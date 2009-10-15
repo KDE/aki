@@ -1,0 +1,18 @@
+[Desktop Entry]
+Type=Service
+Icon=terminal
+ServiceTypes=Aki/Plugin
+X-KDE-Library=aki_konsoledockplugin
+X-KDE-PluginInfo-Author=Keith Rusler
+X-KDE-PluginInfo-Email=xzekex@live.co.uk
+X-KDE-PluginInfo-Name=aki_konsoledockplugin
+X-KDE-PluginInfo-Version=0.0.1
+X-KDE-PluginInfo-Website=http://www.kde.org
+X-KDE-PluginInfo-Category=Plugins
+X-KDE-PluginInfo-Depends=
+X-KDE-PluginInfo-License=GPL
+X-KDE-PluginInfo-EnabledByDefault=true
+Name=Konsole Dock
+Name[x-test]=xxKonsole Dockxx
+Comment=Access Konsole from Aki
+Comment[x-test]=xxAccess Konsole from Akixx

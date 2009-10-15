@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>QueryWindow</class>
+ <widget class="QWidget" name="QueryWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>590</width>
+    <height>491</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_2">
+   <item row="0" column="0">
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="1" column="0">
+      <widget class="Aki::ChatView" name="chatOutput"/>
+     </item>
+     <item row="2" column="0">
+      <widget class="Aki::ChatInput" name="chatInput"/>
+     </item>
+     <item row="0" column="0">
+      <widget class="KLineEdit" name="userHostmask">
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>klineedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>Aki::ChatView</class>
+   <extends>QTextBrowser</extends>
+   <header>ui/chatview.h</header>
+  </customwidget>
+  <customwidget>
+   <class>Aki::ChatInput</class>
+   <extends>QLineEdit</extends>
+   <header>ui/chatinput.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

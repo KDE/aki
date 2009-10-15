@@ -1,0 +1,10 @@
+<!DOCTYPE kpartgui>
+<kpartgui name="aki" version="2">
+    <MenuBar>
+        <Menu name="view">
+            <Menu name="panels">
+                <Action name="channelMonitor" />
+            </Menu>
+        </Menu>
+    </MenuBar>
+</kpartgui>

@@ -1,0 +1,844 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ColorPage</class>
+ <widget class="QWidget" name="ColorPage">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>441</width>
+    <height>500</height>
+   </rect>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_2">
+   <item row="0" column="0">
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="0">
+      <widget class="KTabWidget" name="ktabwidget">
+       <property name="currentIndex">
+        <number>0</number>
+       </property>
+       <widget class="QWidget" name="tab">
+        <attribute name="title">
+         <string>Tabs</string>
+        </attribute>
+        <layout class="QGridLayout" name="gridLayout_4">
+         <item row="0" column="0">
+          <widget class="QGroupBox" name="groupBox">
+           <property name="title">
+            <string>Tab Notifications</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_5">
+            <item row="0" column="0">
+             <layout class="QGridLayout" name="gridLayout_3">
+              <item row="0" column="0">
+               <widget class="QLabel" name="label">
+                <property name="text">
+                 <string>Default:</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="label_2">
+                <property name="text">
+                 <string>Highlight:</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0">
+               <widget class="QLabel" name="label_3">
+                <property name="text">
+                 <string>New Data:</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="0">
+               <widget class="QLabel" name="label_4">
+                <property name="text">
+                 <string>New Message:</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="KColorButton" name="kcfg_defaultTabColor">
+                <property name="whatsThis">
+                 <string>Default color for the tab for when nothing is happening.</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="KColorButton" name="kcfg_highlightTabColor">
+                <property name="whatsThis">
+                 <string>Highlight color for when your nickname is mentioned in the channel or on that server.</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="1">
+               <widget class="KColorButton" name="kcfg_newDataTabColor">
+                <property name="whatsThis">
+                 <string>New data color for when anything is done in the channel or on the server that is not from users.</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="1">
+               <widget class="KColorButton" name="kcfg_newMessageTabColor">
+                <property name="whatsThis">
+                 <string>New message color for when people are talking.</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <spacer name="verticalSpacer">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="tab_2">
+        <attribute name="title">
+         <string>Chat</string>
+        </attribute>
+        <layout class="QGridLayout" name="gridLayout_6">
+         <item row="0" column="0">
+          <widget class="KTabWidget" name="ktabwidget_2">
+           <property name="currentIndex">
+            <number>0</number>
+           </property>
+           <widget class="QWidget" name="tab_3">
+            <attribute name="title">
+             <string>Server Messages</string>
+            </attribute>
+            <layout class="QGridLayout" name="gridLayout_8">
+             <item row="0" column="0">
+              <layout class="QGridLayout" name="gridLayout_7">
+               <item row="0" column="0">
+                <widget class="QLabel" name="label_5">
+                 <property name="text">
+                  <string>ChanServ message:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="0">
+                <widget class="QLabel" name="label_6">
+                 <property name="text">
+                  <string>Error message:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="0">
+                <widget class="QLabel" name="label_7">
+                 <property name="text">
+                  <string>Invite message:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="0">
+                <widget class="QLabel" name="label_8">
+                 <property name="text">
+                  <string>NickServ message:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="4" column="0">
+                <widget class="QLabel" name="label_9">
+                 <property name="text">
+                  <string>Normal message:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="5" column="0">
+                <widget class="QLabel" name="label_10">
+                 <property name="text">
+                  <string>Notice message:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="6" column="0">
+                <widget class="QLabel" name="label_11">
+                 <property name="text">
+                  <string>Split message:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <widget class="KColorButton" name="kcfg_chanServColor"/>
+               </item>
+               <item row="1" column="1">
+                <widget class="KColorButton" name="kcfg_errorColor"/>
+               </item>
+               <item row="2" column="1">
+                <widget class="KColorButton" name="kcfg_inviteColor"/>
+               </item>
+               <item row="3" column="1">
+                <widget class="KColorButton" name="kcfg_nickServColor"/>
+               </item>
+               <item row="4" column="1">
+                <widget class="KColorButton" name="kcfg_normalColor"/>
+               </item>
+               <item row="5" column="1">
+                <widget class="KColorButton" name="kcfg_noticeColor"/>
+               </item>
+               <item row="6" column="1">
+                <widget class="KColorButton" name="kcfg_splitColor"/>
+               </item>
+              </layout>
+             </item>
+             <item row="1" column="0">
+              <spacer name="verticalSpacer_2">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>20</width>
+                 <height>40</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </widget>
+           <widget class="QWidget" name="tab_4">
+            <attribute name="title">
+             <string>User Messages</string>
+            </attribute>
+            <layout class="QGridLayout" name="gridLayout_10">
+             <item row="0" column="0">
+              <layout class="QGridLayout" name="gridLayout_9">
+               <item row="0" column="0">
+                <widget class="QLabel" name="label_12">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="text">
+                  <string>Action message:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="0">
+                <widget class="QLabel" name="label_13">
+                 <property name="text">
+                  <string>Ban message:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="0">
+                <widget class="QLabel" name="label_14">
+                 <property name="text">
+                  <string>DeOp message:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="0">
+                <widget class="QLabel" name="label_15">
+                 <property name="text">
+                  <string>DeVoice message:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="4" column="0">
+                <widget class="QLabel" name="label_16">
+                 <property name="text">
+                  <string>Highlight message:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="5" column="0">
+                <widget class="QLabel" name="label_17">
+                 <property name="text">
+                  <string>Join message:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="6" column="0">
+                <widget class="QLabel" name="label_18">
+                 <property name="text">
+                  <string>Kick message:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="7" column="0">
+                <widget class="QLabel" name="label_19">
+                 <property name="text">
+                  <string>Nick message:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="8" column="0">
+                <widget class="QLabel" name="label_20">
+                 <property name="text">
+                  <string>Op message:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="9" column="0">
+                <widget class="QLabel" name="label_21">
+                 <property name="text">
+                  <string>Part message:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="10" column="0">
+                <widget class="QLabel" name="label_22">
+                 <property name="text">
+                  <string>Quit message:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="11" column="0">
+                <widget class="QLabel" name="label_23">
+                 <property name="text">
+                  <string>Topic message:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="12" column="0">
+                <widget class="QLabel" name="label_24">
+                 <property name="text">
+                  <string>Unban message:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="13" column="0">
+                <widget class="QLabel" name="label_25">
+                 <property name="text">
+                  <string>Voice message:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <widget class="KColorButton" name="kcfg_actionColor"/>
+               </item>
+               <item row="1" column="1">
+                <widget class="KColorButton" name="kcfg_banColor"/>
+               </item>
+               <item row="2" column="1">
+                <widget class="KColorButton" name="kcfg_deOpColor"/>
+               </item>
+               <item row="3" column="1">
+                <widget class="KColorButton" name="kcfg_deVoiceColor"/>
+               </item>
+               <item row="4" column="1">
+                <widget class="KColorButton" name="kcfg_highlightColor"/>
+               </item>
+               <item row="5" column="1">
+                <widget class="KColorButton" name="kcfg_joinColor"/>
+               </item>
+               <item row="6" column="1">
+                <widget class="KColorButton" name="kcfg_kickColor"/>
+               </item>
+               <item row="7" column="1">
+                <widget class="KColorButton" name="kcfg_nickColor"/>
+               </item>
+               <item row="8" column="1">
+                <widget class="KColorButton" name="kcfg_opColor"/>
+               </item>
+               <item row="9" column="1">
+                <widget class="KColorButton" name="kcfg_partColor"/>
+               </item>
+               <item row="10" column="1">
+                <widget class="KColorButton" name="kcfg_quitColor"/>
+               </item>
+               <item row="11" column="1">
+                <widget class="KColorButton" name="kcfg_topicColor"/>
+               </item>
+               <item row="12" column="1">
+                <widget class="KColorButton" name="kcfg_unbanColor"/>
+               </item>
+               <item row="13" column="1">
+                <widget class="KColorButton" name="kcfg_voiceColor"/>
+               </item>
+              </layout>
+             </item>
+             <item row="1" column="0">
+              <spacer name="verticalSpacer_4">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>20</width>
+                 <height>40</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </widget>
+           <widget class="QWidget" name="tab_5">
+            <attribute name="title">
+             <string>mIRC Colors</string>
+            </attribute>
+            <layout class="QGridLayout" name="gridLayout_12">
+             <item row="0" column="0">
+              <layout class="QGridLayout" name="gridLayout_11">
+               <item row="0" column="0">
+                <widget class="QLabel" name="label_26">
+                 <property name="text">
+                  <string>Color 0:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="0">
+                <widget class="QLabel" name="label_27">
+                 <property name="text">
+                  <string>Color 1:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="0">
+                <widget class="QLabel" name="label_28">
+                 <property name="text">
+                  <string>Color 2:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="0">
+                <widget class="QLabel" name="label_29">
+                 <property name="text">
+                  <string>Color 3:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="4" column="0">
+                <widget class="QLabel" name="label_30">
+                 <property name="text">
+                  <string>Color 4:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="5" column="0">
+                <widget class="QLabel" name="label_31">
+                 <property name="text">
+                  <string>Color 5:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="6" column="0">
+                <widget class="QLabel" name="label_32">
+                 <property name="text">
+                  <string>Color 6:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="7" column="0">
+                <widget class="QLabel" name="label_33">
+                 <property name="text">
+                  <string>Color 7:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <widget class="KColorButton" name="kcfg_mircColor0"/>
+               </item>
+               <item row="1" column="1">
+                <widget class="KColorButton" name="kcfg_mircColor1"/>
+               </item>
+               <item row="2" column="1">
+                <widget class="KColorButton" name="kcfg_mircColor2"/>
+               </item>
+               <item row="3" column="1">
+                <widget class="KColorButton" name="kcfg_mircColor3"/>
+               </item>
+               <item row="4" column="1">
+                <widget class="KColorButton" name="kcfg_mircColor4"/>
+               </item>
+               <item row="5" column="1">
+                <widget class="KColorButton" name="kcfg_mircColor5"/>
+               </item>
+               <item row="6" column="1">
+                <widget class="KColorButton" name="kcfg_mircColor6"/>
+               </item>
+               <item row="7" column="1">
+                <widget class="KColorButton" name="kcfg_mircColor7"/>
+               </item>
+               <item row="0" column="2">
+                <widget class="QLabel" name="label_34">
+                 <property name="text">
+                  <string>Color 8:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="2">
+                <widget class="QLabel" name="label_35">
+                 <property name="text">
+                  <string>Color 9:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="2">
+                <widget class="QLabel" name="label_36">
+                 <property name="text">
+                  <string>Color 10:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="2">
+                <widget class="QLabel" name="label_37">
+                 <property name="text">
+                  <string>Color 11:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="4" column="2">
+                <widget class="QLabel" name="label_38">
+                 <property name="text">
+                  <string>Color 12:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="5" column="2">
+                <widget class="QLabel" name="label_39">
+                 <property name="text">
+                  <string>Color 13:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="6" column="2">
+                <widget class="QLabel" name="label_40">
+                 <property name="text">
+                  <string>Color 14:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="7" column="2">
+                <widget class="QLabel" name="label_41">
+                 <property name="text">
+                  <string>Color 15:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="3">
+                <widget class="KColorButton" name="kcfg_mircColor8"/>
+               </item>
+               <item row="1" column="3">
+                <widget class="KColorButton" name="kcfg_mircColor9"/>
+               </item>
+               <item row="2" column="3">
+                <widget class="KColorButton" name="kcfg_mircColor10"/>
+               </item>
+               <item row="3" column="3">
+                <widget class="KColorButton" name="kcfg_mircColor11"/>
+               </item>
+               <item row="4" column="3">
+                <widget class="KColorButton" name="kcfg_mircColor12"/>
+               </item>
+               <item row="5" column="3">
+                <widget class="KColorButton" name="kcfg_mircColor13"/>
+               </item>
+               <item row="6" column="3">
+                <widget class="KColorButton" name="kcfg_mircColor14"/>
+               </item>
+               <item row="7" column="3">
+                <widget class="KColorButton" name="kcfg_mircColor15"/>
+               </item>
+              </layout>
+             </item>
+             <item row="1" column="0">
+              <spacer name="verticalSpacer_6">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>20</width>
+                 <height>40</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </widget>
+           <widget class="QWidget" name="tab_6">
+            <attribute name="title">
+             <string>User Colors</string>
+            </attribute>
+            <layout class="QGridLayout" name="gridLayout_14">
+             <item row="0" column="0">
+              <layout class="QGridLayout" name="gridLayout_13">
+               <item row="0" column="0">
+                <widget class="QLabel" name="label_42">
+                 <property name="text">
+                  <string>Color 0:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="0">
+                <widget class="QLabel" name="label_43">
+                 <property name="text">
+                  <string>Color 1:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="0">
+                <widget class="QLabel" name="label_44">
+                 <property name="text">
+                  <string>Color 2:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="0">
+                <widget class="QLabel" name="label_45">
+                 <property name="text">
+                  <string>Color 3:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <widget class="KColorButton" name="kcfg_userColor0"/>
+               </item>
+               <item row="1" column="1">
+                <widget class="KColorButton" name="kcfg_userColor1"/>
+               </item>
+               <item row="2" column="1">
+                <widget class="KColorButton" name="kcfg_userColor2"/>
+               </item>
+               <item row="3" column="1">
+                <widget class="KColorButton" name="kcfg_userColor3"/>
+               </item>
+               <item row="0" column="2">
+                <widget class="QLabel" name="label_46">
+                 <property name="text">
+                  <string>Color 4:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="2">
+                <widget class="QLabel" name="label_47">
+                 <property name="text">
+                  <string>Color 5:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="2">
+                <widget class="QLabel" name="label_48">
+                 <property name="text">
+                  <string>Color 6:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="3">
+                <widget class="KColorButton" name="kcfg_userColor4"/>
+               </item>
+               <item row="1" column="3">
+                <widget class="KColorButton" name="kcfg_userColor5"/>
+               </item>
+               <item row="2" column="3">
+                <widget class="KColorButton" name="kcfg_userColor6"/>
+               </item>
+              </layout>
+             </item>
+             <item row="1" column="0">
+              <spacer name="verticalSpacer_5">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>20</width>
+                 <height>40</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </widget>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <spacer name="verticalSpacer_3">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </widget>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KColorButton</class>
+   <extends>QPushButton</extends>
+   <header>kcolorbutton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KTabWidget</class>
+   <extends>QTabWidget</extends>
+   <header>ktabwidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

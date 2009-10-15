@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
+                          http://www.kde.org/standards/kcfg/1.0/kcfg.xsd">
+    <kcfgfile name="akirc" />
+    <group name="ProxySettings">
+        <entry name="useSocksProxyServer" type="Bool">
+            <default>false</default>
+        </entry>
+        <entry name="proxyServer" type="String" />
+        <entry name="proxyPort" type="Int">
+            <default>1080</default>
+        </entry>
+        <entry name="proxyVersion" type="Int">
+            <default>4</default>
+        </entry>
+        <entry name="useProxyAuthenticationInfo" type="Bool">
+            <default>false</default>
+        </entry>
+        <entry name="proxyUsername" type="String" />
+        <entry name="proxyPassword" type="String" />
+    </group>
+    <group name="ColorSettings">
+        <entry name="actionColor" type="Color">
+            <default code="true">QColor(0, 0, 192)</default>
+        </entry>
+        <entry name="banColor" type="Color">
+            <default code="true">QColor(0, 192, 0)</default>
+        </entry>
+        <entry name="chanServColor" type="Color">
+            <default code="true">QColor(128, 0, 128)</default>
+        </entry>
+        <entry name="defaultTabColor" type="Color">
+            <default code="true">QString("black")</default>
+        </entry>
+        <entry name="deOpColor" type="Color">
+            <default code="true">QColor(128, 0, 0)</default>
+        </entry>
+        <entry name="deVoiceColor" type="Color">
+            <default code="true">QColor(128, 0, 0)</default>
+        </entry>
+        <entry name="errorColor" type="Color">
+            <default code="true">QColor(255, 0, 0)</default>
+        </entry>
+        <entry name="highlightColor" type="Color">
+            <default code="true">QColor(0, 132, 255)</default>
+        </entry>
+        <entry name="highlightTabColor" type="Color">
+            <default code="true">QString("cornflowerblue")</default>
+        </entry>
+        <entry name="inviteColor" type="Color">
+            <default code="true">QColor(192, 0, 0)</default>
+        </entry>
+        <entry name="joinColor" type="Color">
+            <default code="true">QColor(0, 128, 128)</default>
+        </entry>
+        <entry name="kickColor" type="Color">
+            <default code="true">QColor(192, 0, 0)</default>
+        </entry>
+        <entry name="mircColor0" type="Color">
+            <default code="true">QString("white")</default>
+        </entry>
+        <entry name="mircColor1" type="Color">
+            <default code="true">QString("black")</default>
+        </entry>
+        <entry name="mircColor10" type="Color">
+            <default code="true">QString("teal")</default>
+        </entry>
+        <entry name="mircColor11" type="Color">
+            <default code="true">QString("cyan")</default>
+        </entry>
+        <entry name="mircColor12" type="Color">
+            <default code="true">QString("blue")</default>
+        </entry>
+        <entry name="mircColor13" type="Color">
+            <default code="true">QString("magenta")</default>
+        </entry>
+        <entry name="mircColor14" type="Color">
+            <default code="true">QString("darkgray")</default>
+        </entry>
+        <entry name="mircColor15" type="Color">
+            <default code="true">QString("lightgray")</default>
+        </entry>
+        <entry name="mircColor2" type="Color">
+            <default code="true">QString("darkblue")</default>
+        </entry>
+        <entry name="mircColor3" type="Color">
+            <default code="true">QString("darkgreen")</default>
+        </entry>
+        <entry name="mircColor4" type="Color">
+            <default code="true">QString("red")</default>
+        </entry>
+        <entry name="mircColor5" type="Color">
+            <default code="true">QString("brown")</default>
+        </entry>
+        <entry name="mircColor6" type="Color">
+            <default code="true">QString("purple")</default>
+        </entry>
+        <entry name="mircColor7" type="Color">
+            <default code="true">QString("olive")</default>
+        </entry>
+        <entry name="mircColor8" type="Color">
+            <default code="true">QString("yellow")</default>
+        </entry>
+        <entry name="mircColor9" type="Color">
+            <default code="true">QString("green")</default>
+        </entry>
+        <entry name="newDataTabColor" type="Color">
+            <default code="true">QString("maroon")</default>
+        </entry>
+        <entry name="newMessageTabColor" type="Color">
+            <default code="true">QString("red")</default>
+        </entry>
+        <entry name="nickColor" type="Color">
+            <default code="true">QColor(128, 0, 128)</default>
+        </entry>
+        <entry name="nickServColor" type="Color">
+            <default code="true">QColor(128, 0, 128)</default>
+        </entry>
+        <entry name="normalColor" type="Color">
+            <default code="true">QColor(0, 0, 0)</default>
+        </entry>
+        <entry name="noticeColor" type="Color">
+            <default code="true">QColor(255, 128, 0)</default>
+        </entry>
+        <entry name="opColor" type="Color">
+            <default code="true">QColor(0, 192, 0)</default>
+        </entry>
+        <entry name="partColor" type="Color">
+            <default code="true">QColor(128, 0, 128)</default>
+        </entry>
+        <entry name="quitColor" type="Color">
+            <default code="true">QColor(128, 0, 128)</default>
+        </entry>
+        <entry name="splitColor" type="Color">
+            <default code="true">QColor(160, 0, 160)</default>
+        </entry>
+        <entry name="topicColor" type="Color">
+            <default code="true">QColor(102, 0, 102)</default>
+        </entry>
+        <entry name="unbanColor" type="Color">
+            <default code="true">QColor(0, 128, 0)</default>
+        </entry>
+        <entry name="userColor0" type="Color">
+            <default code="true">QColor(0, 79, 153)</default>
+        </entry>
+        <entry name="userColor1" type="Color">
+            <default code="true">QColor(204, 0, 0)</default>
+        </entry>
+        <entry name="userColor2" type="Color">
+            <default code="true">QColor(26, 51, 0)</default>
+        </entry>
+        <entry name="userColor3" type="Color">
+            <default code="true">QColor(102, 102, 255)</default>
+        </entry>
+        <entry name="userColor4" type="Color">
+            <default code="true">QColor(204, 102, 0)</default>
+        </entry>
+        <entry name="userColor5" type="Color">
+            <default code="true">QColor(255, 153, 255)</default>
+        </entry>
+        <entry name="userColor6" type="Color">
+            <default code="true">QColor(179, 102, 255)</default>
+        </entry>
+        <entry name="voiceColor" type="Color">
+            <default code="true">QColor(0, 192, 0)</default>
+        </entry>
+    </group>
+    <group name="GeneralPage">
+        <entry name="enableSystemTray" type="Bool">
+            <default>true</default>
+        </entry>
+        <entry name="enableSystemTrayNewMessages" type="Bool">
+            <default>false</default>
+        </entry>
+        <entry name="blinkIcon" type="Bool">
+            <default>false</default>
+        </entry>
+        <entry name="minimizeToTrayOnClose" type="Bool">
+            <default>false</default>
+        </entry>
+        <entry name="minimizeToTrayOnStartup" type="Bool">
+            <default>false</default>
+        </entry>
+        <entry name="nickCompletionSuffix" type="String">
+            <default code="true">QChar(':')</default>
+        </entry>
+        <entry name="nickCompletionPrefix" type="String" />
+        <entry name="nickCaseSensitive" type="Bool">
+            <default>false</default>
+        </entry>
+    </group>
+    <group name="IrcPage">
+        <entry name="conferenceMode" type="Bool">
+            <default>false</default>
+        </entry>
+        <entry name="hideChannelCreation" type="Bool">
+            <default>false</default>
+        </entry>
+        <entry name="hideChannelModes" type="Bool">
+            <default>false</default>
+        </entry>
+        <entry name="hideTopic" type="Bool">
+            <default>false</default>
+        </entry>
+        <entry name="scrollbackLines" type="Int">
+            <default>1000</default>
+        </entry>
+        <entry name="showRawModes" type="Bool">
+            <default>false</default>
+        </entry>
+        <entry name="showChannelModeBar" type="Bool">
+            <default>false</default>
+        </entry>
+        <entry name="showNickList" type="Bool">
+            <default>true</default>
+        </entry>
+        <entry name="showTopicBar" type="Bool">
+            <default>true</default>
+        </entry>
+        <entry name="enableWhoLookup" type="Bool">
+            <default>true</default>
+        </entry>
+        <entry name="maxNumberOfUsers" type="Int">
+            <default>300</default>
+        </entry>
+        <entry name="updateInterval" type="Int">
+            <default>180</default>
+        </entry>
+        <entry name="ignoreClientInfo" type="Bool">
+            <default>false</default>
+        </entry>
+        <entry name="ignoreDcc" type="Bool">
+            <default>false</default>
+        </entry>
+        <entry name="ignorePing" type="Bool">
+            <default>false</default>
+        </entry>
+        <entry name="ignoreSource" type="Bool">
+            <default>false</default>
+        </entry>
+        <entry name="ignoreTime" type="Bool">
+            <default>false</default>
+        </entry>
+        <entry name="ignoreUserInfo" type="Bool">
+            <default>false</default>
+        </entry>
+        <entry name="ignoreVersion" type="Bool">
+            <default>false</default>
+        </entry>
+        <entry name="ctcpVersionMessage" type="String">
+            <default code="true">QString("Aki IRC Client v.%1").arg(AKI_VERSION_STR)</default>
+        </entry>
+    </group>
+    <group name="LogPage">
+        <entry name="enableLogging" type="Bool">
+            <default>true</default>
+        </entry>
+        <entry name="logDirectory" type="Url">
+            <code>
+            KUser userDir(KUser::UseRealUserID);
+            </code>
+            <default code="true">
+            userDir.homeDir() + "/akilogs"
+            </default>
+        </entry>
+        <entry name="enableLowercaseNames" type="Bool">
+            <default>true</default>
+        </entry>
+        <entry name="logTimestampFormat" type="String">
+            <default>[%A  %d %B, %Y][%H:%M:%S]</default>
+        </entry>
+        <entry name="logScrollbackLines" type="Int">
+            <default>10</default>
+        </entry>
+        <entry name="enableScrollbackPreviousSession" type="Bool">
+            <default>true</default>
+        </entry>
+    </group>
+</kcfg>

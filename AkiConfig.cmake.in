@@ -1,0 +1,18 @@
+# Aki Configuration File
+#
+# This file sets various CMake Variables
+#
+# AKI_INCLUDE_DIR - The include directory for Aki library
+# AKI_LIBRARY     - The Aki library
+
+get_filename_component(AKI_CURRENT_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
+
+if (NOT WIN32)
+    set(AKI_INCLUDE_DIR "@INCLUDE_INSTALL_DIR@/aki/")
+else (NOT WIN32)
+    set(AKI_INCLUDE_DIR "${AKIIRC_CURRENT_DIR}/../../../include/aki")
+endif (NOT WIN32)
+
+set(AKI_LIBRARY akicore)
+
+mark_as_advanced(AKI_INCLUDE_DIR AKI_LIBRARY)
