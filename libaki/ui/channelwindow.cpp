@@ -443,6 +443,17 @@ public:
         q->socket()->rfcTopic(q->name(), topic);
     }
 
+    void splitterMoved(int /*pos*/, int /*index*/)
+    {
+        KSharedConfigPtr self = KGlobal::config();
+        KConfigGroup splitSize;
+        QList<int> sizes = q->splitter->sizes();
+
+        splitSize = KConfigGroup(self, "SplitSize");
+        splitSize.writeEntry("size", sizes);
+        splitSize.sync();
+    }
+
     Aki::ChannelWindow *q;
     IdentityConfig *identity;
     Aki::ChatParser *parser;
@@ -487,6 +498,8 @@ ChannelWindow::ChannelWindow(const QString &name, Aki::IdentityConfig *identityC
             SLOT(nickSelectorActivated(QString)));
     connect(chatTopic, SIGNAL(returnPressed(QString)),
             SLOT(chatTopicReturnPressed(QString)));
+    connect(splitter, SIGNAL(splitterMoved(int,int)),
+            SLOT(splitterMoved(int,int)));
 
     socket->rfcMode(name.toLower());
     socket->rfcWho(name.toLower());
@@ -789,11 +802,13 @@ ChannelWindow::showEvent(QShowEvent *event)
     if (self->hasGroup("SplitSize")) {
         splitSize = KConfigGroup(self, "SplitSize");
         sizes = splitSize.readEntry("size", QList<int>());
+        kDebug() << "Loading Size: " << sizes;
     } else {
         sizes << (width() -  userList->width())
-              << (fontMetrics().averageCharWidth() * 17 + 20);
+              << (fontMetrics().averageCharWidth() * 17 + 30);
         splitSize = KConfigGroup(self, "SplitSize");
         splitSize.writeEntry("size", sizes);
+        kDebug() << "Writting Size: " << sizes;
     }
 
     splitter->setSizes(sizes);

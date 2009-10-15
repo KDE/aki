@@ -165,6 +165,7 @@ private:
     Q_PRIVATE_SLOT(d, void noOutsideMessagesStateChanged(bool state))
     Q_PRIVATE_SLOT(d, void whoTimerTimeout())
     Q_PRIVATE_SLOT(d, void chatTopicReturnPressed(const QString &topic))
+    Q_PRIVATE_SLOT(d, void splitterMoved(int pos, int index))
 private:
     friend class ChannelWindowPrivate;
     ChannelWindowPrivate* const d;
