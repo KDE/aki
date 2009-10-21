@@ -165,34 +165,32 @@ public:
             foreach (QChar ch, modes) {
                 if (ch == QChar('t')) {
                     modeStrs << i18n("Topic protection");
-                    window->modeBar()->topicProtectionChannel->setChecked(true);
+                    window->modeBar()->enableTopicProtectionButton(true);
                 } else if (ch == QChar('n')) {
                     modeStrs << i18n("No outside messages");
-                    window->modeBar()->noOutsideMessagesChannel->setChecked(true);
+                    window->modeBar()->enableNoOutsideMessagesButton(true);
                 } else if (ch == QChar('s')) {
                     modeStrs << i18n("Secret");
-                    window->modeBar()->secretChannel->setChecked(true);
+                    window->modeBar()->enableSecretButton(true);
                 } else if (ch == QChar('i')) {
                     modeStrs << i18n("Invite only");
-                    window->modeBar()->inviteOnlyChannel->setChecked(true);
+                    window->modeBar()->enableInviteOnlyButton(true);
                 } else if (ch == QChar('p')) {
                     modeStrs << i18n("Private");
-                    window->modeBar()->privateChannel->setChecked(true);
+                    window->modeBar()->enablePrivateButton(true);
                 } else if (ch == QChar('m')) {
                     modeStrs << i18n("Moderated");
-                    window->modeBar()->moderatedChannel->setChecked(true);
+                    window->modeBar()->enableModeratedButton(true);
                 } else if (ch == QChar('b')) {
                 } else if (ch == QChar('k')) {
                     QString param = params[indexParams++];
                     modeStrs << i18n("Password protected: %1", param);
-                    window->modeBar()->keywordChannel->setChecked(true);
-                    window->modeBar()->channelKey->setEnabled(true);
+                    window->modeBar()->enableChannelKeyButton(true);
                     window->modeBar()->setKey(param);
                 } else if (ch == QChar('l')) {
                     QString param = params[indexParams++];
                     modeStrs << i18n("Limited to %1 users", param);
-                    window->modeBar()->limitChannel->setChecked(true);
-                    window->modeBar()->channelLimit->setEnabled(true);
+                    window->modeBar()->enableChannelLimitButton(true);
                     window->modeBar()->setLimit(param.toInt());
                 }
             }

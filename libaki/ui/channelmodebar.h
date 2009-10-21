@@ -34,7 +34,7 @@ class ChannelModeBarPrivate;
  * Channel mode bar for easy access to changing the channels modes.
  */
 class LIBAKI_EXPORT ChannelModeBar : public QWidget,
-                                     public Ui::ChannelModeBar
+                                     private Ui::ChannelModeBar
 {
     Q_OBJECT
 public:
@@ -67,6 +67,23 @@ public:
      * @return Channel limit.
      */
     int limit() const;
+
+    void enableChannelKeyButton(bool enable);
+    void disableChannelKeyButton(bool disable);
+    void enableChannelLimitButton(bool enable);
+    void disableChannelLimitButton(bool disable);
+    void enableTopicProtectionButton(bool enable);
+    void disableTopicProtectionButton(bool disable);
+    void enableNoOutsideMessagesButton(bool enable);
+    void disableNoOutsideMessagesButton(bool disable);
+    void enableSecretButton(bool enable);
+    void disableSecretButton(bool disable);
+    void enableInviteOnlyButton(bool enable);
+    void disableInviteOnlyButton(bool disable);
+    void enablePrivateButton(bool enable);
+    void disablePrivateButton(bool disable);
+    void enableModeratedButton(bool enable);
+    void disableModeratedButton(bool disable);
 Q_SIGNALS:
     /**
      * Emitted when the channel key button has been pushed,

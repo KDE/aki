@@ -21,6 +21,7 @@
 */
 
 #include "channelmodebar.h"
+#include <KInputDialog>
 #include <QRegExpValidator>
 using namespace Aki;
 
@@ -38,51 +39,49 @@ public:
 
     void channelKeyToggled(bool checked)
     {
-        q->keywordChannel->setChecked(checked);
-        q->channelKey->setEnabled(checked);
+        q->enableChannelKeyButton(checked);
         emit q->channelKeyStateChanged(checked);
     }
 
     void channelLimitToggled(bool checked)
     {
-        q->limitChannel->setChecked(checked);
-        q->channelLimit->setEnabled(checked);
+        q->enableChannelLimitButton(checked);
         emit q->channelLimitStateChanged(checked);
     }
 
     void topicProtectionChannelToggled(bool checked)
     {
-        q->topicProtectionChannel->setChecked(checked);
+        q->enableTopicProtectionButton(checked);
         emit q->topicProtectionStateChanged(checked);
     }
 
     void noOutsideMessagesChannelToggled(bool checked)
     {
-        q->noOutsideMessagesChannel->setChecked(checked);
+        q->enableNoOutsideMessagesButton(checked);
         emit q->noOutsideMessagesStateChanged(checked);
     }
 
     void secretChannelToggled(bool checked)
     {
-        q->secretChannel->setChecked(checked);
+        q->enableSecretButton(checked);
         emit q->secretStateChanged(checked);
     }
 
     void inviteOnlyChannelToggled(bool checked)
     {
-        q->inviteOnlyChannel->setChecked(checked);
+        q->enableInviteOnlyButton(checked);
         emit q->inviteOnlyStateChanged(checked);
     }
 
     void privateChannelToggled(bool checked)
     {
-        q->privateChannel->setChecked(checked);
+        q->enablePrivateButton(checked);
         emit q->privateStateChanged(checked);
     }
 
     void moderatedChannelToggled(bool checked)
     {
-        q->moderatedChannel->setChecked(checked);
+        q->enableModeratedButton(checked);
         emit q->moderatedStateChanged(checked);
     }
 
@@ -168,6 +167,106 @@ int
 ChannelModeBar::limit() const
 {
     return d->limit;
+}
+
+void
+ChannelModeBar::enableChannelKeyButton(bool enable)
+{
+    keywordChannel->setChecked(enable);
+    channelKey->setEnabled(enable);
+}
+
+void
+ChannelModeBar::disableChannelKeyButton(bool disable)
+{
+    keywordChannel->setChecked(!disable);
+    channelKey->setDisabled(disable);
+}
+
+void
+ChannelModeBar::enableChannelLimitButton(bool enable)
+{
+    limitChannel->setChecked(enable);
+    channelLimit->setEnabled(enable);
+}
+
+void
+ChannelModeBar::disableChannelLimitButton(bool disable)
+{
+    limitChannel->setChecked(!disable);
+    channelLimit->setDisabled(disable);
+}
+
+void
+ChannelModeBar::enableTopicProtectionButton(bool enable)
+{
+    topicProtectionChannel->setChecked(enable);
+}
+
+void
+ChannelModeBar::disableTopicProtectionButton(bool disable)
+{
+    topicProtectionChannel->setChecked(!disable);
+}
+
+void
+ChannelModeBar::enableNoOutsideMessagesButton(bool enable)
+{
+    noOutsideMessagesChannel->setChecked(enable);
+}
+
+void
+ChannelModeBar::disableNoOutsideMessagesButton(bool disable)
+{
+    noOutsideMessagesChannel->setChecked(!disable);
+}
+
+void
+ChannelModeBar::enableSecretButton(bool enable)
+{
+    secretChannel->setChecked(enable);
+}
+
+void
+ChannelModeBar::disableSecretButton(bool disable)
+{
+    secretChannel->setChecked(!disable);
+}
+
+void
+ChannelModeBar::enableInviteOnlyButton(bool enable)
+{
+    inviteOnlyChannel->setChecked(enable);
+}
+
+void
+ChannelModeBar::disableInviteOnlyButton(bool disable)
+{
+    inviteOnlyChannel->setChecked(!disable);
+}
+
+void
+ChannelModeBar::enablePrivateButton(bool enable)
+{
+    privateChannel->setChecked(enable);
+}
+
+void
+ChannelModeBar::disablePrivateButton(bool disable)
+{
+    privateChannel->setChecked(!disable);
+}
+
+void
+ChannelModeBar::enableModeratedButton(bool enable)
+{
+    moderatedChannel->setChecked(enable);
+}
+
+void
+ChannelModeBar::disableModeratedButton(bool disable)
+{
+    moderatedChannel->setChecked(!disable);
 }
 
 #include "channelmodebar.moc"

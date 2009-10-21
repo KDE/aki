@@ -32,6 +32,7 @@
 #include <Aki/Irc/Socket>
 #include <Aki/Irc/User>
 #include <KDebug>
+#include <KPasswordDialog>
 #include <QMenu>
 #include <QShowEvent>
 #include <QTimer>
@@ -390,42 +391,46 @@ public:
 
     void channelKeyStateChanged(bool state)
     {
-        Q_UNUSED(state);
-        /*if (state) {
+        if (state) {
+            KPasswordDialog dlg(q);
+            dlg.setPrompt(i18n("Enter a channel key."));
+            if (!dlg.exec()) {
+                return;
+            }
+
+            q->chatModes->setKey(dlg.password());
+
             q->socket()->rfcMode(q->name(), "+k " + q->chatModes->key());
         } else {
             q->socket()->rfcMode(q->name(), "-k");
-        }*/
+        }
     }
 
     void inviteOnlyStateChanged(bool state)
     {
-        Q_UNUSED(state);
-        /*if (state) {
+        if (state) {
             q->socket()->rfcMode(q->name(), "+i");
         } else {
             q->socket()->rfcMode(q->name(), "-i");
-        }*/
+        }
     }
 
     void moderatedStateChanged(bool state)
     {
-        Q_UNUSED(state);
-        /*if (state) {
+        if (state) {
             q->socket()->rfcMode(q->name(), "+m");
         } else {
             q->socket()->rfcMode(q->name(), "-m");
-        }*/
+        }
     }
 
     void noOutsideMessagesStateChanged(bool state)
     {
-        Q_UNUSED(state);
-        /*if (state) {
+        if (state) {
             q->socket()->rfcMode(q->name(), "+n");
         } else {
             q->socket()->rfcMode(q->name(), "-n");
-        }*/
+        }
     }
 
     void whoTimerTimeout()
@@ -500,6 +505,14 @@ ChannelWindow::ChannelWindow(const QString &name, Aki::IdentityConfig *identityC
             SLOT(chatTopicReturnPressed(QString)));
     connect(splitter, SIGNAL(splitterMoved(int,int)),
             SLOT(splitterMoved(int,int)));
+    connect(chatModes, SIGNAL(channelKeyStateChanged(bool)),
+            SLOT(channelKeyStateChanged(bool)));
+    connect(chatModes, SIGNAL(inviteOnlyStateChanged(bool)),
+            SLOT(inviteOnlyStateChanged(bool)));
+    connect(chatModes, SIGNAL(moderatedStateChanged(bool)),
+            SLOT(moderatedStateChanged(bool)));
+    connect(chatModes, SIGNAL(noOutsideMessagesStateChanged(bool)),
+            SLOT(noOutsideMessagesStateChanged(bool)));
 
     socket->rfcMode(name.toLower());
     socket->rfcWho(name.toLower());
@@ -577,14 +590,6 @@ ChannelWindow::addMode(Aki::Irc::User *user, const QModelIndex &index, const QSt
     userList->model()->setData(index, QVariant::fromValue<Aki::Irc::User*>(user),
                                Aki::NickListModel::IrcUserRole);
     userList->update(index);
-
-    if (mode.contains('o')) {
-
-    } else if (mode.contains('h')) {
-
-    } else if (mode.contains('v')) {
-
-    }
 }
 
 void
@@ -802,17 +807,14 @@ ChannelWindow::showEvent(QShowEvent *event)
     if (self->hasGroup("SplitSize")) {
         splitSize = KConfigGroup(self, "SplitSize");
         sizes = splitSize.readEntry("size", QList<int>());
-        kDebug() << "Loading Size: " << sizes;
     } else {
         sizes << (width() -  userList->width())
               << (fontMetrics().averageCharWidth() * 17 + 30);
         splitSize = KConfigGroup(self, "SplitSize");
         splitSize.writeEntry("size", sizes);
-        kDebug() << "Writting Size: " << sizes;
     }
 
     splitter->setSizes(sizes);
-
     Aki::BaseWindow::showEvent(event);
 }
 
