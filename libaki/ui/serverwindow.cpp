@@ -810,6 +810,11 @@ public:
     void onMode(const QString &from, const QString &channel, const QString &modes,
                 const QString &nick)
     {
+        kDebug() << "String";
+        kDebug() << "From: " << from;
+        kDebug() << "Channel: " << channel;
+        kDebug() << "Modes: " << modes;
+        kDebug() << "Nick: " << nick;
         Aki::ChannelWindow *window = qobject_cast<Aki::ChannelWindow*>(findChannel(channel.toLower()));
         if (window && window->view()) {
             enum {
@@ -865,6 +870,47 @@ public:
                     } else if (state == Take) {
                         window->view()->addRemoveBan(from, nick);
                     }
+                } else if (ch == 'i') {
+                    if (state == Give) {
+                        window->view()->addMode(from, ch, QStringList(), fromYou);
+                    } else if (state == Take) {
+                    }
+                } else if (ch == QChar('k')) {
+                    if (state == Give) {
+                        
+                    } else if (state == Take) {
+                        
+                    }
+                } else if (ch == QChar('m')) {
+                    if (state == Give) {
+                        window->view()->addMode(from, ch, QStringList(), fromYou);
+                    } else if (state == Take) {
+                        
+                    }
+                } else if (ch == QChar('p')) {
+                    if (state == Give) {
+                        window->view()->addMode(from, ch, QStringList(), fromYou);
+                    } else if (state == Take) {
+                        
+                    }
+                } else if (ch == QChar('s')) {
+                    if (state == Give) {
+                        window->view()->addMode(from, ch, QStringList(), fromYou);
+                    } else if (state == Take) {
+                        
+                    }
+                } else if (ch == QChar('t')) {
+                    if (state == Give) {
+                        window->view()->addMode(from, ch, QStringList(), fromYou);
+                    } else if (state == Take) {
+
+                    }
+                } else if (ch == QChar('n')) {
+                    if (state == Give) {
+                        window->view()->addMode(from, ch, QStringList(), fromYou);
+                    } else if (state == Take) {
+
+                    }
                 }
             }
         }
@@ -873,10 +919,48 @@ public:
     void onMode(const QString &from, const QString &channel, const QString &modes,
                 const QStringList &params)
     {
-        Q_UNUSED(from);
-        Q_UNUSED(channel);
-        Q_UNUSED(modes);
-        Q_UNUSED(params);
+        Aki::ChannelWindow *window = qobject_cast<Aki::ChannelWindow*>(findChannel(channel.toLower()));
+        if (window && window->view()) {
+            QStringList modeStrs;
+            int indexParams = 0;
+
+            foreach (QChar ch, modes) {
+                if (ch == QChar('t')) {
+                    modeStrs << i18n("Topic protection");
+                    window->modeBar()->enableTopicProtectionButton(true);
+                } else if (ch == QChar('n')) {
+                    modeStrs << i18n("No outside messages");
+                    window->modeBar()->enableNoOutsideMessagesButton(true);
+                } else if (ch == QChar('s')) {
+                    modeStrs << i18n("Secret");
+                    window->modeBar()->enableSecretButton(true);
+                } else if (ch == QChar('i')) {
+                    modeStrs << i18n("Invite only");
+                    window->modeBar()->enableInviteOnlyButton(true);
+                } else if (ch == QChar('p')) {
+                    modeStrs << i18n("Private");
+                    window->modeBar()->enablePrivateButton(true);
+                } else if (ch == QChar('m')) {
+                    modeStrs << i18n("Moderated");
+                    window->modeBar()->enableModeratedButton(true);
+                } else if (ch == QChar('b')) {
+                } else if (ch == QChar('k')) {
+                    QString param = params[indexParams++];
+                    modeStrs << i18n("Password protected: %1", param);
+                    window->modeBar()->enableChannelKeyButton(true);
+                    window->modeBar()->setKey(param);
+                } else if (ch == QChar('l')) {
+                    QString param = params[indexParams++];
+                    modeStrs << i18n("Limited to %1 users", param);
+                    window->modeBar()->enableChannelLimitButton(true);
+                    window->modeBar()->setLimit(param.toInt());
+                }
+            }
+
+            if (!Aki::Settings::hideChannelModes()) {
+                window->view()->addChannelModes(modeStrs.join(", "));
+            }
+        }
     }
 
     void onMotd(const QString &message)

@@ -54,7 +54,9 @@ public:
     void addIsOn(const QStringList &nicks);
     void addLUser(const QString &message);
     void addMessage(const QString &message);
-    void addMode(const QString &FromNick, const QString &toNick, const QChar &mode,
+    void addMode(const QString &fromNick, const QChar &mode, const QStringList &params = QStringList(),
+                 bool self = false);
+    void addMode(const QString &fromNick, const QString &toNick, const QChar &mode,
                  bool toYou = false, bool fromYou = false);
     void addMotd(const QString &message);
     void addNick(const QString &oldNick, const QString &newNick);

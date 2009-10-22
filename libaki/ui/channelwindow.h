@@ -163,6 +163,8 @@ private:
     Q_PRIVATE_SLOT(d, void inviteOnlyStateChanged(bool state))
     Q_PRIVATE_SLOT(d, void moderatedStateChanged(bool state))
     Q_PRIVATE_SLOT(d, void noOutsideMessagesStateChanged(bool state))
+    Q_PRIVATE_SLOT(d, void privateStateChanged(bool state))
+    Q_PRIVATE_SLOT(d, void secretStateChanged(bool state))
     Q_PRIVATE_SLOT(d, void whoTimerTimeout())
     Q_PRIVATE_SLOT(d, void chatTopicReturnPressed(const QString &topic))
     Q_PRIVATE_SLOT(d, void splitterMoved(int pos, int index))

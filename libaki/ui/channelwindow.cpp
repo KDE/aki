@@ -17,7 +17,6 @@
 
     You should have received a copy of the GNU Lesser General Public
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
-
 */
 
 #include "channelwindow.h"
@@ -433,6 +432,24 @@ public:
         }
     }
 
+    void privateStateChanged(bool state)
+    {
+        if (state) {
+            q->socket()->rfcMode(q->name(), "+p");
+        } else {
+            q->socket()->rfcMode(q->name(), "-p");
+        }
+    }
+
+    void secretStateChanged(bool state)
+    {
+        if (state) {
+            q->socket()->rfcMode(q->name(), "+s");
+        } else {
+            q->socket()->rfcMode(q->name(), "-s");
+        }
+    }
+
     void whoTimerTimeout()
     {
         if (isWhoRunning || (q->userList->count() > Aki::Settings::maxNumberOfUsers())) {
@@ -513,6 +530,10 @@ ChannelWindow::ChannelWindow(const QString &name, Aki::IdentityConfig *identityC
             SLOT(moderatedStateChanged(bool)));
     connect(chatModes, SIGNAL(noOutsideMessagesStateChanged(bool)),
             SLOT(noOutsideMessagesStateChanged(bool)));
+    connect(chatModes, SIGNAL(privateStateChanged(bool)),
+            SLOT(privateStateChanged(bool)));
+    connect(chatModes, SIGNAL(secretStateChanged(bool)),
+            SLOT(secretStateChanged(bool)));
 
     socket->rfcMode(name.toLower());
     socket->rfcWho(name.toLower());

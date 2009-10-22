@@ -262,6 +262,76 @@ ChatView::addMessage(const QString &message)
 }
 
 void
+ChatView::addMode(const QString &fromNick, const QChar &mode, const QStringList &params,
+                  bool self)
+{
+    QString colour;
+    if (mode == QChar('i')) {
+        if (self) {
+            colour = i18n("<span style='color: %1;'>*** You set the channel to invite only</span>",
+                          Aki::Settings::topicColor().name());
+            d->toLog(i18n("*** You set the channel to invite only"));
+        } else {
+            colour = i18n("<span style='color: %1;'>*** %2 set the channel to invite only</span>",
+                          Aki::Settings::topicColor().name(), fromNick);
+            d->toLog(i18n("*** %1 set the channel to invite only", fromNick));
+        }
+    } else if (mode == QChar('m')) {
+        if (self) {
+            colour = i18n("<span style='color: %1;'>*** You set the channel to moderated</span>",
+                          Aki::Settings::topicColor().name());
+            d->toLog(i18n("*** You set the channel to moderated</span>"));
+        } else {
+            colour = i18n("<span style='color: %1;'>*** %2 set the channel to moderated</span>",
+                          Aki::Settings::topicColor().name(), fromNick);
+            d->toLog(i18n("*** %1 set the channel to moderated</span>", fromNick));
+        }
+    } else if (mode == QChar('p')) {
+        if (self) {
+            colour = i18n("<span style='color: %1;'>*** You set the channel to private</span>",
+                          Aki::Settings::topicColor().name());
+            d->toLog(i18n("*** You set the channel to private</span>"));
+        } else {
+            colour = i18n("<span style='color: %1;'>*** %2 set the channel to private</span>",
+                          Aki::Settings::topicColor().name(), fromNick);
+            d->toLog(i18n("*** %1 set the channel to private</span>", fromNick));
+        }
+    } else if (mode == QChar('s')) {
+        if (self) {
+            colour = i18n("<span style='color: %1;'>*** You set the channel to secret</span>",
+                          Aki::Settings::topicColor().name());
+            d->toLog(i18n("*** You set the channel to secret"));
+        } else {
+            colour = i18n("<span style='color: %1;'>*** %2 set the channel to secret</span>",
+                          Aki::Settings::topicColor().name(), fromNick);
+            d->toLog(i18n("*** %1 set the channel to secret", fromNick));
+        }
+    } else if (mode == QChar('t')) {
+        if (self) {
+            colour = i18n("<span style='color: %1;'>*** You set the channel to topic protection</span>",
+                         Aki::Settings::topicColor().name());
+            d->toLog(i18n("*** You set the channel to topic protection"));
+        } else {
+            colour = i18n("<span style='color: %1;'>*** %1 set the channel to topic protection</span>",
+                          Aki::Settings::topicColor().name(), fromNick);
+            d->toLog(i18n("*** %1 set the channel to topic protection", fromNick));
+        }
+    } else if (mode == QChar('n')) {
+        if (self) {
+            colour = i18n("<span style='color: %1;'>*** You set the channel to no outside messages</span>",
+                          Aki::Settings::topicColor().name());
+            d->toLog(i18n("*** You set the channel to no outside message"));
+        } else {
+            colour = i18n("<span style='color: %1;'>*** %2 set the channel to no outside messages</span>",
+                          Aki::Settings::topicColor().name(), fromNick);
+            d->toLog(i18n("*** %1 set the channel to no outside messages", fromNick));
+        }
+    }
+
+    d->appendMessage(colour);
+}
+
+void
 ChatView::addMode(const QString &fromNick, const QString &toNick, const QChar &mode,
                   bool toYou, bool fromYou)
 {

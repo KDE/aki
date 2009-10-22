@@ -110,21 +110,21 @@ ChannelModeBar::ChannelModeBar(QWidget *parent)
     QRegExpValidator *validator = new QRegExpValidator(QRegExp("[0-9]+"), this);
     channelLimit->setValidator(validator);
 
-    connect(keywordChannel, SIGNAL(toggled(bool)),
+    connect(keywordChannel, SIGNAL(clicked(bool)),
             SLOT(channelKeyToggled(bool)));
-    connect(limitChannel, SIGNAL(toggled(bool)),
+    connect(limitChannel, SIGNAL(clicked(bool)),
             SLOT(channelLimitToggled(bool)));
-    connect(topicProtectionChannel, SIGNAL(toggled(bool)),
+    connect(topicProtectionChannel, SIGNAL(clicked(bool)),
             SLOT(topicProtectionChannelToggled(bool)));
-    connect(noOutsideMessagesChannel, SIGNAL(toggled(bool)),
+    connect(noOutsideMessagesChannel, SIGNAL(clicked(bool)),
             SLOT(noOutsideMessagesChannelToggled(bool)));
-    connect(secretChannel, SIGNAL(toggled(bool)),
+    connect(secretChannel, SIGNAL(clicked(bool)),
             SLOT(secretChannelToggled(bool)));
-    connect(inviteOnlyChannel, SIGNAL(toggled(bool)),
+    connect(inviteOnlyChannel, SIGNAL(clicked(bool)),
             SLOT(inviteOnlyChannelToggled(bool)));
-    connect(privateChannel, SIGNAL(toggled(bool)),
+    connect(privateChannel, SIGNAL(clicked(bool)),
             SLOT(privateChannelToggled(bool)));
-    connect(moderatedChannel, SIGNAL(toggled(bool)),
+    connect(moderatedChannel, SIGNAL(clicked(bool)),
             SLOT(moderatedChannelToggled(bool)));
     connect(channelKey, SIGNAL(returnPressed(QString)),
             SLOT(channelKeyReturnPressed(QString)));
