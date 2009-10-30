@@ -810,11 +810,6 @@ public:
     void onMode(const QString &from, const QString &channel, const QString &modes,
                 const QString &nick)
     {
-        kDebug() << "String";
-        kDebug() << "From: " << from;
-        kDebug() << "Channel: " << channel;
-        kDebug() << "Modes: " << modes;
-        kDebug() << "Nick: " << nick;
         Aki::ChannelWindow *window = qobject_cast<Aki::ChannelWindow*>(findChannel(channel.toLower()));
         if (window && window->view()) {
             enum {
@@ -1003,6 +998,9 @@ public:
 
                 if (nick.left(1) == QChar('@')) {
                     user->setNick(nick.remove(QChar('@')));
+                    if (user->nick() == window->socket()->currentNick()) {
+                        window->modeBar()->setEnabled(true);
+                    }
                     window->addUser(user);
                 } else if (nick.left(1) == QChar('+')) {
                     user->setNick(nick.remove(QChar('+')));

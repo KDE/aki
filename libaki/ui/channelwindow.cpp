@@ -537,6 +537,7 @@ ChannelWindow::ChannelWindow(const QString &name, Aki::IdentityConfig *identityC
     setSocket(socket);
     setupUi(this);
     setView(chatOutput);
+    modeBar()->setEnabled(false);
     setLogFile(new Aki::LogFile(socket->name(), name, this));
     view()->setLog(logFile());
 
@@ -658,6 +659,12 @@ ChannelWindow::addMode(Aki::Irc::User *user, const QModelIndex &index, const QSt
     QString tmpModes = user->modes();
     user->setModes(tmpModes + mode);
 
+    if (user->nick() == socket()->currentNick()) {
+        if (mode == "o") {
+            modeBar()->setEnabled(true);
+        }
+    }
+
     userList->model()->setData(index, QVariant::fromValue<Aki::Irc::User*>(user),
                                Aki::NickListModel::IrcUserRole);
     userList->update(index);
@@ -703,17 +710,15 @@ ChannelWindow::removeMode(Aki::Irc::User *user, const QModelIndex &index, const 
     QString tmpModes = user->modes();
     user->removeModes(mode);
 
+    if (user->nick() == socket()->currentNick()) {
+        if (mode == "o") {
+            modeBar()->setEnabled(false);
+        }
+    }
+
     userList->model()->setData(index, QVariant::fromValue<Aki::Irc::User*>(user),
                                Aki::NickListModel::IrcUserRole);
     userList->update(index);
-
-    if (mode.contains('o')) {
-
-    } else if (mode.contains('h')) {
-
-    } else if (mode.contains('v')) {
-
-    }
 }
 
 void
