@@ -31,6 +31,7 @@
 #include <Aki/Irc/Socket>
 #include <Aki/Irc/User>
 #include <KDebug>
+#include <KInputDialog>
 #include <KPasswordDialog>
 #include <QMenu>
 #include <QShowEvent>
@@ -392,7 +393,7 @@ public:
     {
         if (state) {
             KPasswordDialog dlg(q);
-            dlg.setPrompt(i18n("Enter a channel key."));
+            dlg.setPrompt(i18n("Enter a channel key"));
             if (!dlg.exec()) {
                 return;
             }
@@ -405,21 +406,44 @@ public:
         }
     }
 
-    void inviteOnlyStateChanged(bool state)
+    void newChannelKey(const QString &key)
     {
-        if (state) {
-            q->socket()->rfcMode(q->name(), "+i");
+        if (key.isEmpty() || key.isNull()) {
+            q->socket()->rfcMode(q->name(), "+k " + key);
         } else {
-            q->socket()->rfcMode(q->name(), "-i");
+            q->socket()->rfcMode(q->name(), "-k");
         }
     }
 
-    void moderatedStateChanged(bool state)
+    void channelLimitStateChanged(bool state)
+    {
+        bool ok = false;
+        int limit = KInputDialog::getInteger(i18n("New Channel Limit"), i18n("Enter a new channel limit"),
+                                             0, 0, 20000, 10, &ok, q);
+        if (ok) {
+            if (state) {
+                q->socket()->rfcMode(q->name(), "+l " + limit);
+            } else {
+                q->socket()->rfcMode(q->name(), "-l");
+            }
+        }
+    }
+
+    void newChannelLimit(int limit)
+    {
+        if (limit <= 0) {
+            q->socket()->rfcMode(q->name(), "-l");
+        } else {
+            q->socket()->rfcMode(q->name(), "+l " + limit);
+        }
+    }
+
+    void topicProtectionStateChanged(bool state)
     {
         if (state) {
-            q->socket()->rfcMode(q->name(), "+m");
+            q->socket()->rfcMode(q->name(), "+t");
         } else {
-            q->socket()->rfcMode(q->name(), "-m");
+            q->socket()->rfcMode(q->name(), "-t");
         }
     }
 
@@ -432,6 +456,24 @@ public:
         }
     }
 
+    void secretStateChanged(bool state)
+    {
+        if (state) {
+            q->socket()->rfcMode(q->name(), "+s");
+        } else {
+            q->socket()->rfcMode(q->name(), "-s");
+        }
+    }
+
+    void inviteOnlyStateChanged(bool state)
+    {
+        if (state) {
+            q->socket()->rfcMode(q->name(), "+i");
+        } else {
+            q->socket()->rfcMode(q->name(), "-i");
+        }
+    }
+
     void privateStateChanged(bool state)
     {
         if (state) {
@@ -441,12 +483,12 @@ public:
         }
     }
 
-    void secretStateChanged(bool state)
+    void moderatedStateChanged(bool state)
     {
         if (state) {
-            q->socket()->rfcMode(q->name(), "+s");
+            q->socket()->rfcMode(q->name(), "+m");
         } else {
-            q->socket()->rfcMode(q->name(), "-s");
+            q->socket()->rfcMode(q->name(), "-m");
         }
     }
 
@@ -524,16 +566,24 @@ ChannelWindow::ChannelWindow(const QString &name, Aki::IdentityConfig *identityC
             SLOT(splitterMoved(int,int)));
     connect(chatModes, SIGNAL(channelKeyStateChanged(bool)),
             SLOT(channelKeyStateChanged(bool)));
-    connect(chatModes, SIGNAL(inviteOnlyStateChanged(bool)),
-            SLOT(inviteOnlyStateChanged(bool)));
-    connect(chatModes, SIGNAL(moderatedStateChanged(bool)),
-            SLOT(moderatedStateChanged(bool)));
+    connect(chatModes, SIGNAL(newChannelKey(QString)),
+            SLOT(newChannelKey(QString)));
+    connect(chatModes, SIGNAL(channelLimitStateChanged(bool)),
+            SLOT(channelLimitStateChanged(bool)));
+    connect(chatModes, SIGNAL(newChannelLimit(int)),
+            SLOT(newChannelLimit(int)));
+    connect(chatModes, SIGNAL(topicProtectionStateChanged(bool)),
+            SLOT(topicProtectionStateChanged(bool)));
     connect(chatModes, SIGNAL(noOutsideMessagesStateChanged(bool)),
             SLOT(noOutsideMessagesStateChanged(bool)));
-    connect(chatModes, SIGNAL(privateStateChanged(bool)),
-            SLOT(privateStateChanged(bool)));
     connect(chatModes, SIGNAL(secretStateChanged(bool)),
             SLOT(secretStateChanged(bool)));
+    connect(chatModes, SIGNAL(inviteOnlyStateChanged(bool)),
+            SLOT(inviteOnlyStateChanged(bool)));
+    connect(chatModes, SIGNAL(privateStateChanged(bool)),
+            SLOT(privateStateChanged(bool)));
+    connect(chatModes, SIGNAL(moderatedStateChanged(bool)),
+            SLOT(moderatedStateChanged(bool)));
 
     socket->rfcMode(name.toLower());
     socket->rfcWho(name.toLower());
@@ -658,11 +708,11 @@ ChannelWindow::removeMode(Aki::Irc::User *user, const QModelIndex &index, const 
     userList->update(index);
 
     if (mode.contains('o')) {
-        
+
     } else if (mode.contains('h')) {
-        
+
     } else if (mode.contains('v')) {
-        
+
     }
 }
 

@@ -343,15 +343,6 @@ MainWindow::MainWindow(QWidget *parent)
     d->messageLog = new Aki::MessageLog(this);
     d->createMenus();
 
-    KStandardDirs dirs;
-    if (dirs.findResource("config", "akiidentityrc").isEmpty()) {
-        Aki::WelcomeDialog *dlg = new Aki::WelcomeDialog(this);
-        dlg->exec();
-#ifdef Q_CC_GNU
-#warning "Fix this so it doesn't block"
-#endif
-    }
-
     d->mainView = new ServerView(this, this);
     d->mainView->addMessageLog(d->messageLog);
     setCentralWidget(d->mainView);

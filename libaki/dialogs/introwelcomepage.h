@@ -33,6 +33,7 @@ class IntroWelcomePagePrivate;
 class IntroWelcomePage : public QWidget,
                          public Ui::IntroWelcomePage
 {
+    Q_OBJECT
 public:
     IntroWelcomePage(QWidget *parent = 0);
     ~IntroWelcomePage();

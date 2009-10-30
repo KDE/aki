@@ -23,12 +23,14 @@
 #include "akiapplication.h"
 #include "config/identityconfig.h"
 #include "config/serverconfig.h"
+#include "libaki/dialogs/welcomedialog.h"
 #include "ui/mainwindow.h"
 #include "settings.h"
 #include "ui/serverview.h"
 #include "ui/systemtray.h"
 #include <Aki/Irc/Socket>
 #include <KCmdLineArgs>
+#include <KStandardDirs>
 #include <KWindowSystem>
 #include <QTimer>
 
@@ -48,6 +50,12 @@ AkiApplication::newInstance()
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 
     if (!m_mainWindow) {
+        KStandardDirs dirs;
+        if (dirs.findResource("config", "akiidentityrc").isEmpty()) {
+            Aki::WelcomeDialog dlg;
+            dlg.exec();
+        }
+
         m_mainWindow = new Aki::MainWindow;
         m_mainWindow->hide();
 

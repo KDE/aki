@@ -23,13 +23,14 @@
 #ifndef WELCOMEDIALOG_H
 #define WELCOMEDIALOG_H
 
+#include "libaki_export.h"
 #include <KAssistantDialog>
 #include <QScopedPointer>
 
 namespace Aki
 {
 class WelcomeDialogPrivate;
-class WelcomeDialog : public KAssistantDialog
+class LIBAKI_EXPORT WelcomeDialog : public KAssistantDialog
 {
     Q_OBJECT
 public:

@@ -59,7 +59,7 @@ public:
     ~ChannelWindow();
     /**
      * Gets the identity configuration for the identity of which this
-     * channel is currently connected for. 
+     * channel is currently connected for.
      */
     Aki::IdentityConfig* identity();
     /**
@@ -160,11 +160,15 @@ private:
     Q_PRIVATE_SLOT(d, void takeVoiceTriggered())
     Q_PRIVATE_SLOT(d, void textSubmitted())
     Q_PRIVATE_SLOT(d, void channelKeyStateChanged(bool state))
-    Q_PRIVATE_SLOT(d, void inviteOnlyStateChanged(bool state))
-    Q_PRIVATE_SLOT(d, void moderatedStateChanged(bool state))
+    Q_PRIVATE_SLOT(d, void newChannelKey(const QString &key))
+    Q_PRIVATE_SLOT(d, void channelLimitStateChanged(bool state))
+    Q_PRIVATE_SLOT(d, void newChannelLimit(int limit))
+    Q_PRIVATE_SLOT(d, void topicProtectionStateChanged(bool state))
     Q_PRIVATE_SLOT(d, void noOutsideMessagesStateChanged(bool state))
-    Q_PRIVATE_SLOT(d, void privateStateChanged(bool state))
     Q_PRIVATE_SLOT(d, void secretStateChanged(bool state))
+    Q_PRIVATE_SLOT(d, void inviteOnlyStateChanged(bool state))
+    Q_PRIVATE_SLOT(d, void privateStateChanged(bool state))
+    Q_PRIVATE_SLOT(d, void moderatedStateChanged(bool state))
     Q_PRIVATE_SLOT(d, void whoTimerTimeout())
     Q_PRIVATE_SLOT(d, void chatTopicReturnPressed(const QString &topic))
     Q_PRIVATE_SLOT(d, void splitterMoved(int pos, int index))

@@ -877,27 +877,27 @@ public:
                     }
                 } else if (ch == QChar('k')) {
                     if (state == Give) {
-                        
+
                     } else if (state == Take) {
-                        
+
                     }
                 } else if (ch == QChar('m')) {
                     if (state == Give) {
                         window->view()->addMode(from, ch, QStringList(), fromYou);
                     } else if (state == Take) {
-                        
+
                     }
                 } else if (ch == QChar('p')) {
                     if (state == Give) {
                         window->view()->addMode(from, ch, QStringList(), fromYou);
                     } else if (state == Take) {
-                        
+
                     }
                 } else if (ch == QChar('s')) {
                     if (state == Give) {
                         window->view()->addMode(from, ch, QStringList(), fromYou);
                     } else if (state == Take) {
-                        
+
                     }
                 } else if (ch == QChar('t')) {
                     if (state == Give) {
@@ -919,6 +919,7 @@ public:
     void onMode(const QString &from, const QString &channel, const QString &modes,
                 const QStringList &params)
     {
+        Q_UNUSED(from);
         Aki::ChannelWindow *window = qobject_cast<Aki::ChannelWindow*>(findChannel(channel.toLower()));
         if (window && window->view()) {
             QStringList modeStrs;

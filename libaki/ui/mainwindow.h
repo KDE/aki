@@ -89,6 +89,9 @@ public:
     void setAkiWindowTitle(const QString &serverName, const QString &channelName);
 
     void loadPlugins();
+
+    void loadCustomServer(const QString &nick, const QString &server = QString(), quint16 port = 6667,
+                          const QString &serverPassword = QString(), bool ssl = false);
 protected:
     virtual void closeEvent(QCloseEvent *event);
 private:

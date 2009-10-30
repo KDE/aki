@@ -265,6 +265,7 @@ void
 ChatView::addMode(const QString &fromNick, const QChar &mode, const QStringList &params,
                   bool self)
 {
+    Q_UNUSED(params);
     QString colour;
     if (mode == QChar('i')) {
         if (self) {
