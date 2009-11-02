@@ -54,7 +54,7 @@ public:
     void addIsOn(const QStringList &nicks);
     void addLUser(const QString &message);
     void addMessage(const QString &message);
-    void addMode(const QString &fromNick, const QChar &mode, const QStringList &params = QStringList(),
+    void addMode(const QString &fromNick, const QChar &mode, const QString &params = QString(),
                  bool self = false);
     void addMode(const QString &fromNick, const QString &toNick, const QChar &mode,
                  bool toYou = false, bool fromYou = false);
@@ -66,6 +66,7 @@ public:
     void addPrivmsg(const QString &from, const QString &message);
     void addPrivmsgHighlight(const QString &from, const QString &message);
     void addRemoveBan(const QString &nick, const QString &mask);
+    void addRemoveMode(const QString &fromNick, const QChar &mode, bool self = false);
     void addRemoveMode(const QString &fromNick, const QString &toNick, const QChar &mode,
                        bool toYou = false, bool fromYou = false);
     void addSelfUModeSet(const QString &modes);

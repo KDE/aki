@@ -36,6 +36,7 @@
 #include <QMenu>
 #include <QShowEvent>
 #include <QTimer>
+#include <KMessageBox>
 using namespace Aki;
 
 namespace Aki
@@ -399,9 +400,9 @@ public:
             }
 
             q->chatModes->setKey(dlg.password());
-
             q->socket()->rfcMode(q->name(), "+k " + q->chatModes->key());
         } else {
+            q->chatModes->setKey("");
             q->socket()->rfcMode(q->name(), "-k");
         }
     }
@@ -417,15 +418,16 @@ public:
 
     void channelLimitStateChanged(bool state)
     {
-        bool ok = false;
-        int limit = KInputDialog::getInteger(i18n("New Channel Limit"), i18n("Enter a new channel limit"),
-                                             0, 0, 20000, 10, &ok, q);
-        if (ok) {
-            if (state) {
-                q->socket()->rfcMode(q->name(), "+l " + limit);
-            } else {
-                q->socket()->rfcMode(q->name(), "-l");
+        if (state) {
+            bool ok = false;
+            int limit = KInputDialog::getInteger(i18n("New Channel Limit"), i18n("Enter a new channel limit"),
+                                                 0, 0, 20000, 10, &ok, q);
+            if (ok) {
+                q->chatModes->setLimit(limit);
+                q->socket()->rfcMode(q->name(), "+l " + QString::number(limit));
             }
+        } else {
+            q->socket()->rfcMode(q->name(), "-l");
         }
     }
 
@@ -434,7 +436,7 @@ public:
         if (limit <= 0) {
             q->socket()->rfcMode(q->name(), "-l");
         } else {
-            q->socket()->rfcMode(q->name(), "+l " + limit);
+            q->socket()->rfcMode(q->name(), "+l " + QString::number(limit));
         }
     }
 

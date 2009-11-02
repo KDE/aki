@@ -867,44 +867,51 @@ public:
                     }
                 } else if (ch == 'i') {
                     if (state == Give) {
-                        window->view()->addMode(from, ch, QStringList(), fromYou);
+                        window->view()->addMode(from, ch, QString(), fromYou);
                     } else if (state == Take) {
-                    }
-                } else if (ch == QChar('k')) {
-                    if (state == Give) {
-
-                    } else if (state == Take) {
-
+                        window->view()->addRemoveMode(from, ch, fromYou);
                     }
                 } else if (ch == QChar('m')) {
                     if (state == Give) {
-                        window->view()->addMode(from, ch, QStringList(), fromYou);
+                        window->view()->addMode(from, ch, QString(), fromYou);
                     } else if (state == Take) {
-
+                        window->view()->addRemoveMode(from, ch, fromYou);
                     }
                 } else if (ch == QChar('p')) {
                     if (state == Give) {
-                        window->view()->addMode(from, ch, QStringList(), fromYou);
+                        window->view()->addMode(from, ch, QString(), fromYou);
                     } else if (state == Take) {
-
+                        window->view()->addRemoveMode(from, ch, fromYou);
                     }
                 } else if (ch == QChar('s')) {
                     if (state == Give) {
-                        window->view()->addMode(from, ch, QStringList(), fromYou);
+                        window->view()->addMode(from, ch, QString(), fromYou);
                     } else if (state == Take) {
-
+                        window->view()->addRemoveMode(from, ch, fromYou);
                     }
                 } else if (ch == QChar('t')) {
                     if (state == Give) {
-                        window->view()->addMode(from, ch, QStringList(), fromYou);
+                        window->view()->addMode(from, ch, QString(), fromYou);
                     } else if (state == Take) {
-
+                        window->view()->addRemoveMode(from, ch, fromYou);
                     }
                 } else if (ch == QChar('n')) {
                     if (state == Give) {
-                        window->view()->addMode(from, ch, QStringList(), fromYou);
+                        window->view()->addMode(from, ch, QString(), fromYou);
                     } else if (state == Take) {
-
+                        window->view()->addRemoveMode(from, ch, fromYou);
+                    }
+                } else if (ch == QChar('l')) {
+                    if (state == Give) {
+                        window->view()->addMode(from, ch, QString(), fromYou);
+                    } else if (state == Take) {
+                        window->view()->addRemoveMode(from, ch, fromYou);
+                    }
+                } else if (ch == QChar('k')) {
+                    if (state == Give) {
+                        window->view()->addMode(from, ch, QString(), fromYou);
+                    } else if (state == Take) {
+                        window->view()->addRemoveMode(from, ch, fromYou);
                     }
                 }
             }

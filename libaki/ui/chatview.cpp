@@ -262,10 +262,9 @@ ChatView::addMessage(const QString &message)
 }
 
 void
-ChatView::addMode(const QString &fromNick, const QChar &mode, const QStringList &params,
+ChatView::addMode(const QString &fromNick, const QChar &mode, const QString &params,
                   bool self)
 {
-    Q_UNUSED(params);
     QString colour;
     if (mode == QChar('i')) {
         if (self) {
@@ -313,7 +312,7 @@ ChatView::addMode(const QString &fromNick, const QChar &mode, const QStringList 
                          Aki::Settings::topicColor().name());
             d->toLog(i18n("*** You set the channel to topic protection"));
         } else {
-            colour = i18n("<span style='color: %1;'>*** %1 set the channel to topic protection</span>",
+            colour = i18n("<span style='color: %1;'>*** %2 set the channel to topic protection</span>",
                           Aki::Settings::topicColor().name(), fromNick);
             d->toLog(i18n("*** %1 set the channel to topic protection", fromNick));
         }
@@ -326,6 +325,27 @@ ChatView::addMode(const QString &fromNick, const QChar &mode, const QStringList 
             colour = i18n("<span style='color: %1;'>*** %2 set the channel to no outside messages</span>",
                           Aki::Settings::topicColor().name(), fromNick);
             d->toLog(i18n("*** %1 set the channel to no outside messages", fromNick));
+        }
+    } else if (mode == QChar('k')) {
+        if (self) {
+            colour = i18n("<span style='color: %1;'>*** You set the channel keyword to '%2'</span>",
+                          Aki::Settings::topicColor().name(), params);
+            d->toLog(i18n("*** You set the channel keyword to '%1'", params));
+        } else {
+            colour = i18n("<span style='color: %1;'>*** %2 set the channel keyword to '%3'</span>",
+                          Aki::Settings::topicColor().name(), fromNick, params);
+            d->toLog(i18n("*** %1 set the channel keyword to '%2'", fromNick, params));
+        }
+    } else if (mode == QChar('l')) {
+        if (self) {
+            colour = i18n("<span style='color: %1;'>*** You set the channel limit to %2 users</span>",
+                          Aki::Settings::topicColor().name(), params);
+            d->toLog(i18n("*** You set the channel limit to %1 users", params));
+        } else {
+            colour = i18n("<span style='color: %1;'>*** %2 set the channel limit to %3 users</span>",
+                         Aki::Settings::topicColor().name(), fromNick, params);
+            d->toLog(i18n("*** %1 set the channel limit to %2 users</span>",
+                          fromNick, params));
         }
     }
 
@@ -464,6 +484,95 @@ ChatView::addRemoveBan(const QString &nick, const QString &mask)
     QString colour = i18n("<span style='color %1;'>*** %2 removed ban on %3</span>",
                           Aki::Settings::unbanColor().name(), nick, mask);
     d->toLog(i18n("*** %1 removed ban on %2", d->stripHtml(nick), mask));
+    d->appendMessage(colour);
+}
+
+void
+ChatView::addRemoveMode(const QString &fromNick, const QChar &mode, bool self)
+{
+    QString colour;
+    if (mode == QChar('i')) {
+        if (self) {
+            colour = i18n("<span style='color: %1;'>*** You removed the channel's invite only mode</span>",
+                          Aki::Settings::topicColor().name());
+            d->toLog(i18n("*** You removed the channel's invite only mode"));
+        } else {
+            colour = i18n("<span style='color: %1;'>*** %2 removed the channel's invite only mode</span>",
+                          Aki::Settings::topicColor().name(), fromNick);
+            d->toLog(i18n("*** %1 removed the channel's invite only mode"));
+        }
+    } else if (mode == QChar('m')) {
+        if (self) {
+            colour = i18n("<span style='color: %1;'>*** You removed the channel's moderation</span>",
+                          Aki::Settings::topicColor().name());
+            d->toLog(i18n("*** You removed the channel's moderation"));
+        } else {
+            colour = i18n("<span style='color: %1;'>*** %2 removed the channel's moderation</span>",
+                          Aki::Settings::topicColor().name(), fromNick);
+            d->toLog(i18n("*** %1 removed the channel's moderation", fromNick));
+        }
+    } else if (mode == QChar('p')) {
+        if (self) {
+            colour = i18n("<span style='color: %1;'>*** You set the channel to public</span>",
+                          Aki::Settings::topicColor().name());
+            d->toLog(i18n("*** You set the channel to public"));
+        } else {
+            colour = i18n("<span style='color: %1;'>*** %2 set the channel to public</span>",
+                          Aki::Settings::topicColor().name(), fromNick);
+            d->toLog(i18n("*** %1 set the channel to public", fromNick));
+        }
+    } else if (mode == QChar('s')) {
+        if (self) {
+            colour = i18n("<span style='color: %1;'>*** You set the channel to visible</span>",
+                          Aki::Settings::topicColor().name());
+            d->toLog(i18n("*** You set the channel to visible"));
+        } else {
+            colour = i18n("<span style='color: %1;'>*** %2 set the channel to visible</span>",
+                          Aki::Settings::topicColor().name(), fromNick);
+            d->toLog(i18n("*** %1 set the channel to visible", fromNick));
+        }
+    } else if (mode == QChar('t')) {
+        if (self) {
+            colour = i18n("<span style='color: %1;'>*** You removed the channel's topic protection</span>",
+                          Aki::Settings::topicColor().name());
+            d->toLog(i18n("*** You removed the channel's topic protection</span>"));
+        } else {
+            colour = i18n("<span style='color: %1;'>*** %2 removed the channel's topic protection</span>",
+                          Aki::Settings::topicColor().name(), fromNick);
+            d->toLog(i18n("*** %1 removed the channel's topic protection"));
+        }
+    } else if (mode == QChar('n')) {
+        if (self) {
+            colour = i18n("<span style='color: %1;'>*** You set the channel to allow outside messages</span>",
+                          Aki::Settings::topicColor().name());
+            d->toLog(i18n("*** You set the channel to allow outside messages</span>"));
+        } else {
+            colour = i18n("<span style='color: %1;'>*** %2 set the channel to allow outside messages</span>",
+                          Aki::Settings::topicColor().name(), fromNick);
+            d->toLog(i18n("*** %1 set the channel to allow outside messages</span>", fromNick));
+        }
+    } else if (mode == QChar('k')) {
+        if (self) {
+            colour = i18n("<span style='color: %1;'>*** You removed the channel's keyword</span>",
+                          Aki::Settings::topicColor().name());
+            d->toLog(i18n("*** You removed the channel's keyword"));
+        } else {
+            colour = i18n("<span style='color: %1;'>*** %2 removed the channel's keyword</span>",
+                          Aki::Settings::topicColor().name(), fromNick);
+            d->toLog(i18n("*** %1 removed the channel's keyword", fromNick));
+        }
+    } else if (mode == QChar('l')) {
+        if (self) {
+            colour = i18n("<span style='color: %1;'>*** You removed the channel's user limit</span>",
+                          Aki::Settings::topicColor().name());
+            d->toLog(i18n("*** You removed the channel's user limit"));
+        } else {
+            colour = i18n("<span style='color: %1;'>*** %2 removed the channel's user limit</span>",
+                          Aki::Settings::topicColor().name(), fromNick);
+            d->toLog(i18n("*** %1 removed the channel's user limit", fromNick));
+        }
+    }
+
     d->appendMessage(colour);
 }
 
