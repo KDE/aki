@@ -36,6 +36,7 @@ main(int argc, char **argv)
                                "Build Date: %1 at %2").subs(__DATE__).subs(__TIME__));
     aboutData.addAuthor(ki18n("Keith Rusler"), ki18n("Lead Developer"), "xzekecomax@gmail.com");
     aboutData.addCredit(ki18n("Lee Olson"), ki18n("Aki Icon Author"), "leetolson@gmail.com");
+    aboutData.addCredit(ki18n("Andreas Marschke"), ki18n("Bughunter, Testing and Design"), "xxtjaxx@gmail.com");
 
     KCmdLineArgs::init(argc, argv, &aboutData);
     KCmdLineOptions options;
