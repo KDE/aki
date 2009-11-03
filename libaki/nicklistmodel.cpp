@@ -36,16 +36,15 @@ public:
 } // End of namespace Aki.
 
 NickListModel::NickListModel(QObject *parent)
-    : QAbstractListModel(parent),
-    d(new NickListModelPrivate)
+    : QAbstractListModel(parent)
 {
+    d.reset(new Aki::NickListModelPrivate);
 }
 
 NickListModel::~NickListModel()
 {
     qDeleteAll(d->nickList);
     d->nickList.clear();
-    delete d;
 }
 
 QVariant

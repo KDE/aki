@@ -24,23 +24,49 @@
 #define AKI_NOTIFICATIONS_H
 
 #include <QObject>
+#include <QScopedPointer>
 
 class KMainWindow;
 namespace Aki
 {
 class NotificationsPrivate;
+/**
+ * Notifications is a wrapper around KNotify to give Aki taskbar
+ * popups on each system of important information.
+ */
 class Notifications : public QObject
 {
     Q_OBJECT
 public:
+    /**
+     * Creates the notification object.
+     * @param parent Parent of the object.
+     */
     Notifications(QObject *parent = 0);
+    /**
+     * Destroys the object.
+     */
     ~Notifications();
+    /**
+     * Sets the main window of the notification.
+     * @param window Main window of the application.
+     */
     void setWindow(KMainWindow *window);
+    /**
+     * A highlight was triggered.
+     * @param from Nick of the person who triggered this.
+     * @param message Message of the user who sent this.
+     */
     void highlight(const QString &from, const QString &message);
+    /**
+     * A private message was triggered.
+     * @param from Nick of the person who triggered this.
+     * @param message Message of the user who sent this.
+     */
     void privateMessage(const QString &from, const QString &message);
 private:
     friend class NotificationsPrivate;
-    NotificationsPrivate* const d;
+    QScopedPointer<NotificationsPrivate> d;
 }; // End of class Notifications.
 } // End of namespace Aki.
 

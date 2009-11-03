@@ -23,155 +23,195 @@
 #include "identity.h"
 using namespace Aki;
 
+namespace Aki
+{
+class IdentityPrivate
+{
+public:
+    IdentityPrivate()
+        : awayMessage(QString()),
+        awayNickname(QString()),
+        name(QString()),
+        kickMessage(QString()),
+        partMessage(QString()),
+        quitMessage(QString()),
+        realName(QString()),
+        returnMessage(QString()),
+        isAwayMessagesEnabled(false),
+        isMarkLastPositionEnabled(false)
+    {
+        nicknameList.clear();
+    }
+
+    QStringList nicknameList;
+    QString awayMessage;
+    QString awayNickname;
+    QString name;
+    QString kickMessage;
+    QString partMessage;
+    QString quitMessage;
+    QString realName;
+    QString returnMessage;
+    bool isAwayMessagesEnabled;
+    bool isMarkLastPositionEnabled;
+}; // End of class IdentityPrivate.
+} // End of namespace Aki.
+
 Identity::Identity()
 {
+    d.reset(new Aki::IdentityPrivate);
 }
 
 Identity::Identity(const QString &name)
-    : m_name(name)
+{
+    d.reset(new Aki::IdentityPrivate);
+    d->name = name;
+}
+
+Identity::~Identity()
 {
 }
 
 QString
 Identity::awayMessage() const
 {
-    return m_awayMessage;
+    return d->awayMessage;
 }
 
 QString
 Identity::awayNickname() const
 {
-    return m_awayNickname;
+    return d->awayNickname;
 }
 
 QString
 Identity::name() const
 {
-    return m_name;
+    return d->name;
 }
 
 bool
 Identity::isAwayMessagesEnabled() const
 {
-    return m_isAwayMessagesEnabled;
+    return d->isAwayMessagesEnabled;
 }
 
 bool
 Identity::isMarkLastPositionEnabled() const
 {
-    return m_isMarkLastPositionEnabled;
+    return d->isMarkLastPositionEnabled;
 }
 
 QString
 Identity::kickMessage() const
 {
-    return m_kickMessage;
+    return d->kickMessage;
 }
 
 QString
 Identity::nickname(int index) const
 {
-    return m_nicknameList.value(index);
+    return d->nicknameList.value(index);
 }
 
 QStringList
 Identity::nicknameList() const
 {
-    return m_nicknameList;
+    return d->nicknameList;
 }
 
 QString
 Identity::partMessage() const
 {
-    return m_partMessage;
+    return d->partMessage;
 }
 
 QString
 Identity::quitMessage() const
 {
-    return m_quitMessage;
+    return d->quitMessage;
 }
 
 QString
 Identity::realName() const
 {
-    return m_realName;
+    return d->realName;
 }
 
 QString
 Identity::returnMessage() const
 {
-    return m_returnMessage;
+    return d->returnMessage;
 }
 
 void
 Identity::setAwayMessage(const QString &message)
 {
-    m_awayMessage = message;
+    d->awayMessage = message;
 }
 
 void
 Identity::setAwayNickname(const QString &nickname)
 {
-    m_awayNickname = nickname;
+    d->awayNickname = nickname;
 }
 
 void
 Identity::setName(const QString &name)
 {
-    m_name = name;
+    d->name = name;
 }
 
 void
 Identity::setKickMessage(const QString &message)
 {
-    m_kickMessage = message;
+    d->kickMessage = message;
 }
 
 void
 Identity::setMarkLastPosition(bool enable)
 {
-    m_isMarkLastPositionEnabled = enable;
+    d->isMarkLastPositionEnabled = enable;
 }
 
 void
 Identity::setNickname(int index, const QString &nickname)
 {
-    m_nicknameList.replace(index, nickname);
+    d->nicknameList.replace(index, nickname);
 }
 
 void
 Identity::setNicknameList(const QStringList &nicknames)
 {
-    m_nicknameList = nicknames;
+    d->nicknameList = nicknames;
 }
 
 void
 Identity::setPartMessage(const QString &message)
 {
-    m_partMessage = message;
+    d->partMessage = message;
 }
 
 void
 Identity::setQuitMessage(const QString &message)
 {
-    m_quitMessage = message;
+    d->quitMessage = message;
 }
 
 void
 Identity::setRealName(const QString &name)
 {
-    m_realName = name;
+    d->realName = name;
 }
 
 void
 Identity::setReturnMessage(const QString &message)
 {
-    m_returnMessage = message;
+    d->returnMessage = message;
 }
 
 void
 Identity::setUseAwayMessages(bool enable)
 {
-    m_isAwayMessagesEnabled = enable;
+    d->isAwayMessagesEnabled = enable;
 }

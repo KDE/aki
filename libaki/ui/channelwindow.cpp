@@ -520,8 +520,40 @@ public:
         splitSize.sync();
     }
 
+    void addMode(Aki::Irc::User *user, const QModelIndex &index, const QString &mode)
+    {
+        QString tmpModes = user->modes();
+        user->setModes(tmpModes + mode);
+
+        if (user->nick() == q->socket()->currentNick()) {
+            if (mode == "o") {
+                q->modeBar()->setEnabled(true);
+            }
+        }
+
+        q->userList->model()->setData(index, QVariant::fromValue<Aki::Irc::User*>(user),
+                                      Aki::NickListModel::IrcUserRole);
+        q->userList->update(index);
+    }
+
+    void removeMode(Aki::Irc::User *user, const QModelIndex &index, const QString &mode)
+    {
+        QString tmpModes = user->modes();
+        user->removeModes(mode);
+
+        if (user->nick() == q->socket()->currentNick()) {
+            if (mode == "o") {
+                q->modeBar()->setEnabled(false);
+            }
+        }
+
+        q->userList->model()->setData(index, QVariant::fromValue<Aki::Irc::User*>(user),
+                                      Aki::NickListModel::IrcUserRole);
+        q->userList->update(index);
+    }
+
     Aki::ChannelWindow *q;
-    IdentityConfig *identity;
+    Aki::IdentityConfig *identity;
     Aki::ChatParser *parser;
     QTimer *whoTimer;
     bool isWhoRunning;
@@ -530,9 +562,10 @@ public:
 
 ChannelWindow::ChannelWindow(const QString &name, Aki::IdentityConfig *identityConfig,
                              Aki::Irc::Socket *socket, QWidget *parent)
-    : Aki::BaseWindow(name, Aki::BaseWindow::ChannelWindow, parent),
-    d(new ChannelWindowPrivate(this))
+    : Aki::BaseWindow(name, Aki::BaseWindow::ChannelWindow, parent)
 {
+    d.reset(new Aki::ChannelWindowPrivate(this));
+
     d->identity = identityConfig;
     d->whoTimer = new QTimer(this);
 
@@ -600,7 +633,6 @@ ChannelWindow::ChannelWindow(const QString &name, Aki::IdentityConfig *identityC
 
 ChannelWindow::~ChannelWindow()
 {
-    delete d;
 }
 
 Aki::IdentityConfig*
@@ -656,23 +688,6 @@ ChannelWindow::users()
 }
 
 void
-ChannelWindow::addMode(Aki::Irc::User *user, const QModelIndex &index, const QString &mode)
-{
-    QString tmpModes = user->modes();
-    user->setModes(tmpModes + mode);
-
-    if (user->nick() == socket()->currentNick()) {
-        if (mode == "o") {
-            modeBar()->setEnabled(true);
-        }
-    }
-
-    userList->model()->setData(index, QVariant::fromValue<Aki::Irc::User*>(user),
-                               Aki::NickListModel::IrcUserRole);
-    userList->update(index);
-}
-
-void
 ChannelWindow::addMode(const QString &nick, const QString &mode)
 {
     QModelIndex index;
@@ -683,7 +698,7 @@ ChannelWindow::addMode(const QString &nick, const QString &mode)
         user = userList->model()->data(index, Aki::NickListModel::IrcUserRole)
                                         .value<Aki::Irc::User*>();
         if (user->nick() == nick) {
-            addMode(user, index, mode);
+            d->addMode(user, index, mode);
             return;
         }
     }
@@ -700,27 +715,10 @@ ChannelWindow::removeMode(const QString &nick, const QString &mode)
         user = userList->model()->data(index, Aki::NickListModel::IrcUserRole)
                                         .value<Aki::Irc::User*>();
         if (user->nick() == nick) {
-            removeMode(user, index, mode);
+            d->removeMode(user, index, mode);
             return;
         }
     }
-}
-
-void
-ChannelWindow::removeMode(Aki::Irc::User *user, const QModelIndex &index, const QString &mode)
-{
-    QString tmpModes = user->modes();
-    user->removeModes(mode);
-
-    if (user->nick() == socket()->currentNick()) {
-        if (mode == "o") {
-            modeBar()->setEnabled(false);
-        }
-    }
-
-    userList->model()->setData(index, QVariant::fromValue<Aki::Irc::User*>(user),
-                               Aki::NickListModel::IrcUserRole);
-    userList->update(index);
 }
 
 void

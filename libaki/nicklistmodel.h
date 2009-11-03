@@ -25,6 +25,7 @@
 
 #include "libaki_export.h"
 #include <QAbstractItemModel>
+#include <QScopedPointer>
 
 namespace Aki
 {
@@ -66,7 +67,7 @@ public:
     int count() const;
 private:
     friend class NickListModelPrivate;
-    NickListModelPrivate* const d;
+    QScopedPointer<NickListModelPrivate> d;
 }; // End of class NickListModel.
 } // End of namespace Aki.
 

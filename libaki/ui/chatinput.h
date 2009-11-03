@@ -25,6 +25,7 @@
 
 #include "libaki_export.h"
 #include <KLineEdit>
+#include <QScopedPointer>
 
 namespace Aki
 {
@@ -44,11 +45,8 @@ protected:
     virtual void keyPressEvent(QKeyEvent *event);
     virtual void wheelEvent(QWheelEvent *event);
 private:
-    enum {
-        HISTORY_LIMIT = 50
-    };
     friend class ChatInputPrivate;
-    ChatInputPrivate* const d;
+    QScopedPointer<ChatInputPrivate> d;
 private:
     Q_PRIVATE_SLOT(d, void insertCompletion(const QString &nick))
 }; // End of class ChatInput.

@@ -25,6 +25,7 @@
 
 #include "libaki_export.h"
 #include "ui_channelmodebar.h"
+#include <QScopedPointer>
 #include <QWidget>
 
 namespace Aki
@@ -148,7 +149,7 @@ private:
     Q_PRIVATE_SLOT(d, void channelLimitReturnPressed(const QString &limit))
 private:
     friend class ChannelModeBarPrivate;
-    ChannelModeBarPrivate* const d;
+    QScopedPointer<ChannelModeBarPrivate> d;
 }; // End of class ChannelModeBar.
 } // End of namespace Aki.
 

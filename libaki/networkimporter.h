@@ -23,12 +23,13 @@
 #define AKI_NETWORKIMPORTER_H
 
 #include "libaki_export.h"
+#include "server.h"
+#include <QScopedPointer>
 #include <QSharedPointer>
 #include <QXmlStreamReader>
 
 namespace Aki
 {
-class Server;
 class NetworkImporterPrivate;
 class LIBAKI_EXPORT NetworkImporter : public QXmlStreamReader
 {
@@ -36,10 +37,10 @@ public:
     NetworkImporter();
     ~NetworkImporter();
     bool read(QIODevice *device);
-    QList<QSharedPointer<Aki::Server> > serverList() const;
+    Aki::ServerList serverList() const;
 private:
     friend class NetworkImporterPrivate;
-    NetworkImporterPrivate* const d;
+    QScopedPointer<NetworkImporterPrivate> d;
 }; // End of class NetworkImporter.
 } // End of namespace Aki.
 

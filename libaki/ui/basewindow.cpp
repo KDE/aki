@@ -29,16 +29,40 @@
 #include <Aki/Irc/Socket>
 using namespace Aki;
 
-BaseWindow::BaseWindow(const QString &name, const Aki::BaseWindow::WindowType &type, QWidget *parent)
-    : QWidget(parent),
-    m_type(type),
-    m_socket(0),
-    m_view(0),
-    m_notifications(0),
-    m_channelView(0),
-    m_logFile(0),
-    m_name(name)
+namespace Aki
 {
+class BaseWindowPrivate
+{
+public:
+    BaseWindowPrivate()
+        : type(Aki::BaseWindow::OtherWindow),
+        socket(0),
+        view(0),
+        notifications(0),
+        channelView(0),
+        logFile(0),
+        name(QString()),
+        isCurrent(false)
+    {
+    }
+
+    Aki::BaseWindow::WindowType type;
+    Aki::Irc::Socket *socket;
+    Aki::ChatView *view;
+    Aki::Notifications *notifications;
+    Aki::ChannelView *channelView;
+    Aki::LogFile *logFile;
+    QString name;
+    bool isCurrent;
+}; // End of class BaseWindowPrivate.
+} // End of namespace Aki.
+
+BaseWindow::BaseWindow(const QString &name, const Aki::BaseWindow::WindowType &type, QWidget *parent)
+    : QWidget(parent)
+{
+    d.reset(new Aki::BaseWindowPrivate);
+    d->name = name;
+    d->type = type;
     setAttribute(Qt::WA_DeleteOnClose, true);
 }
 
@@ -49,121 +73,121 @@ BaseWindow::~BaseWindow()
 bool
 BaseWindow::isCurrent() const
 {
-    return m_isCurrent;
+    return d->isCurrent;
 }
 
 QString
 BaseWindow::name() const
 {
-    return m_name;
+    return d->name;
 }
 
 void
 BaseWindow::setCurrent(bool current)
 {
-    m_isCurrent = current;
+    d->isCurrent = current;
 }
 
 void
 BaseWindow::setName(const QString &name)
 {
-    m_name = name;
+    d->name = name;
 }
 
 void
 BaseWindow::setWindowType(const Aki::BaseWindow::WindowType &type)
 {
-    m_type = type;
+    d->type = type;
 }
 
 Aki::BaseWindow::WindowType
 BaseWindow::windowType() const
 {
-    return m_type;
+    return d->type;
 }
 
 void
 BaseWindow::setSocket(Aki::Irc::Socket *socket)
 {
-    m_socket = socket;
+    d->socket = socket;
 }
 
 Aki::Irc::Socket*
 BaseWindow::socket()
 {
-    return m_socket;
+    return d->socket;
 }
 
 void
 BaseWindow::setView(Aki::ChatView *view)
 {
-    m_view = view;
+    d->view = view;
 }
 
 Aki::ChatView*
 BaseWindow::view()
 {
-    return m_view;
+    return d->view;
 }
 
 void
 BaseWindow::setNotifications(Aki::Notifications *notifications)
 {
-    m_notifications = notifications;
+    d->notifications = notifications;
 }
 
 Aki::Notifications*
 BaseWindow::notifications()
 {
-    return m_notifications;
+    return d->notifications;
 }
 
 void
 BaseWindow::setChannelView(Aki::ChannelView *view)
 {
-    m_channelView = view;
+    d->channelView = view;
 }
 
 void
 BaseWindow::setTabText(const QString &name)
 {
-    const int index = m_channelView->indexOf(this);
-    m_channelView->setTabText(index, name);
+    const int index = d->channelView->indexOf(this);
+    d->channelView->setTabText(index, name);
 }
 
 void
 BaseWindow::setLogFile(Aki::LogFile *logFile)
 {
-    m_logFile = logFile;
+    d->logFile = logFile;
 }
 
 Aki::LogFile*
 BaseWindow::logFile()
 {
-    return m_logFile;
+    return d->logFile;
 }
 
 void
 BaseWindow::setTabColor(const Aki::BaseWindow::TabColor &color)
 {
-    const int currentIndex = m_channelView->indexOf(this);
-    const QColor currentColor = m_channelView->tabTextColor(currentIndex);
+    const int currentIndex = d->channelView->indexOf(this);
+    const QColor currentColor = d->channelView->tabTextColor(currentIndex);
     const QColor defaultColor = Aki::Settings::defaultTabColor();
     const QColor highlightColor = Aki::Settings::highlightTabColor();
     const QColor newDataColor = Aki::Settings::newDataTabColor();
     const QColor newMessageColor = Aki::Settings::newMessageTabColor();
 
     if (color == BaseWindow::Default) {
-        m_channelView->setTabTextColor(currentIndex, defaultColor);
+        d->channelView->setTabTextColor(currentIndex, defaultColor);
     } else if (color == BaseWindow::Highlight) {
-        m_channelView->setTabTextColor(currentIndex, highlightColor);
+        d->channelView->setTabTextColor(currentIndex, highlightColor);
     } else if (color == BaseWindow::NewData) {
         if (currentColor == defaultColor) {
-            m_channelView->setTabTextColor(currentIndex, newDataColor);
+            d->channelView->setTabTextColor(currentIndex, newDataColor);
         }
     } else if (color == BaseWindow::NewMessage) {
         if (currentColor != highlightColor) {
-            m_channelView->setTabTextColor(currentIndex, newMessageColor);
+            d->channelView->setTabTextColor(currentIndex, newMessageColor);
         }
     }
 }

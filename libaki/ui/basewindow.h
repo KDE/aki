@@ -24,6 +24,7 @@
 #define BASEWINDOW_H
 
 #include "libaki_export.h"
+#include <QScopedPointer>
 #include <QWidget>
 
 namespace Aki
@@ -36,6 +37,7 @@ class Notifications;
 class LogFile;
 class ChannelView;
 class ChatView;
+class BaseWindowPrivate;
 /**
  * Base window class for all the tabs in ServerView and ChannelView.
  * Every class has to inherit this class for it to appear in Aki. The
@@ -158,14 +160,8 @@ public:
 protected:
     virtual void setLogFile(Aki::LogFile *logFile);
 private:
-    Aki::BaseWindow::WindowType m_type;
-    Aki::Irc::Socket *m_socket;
-    Aki::ChatView *m_view;
-    Aki::Notifications *m_notifications;
-    Aki::ChannelView *m_channelView;
-    Aki::LogFile *m_logFile;
-    QString m_name;
-    bool m_isCurrent;
+    friend class BaseWindowPrivate;
+    QScopedPointer<BaseWindowPrivate> d;
 }; // End of class BaseWindow.
 } // End of namespace Aki.
 

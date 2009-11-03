@@ -68,6 +68,10 @@ public:
         q->setCursorPosition(position + 1);
     }
 
+    enum {
+        HISTORY_LIMIT = 50
+    };
+
     ChatInput *q;
     QStringList history;
     KCompletionBox *completionBox;
@@ -79,6 +83,7 @@ ChatInput::ChatInput(QWidget *parent)
     : KLineEdit(parent),
     d(new ChatInputPrivate(this))
 {
+    d.reset(new Aki::ChatInputPrivate(this));
     d->completionBox = new KCompletionBox(this);
     connect(d->completionBox, SIGNAL(activated(QString)),
             SLOT(insertCompletion(QString)));
@@ -86,7 +91,6 @@ ChatInput::ChatInput(QWidget *parent)
 
 ChatInput::~ChatInput()
 {
-    delete d;
 }
 
 bool
@@ -117,7 +121,7 @@ ChatInput::keyPressEvent(QKeyEvent *event)
         d->history << text();
         d->lineNumber = d->history.count();
 
-        if (d->history.count() > HISTORY_LIMIT) {
+        if (d->history.count() > Aki::ChatInputPrivate::HISTORY_LIMIT) {
             d->history.takeFirst();
             d->lineNumber = d->history.count();
         }

@@ -25,6 +25,7 @@
 #include "libaki_export.h"
 #include "interfaces/maininterface.h"
 #include <KXmlGuiWindow>
+#include <QScopedPointer>
 
 class QDockWidget;
 
@@ -109,7 +110,7 @@ private:
     Q_PRIVATE_SLOT(d, void identityTriggered())
 private:
     friend class MainWindowPrivate;
-    MainWindowPrivate* const d;
+    QScopedPointer<MainWindowPrivate> d;
 }; // End of class MainWindow.
 } // End of namespace Aki.
 

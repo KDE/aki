@@ -26,6 +26,7 @@
 #include "libaki_export.h"
 #include <QIODevice>
 #include <QObject>
+#include <QScopedPointer>
 #include <QStringList>
 
 class QTextStream;
@@ -66,7 +67,7 @@ public:
     void appendLine(const QString &value);
 private:
     friend class LogFilePrivate;
-    LogFilePrivate* const d;
+    QScopedPointer<LogFilePrivate> d;
 }; // End of class LogFile.
 } // End of namespace Aki.
 

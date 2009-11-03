@@ -25,6 +25,7 @@
 
 #include "libaki_export.h"
 #include <KTextBrowser>
+#include <QScopedPointer>
 
 namespace Aki
 {
@@ -104,7 +105,7 @@ public:
     void setLog(Aki::LogFile *logFile);
 private:
     friend class ChatViewPrivate;
-    ChatViewPrivate* const d;
+    QScopedPointer<ChatViewPrivate> d;
 }; // End of class ChatView.
 } // End of namespace Aki.
 

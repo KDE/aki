@@ -44,11 +44,11 @@ Notifications::Notifications(QObject *parent)
     : QObject(parent),
     d(new NotificationsPrivate)
 {
+    d.reset(new Aki::NotificationsPrivate);
 }
 
 Notifications::~Notifications()
 {
-    delete d;
 }
 
 void
@@ -60,7 +60,6 @@ Notifications::setWindow(KMainWindow *window)
 void
 Notifications::highlight(const QString &from, const QString &message)
 {
-    kDebug() << d->window;
     if (!d->window) {
         return;
     }

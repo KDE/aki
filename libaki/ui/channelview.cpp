@@ -203,9 +203,10 @@ public:
 } // End of namespace Aki.
 
 ChannelView::ChannelView(Aki::IdentityConfig *identityConfig, QWidget *parent)
-    : KTabWidget(parent),
-    d(new ChannelViewPrivate(this))
+    : KTabWidget(parent)
 {
+    d.reset(new Aki::ChannelViewPrivate(this));
+
     Aki::TabBar *bar = new Aki::TabBar(this);
     d->identity = identityConfig;
 
@@ -231,9 +232,10 @@ ChannelView::ChannelView(Aki::IdentityConfig *identityConfig, QWidget *parent)
 
 ChannelView::ChannelView(Aki::IdentityConfig *identityConfig, Aki::Irc::Socket *socket,
                          Aki::ChatParser *parser, Aki::Notifications *notification, QWidget *parent)
-    : KTabWidget(parent),
-    d(new ChannelViewPrivate(this))
+    : KTabWidget(parent)
 {
+    d.reset(new Aki::ChannelViewPrivate(this));
+
     Aki::TabBar *bar = new Aki::TabBar(this);
     d->identity = identityConfig;
     d->socket = socket;
@@ -263,7 +265,6 @@ ChannelView::ChannelView(Aki::IdentityConfig *identityConfig, Aki::Irc::Socket *
 
 ChannelView::~ChannelView()
 {
-    delete d;
 }
 
 void

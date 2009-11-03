@@ -336,9 +336,9 @@ public:
 } // End of namespace Aki.
 
 MainWindow::MainWindow(QWidget *parent)
-    : KXmlGuiWindow(parent),
-    d(new MainWindowPrivate(this))
+    : KXmlGuiWindow(parent)
 {
+    d.reset(new Aki::MainWindowPrivate(this));
     restoreAkiDefaultWindowTitle();
     d->messageLog = new Aki::MessageLog(this);
     d->createMenus();
@@ -350,7 +350,6 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
-    delete d;
 }
 
 void

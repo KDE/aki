@@ -25,6 +25,7 @@
 
 #include "libaki_export.h"
 #include <QObject>
+#include <QScopedPointer>
 #include <QStringList>
 
 namespace Aki
@@ -50,7 +51,7 @@ Q_SIGNALS:
     void queryMessage(const QString &to, const QString &message);
 private:
     friend class ChatParserPrivate;
-    ChatParserPrivate* const d;
+    QScopedPointer<ChatParserPrivate> d;
 }; // End of class ChatParser.
 } // End of namespace Aki.
 

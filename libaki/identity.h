@@ -24,6 +24,7 @@
 #define AKI_IDENTITY_H
 
 #include "libaki_export.h"
+#include <QScopedPointer>
 #include <QSharedPointer>
 #include <QStringList>
 
@@ -33,6 +34,7 @@ namespace Aki
  * Identity class to hold information about the identity. Not to be
  * confused with IdentityConfig.
  */
+class IdentityPrivate;
 class LIBAKI_EXPORT Identity
 {
 public:
@@ -45,6 +47,10 @@ public:
      * @param name Identity name.
      */
     explicit Identity(const QString &name);
+    /**
+     * Destroys the object.
+     */
+    ~Identity();
     /*! @copydoc IdentityConfig::awayMessage() */
     QString awayMessage() const;
     /*! @copydoc IdentityConfig::awayNickname() */
@@ -107,19 +113,10 @@ public:
     /*! @copydoc IdentityConfig::setUseAwayMessages() */
     void setUseAwayMessages(bool enable);
 private:
-    QStringList m_nicknameList;
-    QString m_awayMessage;
-    QString m_awayNickname;
-    QString m_name;
-    QString m_kickMessage;
-    QString m_partMessage;
-    QString m_quitMessage;
-    QString m_realName;
-    QString m_returnMessage;
-    bool m_isAwayMessagesEnabled;
-    bool m_isMarkLastPositionEnabled;
+    friend class IdentityPrivate;
+    QScopedPointer<IdentityPrivate> d;
 }; // End of class Identity.
-typedef QSharedPointer<Identity> IdentityPointer;
+typedef QSharedPointer<Aki::Identity> IdentityPointer;
 typedef QList<IdentityPointer> IdentityList;
 } // End of namespace Aki.
 

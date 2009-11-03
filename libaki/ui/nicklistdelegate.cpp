@@ -41,14 +41,13 @@ public:
 } // End of namespace Aki.
 
 NickListDelegate::NickListDelegate(QObject *parent)
-    : QStyledItemDelegate(parent),
-    d(new NickListDelegatePrivate)
+    : QStyledItemDelegate(parent)
 {
+    d.reset(new Aki::NickListDelegatePrivate);
 }
 
 NickListDelegate::~NickListDelegate()
 {
-    delete d;
 }
 
 QColor

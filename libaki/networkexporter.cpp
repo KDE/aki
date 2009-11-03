@@ -20,7 +20,6 @@
 */
 
 #include "networkexporter.h"
-#include "server.h"
 #include <QIODevice>
 #include <QTextCodec>
 #include <QXmlStreamWriter>
@@ -36,13 +35,13 @@ public:
     }
 
     QXmlStreamWriter stream;
-    QList<QSharedPointer<Aki::Server> > serverList;
+    Aki::ServerList serverList;
 }; // End of class NetworkExporterPrivate.
 } // End of namespace Aki.
 
 NetworkExporter::NetworkExporter()
-    : d(new NetworkExporterPrivate)
 {
+    d.reset(new Aki::NetworkExporterPrivate);
     d->stream.setAutoFormatting(true);
 }
 
@@ -51,7 +50,7 @@ NetworkExporter::~NetworkExporter()
 }
 
 void
-NetworkExporter::setServerList(const QList<QSharedPointer<Aki::Server> > &list)
+NetworkExporter::setServerList(const Aki::ServerList &list)
 {
     d->serverList = list;
 }

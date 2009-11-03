@@ -86,10 +86,27 @@ install(TARGETS akicore ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 install(
     FILES
+        chatparser.h
+        identity.h
         libaki_export.h
+        logfile.h
+        networkexporter.h
+        networkimporter.h
+        nicklistmodel.h
+        nicksort.h
+        notifications.h
         server.h
     DESTINATION
         ${INCLUDE_INSTALL_DIR}/aki
+    COMPONENT
+        Devel
+)
+
+install(
+    FILES
+        Server
+    DESTINATION
+        ${INCLUDE_INSTALL_DIR}/Aki
     COMPONENT
         Devel
 )
@@ -101,6 +118,17 @@ install(
         config/serverconfig.h
     DESTINATION
         ${INCLUDE_INSTALL_DIR}/aki/config
+    COMPONENT
+        Devel
+)
+
+install(
+    FILES
+        config/ConfigFile
+        config/IdentityConfig
+        config/ServerConfig
+    DESTINATION
+        ${INCLUDE_INSTALL_DIR}/Aki/Config
     COMPONENT
         Devel
 )
@@ -131,26 +159,6 @@ install(
         ui/serverview.h
     DESTINATION
         ${INCLUDE_INSTALL_DIR}/aki/ui
-    COMPONENT
-        Devel
-)
-
-install(
-    FILES
-        Server
-    DESTINATION
-        ${INCLUDE_INSTALL_DIR}/Aki
-    COMPONENT
-        Devel
-)
-
-install(
-    FILES
-        config/ConfigFile
-        config/IdentityConfig
-        config/ServerConfig
-    DESTINATION
-        ${INCLUDE_INSTALL_DIR}/Aki/Config
     COMPONENT
         Devel
 )

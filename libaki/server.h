@@ -24,6 +24,7 @@
 #define SERVER_H
 
 #include "libaki_export.h"
+#include <QScopedPointer>
 #include <QSharedPointer>
 #include <QStringList>
 
@@ -33,6 +34,7 @@ namespace Aki
  * Server class to hold information about the server. Not to be
  * confused with ServerConfig.
  */
+class ServerPrivate;
 class LIBAKI_EXPORT Server
 {
 public:
@@ -45,6 +47,10 @@ public:
      * @param name Server name.
      */
     explicit Server(const QString &name);
+    /**
+     * Destroys the object.
+     */
+    ~Server();
     /*! @copydoc ServerConfig::addressList() */
     QStringList addressList() const;
     /*! @copydoc ServerConfig::channelList() */
@@ -112,21 +118,8 @@ public:
     /*! @copydoc ServerConfig::setSsl() */
     void setSsl(bool enable);
 private:
-    QStringList m_addressList;
-    QStringList m_channelList;
-    QString m_encoding;
-    QString m_name;
-    QString m_serviceName;
-    QString m_servicePassword;
-    bool m_isAutoIdentifyEnabled;
-    bool m_isAutoJoinChannelsEnabled;
-    bool m_isAutoReconnectionEnabled;
-    bool m_isConnectOnStartupEnabled;
-    bool m_isConnectToRandomServerEnabled;
-    bool m_isDefaultEncodingEnabled;
-    bool m_isSslEnabled;
-    int m_retryAttemptCount;
-    int m_retryInterval;
+    friend class ServerPrivate;
+    QScopedPointer<ServerPrivate> d;
 }; // End of class Server.
 typedef QSharedPointer<Server> ServerPointer;
 typedef QList<ServerPointer> ServerList;

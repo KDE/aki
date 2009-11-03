@@ -26,6 +26,7 @@
 #include "libaki_export.h"
 #include "ui/basewindow.h"
 #include "ui_channelwindow.h"
+#include <QScopedPointer>
 
 namespace Aki
 {
@@ -137,9 +138,6 @@ Q_SIGNALS:
 protected:
     virtual void showEvent(QShowEvent *event);
 private:
-    void addMode(Aki::Irc::User *user, const QModelIndex &index, const QString &mode);
-    void removeMode(Aki::Irc::User *user, const QModelIndex &index, const QString &mode);
-private:
     Q_PRIVATE_SLOT(d, void nickSelectorActivated(const QString &nick));
     Q_PRIVATE_SLOT(d, void banDomainTriggered())
     Q_PRIVATE_SLOT(d, void banHostTriggered())
@@ -174,7 +172,7 @@ private:
     Q_PRIVATE_SLOT(d, void splitterMoved(int pos, int index))
 private:
     friend class ChannelWindowPrivate;
-    ChannelWindowPrivate* const d;
+    QScopedPointer<ChannelWindowPrivate> d;
 }; // End of class ChannelWindow.
 } // End of namespace Aki::BaseWindow.
 

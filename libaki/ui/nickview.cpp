@@ -41,9 +41,9 @@ public:
 } // End of namespace Aki.
 
 NickView::NickView(QWidget *parent)
-    : QListView(parent),
-    d(new NickViewPrivate)
+    : QListView(parent)
 {
+    d.reset(new Aki::NickViewPrivate);
     d->model = new Aki::NickListModel(this);
     Aki::NickSort *sort = new Aki::NickSort(d->model, this);
 
@@ -57,7 +57,6 @@ NickView::NickView(QWidget *parent)
 
 NickView::~NickView()
 {
-    delete d;
 }
 
 NickView::NickList

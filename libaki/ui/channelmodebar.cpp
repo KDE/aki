@@ -102,9 +102,9 @@ public:
 } // End of namespace Aki.
 
 ChannelModeBar::ChannelModeBar(QWidget *parent)
-    : QWidget(parent),
-    d(new ChannelModeBarPrivate(this))
+    : QWidget(parent)
 {
+    d.reset(new Aki::ChannelModeBarPrivate(this));
     setupUi(this);
 
     QRegExpValidator *validator = new QRegExpValidator(QRegExp("[0-9]+"), this);
@@ -134,7 +134,6 @@ ChannelModeBar::ChannelModeBar(QWidget *parent)
 
 ChannelModeBar::~ChannelModeBar()
 {
-    delete d;
 }
 
 void

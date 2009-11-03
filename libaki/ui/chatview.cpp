@@ -35,7 +35,7 @@ namespace Aki
 class ChatViewPrivate
 {
 public:
-    ChatViewPrivate(ChatView *qq)
+    ChatViewPrivate(Aki::ChatView *qq)
         : q(qq),
         logFile(0)
     {
@@ -81,22 +81,21 @@ public:
         return backup;
     }
 
-    ChatView *q;
+    Aki::ChatView *q;
     Aki::LogFile *logFile;
     KEmoticonsTheme emoTheme;
 }; // End of class ChatViewPrivate.
 } // End of namespace Aki.
 
 ChatView::ChatView(QWidget *parent)
-    : KTextBrowser(parent, true),
-    d(new ChatViewPrivate(this))
+    : KTextBrowser(parent, true)
 {
+    d.reset(new Aki::ChatViewPrivate(this));
     setFocusPolicy(Qt::NoFocus);
 }
 
 ChatView::~ChatView()
 {
-    delete d;
 }
 
 void

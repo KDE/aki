@@ -23,24 +23,23 @@
 #define AKI_NETWORKEXPORTER_H
 
 #include "libaki_export.h"
-#include <QList>
-#include <QSharedPointer>
+#include "server.h"
+#include <QScopedPointer>
 
 class QIODevice;
 namespace Aki
 {
-class Server;
 class NetworkExporterPrivate;
 class LIBAKI_EXPORT NetworkExporter
 {
 public:
     NetworkExporter();
     ~NetworkExporter();
-    void setServerList(const QList<QSharedPointer<Aki::Server> > &servers);
+    void setServerList(const Aki::ServerList &servers);
     bool write(QIODevice *device);
 private:
     friend class NetworkExporterPrivate;
-    NetworkExporterPrivate* const d;
+    QScopedPointer<NetworkExporterPrivate> d;
 }; // End of class NetworkExporter.
 } // End of namespace Aki.
 

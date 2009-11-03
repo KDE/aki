@@ -23,190 +23,238 @@
 #include "server.h"
 using namespace Aki;
 
+namespace Aki
+{
+class ServerPrivate
+{
+public:
+    ServerPrivate()
+        : encoding(QString()),
+        name(QString()),
+        serviceName(QString()),
+        servicePassword(QString()),
+        isAutoIdentifyEnabled(false),
+        isAutoJoinChannelsEnabled(false),
+        isAutoReconnectionEnabled(false),
+        isConnectOnStartupEnabled(false),
+        isConnectToRandomServerEnabled(false),
+        isDefaultEncodingEnabled(false),
+        isSslEnabled(false),
+        retryAttemptCount(0),
+        retryInterval(0)
+    {
+        addressList.clear();
+        channelList.clear();
+    }
+
+    QStringList addressList;
+    QStringList channelList;
+    QString encoding;
+    QString name;
+    QString serviceName;
+    QString servicePassword;
+    bool isAutoIdentifyEnabled;
+    bool isAutoJoinChannelsEnabled;
+    bool isAutoReconnectionEnabled;
+    bool isConnectOnStartupEnabled;
+    bool isConnectToRandomServerEnabled;
+    bool isDefaultEncodingEnabled;
+    bool isSslEnabled;
+    int retryAttemptCount;
+    int retryInterval;
+}; // End of class ServerPrivate.
+} // End of namespace Aki.
+
 Server::Server()
 {
+    d.reset(new Aki::ServerPrivate);
 }
 
 Server::Server(const QString &name)
-    : m_name(name)
+{
+    d.reset(new Aki::ServerPrivate);
+    d->name = name;
+}
+
+Server::~Server()
 {
 }
 
 QStringList
 Server::addressList() const
 {
-    return m_addressList;
+    return d->addressList;
 }
 
 QStringList
 Server::channelList() const
 {
-    return m_channelList;
+    return d->channelList;
 }
 
 QString
 Server::encoding() const
 {
-    return m_encoding;
+    return d->encoding;
 }
 
 bool
 Server::isAutoIdentifyEnabled() const
 {
-    return m_isAutoIdentifyEnabled;
+    return d->isAutoIdentifyEnabled;
 }
 
 bool
 Server::isAutoJoinChannelsEnabled() const
 {
-    return m_isAutoJoinChannelsEnabled;
+    return d->isAutoJoinChannelsEnabled;
 }
 
 bool
 Server::isAutoReconnectionEnabled() const
 {
-    return m_isAutoReconnectionEnabled;
+    return d->isAutoReconnectionEnabled;
 }
 
 bool
 Server::isConnectOnStartupEnabled() const
 {
-    return m_isConnectOnStartupEnabled;
+    return d->isConnectOnStartupEnabled;
 }
 
 bool
 Server::isConnectToRandomServerEnabled() const
 {
-    return m_isConnectToRandomServerEnabled;
+    return d->isConnectToRandomServerEnabled;
 }
 
 bool
 Server::isDefaultEncodingEnabled() const
 {
-    return m_isDefaultEncodingEnabled;
+    return d->isDefaultEncodingEnabled;
 }
 
 bool
 Server::isSslEnabled() const
 {
-    return m_isSslEnabled;
+    return d->isSslEnabled;
 }
 
 QString
 Server::name() const
 {
-    return m_name;
+    return d->name;
 }
 
 int
 Server::retryAttemptCount() const
 {
-    return m_retryAttemptCount;
+    return d->retryAttemptCount;
 }
 
 int
 Server::retryInterval() const
 {
-    return m_retryInterval;
+    return d->retryInterval;
 }
 
 QString
 Server::serviceName() const
 {
-    return m_serviceName;
+    return d->serviceName;
 }
 
 QString
 Server::servicePassword() const
 {
-    return m_servicePassword;
+    return d->servicePassword;
 }
 
 void
 Server::setAddressList(const QStringList &addresses)
 {
-    m_addressList = addresses;
+    d->addressList = addresses;
 }
 
 void
 Server::setAutoIdentify(bool enable)
 {
-    m_isAutoIdentifyEnabled = enable;
+    d->isAutoIdentifyEnabled = enable;
 }
 
 void
 Server::setAutoJoinChannels(bool enable)
 {
-    m_isAutoJoinChannelsEnabled = enable;
+    d->isAutoJoinChannelsEnabled = enable;
 }
 
 void
 Server::setAutoReconnection(bool enable)
 {
-    m_isAutoReconnectionEnabled = enable;
+    d->isAutoReconnectionEnabled = enable;
 }
 
 void
 Server::setChannelList(const QStringList &channels)
 {
-    m_channelList = channels;
+    d->channelList = channels;
 }
 
 void
 Server::setConnectOnStartup(bool enable)
 {
-    m_isConnectOnStartupEnabled = enable;
+    d->isConnectOnStartupEnabled = enable;
 }
 
 void
 Server::setConnectToRandomServer(bool enable)
 {
-    m_isConnectToRandomServerEnabled = enable;
+    d->isConnectToRandomServerEnabled = enable;
 }
 
 void
 Server::setDefaultEncoding(bool enable)
 {
-    m_isDefaultEncodingEnabled = enable;
+    d->isDefaultEncodingEnabled = enable;
 }
 
 void
 Server::setEncoding(const QString &encodingName)
 {
-    m_encoding = encodingName;
+    d->encoding = encodingName;
 }
 
 void
 Server::setName(const QString &name)
 {
-    m_name = name;
+    d->name = name;
 }
 void
 Server::setRetryAttempts(int count)
 {
-    m_retryAttemptCount = count;
+    d->retryAttemptCount = count;
 }
 
 void
 Server::setRetryInterval(int seconds)
 {
-    m_retryInterval = seconds;
+    d->retryInterval = seconds;
 }
 
 void
 Server::setServiceName(const QString &name)
 {
-    m_serviceName = name;
+    d->serviceName = name;
 }
 
 void
 Server::setServicePassword(const QString &password)
 {
-    m_servicePassword = password;
+    d->servicePassword = password;
 }
 
 void
 Server::setSsl(bool enable)
 {
-    m_isSslEnabled = enable;
+    d->isSslEnabled = enable;
 }

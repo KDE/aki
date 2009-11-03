@@ -20,8 +20,6 @@
 */
 
 #include "networkimporter.h"
-#include "server.h"
-#include <KDebug>
 #include <KLocale>
 using namespace Aki;
 
@@ -197,10 +195,6 @@ public:
             }
         }
 
-        foreach (QString add, addresses) {
-            kDebug() << add;
-        }
-
         if (!addresses.isEmpty()) {
             server->setAddressList(addresses);
         }
@@ -256,14 +250,13 @@ public:
 } // End of namespace Aki.
 
 NetworkImporter::NetworkImporter()
-    : QXmlStreamReader(),
-    d(new NetworkImporterPrivate(this))
+    : QXmlStreamReader()
 {
+    d.reset(new Aki::NetworkImporterPrivate(this));
 }
 
 NetworkImporter::~NetworkImporter()
 {
-    delete d;
 }
 
 bool

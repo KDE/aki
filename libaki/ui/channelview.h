@@ -24,8 +24,7 @@
 #define CHANNELVIEW_H
 
 #include <KTabWidget>
-
-//#define USE_QTABWIDGET
+#include <QScopedPointer>
 
 namespace Aki
 {
@@ -145,7 +144,7 @@ private:
     Q_PRIVATE_SLOT(d, void _textSubmitted(Aki::BaseWindow *window, const QString &text))
 private:
     friend class ChannelViewPrivate;
-    ChannelViewPrivate* const d;
+    QScopedPointer<ChannelViewPrivate> d;
 }; // End of class ChannelView.
 } // End of namespace Aki.
 

@@ -105,7 +105,7 @@ public:
         return QString(i18n("Unknown month"));
     }
 
-    LogFile *q;
+    Aki::LogFile *q;
     KUrl directory;
     QString fileName;
     QFile file;
@@ -114,9 +114,9 @@ public:
 } // End of namespace Aki.
 
 LogFile::LogFile(const QString &serverName, const QString &channelName, QObject *parent)
-    : QObject(parent),
-    d(new LogFilePrivate(this))
+    : QObject(parent)
 {
+    d.reset(new Aki::LogFilePrivate(this));
     // Get the log directory from the configuration dialog.
     d->directory = Aki::Settings::logDirectory();
     // Get the current local time and date.
@@ -149,7 +149,6 @@ LogFile::LogFile(const QString &serverName, const QString &channelName, QObject 
 
 LogFile::~LogFile()
 {
-    delete d;
 }
 
 void

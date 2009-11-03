@@ -488,14 +488,13 @@ public:
 } // End of namespace Aki.
 
 ChatParser::ChatParser(QObject *parent)
-    : QObject(parent),
-    d(new ChatParserPrivate(this))
+    : QObject(parent)
 {
+    d.reset(new Aki::ChatParserPrivate(this));
 }
 
 ChatParser::~ChatParser()
 {
-    delete d;
 }
 
 void

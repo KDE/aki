@@ -25,6 +25,7 @@
 
 #include "libaki_export.h"
 #include <QListView>
+#include <QScopedPointer>
 
 namespace Aki
 {
@@ -47,7 +48,7 @@ public:
     NickView::NickList users();
 private:
     friend class NickViewPrivate;
-    NickViewPrivate* const d;
+    QScopedPointer<NickViewPrivate> d;
 }; // End of class NickView.
 } // End of namespace Aki.
 

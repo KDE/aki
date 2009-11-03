@@ -24,6 +24,7 @@
 #define NICKLISTDELEGATE_H
 
 #include "libaki_export.h"
+#include <QScopedPointer>
 #include <QStyledItemDelegate>
 
 namespace Aki
@@ -69,7 +70,7 @@ protected:
     void initStyleOption(QStyleOptionViewItem *option, const QModelIndex &index) const;
 private:
     friend class NickListDelegatePrivate;
-    NickListDelegatePrivate* const d;
+    QScopedPointer<NickListDelegatePrivate> d;
 }; // End of class NickListDelegate.
 } // End of namespace Aki.
 
