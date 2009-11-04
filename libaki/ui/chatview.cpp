@@ -67,10 +67,8 @@ public:
 
     QString messageTime() const
     {
-        KDateTime time = KDateTime::currentLocalDateTime();
-        time = time.toClockTime();
-
-        QString timeString = time.toString("%H:%M:%S");
+        QTime time = KDateTime::currentLocalTime();
+        QString timeString = KGlobal::locale()->formatLocaleTime( time );
         return QString("<span>[%1] </span>").arg(timeString);
     }
 
@@ -103,7 +101,7 @@ ChatView::addAway(const QString &message)
 {
     QString colour = i18n("<span style='color: %1;'>[Away] %2</span>",
                           Aki::Settings::noticeColor().name(), message);
-    d->toLog(i18n("[Away] %1", message));
+    d->toLog(i18nc("The away message","[Away] %1", message));
     d->appendMessage(colour);
 }
 
@@ -112,7 +110,8 @@ ChatView::addAway(const QString &nick, const QString &message)
 {
     QString colour = i18n("<span style='color :%1;'>[Away] %2 (%3)</span>",
                           Aki::Settings::noticeColor().name(), nick, message);
-    d->toLog(i18n("[Away] %1 (%2)", d->stripHtml(nick), message));
+    d->toLog(i18nc("Nick, followed by away message", "[Away] %1 (%2)", 
+                   d->stripHtml(nick), message));
     d->appendMessage(colour);
 }
 
@@ -210,7 +209,8 @@ ChatView::addError(const QString &channel, const QString &errorMessage)
 {
     QString colour = i18n("<span style='color: %1;'>[Error] %2: %3</span>",
                           Aki::Settings::errorColor().name(), channel, errorMessage);
-    d->toLog(i18n("[Error] %1: %2", channel, errorMessage));
+    d->toLog(i18nc("Channel, followed by the error message", "[Error] %1: %2", 
+                   channel, errorMessage));
     d->appendMessage(colour);
 }
 
@@ -256,7 +256,7 @@ ChatView::addMessage(const QString &message)
 {
     QString colour = QString("<span style='color: %1;'>*** %2</span>")
                              .arg(Aki::Settings::actionColor().name(), message);
-    d->toLog(i18n("*** %1", message));
+    d->toLog(i18nc("A message","*** %1", message));
     d->appendMessage(colour);
 }
 
@@ -448,7 +448,8 @@ ChatView::addNotice(const QString &from, const QString &message)
 {
     QString colour = i18n("<span style=\"color: %1;\">[Notice] <strong>%2</strong>: %3</span>",
                           Aki::Settings::noticeColor().name(), from, message);
-    d->toLog(i18n("[Notice] %1: %2", d->stripHtml(from), d->stripHtml(message)));
+    d->toLog(i18nc("Nickname, followed by the message","[Notice] %1: %2", 
+                   d->stripHtml(from), d->stripHtml(message)));
     d->appendMessage(colour);
 }
 
@@ -463,17 +464,21 @@ ChatView::addNoticeAuth(const QString &message)
 void
 ChatView::addPrivmsg(const QString &from, const QString &message)
 {
-    QString tmpString = QString("<span>&lt;%1&gt; %2</span>").arg(from).arg(message);
-    d->toLog(i18n("<%1> %2", d->stripHtml(from), d->stripHtml(message)));
+    QString tmpString = i18nc("Nick, followed by a message", "<span>&lt;%1&gt; %2</span>",
+                              from, message);
+    d->toLog(i18nc("Nickname, followed by a message","<%1> %2", 
+                   d->stripHtml(from), d->stripHtml(message)));
     d->appendMessage(tmpString);
 }
 
 void
 ChatView::addPrivmsgHighlight(const QString &from, const QString &message)
 {
-    QString colour = QString("&lt;%2&gt; <span style='color: %1;'>%3</span>")
-                        .arg(Aki::Settings::highlightColor().name(), from, message);
-    d->toLog(i18n("<%1> %2", d->stripHtml(from), d->stripHtml(message)));
+    QString colour = i18nc("nick name, the color and the message",
+                           "&lt;%1&gt; <span style='color: %2;'>%3</span>",
+                           from, Aki::Settings::highlightColor().name(), message);
+    d->toLog(i18nc("Nickname, followed by the message","<%1> %2", 
+                   d->stripHtml(from), d->stripHtml(message)));
     d->appendMessage(colour);
 }
 
@@ -748,7 +753,8 @@ ChatView::addUserPart(const QString &channel, const QString &nick, const QString
 
     QString colour = i18n("<span style='color: %1;'>&lt;-- %2 (%3) has left %4</span>",
                           Aki::Settings::partColor().name(), nick, tmp, channel);
-    d->toLog(i18n("<-- %1 (%2) has left %4", d->stripHtml(nick), tmp, channel));
+    d->toLog(i18nc("Nickname (Message)","<-- %1 (%2) has left %4", d->stripHtml(nick), 
+                   tmp, channel));
     d->appendMessage(colour);
 }
 
@@ -759,7 +765,7 @@ ChatView::addUserQuit(const QString &nick, const QString &hostMask,
     QString colour = i18n("<span style='color: %1;'>&lt;-- %2 (%3) has quit</span>",
                           Aki::Settings::quitColor().name(), nick,
                           (quitMessage.isEmpty() || quitMessage.isNull()) ? hostMask : quitMessage);
-    d->toLog(i18n("<-- %1 (%2) has quit.", d->stripHtml(nick),
+    d->toLog(i18nc("Nickname (Message)","<-- %1 (%2) has quit.", d->stripHtml(nick),
                   (quitMessage.isEmpty() || quitMessage.isNull()) ? hostMask : quitMessage));
     d->appendMessage(colour);
 }
@@ -783,7 +789,7 @@ ChatView::addWelcome(const QString &message)
 void
 ChatView::addWho(const QString &channel, const QString &message)
 {
-    QString colour = i18n("<span style='color: %1;'>[Who:%2] %3</span>",
+    QString colour = i18nc("color, channel, message","<span style='color: %1;'>[Who:%2] %3</span>",
                           Aki::Settings::noticeColor().name(), channel, message);
     d->appendMessage(colour);
 }
@@ -804,7 +810,7 @@ ChatView::addWho(const QString &channel, const QString &userName, const QString 
 void
 ChatView::addWhoIs(const QString &nick, const QString &info)
 {
-    QString colour = i18n("<span style='color: %1;'>[WhoIs:%2] %3</span>",
+    QString colour = i18nc("Color, nick, info","<span style='color: %1;'>[WhoIs:%2] %3</span>",
                           Aki::Settings::noticeColor().name(), nick, info);
     d->appendMessage(colour);
 }
@@ -820,7 +826,7 @@ ChatView::addWhoIsChannels(const QString &nick, const QString &channels)
 void
 ChatView::addWhoIsIdentified(const QString &nick, const QString &info)
 {
-    QString colour = i18n("<span style='color: %1;'>[WhoIs:%2] %3</span>",
+    QString colour = i18nc("Color, nick, info","<span style='color: %1;'>[WhoIs:%2] %3</span>",
                           Aki::Settings::noticeColor().name(), nick, info);
     d->appendMessage(colour);
 }

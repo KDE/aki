@@ -7,6 +7,8 @@ set(AKI_VERSION_PATCH 3)
 set(AKI_VERSION "${AKI_VERSION_MAJOR}.${AKI_VERSION_MINOR}.${AKI_VERSION_PATCH}")
 set(AKI_SOVERSION 0)
 
+set(QT_MIN_VERSION "4.6.0")
+
 find_package(KDE4 REQUIRED)
 include(KDE4Defaults)
 find_package(AkiIrc 0.0.3 REQUIRED)
