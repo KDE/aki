@@ -25,6 +25,7 @@
 
 #include "libaki_export.h"
 #include "ui/basewindow.h"
+#include <QScopedPointer>
 
 namespace Aki
 {
@@ -187,7 +188,7 @@ private:
     Q_PRIVATE_SLOT(d, void queryMessage(const QString &to, const QString &message))
 private:
     friend class ServerWindowPrivate;
-    ServerWindowPrivate* const d;
+    QScopedPointer<ServerWindowPrivate> d;
 }; // End of class ServerWindow.
 } // End of namespace Aki.
 

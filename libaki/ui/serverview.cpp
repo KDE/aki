@@ -125,9 +125,10 @@ public:
 } // End of namespace Aki.
 
 ServerView::ServerView(KMainWindow *window, QWidget *parent)
-    : KTabWidget(parent),
-    d(new Aki::ServerViewPrivate(this))
+    : KTabWidget(parent)
 {
+    d.reset(new Aki::ServerViewPrivate(this));
+
     Aki::TabBar *bar = new Aki::TabBar(this);
     bar->setDragMode(false);
 
@@ -152,7 +153,6 @@ ServerView::ServerView(KMainWindow *window, QWidget *parent)
 
 ServerView::~ServerView()
 {
-    delete d;
 }
 
 void

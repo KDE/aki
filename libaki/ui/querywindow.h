@@ -26,6 +26,7 @@
 #include "libaki_export.h"
 #include "ui/basewindow.h"
 #include "ui_querywindow.h"
+#include <QScopedPointer>
 
 namespace Aki
 {
@@ -59,7 +60,7 @@ private:
     Q_PRIVATE_SLOT(d, void textSubmitted())
 private:
     friend class QueryWindowPrivate;
-    QueryWindowPrivate* const d;
+    QScopedPointer<QueryWindowPrivate> d;
 }; // End of class QueryWindow.
 } // End of namespace Aki.
 

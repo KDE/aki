@@ -1600,9 +1600,10 @@ public:
 ServerWindow::ServerWindow(Aki::IdentityConfig *identityConfig, Aki::Irc::Socket *socket,
                            Aki::Notifications *notifications, Aki::MessageLog *messageLog,
                            QWidget *parent)
-    : Aki::BaseWindow(socket->name(), Aki::BaseWindow::ServerWindow, parent),
-    d(new ServerWindowPrivate(this))
+    : Aki::BaseWindow(socket->name(), Aki::BaseWindow::ServerWindow, parent)
 {
+    d.reset(new Aki::ServerWindowPrivate(this));
+
     Aki::Irc::Ctcp *ctcp = new Aki::Irc::Ctcp(this);
     ctcp->setVersionString(Aki::Settings::ctcpVersionMessage());
     ctcp->blockClientInfo(Aki::Settings::ignoreClientInfo());
@@ -1877,7 +1878,6 @@ ServerWindow::ServerWindow(Aki::IdentityConfig *identityConfig, Aki::Irc::Socket
 
 ServerWindow::~ServerWindow()
 {
-    delete d;
 }
 
 Aki::IdentityConfig*

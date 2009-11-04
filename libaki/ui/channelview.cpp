@@ -94,8 +94,7 @@ public:
             if (i == index) {
                 tabList[i]->setCurrent(true);
                 const QString name = tabList[i]->name();
-                const QString serverName = socket->name();
-
+                const QString serverName = tabList[i]->socket()->name();
             } else {
                 tabList[i]->setCurrent(false);
             }

@@ -57,9 +57,10 @@ public:
 
 StatusWindow::StatusWindow(const QString &name, Aki::IdentityConfig *identityConfig,
                            Aki::Irc::Socket *socket, QWidget *parent)
-    : Aki::BaseWindow(name, Aki::BaseWindow::StatusWindow, parent),
-    d(new StatusWindowPrivate(this))
+    : Aki::BaseWindow(name, Aki::BaseWindow::StatusWindow, parent)
 {
+    d.reset(new Aki::StatusWindowPrivate(this));
+
     setupUi(this);
     setView(chatOutput);
     d->identity = identityConfig;
@@ -73,7 +74,6 @@ StatusWindow::StatusWindow(const QString &name, Aki::IdentityConfig *identityCon
 
 StatusWindow::~StatusWindow()
 {
-    delete d;
 }
 
 void

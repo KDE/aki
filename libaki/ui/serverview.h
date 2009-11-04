@@ -25,6 +25,7 @@
 
 #include "libaki_export.h"
 #include <KTabWidget>
+#include <QScopedPointer>
 
 class KMainWindow;
 namespace Aki
@@ -106,7 +107,7 @@ Q_SIGNALS:
     void customCommand(const QString &command, const QString &message);
 private:
     friend class ServerViewPrivate;
-    ServerViewPrivate* const d;
+    QScopedPointer<ServerViewPrivate> d;
 
     Q_PRIVATE_SLOT(d, void _closeTabTriggered());
     Q_PRIVATE_SLOT(d, void _currentChanged(int))

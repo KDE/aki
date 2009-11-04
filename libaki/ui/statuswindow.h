@@ -26,6 +26,7 @@
 #include "libaki_export.h"
 #include "ui/basewindow.h"
 #include "ui_statuswindow.h"
+#include <QScopedPointer>
 
 namespace Aki
 {
@@ -58,7 +59,7 @@ private:
     Q_PRIVATE_SLOT(d, void nickSelectorActivated(const QString &nick))
 private:
     friend class StatusWindowPrivate;
-    StatusWindowPrivate* const d;
+    QScopedPointer<StatusWindowPrivate> d;
 }; // End of class StatusWindow.
 } // End of namespace Aki.
 

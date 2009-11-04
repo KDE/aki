@@ -104,6 +104,7 @@ install(
 
 install(
     FILES
+        Identity
         Server
     DESTINATION
         ${INCLUDE_INSTALL_DIR}/Aki
@@ -146,25 +147,6 @@ install(
 
 install(
     FILES
-        plugin/plugin.h
-    DESTINATION
-        ${INCLUDE_INSTALL_DIR}/aki/plugin
-    COMPONENT
-        Devel
-)
-
-install(
-    FILES
-        ui/basewindow.h
-        ui/serverview.h
-    DESTINATION
-        ${INCLUDE_INSTALL_DIR}/aki/ui
-    COMPONENT
-        Devel
-)
-
-install(
-    FILES
         interfaces/MainInterface
         interfaces/SettingsPageInterface
         interfaces/WindowInterface
@@ -176,9 +158,61 @@ install(
 
 install(
     FILES
+        plugin/plugin.h
+    DESTINATION
+        ${INCLUDE_INSTALL_DIR}/aki/plugin
+    COMPONENT
+        Devel
+)
+
+install(
+    FILES
         plugin/Plugin
     DESTINATION
         ${INCLUDE_INSTALL_DIR}/Aki/Plugin
+    COMPONENT
+        Devel
+)
+
+install(
+    FILES
+        ui/basewindow.h
+        ui/channelmodebar.h
+        ui/channelview.h
+        ui/channelwindow.h
+        ui/chatinput.h
+        ui/chatview.h
+        ui/mainwindow.h
+        ui/nicklistdelegate.h
+        ui/nickview.h
+        ui/querywindow.h
+        ui/serverview.h
+        ui/serverwindow.h
+        ui/systemtray.h
+        ui/tabbar.h
+    DESTINATION
+        ${INCLUDE_INSTALL_DIR}/aki/ui
+    COMPONENT
+        Devel
+)
+
+install(
+    FILES
+        ui/BaseWindow
+        ui/ChannelModeBar
+        ui/ChannelView
+        ui/ChannelWindow
+        ui/ChatInput
+        ui/ChatView
+        ui/MainWindow
+        ui/NickListDelegate
+        ui/NickView
+        ui/QueryWindow
+        ui/ServerView
+        ui/ServerWindow
+        ui/TabBar
+    DESTINATION
+        ${INCLUDE_INSTALL_DIR}/Aki/Ui
     COMPONENT
         Devel
 )

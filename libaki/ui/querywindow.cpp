@@ -53,9 +53,10 @@ public:
 } // End of namespace Aki.
 
 QueryWindow::QueryWindow(const QString &name, Aki::Irc::Socket *socket, QWidget *parent)
-    : Aki::BaseWindow(name, Aki::BaseWindow::QueryWindow, parent),
-    d(new QueryWindowPrivate(this))
+    : Aki::BaseWindow(name, Aki::BaseWindow::QueryWindow, parent)
 {
+    d.reset(new Aki::QueryWindowPrivate(this));
+
     setupUi(this);
     setSocket(socket);
     setView(chatOutput);
@@ -77,7 +78,6 @@ QueryWindow::QueryWindow(const QString &name, Aki::Irc::Socket *socket, QWidget 
 
 QueryWindow::~QueryWindow()
 {
-    delete d;
 }
 
 void

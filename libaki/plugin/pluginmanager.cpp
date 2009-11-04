@@ -167,11 +167,11 @@ PluginManager::unloadPlugin(const KPluginInfo &info)
         return;
     }
 
-    // Remove the plugin's gui from the application.
-    m_mainInterface->removeGui(plugin);
-
     // Plugin was found and is valid so we start the unload process.
     plugin->unload();
+
+    // Remove the plugin's gui from the application.
+    m_mainInterface->removeGui(plugin);
 
     delete m_loadedPlugins.take(info);
 }
