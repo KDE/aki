@@ -74,6 +74,7 @@ set(akicore_LIBS
     ${KDE4_KNOTIFYCONFIG_LIBS}
     ${KDE4_KIO_LIBS}
     ${QT_QTNETWORK_LIBRARY}
+    ${QT_QTWEBKIT_LIBRARY}
     akiirc
 )
 
