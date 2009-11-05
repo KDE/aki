@@ -21,13 +21,16 @@
 */
 
 #include "chatview.h"
-#include "settings.h"
 #include "logfile.h"
+#include "settings.h"
 #include <KDateTime>
 #include <KEmoticons>
 #include <KEmoticonsTheme>
+#include <KGlobal>
 #include <KLocale>
 #include <QScrollBar>
+#include <QWebElement>
+#include <QWebFrame>
 using namespace Aki;
 
 namespace Aki
@@ -36,26 +39,49 @@ class ChatViewPrivate
 {
 public:
     ChatViewPrivate(Aki::ChatView *qq)
-        : q(qq),
-        logFile(0)
+        : q(qq)
     {
         KEmoticons emoticons;
         emoTheme = emoticons.theme();
     }
 
+    QWebFrame* mainFrame()
+    {
+        return q->page()->mainFrame();
+    }
+
     void appendMessage(const QString &message, bool useTime = true)
     {
         if (useTime) {
-            q->append(messageTime() + emoTheme.parseEmoticons(message, KEmoticonsTheme::StrictParse));
+            QWebElement body = mainFrame()->findFirstElement("body");
+            body.appendInside(para(messageTime() + convertEmotes(message)));
+            mainFrame()->documentElement().replace(body);
         } else {
-            q->append(emoTheme.parseEmoticons(message, KEmoticonsTheme::StrictParse));
+            QWebElement body = mainFrame()->findFirstElement("body");
+            body.appendInside(para(convertEmotes(message)));
+            mainFrame()->documentElement().replace(body);
         }
 
-        if (q->verticalScrollBar()->value() == q->verticalScrollBar()->maximum()) {
-            q->document()->setMaximumBlockCount(Aki::Settings::scrollbackLines());
+        const int maxVert = mainFrame()->scrollBarMaximum(Qt::Vertical);
+        const int value = mainFrame()->scrollBarValue(Qt::Vertical);
+
+        if (value == maxVert) {
+            mainFrame()->setScrollBarValue(Qt::Vertical, Aki::Settings::scrollbackLines());
         } else {
-            q->document()->setMaximumBlockCount(q->document()->maximumBlockCount() + 1);
+            mainFrame()->setScrollBarValue(Qt::Vertical, Aki::Settings::scrollbackLines() + 1);
         }
+    }
+
+    QString convertEmotes(const QString &str) const
+    {
+        return emoTheme.parseEmoticons(str, KEmoticonsTheme::StrictParse);
+    }
+
+    QString messageTime() const
+    {
+        QTime time = KDateTime::currentLocalTime();
+        QString timeString = KGlobal::locale()->formatLocaleTime(time);
+        return span("[" + timeString + "] ");
     }
 
     void toLog(const QString &log)
@@ -65,18 +91,42 @@ public:
         }
     }
 
-    QString messageTime() const
-    {
-        QTime time = KDateTime::currentLocalTime();
-        QString timeString = KGlobal::locale()->formatLocaleTime( time );
-        return QString("<span>[%1] </span>").arg(timeString);
-    }
-
     QString stripHtml(const QString &message) const
     {
         QString backup = message;
         backup.replace(QRegExp("<[^>]*>"), "");
         return backup;
+    }
+
+    QString span(const QString &message) const
+    {
+        return "<span>" + message + "</span>";
+    }
+
+    QString span(const QString &message, const QColor &color) const
+    {
+        return QString("<span style='color: %1;'>%2</span>")
+                    .arg(color.name(), message);
+    }
+
+    QString para(const QString &message) const
+    {
+        return "<p>" + message + "</p>";
+    }
+
+    QString url(const QString &u) const
+    {
+        return url(u, u);
+    }
+
+    QString url(const QString &name, const QString &u) const
+    {
+        return QString("<a href='%1'>%2</a>").arg(name, u);
+    }
+
+    QString strong(const QString &message) const
+    {
+        return "<strong>" + message + "</strong>";
     }
 
     Aki::ChatView *q;
@@ -86,7 +136,7 @@ public:
 } // End of namespace Aki.
 
 ChatView::ChatView(QWidget *parent)
-    : KTextBrowser(parent, true)
+    : QWebView(parent)
 {
     d.reset(new Aki::ChatViewPrivate(this));
     setFocusPolicy(Qt::NoFocus);
@@ -99,798 +149,430 @@ ChatView::~ChatView()
 void
 ChatView::addAway(const QString &message)
 {
-    QString colour = i18n("<span style='color: %1;'>[Away] %2</span>",
-                          Aki::Settings::noticeColor().name(), message);
-    d->toLog(i18nc("The away message","[Away] %1", message));
-    d->appendMessage(colour);
+    QString msg = i18nc("The away message", "[Away] %1", message);
+    QString span = d->span(msg, Aki::Settings::noticeColor());
+    d->toLog(msg);
+    d->appendMessage(span);
 }
 
 void
 ChatView::addAway(const QString &nick, const QString &message)
 {
-    QString colour = i18n("<span style='color :%1;'>[Away] %2 (%3)</span>",
-                          Aki::Settings::noticeColor().name(), nick, message);
-    d->toLog(i18nc("Nick, followed by away message", "[Away] %1 (%2)", 
-                   d->stripHtml(nick), message));
-    d->appendMessage(colour);
-}
-
-void
-ChatView::addBan(const QString &nick, const QString &mask)
-{
-    QString colour = i18n("<span style='color :%1;'>*** %2 set ban on %3</span>",
-                          Aki::Settings::banColor().name(), nick, mask);
-    d->toLog(i18n("*** %1 set ban on %2", d->stripHtml(nick), mask));
-    d->appendMessage(colour);
+    QString msg = i18nc("Nick, followed by away message", "[Away] %1 (%2)", nick, message);
+    QString span = d->span(msg, Aki::Settings::noticeColor());
+    d->toLog(msg);
+    d->appendMessage(span);
 }
 
 void
 ChatView::addBanList(const QString &channel, const QString &mask, const QString &who,
                      const QString &time)
 {
-    QString colour = i18n("<span style='color: %1;'>[BanList:%2] %3 set by %4 on %5</span>",
-                          Aki::Settings::noticeColor().name(), channel, mask, who, time);
-    d->appendMessage(colour);
+    Q_UNUSED(channel);
+    Q_UNUSED(mask);
+    Q_UNUSED(who);
+    Q_UNUSED(time);
+    /*QString msg = i18nc("Channel, followed by ban mask, nick and nick",
+                        "[BanList: %1] %2 set by %3 on %4",
+                        channel, mask, who, time);*/
 }
 
 void
 ChatView::addChannelCreated(const QString &time)
 {
-    QString colour = i18n("<span style='color: %1;'>*** Channel was created on %2</span>",
-                          Aki::Settings::topicColor().name(), time);
-    d->toLog(i18n("*** Channel was created on %1", time));
-    d->appendMessage(colour);
-}
-
-void
-ChatView::addChannelModes(const QString &modes)
-{
-    QString colour = i18n("<span style='color: %1;'>*** Channel Modes: %2</span>",
-                          Aki::Settings::topicColor().name(), modes);
-    d->toLog(i18n("*** Channel Modes: %1", modes));
-    d->appendMessage(colour);
+    QString msg = i18n("*** Channel was created on %1", time);
+    QString span = d->span(msg, Aki::Settings::topicColor());
+    d->toLog(msg);
+    d->appendMessage(span);
 }
 
 void
 ChatView::addChannelModes(const QString &from, const QString &modes)
 {
-    QString colour = i18n("<span style='color: %1;'>*** %2 sets the channel modes to %3</span>",
-                          Aki::Settings::topicColor().name(), from, modes);
-    d->toLog(i18n("*** %1 sets the channel modes to %2", d->stripHtml(from), modes));
-    d->appendMessage(colour);
+    QString msg = i18n("*** %1 sets the channel modes to %2", from, modes);
+    QString span = d->span(msg, Aki::Settings::topicColor());
+    d->toLog(msg);
+    d->appendMessage(span);
 }
 
 void
 ChatView::addChannelUrl(const QString &url)
 {
-    QString colour = i18n("<span style='color: %1;'>*** Channel Url: "
-                          "<a href='%2'>%2</a></span>", Aki::Settings::topicColor().name(), url);
-    d->toLog(i18n("*** Channel Url: %1", url));
-    d->appendMessage(colour);
+    QString msg = i18n("*** Channel url: ", d->url(url));
+    QString span = d->span(msg, Aki::Settings::topicColor());
+    d->toLog(msg);
+    d->appendMessage(span);
 }
 
 void
 ChatView::addCtcp(const QString &from, const QString &message)
 {
     Q_UNUSED(from);
-    d->toLog(i18n("[Ctcp] %1", message));
-    d->appendMessage(QString("<span style='color: %1;'>[Ctcp] %2</span>")
-        .arg(Aki::Settings::noticeColor().name(), message));
-}
-
-void
-ChatView::addCtcpAction(const QString &from, const QString &message)
-{
-    d->toLog(i18n("*** %1 %2", d->stripHtml(from), message));
-    d->appendMessage(QString("<span style=\"color: %1;\">*** %2 %3</span>")
-        .arg(Aki::Settings::actionColor().name(), from, message));
+    QString msg = QString("[Ctcp] %1").arg(message);
+    QString span = d->span(msg, Aki::Settings::noticeColor());
+    d->toLog(msg);
+    d->appendMessage(span);
 }
 
 void
 ChatView::addCtcpRequest(const QString &from, const QString &type)
 {
-    QString colour = i18n("<span style='color: %1;'>[Ctcp] Received CTCP-%2 from %3</span>",
-                          Aki::Settings::noticeColor().name(), type, from);
-    d->toLog(i18n("Received CTCP-%1 from %2", type, d->stripHtml(from)));
-    d->appendMessage(colour);
+    QString msg = i18n("[Ctcp] Received CTCP-%1 from %2").arg(type, from);
+    QString span = d->span(msg, Aki::Settings::noticeColor());
+    d->toLog(msg);
+    d->appendMessage(span);
 }
 
 void
-ChatView::addError(const QString &errorMessage)
+ChatView::addError(const QString &message)
 {
-    QString colour = i18n("<span style='color: %1;'>[Error] %2</span>",
-                          Aki::Settings::errorColor().name(), errorMessage);
-    d->toLog(i18n("[Error] %1", errorMessage));
-    d->appendMessage(colour);
+    QString msg = i18n("[Error] %1", message);
+    QString span = d->span(msg, Aki::Settings::errorColor());
+    d->toLog(msg);
+    d->appendMessage(span);
 }
 
 void
-ChatView::addError(const QString &channel, const QString &errorMessage)
+ChatView::addError(const QString &type, const QString &message)
 {
-    QString colour = i18n("<span style='color: %1;'>[Error] %2: %3</span>",
-                          Aki::Settings::errorColor().name(), channel, errorMessage);
-    d->toLog(i18nc("Channel, followed by the error message", "[Error] %1: %2", 
-                   channel, errorMessage));
-    d->appendMessage(colour);
+    QString msg = i18n("[Error] %1: %2", type, message);
+    QString span = d->span(msg, Aki::Settings::errorColor());
+    d->toLog(msg);
+    d->appendMessage(span);
 }
 
 void
 ChatView::addHelp(const QString &message)
 {
-    d->toLog(i18n("[Help] %1", message));
-    d->appendMessage(QString("<span>[Help] %1</span>").arg(message));
+    QString msg = i18n("[Help] %1", message);
+    QString span = d->span(msg);
+    d->toLog(msg);
+    d->appendMessage(span);
 }
 
 void
 ChatView::addInvite(const QString &nick, const QString &channel)
 {
-    QString colour = i18n("<span style='color: %1;'>[Invite] You have invited %2 to"
-                          " channel %3</span>", Aki::Settings::inviteColor().name(),
-                          nick, channel);
-    d->toLog(i18n("[Invite] You have invited %1 to channel %2", d->stripHtml(nick), channel));
-    d->appendMessage(colour);
+    QString msg = i18n("[Invite] You have invited %1 to channel %2", nick, channel);
+    QString span = d->span(msg, Aki::Settings::inviteColor());
+    d->toLog(msg);
+    d->appendMessage(span);
 }
 
 void
 ChatView::addIsOn(const QStringList &nicks)
 {
-    foreach (const QString &nick, nicks) {
-        QString colour = i18n("<span style='color: %1;'>[IsOn] %2 is online</span>",
-                              Aki::Settings::noticeColor().name(), nick);
-        d->toLog(i18n("[IsOn] %1 is online", d->stripHtml(nick)));
-        d->appendMessage(colour);
+    QStringListIterator nickIter(nicks);
+    while (nickIter.hasNext()) {
+        QString msg = i18n("[IsOn] %1 is online", nickIter.next());
+        QString span = d->span(msg, Aki::Settings::noticeColor());
+        d->toLog(msg);
+        d->appendMessage(span);
     }
 }
 
 void
 ChatView::addLUser(const QString &message)
 {
-    QString colour = i18n("<span style='color: %1;'>[LUser] %2</span>",
-                          Aki::Settings::noticeColor().name(), message);
-    d->toLog(i18n("[LUser] %1", message));
-    d->appendMessage(colour);
+    QString msg = i18n("[LUser] %1", message);
+    QString span = d->span(msg, Aki::Settings::noticeColor());
+    d->toLog(msg);
+    d->appendMessage(span);
 }
 
 void
 ChatView::addMessage(const QString &message)
 {
-    QString colour = QString("<span style='color: %1;'>*** %2</span>")
-                             .arg(Aki::Settings::actionColor().name(), message);
-    d->toLog(i18nc("A message","*** %1", message));
-    d->appendMessage(colour);
+    QString msg = QString("*** %1").arg(message);
+    QString span = d->span(msg, Aki::Settings::actionColor());
+    d->toLog(msg);
+    d->appendMessage(span);
 }
 
 void
-ChatView::addMode(const QString &fromNick, const QChar &mode, const QString &params,
-                  bool self)
+ChatView::addChannelMode(const QString &fromNick, const QChar &mode, const QString &params,
+                         bool self)
 {
-    QString colour;
-    if (mode == QChar('i')) {
+    QString msg;
+    QString span;
+
+    if (mode == 'i') {
         if (self) {
-            colour = i18n("<span style='color: %1;'>*** You set the channel to invite only</span>",
-                          Aki::Settings::topicColor().name());
-            d->toLog(i18n("*** You set the channel to invite only"));
+            msg = i18n("*** You set the channel to invite only");
+            span = d->span(msg, Aki::Settings::topicColor());
         } else {
-            colour = i18n("<span style='color: %1;'>*** %2 set the channel to invite only</span>",
-                          Aki::Settings::topicColor().name(), fromNick);
-            d->toLog(i18n("*** %1 set the channel to invite only", fromNick));
+            msg = i18n("*** %1 set the channel to invite only", fromNick);
+            span = d->span(msg, Aki::Settings::topicColor());
         }
-    } else if (mode == QChar('m')) {
+    } else if (mode == 'm') {
         if (self) {
-            colour = i18n("<span style='color: %1;'>*** You set the channel to moderated</span>",
-                          Aki::Settings::topicColor().name());
-            d->toLog(i18n("*** You set the channel to moderated</span>"));
+            msg = i18n("*** You set the channel to moderated");
+            span = d->span(msg, Aki::Settings::topicColor());
         } else {
-            colour = i18n("<span style='color: %1;'>*** %2 set the channel to moderated</span>",
-                          Aki::Settings::topicColor().name(), fromNick);
-            d->toLog(i18n("*** %1 set the channel to moderated</span>", fromNick));
+            msg = i18n("*** %1 set the channel to moderated", fromNick);
+            span = d->span(msg, Aki::Settings::topicColor());
         }
-    } else if (mode == QChar('p')) {
+    } else if (mode == 'p') {
         if (self) {
-            colour = i18n("<span style='color: %1;'>*** You set the channel to private</span>",
-                          Aki::Settings::topicColor().name());
-            d->toLog(i18n("*** You set the channel to private</span>"));
+            msg = i18n("*** You set the channel to private");
+            span = d->span(msg, Aki::Settings::topicColor());
         } else {
-            colour = i18n("<span style='color: %1;'>*** %2 set the channel to private</span>",
-                          Aki::Settings::topicColor().name(), fromNick);
-            d->toLog(i18n("*** %1 set the channel to private</span>", fromNick));
+            msg = i18n("*** %1 set the channel to private", fromNick);
+            span = d->span(msg, Aki::Settings::topicColor());
         }
-    } else if (mode == QChar('s')) {
+    } else if (mode == 's') {
         if (self) {
-            colour = i18n("<span style='color: %1;'>*** You set the channel to secret</span>",
-                          Aki::Settings::topicColor().name());
-            d->toLog(i18n("*** You set the channel to secret"));
+            msg = i18n("*** You set the channel to secret");
+            span = d->span(msg, Aki::Settings::topicColor());
         } else {
-            colour = i18n("<span style='color: %1;'>*** %2 set the channel to secret</span>",
-                          Aki::Settings::topicColor().name(), fromNick);
-            d->toLog(i18n("*** %1 set the channel to secret", fromNick));
+            msg = i18n("*** %1 set the channel to secret", fromNick);
+            span = d->span(msg, Aki::Settings::topicColor());
         }
-    } else if (mode == QChar('t')) {
+    } else if (mode == 't') {
         if (self) {
-            colour = i18n("<span style='color: %1;'>*** You set the channel to topic protection</span>",
-                         Aki::Settings::topicColor().name());
-            d->toLog(i18n("*** You set the channel to topic protection"));
+            msg = i18n("*** You turned on topic protection");
+            span = d->span(msg, Aki::Settings::topicColor());
         } else {
-            colour = i18n("<span style='color: %1;'>*** %2 set the channel to topic protection</span>",
-                          Aki::Settings::topicColor().name(), fromNick);
-            d->toLog(i18n("*** %1 set the channel to topic protection", fromNick));
+            msg = i18n("*** %1 turned on topic protection", fromNick);
+            span = d->span(msg, Aki::Settings::topicColor());
         }
-    } else if (mode == QChar('n')) {
+    } else if (mode == 'n') {
         if (self) {
-            colour = i18n("<span style='color: %1;'>*** You set the channel to no outside messages</span>",
-                          Aki::Settings::topicColor().name());
-            d->toLog(i18n("*** You set the channel to no outside message"));
+            msg = i18n("*** You set the channel to no outside messages");
+            span = d->span(msg, Aki::Settings::topicColor());
         } else {
-            colour = i18n("<span style='color: %1;'>*** %2 set the channel to no outside messages</span>",
-                          Aki::Settings::topicColor().name(), fromNick);
-            d->toLog(i18n("*** %1 set the channel to no outside messages", fromNick));
+            msg = i18n("*** %1 set the channel to no outside messages", fromNick);
+            span = d->span(msg, Aki::Settings::topicColor());
         }
-    } else if (mode == QChar('k')) {
+    } else if (mode == 'k') {
         if (self) {
-            colour = i18n("<span style='color: %1;'>*** You set the channel keyword to '%2'</span>",
-                          Aki::Settings::topicColor().name(), params);
-            d->toLog(i18n("*** You set the channel keyword to '%1'", params));
+            msg = i18n("*** You set the channel keyword to '%1'", params);
+            span = d->span(msg, Aki::Settings::topicColor());
         } else {
-            colour = i18n("<span style='color: %1;'>*** %2 set the channel keyword to '%3'</span>",
-                          Aki::Settings::topicColor().name(), fromNick, params);
-            d->toLog(i18n("*** %1 set the channel keyword to '%2'", fromNick, params));
+            msg = i18n("*** %1 set the channel keyword to '%2'", fromNick, params);
+            span = d->span(msg, Aki::Settings::topicColor());
         }
-    } else if (mode == QChar('l')) {
+    } else if (mode == 'l') {
         if (self) {
-            colour = i18n("<span style='color: %1;'>*** You set the channel limit to %2 users</span>",
-                          Aki::Settings::topicColor().name(), params);
-            d->toLog(i18n("*** You set the channel limit to %1 users", params));
+            msg = i18n("*** You set the channel's user limit to %1", params);
+            span = d->span(msg, Aki::Settings::topicColor());
         } else {
-            colour = i18n("<span style='color: %1;'>*** %2 set the channel limit to %3 users</span>",
-                         Aki::Settings::topicColor().name(), fromNick, params);
-            d->toLog(i18n("*** %1 set the channel limit to %2 users</span>",
-                          fromNick, params));
+            msg = i18n("*** %1 set the channel's user limit to %2", fromNick, params);
+            span = d->span(msg, Aki::Settings::topicColor());
+        }
+    } else {
+        if (self) {
+            msg = i18n("*** You set the channel's mode to +%1", mode);
+            span = d->span(msg, Aki::Settings::topicColor());
+        } else {
+            msg = i18n("*** %1 set the channel's mode to +%2", fromNick, mode);
+            span = d->span(msg, Aki::Settings::topicColor());
         }
     }
-
-    d->appendMessage(colour);
+    d->toLog(msg);
+    d->appendMessage(span);
 }
 
 void
 ChatView::addMode(const QString &fromNick, const QString &toNick, const QChar &mode,
                   bool toYou, bool fromYou)
 {
-    QString colour;
-    if (mode == QChar('o')) {
+    QString msg;
+    QString span;
+    if (mode == 'o') {
         if (toYou && fromYou) {
-            colour = i18n("<span style='color: %1;'>*** You gave yourself operator status</span>",
-                          Aki::Settings::opColor().name());
-            d->toLog(i18n("*** You gave yourself operator status"));
+            msg = i18n("*** You gave yourself operator status");
+            span = d->span(msg, Aki::Settings::opColor());
         } else if (fromYou && !toYou) {
-            colour = i18n("<span style='color: %1;'>*** You gave operator status to %2</span>",
-                          Aki::Settings::opColor().name(), toNick);
-            d->toLog(i18n("*** You gave operator status to %1", d->stripHtml(toNick)));
+            msg = i18n("*** You gave operator status to %1", toNick);
+            span = d->span(msg, Aki::Settings::opColor());
         } else if (toYou && !fromYou) {
-            colour = i18n("<span style='color: %1;'>*** %2 gave operator status to you</span>",
-                          Aki::Settings::opColor().name(), fromNick);
-            d->toLog(i18n("*** %1 gave operator status to you", d->stripHtml(fromNick)));
+            msg = i18n("*** %1 gave operator status to you", fromNick);
+            span = d->span(msg, Aki::Settings::opColor());
         } else if (!toYou && !fromYou) {
-            colour = i18n("<span style='color: %1;'>*** %2 gave operator status to %3</span>",
-                          Aki::Settings::opColor().name(), fromNick, toNick);
-            d->toLog(i18n("*** %1 gave operator status to %2", d->stripHtml(fromNick), d->stripHtml(toNick)));
+            msg = i18n("*** %1 gave operator status to %2", fromNick, toNick);
+            span = d->span(msg, Aki::Settings::opColor());
         }
-    } else if (mode == QChar('h')) {
+    } else if (mode == 'h') {
         if (toYou && fromYou) {
-            colour = i18n("<span style='color: %1;'>*** You gave yourself half operator status</span>",
-                          Aki::Settings::opColor().name());
-            d->toLog(i18n("*** You gace yourself half operator status"));
+            msg = i18n("*** You gave yourself half operator status");
+            span = d->span(msg, Aki::Settings::opColor());
         } else if (fromYou && !toYou) {
-            colour = i18n("<span style='color: %1;'>*** You gave half operator status to %2</span>",
-                          Aki::Settings::opColor().name(), toNick);
-            d->toLog(i18n("*** You gave half operator status to %1", d->stripHtml(toNick)));
+            msg = i18n("*** You gave half operator status to %1", toNick);
+            span = d->span(msg, Aki::Settings::opColor());
         } else if (toYou && !fromYou) {
-            colour = i18n("<span style='color: %1;'>*** %2 gave half operator status to you</span>",
-                          Aki::Settings::opColor().name(), fromNick);
-            d->toLog(i18n("*** %1 gave half operator status to you", d->stripHtml(fromNick)));
+            msg = i18n("*** %1 gave half operator status to you", fromNick);
+            span = d->span(msg, Aki::Settings::opColor());
         } else if (!toYou && !fromYou) {
-            colour = i18n("<span style='color: %1;'>*** %2 gave half operator status to %3</span>",
-                          Aki::Settings::opColor().name(), fromNick, toNick);
-            d->toLog(i18n("*** %1 gave half operator status to %2", d->stripHtml(fromNick), d->stripHtml(toNick)));
+            msg = i18n("*** %1 gave half operator status to %2", fromNick, toNick);
+            span = d->span(msg, Aki::Settings::opColor());
         }
-    } else if (mode == QChar('v')) {
+    } else if (mode == 'v') {
         if (toYou && fromYou) {
-            colour = i18n("<span style='color: %1;'>*** You gave yourself permission to talk</span>",
-                          Aki::Settings::voiceColor().name());
-            d->toLog(i18n("*** You gave yourself permission to talk"));
+            msg = i18n("*** You gave yourself permission to talk");
+            span = d->span(msg, Aki::Settings::voiceColor());
         } else if (fromYou && !toYou) {
-            colour = i18n("<span style='color: %1;'>*** You gave %2 permission to talk</span>",
-                          Aki::Settings::voiceColor().name(), toNick);
-            d->toLog(i18n("*** You gave %1 permission to talk", d->stripHtml(toNick)));
+            msg = i18n("*** You gave %1 permission to talk", toNick);
+            span = d->span(msg, Aki::Settings::voiceColor());
         } else if (toYou && !fromYou) {
-            colour = i18n("<span style='color: %1;'>*** %2 gave you permission to talk</span>",
-                          Aki::Settings::voiceColor().name(), fromNick);
-            d->toLog(i18n("*** %1 gave you permission to talk", d->stripHtml(fromNick)));
+            msg = i18n("*** %1 gave you permission to talk", fromNick);
+            span = d->span(msg, Aki::Settings::voiceColor());
         } else if (!toYou && !fromYou) {
-            colour = i18n("<span style='color: %1;'>*** %2 gave %3 permission to talk</span>",
-                          Aki::Settings::voiceColor().name(), fromNick, toNick);
-            d->toLog(i18n("*** %1 gave %2 permission to talk", d->stripHtml(fromNick), d->stripHtml(toNick)));
+            msg = i18n("*** %1 gave %2 permission to talk", fromNick, toNick);
+            span = d->span(msg, Aki::Settings::voiceColor());
         }
     } else {
-        return;
     }
 
-    d->appendMessage(colour);
+    d->toLog(msg);
+    d->appendMessage(span);
 }
 
 void
 ChatView::addMotd(const QString &message)
 {
-    QString colour = i18n("<span style=\"color: %1;\">[Motd] %2</span>",
-                          Aki::Settings::noticeColor().name(), d->stripHtml(message));
-    d->appendMessage(colour);
+    QString msg = i18n("[Motd] %1").arg(message);
+    QString span = d->span(msg, Aki::Settings::noticeColor());
+    d->toLog(msg);
+    d->appendMessage(span);
 }
 
 void
 ChatView::addNick(const QString &oldNick, const QString &newNick)
 {
-    QString colour = i18n("<span style=\"color: %1;\">*** %2 is now known as %3</span>",
-                          Aki::Settings::nickColor().name(), oldNick, newNick);
-    d->toLog(i18n("*** %1 is now known as %2", oldNick, newNick));
-    d->appendMessage(colour);
+    QString msg = i18n("*** %1 is now known as as %2", oldNick, newNick);
+    QString span = d->span(msg, Aki::Settings::nickColor());
+    d->toLog(msg);
+    d->appendMessage(span);
 }
 
 void
 ChatView::addNotice(const QString &message)
 {
-    QString colour = i18n("<span style=\"color: %1;\">[Notice] %2</span>",
-                          Aki::Settings::noticeColor().name(), message);
-    d->toLog(i18n("[Notice] %1", d->stripHtml(message)));
-    d->appendMessage(colour);
+    QString msg = i18n("[Notice] %1", message);
+    QString span = d->span(msg, Aki::Settings::noticeColor());
+    d->toLog(msg);
+    d->appendMessage(span);
 }
 
 void
 ChatView::addNotice(const QString &from, const QString &message)
 {
-    QString colour = i18n("<span style=\"color: %1;\">[Notice] <strong>%2</strong>: %3</span>",
-                          Aki::Settings::noticeColor().name(), from, message);
-    d->toLog(i18nc("Nickname, followed by the message","[Notice] %1: %2", 
-                   d->stripHtml(from), d->stripHtml(message)));
-    d->appendMessage(colour);
+    QString msg = i18n("[Notice] %1: %2", from, d->strong(message));
+    QString span = d->span(msg, Aki::Settings::noticeColor());
+    d->toLog(d->stripHtml(msg));
+    d->appendMessage(span);
 }
 
 void
 ChatView::addNoticeAuth(const QString &message)
 {
-    QString colour = i18n("<span style=\"color: %1;\">[Notice] %2</span>",
-                          Aki::Settings::noticeColor().name(), d->stripHtml(message));
-    d->appendMessage(colour);
+    QString msg = i18n("[Notice] %1", message);
+    QString span = d->span(msg, Aki::Settings::noticeColor());
+    d->toLog(msg);
+    d->appendMessage(span);
 }
 
 void
 ChatView::addPrivmsg(const QString &from, const QString &message)
 {
-    QString tmpString = i18nc("Nick, followed by a message", "<span>&lt;%1&gt; %2</span>",
-                              from, message);
-    d->toLog(i18nc("Nickname, followed by a message","<%1> %2", 
-                   d->stripHtml(from), d->stripHtml(message)));
-    d->appendMessage(tmpString);
+    QString msg = i18nc("Nick, followed by a message", "&lt;%1&gt; %2",
+                        from, message);
+    QString span = d->span(msg);
+    d->toLog(msg);
+    d->appendMessage(span);
 }
 
 void
 ChatView::addPrivmsgHighlight(const QString &from, const QString &message)
 {
-    QString colour = i18nc("nick name, the color and the message",
-                           "&lt;%1&gt; <span style='color: %2;'>%3</span>",
-                           from, Aki::Settings::highlightColor().name(), message);
-    d->toLog(i18nc("Nickname, followed by the message","<%1> %2", 
-                   d->stripHtml(from), d->stripHtml(message)));
-    d->appendMessage(colour);
+    QString msg = i18nc("Nick name, the colour and the message",
+                        "&lt;%1&gt; %2", from, d->span(message, Aki::Settings::highlightColor()));
+    QString span = d->span(msg);
+    d->toLog(d->stripHtml(msg));
+    d->appendMessage(span);
 }
 
 void
 ChatView::addRemoveBan(const QString &nick, const QString &mask)
 {
-    QString colour = i18n("<span style='color %1;'>*** %2 removed ban on %3</span>",
-                          Aki::Settings::unbanColor().name(), nick, mask);
-    d->toLog(i18n("*** %1 removed ban on %2", d->stripHtml(nick), mask));
-    d->appendMessage(colour);
+    QString msg = i18n("*** %1 removed ban on %2", nick, mask);
+    QString span = d->span(msg, Aki::Settings::unbanColor());
+    d->toLog(msg);
+    d->appendMessage(span);
 }
 
 void
 ChatView::addRemoveMode(const QString &fromNick, const QChar &mode, bool self)
 {
-    QString colour;
-    if (mode == QChar('i')) {
+    QString msg;
+    QString span;
+    if (mode == 'i') {
         if (self) {
-            colour = i18n("<span style='color: %1;'>*** You removed the channel's invite only mode</span>",
-                          Aki::Settings::topicColor().name());
-            d->toLog(i18n("*** You removed the channel's invite only mode"));
+            msg = i18n("*** You removed the channel's invite only mode");
+            span = d->span(msg, Aki::Settings::topicColor());
         } else {
-            colour = i18n("<span style='color: %1;'>*** %2 removed the channel's invite only mode</span>",
-                          Aki::Settings::topicColor().name(), fromNick);
-            d->toLog(i18n("*** %1 removed the channel's invite only mode"));
+            msg = i18n("*** %1 removed the channel's invite only mode", fromNick);
+            span = d->span(msg, Aki::Settings::topicColor());
         }
-    } else if (mode == QChar('m')) {
+    } else if (mode == 'm') {
         if (self) {
-            colour = i18n("<span style='color: %1;'>*** You removed the channel's moderation</span>",
-                          Aki::Settings::topicColor().name());
-            d->toLog(i18n("*** You removed the channel's moderation"));
+            msg = i18n("*** You removed the channel's moderation");
+            span = d->span(msg, Aki::Settings::topicColor());
         } else {
-            colour = i18n("<span style='color: %1;'>*** %2 removed the channel's moderation</span>",
-                          Aki::Settings::topicColor().name(), fromNick);
-            d->toLog(i18n("*** %1 removed the channel's moderation", fromNick));
+            msg = i18n("*** %1 removed the channel's moderation", fromNick);
+            span = d->span(msg, Aki::Settings::topicColor());
         }
-    } else if (mode == QChar('p')) {
+    } else if (mode == 'p') {
         if (self) {
-            colour = i18n("<span style='color: %1;'>*** You set the channel to public</span>",
-                          Aki::Settings::topicColor().name());
-            d->toLog(i18n("*** You set the channel to public"));
+            msg = i18n("*** You set the channel to public");
+            span = d->span(msg, Aki::Settings::topicColor());
         } else {
-            colour = i18n("<span style='color: %1;'>*** %2 set the channel to public</span>",
-                          Aki::Settings::topicColor().name(), fromNick);
-            d->toLog(i18n("*** %1 set the channel to public", fromNick));
+            msg = i18n("*** %1 set the channel to public", fromNick);
+            span = d->span(msg, Aki::Settings::topicColor());
         }
-    } else if (mode == QChar('s')) {
+    } else if (mode == 's') {
         if (self) {
-            colour = i18n("<span style='color: %1;'>*** You set the channel to visible</span>",
-                          Aki::Settings::topicColor().name());
-            d->toLog(i18n("*** You set the channel to visible"));
+            msg = i18n("*** You set the channel to visible");
+            span = d->span(msg, Aki::Settings::topicColor());
         } else {
-            colour = i18n("<span style='color: %1;'>*** %2 set the channel to visible</span>",
-                          Aki::Settings::topicColor().name(), fromNick);
-            d->toLog(i18n("*** %1 set the channel to visible", fromNick));
+            msg = i18n("*** %1 set the channel to visible", fromNick);
+            span = d->span(msg, Aki::Settings::topicColor());
         }
-    } else if (mode == QChar('t')) {
+    } else if (mode == 't') {
         if (self) {
-            colour = i18n("<span style='color: %1;'>*** You removed the channel's topic protection</span>",
-                          Aki::Settings::topicColor().name());
-            d->toLog(i18n("*** You removed the channel's topic protection</span>"));
+            msg = i18n("*** You removed the channel's topic protection");
+            span = d->span(msg, Aki::Settings::topicColor());
         } else {
-            colour = i18n("<span style='color: %1;'>*** %2 removed the channel's topic protection</span>",
-                          Aki::Settings::topicColor().name(), fromNick);
-            d->toLog(i18n("*** %1 removed the channel's topic protection"));
+            msg = i18n("*** %1 removed the channel's topic protection", fromNick);
+            span = d->span(msg, Aki::Settings::topicColor());
         }
-    } else if (mode == QChar('n')) {
+    } else if (mode == 'n') {
         if (self) {
-            colour = i18n("<span style='color: %1;'>*** You set the channel to allow outside messages</span>",
-                          Aki::Settings::topicColor().name());
-            d->toLog(i18n("*** You set the channel to allow outside messages</span>"));
+            msg = i18n("*** You set the channel to allow outside messages");
+            span = d->span(msg, Aki::Settings::topicColor());
         } else {
-            colour = i18n("<span style='color: %1;'>*** %2 set the channel to allow outside messages</span>",
-                          Aki::Settings::topicColor().name(), fromNick);
-            d->toLog(i18n("*** %1 set the channel to allow outside messages</span>", fromNick));
+            msg = i18n("*** %1 set the channel to allow outside messages", fromNick);
+            span = d->span(msg, Aki::Settings::topicColor());
         }
-    } else if (mode == QChar('k')) {
+    } else if (mode == 'k') {
         if (self) {
-            colour = i18n("<span style='color: %1;'>*** You removed the channel's keyword</span>",
-                          Aki::Settings::topicColor().name());
-            d->toLog(i18n("*** You removed the channel's keyword"));
+            msg = i18n("*** You removed the channel's keyword");
+            span = d->span(msg, Aki::Settings::topicColor());
         } else {
-            colour = i18n("<span style='color: %1;'>*** %2 removed the channel's keyword</span>",
-                          Aki::Settings::topicColor().name(), fromNick);
-            d->toLog(i18n("*** %1 removed the channel's keyword", fromNick));
+            msg = i18n("*** %1 removed the channel's keyword", fromNick);
+            span = d->span(msg, Aki::Settings::topicColor());
         }
-    } else if (mode == QChar('l')) {
+    } else if (mode == 'l') {
         if (self) {
-            colour = i18n("<span style='color: %1;'>*** You removed the channel's user limit</span>",
-                          Aki::Settings::topicColor().name());
-            d->toLog(i18n("*** You removed the channel's user limit"));
+            msg = i18n("*** You removed the channel's user limit");
+            span = d->span(msg, Aki::Settings::topicColor());
         } else {
-            colour = i18n("<span style='color: %1;'>*** %2 removed the channel's user limit</span>",
-                          Aki::Settings::topicColor().name(), fromNick);
-            d->toLog(i18n("*** %1 removed the channel's user limit", fromNick));
+            msg = i18n("*** %1 removed the channel's user limit", fromNick);
+            span = d->span(msg, Aki::Settings::topicColor());
         }
     }
 
-    d->appendMessage(colour);
-}
-
-void
-ChatView::addRemoveMode(const QString &fromNick, const QString &toNick, const QChar &mode,
-                        bool toYou, bool fromYou)
-{
-    QString colour;
-    if (mode == QChar('o')) {
-        if (toYou && fromYou) {
-            colour = i18n("<span style='color: %1;'>*** You took operator status from yourself</span>",
-                          Aki::Settings::deOpColor().name());
-            d->toLog(i18n("*** You took operator status from yourself"));
-        } else if (fromYou && !toYou) {
-            colour = i18n("<span style='color: %1;'>*** You took operator status from %2</span>",
-                          Aki::Settings::deOpColor().name(), toNick);
-            d->toLog(i18n("*** You took operator status from %1", d->stripHtml(toNick)));
-        } else if (toYou && !fromYou) {
-            colour = i18n("<span style='color: %1;'>*** %2 took operator status from you</span>",
-                          Aki::Settings::deOpColor().name(), fromNick);
-            d->toLog(i18n("*** %1 took operator status from you", d->stripHtml(fromNick)));
-        } else if (!toYou && !fromYou) {
-            colour = i18n("<span style='color: %1;'>*** %2 took operator status from %3</span>",
-                          Aki::Settings::deOpColor().name(), fromNick, toNick);
-            d->toLog(i18n("*** %1 took operator status from %2", d->stripHtml(fromNick), d->stripHtml(toNick)));
-        }
-    } else if (mode == QChar('h')) {
-        if (toYou && fromYou) {
-            colour = i18n("<span style='color: %1;'>*** You took half operator status from yourself</span>",
-                          Aki::Settings::deOpColor().name());
-            d->toLog(i18n("*** You took half operator status from yourself"));
-        } else if (fromYou && !toYou) {
-            colour = i18n("<span style='color: %1;'>*** You took half operator status from %2</span>",
-                          Aki::Settings::deOpColor().name(), toNick);
-            d->toLog(i18n("*** You took half operator status from %1", d->stripHtml(toNick)));
-        } else if (toYou && !fromYou) {
-            colour = i18n("<span style='color: %1;'>*** %2 took half operator status from you</span>",
-                          Aki::Settings::deOpColor().name(), fromNick);
-            d->toLog(i18n("*** %1 took half operator status from you", d->stripHtml(fromNick)));
-        } else if (!toYou && !fromYou) {
-            colour = i18n("<span style='color: %1;'>*** %2 took half operator status from %3</span>",
-                          Aki::Settings::deOpColor().name(), fromNick, toNick);
-            d->toLog(i18n("*** %1 took half operator status from %2", d->stripHtml(fromNick), d->stripHtml(toNick)));
-        }
-    } else if (mode == QChar('v')) {
-        if (toYou && fromYou) {
-            colour = i18n("<span style='color: %1;'>*** You took permission to talk from yourself</span>",
-                          Aki::Settings::deVoiceColor().name());
-            d->toLog(i18n("*** You took permission to talk from yourself"));
-        } else if (fromYou && !toYou) {
-            colour = i18n("<span style='color: %1;'>*** You took %2 permission to talk</span>",
-                          Aki::Settings::deVoiceColor().name(), toNick);
-            d->toLog(i18n("*** You took %1 permission to talk", d->stripHtml(toNick)));
-        } else if (toYou && !fromYou) {
-            colour = i18n("<span style='color: %1;'>*** %2 took your permission to talk</span>",
-                          Aki::Settings::deVoiceColor().name(), fromNick);
-            d->toLog(i18n("*** %1 took your permission to talk", d->stripHtml(fromNick)));
-        } else if (!toYou && !fromYou) {
-            colour = i18n("<span style='color: %1;'>*** %2 took %3 permission to talk</span>",
-                          Aki::Settings::deVoiceColor().name(), fromNick, toNick);
-            d->toLog(i18n("*** %1 took %2 permission to talk", d->stripHtml(fromNick), d->stripHtml(toNick)));
-        }
-    } else {
-        return;
-    }
-
-    d->appendMessage(colour);
-}
-
-void
-ChatView::addSelfUModeSet(const QString &modes)
-{
-    QString colour = i18n("<span style='color: %1;'>[UMode] You changed your modes to %2</span>",
-                          Aki::Settings::noticeColor().name(), modes);
-    d->toLog(i18n("[UMode] You changed your modes to %1", modes));
-    d->appendMessage(colour);
-}
-
-void
-ChatView::addSupport(const QString &message)
-{
-    QString colour = i18n("<span style=\"color: %1;\">[Support] %2</span>",
-                          Aki::Settings::noticeColor().name(), message);
-    d->appendMessage(colour);
-}
-
-void
-ChatView::addTime(const QString &server, const QString &time)
-{
-    QString colour = i18n("<span style='color: %1;'>[Time] %2 %3</span>",
-                          Aki::Settings::noticeColor().name(), server, time);
-    d->toLog(i18n("[Time] %1 %2", server, time));
-    d->appendMessage(colour);
-}
-
-void
-ChatView::addTopic(const QString &topic)
-{
-    QString colour = i18n("<span style='color: %1;'>*** The channel's topic is \"%2\"</span>",
-                          Aki::Settings::topicColor().name(), topic);
-    d->toLog(i18n("*** The channel's topic is \"%1\"", d->stripHtml(topic)));
-    d->appendMessage(colour);
-}
-
-void
-ChatView::addTopicChanged(const QString &nick, const QString &topic)
-{
-    QString colour = i18n("<span style='color: %1;'>*** %2 has changed the channel's topic to "
-                          "\'%3\'</span>", Aki::Settings::topicColor().name(), nick, topic);
-    d->toLog(i18n("*** %1 has changed the channel's topic to \"%2\"", d->stripHtml(nick), topic));
-    d->appendMessage(colour);
-}
-
-void
-ChatView::addTopicSetBy(const QString &name, const QString &time)
-{
-    QString colour = i18n("<span style='color: %1;'>*** Topic set by %2 on %3</span>",
-                          Aki::Settings::topicColor().name(), name, time);
-    d->toLog(i18n("*** Topic set by %1 on %2", name, time));
-    d->appendMessage(colour);
-}
-
-void
-ChatView::addUMode(const QString &modes)
-{
-    QString colour = i18n("<span style='color: %1;'>[UMode] Your modes are: %2</span>",
-                          Aki::Settings::noticeColor().name(), modes);
-    d->toLog(i18n("[UMode] Your modes are: %1", modes));
-    d->appendMessage(colour);
-}
-
-void
-ChatView::addUMode(const QString &nick, const QString &modes)
-{
-    QString colour = i18n("<span style='color: %1;'>[UMode] %2 set your modes to %3</span>",
-                          Aki::Settings::noticeColor().name(), nick, modes);
-    d->toLog(i18n("[UMode] %1 set your modes to %2", d->stripHtml(nick), modes));
-    d->appendMessage(colour);
-}
-
-void
-ChatView::addUserHost(const QStringList &nicks, const QStringList &hosts)
-{
-    foreach (const QString &nick, nicks) {
-        foreach (const QString &host, hosts) {
-            QString colour = i18n("<span style='color: %1;'>[UserHost] %2 is %3</span>",
-                                  Aki::Settings::noticeColor().name(),
-                                  nick, host);
-            d->appendMessage(colour);
-        }
-    }
-}
-
-void
-ChatView::addUserJoin(const QString &channel, const QString &nick, const QString &hostMask)
-{
-    QString colour = i18n("<span style='color: %1;'>--&gt; %2 (%3) has joined %4</span>",
-                          Aki::Settings::joinColor().name(), nick, hostMask, channel);
-    d->toLog(i18n("--> %1 (%2) has joined %3", d->stripHtml(nick), hostMask, channel));
-    d->appendMessage(colour);
-}
-
-void
-ChatView::addUserPart(const QString &channel, const QString &nick, const QString &hostMask,
-                      const QString &partMessage)
-{
-    QString tmp;
-
-    if (partMessage.isEmpty()) {
-        tmp = hostMask;
-    } else {
-        tmp = partMessage;
-    }
-
-    QString colour = i18n("<span style='color: %1;'>&lt;-- %2 (%3) has left %4</span>",
-                          Aki::Settings::partColor().name(), nick, tmp, channel);
-    d->toLog(i18nc("Nickname (Message)","<-- %1 (%2) has left %4", d->stripHtml(nick), 
-                   tmp, channel));
-    d->appendMessage(colour);
-}
-
-void
-ChatView::addUserQuit(const QString &nick, const QString &hostMask,
-                      const QString &quitMessage)
-{
-    QString colour = i18n("<span style='color: %1;'>&lt;-- %2 (%3) has quit</span>",
-                          Aki::Settings::quitColor().name(), nick,
-                          (quitMessage.isEmpty() || quitMessage.isNull()) ? hostMask : quitMessage);
-    d->toLog(i18nc("Nickname (Message)","<-- %1 (%2) has quit.", d->stripHtml(nick),
-                  (quitMessage.isEmpty() || quitMessage.isNull()) ? hostMask : quitMessage));
-    d->appendMessage(colour);
-}
-
-void
-ChatView::addVersion(const QString &message)
-{
-    QString colour = i18n("<span style='color: %1;'>[Version] %2</span>",
-                          Aki::Settings::noticeColor().name(), message);
-    d->appendMessage(colour);
-}
-
-void
-ChatView::addWelcome(const QString &message)
-{
-    QString colour = i18n("<span style=\"color: %1;\">[Welcome] %2</span>",
-                           Aki::Settings::noticeColor().name(), message);
-    d->appendMessage(colour);
-}
-
-void
-ChatView::addWho(const QString &channel, const QString &message)
-{
-    QString colour = i18nc("color, channel, message","<span style='color: %1;'>[Who:%2] %3</span>",
-                          Aki::Settings::noticeColor().name(), channel, message);
-    d->appendMessage(colour);
-}
-
-void
-ChatView::addWho(const QString &channel, const QString &userName, const QString &address,
-                 const QString &server, const QString &nick, const QString &flags, int hops,
-                 const QString &realName)
-{
-    QString colour = i18n("<span style='color: %1;'>[Who:%2] <b><u>Username</u></b>: %3, <b><u>Address</u></b>: %4, "
-                          "<b><u>Server</u></b>: %5, <b><u>Nick</u></b>: %6, <b><u>Flags</u></b>: %7, "
-                          "<b><u>Hops</u></b>: %8, <b><u>Real Name</u></b>: %9</span>",
-                          Aki::Settings::noticeColor().name(), channel, userName, address, server, nick,
-                          flags, hops, realName);
-    d->appendMessage(colour);
-}
-
-void
-ChatView::addWhoIs(const QString &nick, const QString &info)
-{
-    QString colour = i18nc("Color, nick, info","<span style='color: %1;'>[WhoIs:%2] %3</span>",
-                          Aki::Settings::noticeColor().name(), nick, info);
-    d->appendMessage(colour);
-}
-
-void
-ChatView::addWhoIsChannels(const QString &nick, const QString &channels)
-{
-    QString colour = i18n("<span style='color: %1;'>[WhoIs:%2] is currently on channels: %3</span>",
-                          Aki::Settings::noticeColor().name(), nick, channels);
-    d->appendMessage(colour);
-}
-
-void
-ChatView::addWhoIsIdentified(const QString &nick, const QString &info)
-{
-    QString colour = i18nc("Color, nick, info","<span style='color: %1;'>[WhoIs:%2] %3</span>",
-                          Aki::Settings::noticeColor().name(), nick, info);
-    d->appendMessage(colour);
-}
-
-void
-ChatView::addWhoIsIdle(const QString &nick, const QString &idleTime, const QString &signon)
-{
-    QString colour = i18n("<span style='color: %1;'>[WhoIs:%2] idle: %3, signon: %4</span>",
-                          Aki::Settings::noticeColor().name(), nick, idleTime, signon);
-    d->appendMessage(colour);
-}
-
-void
-ChatView::addWhoIsServer(const QString &nick, const QString &server, const QString &info)
-{
-    QString colour = i18n("<span style='color: %1;'>[WhoIs:%2] is online via %3 (%4)</span>",
-                          Aki::Settings::noticeColor().name(), nick, server, info);
-    d->appendMessage(colour);
-}
-
-void
-ChatView::addWhoIsUser(const QString &nick, const QString &username, const QString &address,
-                       const QString &info)
-{
-    QString colour = i18n("<span style='color: %1;'>[WhoIs:%2] is %3@%4 (%5)</span>",
-                          Aki::Settings::noticeColor().name(), nick, username, address, info);
-    d->appendMessage(colour);
-}
-
-void
-ChatView::addWhoWas(const QString &nick, const QString &message)
-{
-    QString colour = i18n("<span style='color: %1;'>[WhoWas:%2] %3</span>",
-                          Aki::Settings::noticeColor().name(), nick, message);
-    d->appendMessage(colour);
-}
-
-void
-ChatView::addWhoWasUser(const QString &nick, const QString &username, const QString &address,
-                       const QString &info)
-{
-    QString colour = i18n("<span style='color: %1;'>[WhoWas:%2] is %3@%4 (%5)</span>",
-                          Aki::Settings::noticeColor().name(), nick, username, address, info);
-    d->appendMessage(colour);
-}
-
-void
-ChatView::add901(const QString &id, const QString &identName, const QString &address,
-                 const QString &message)
-{
-    d->toLog(QString("%1 %2@%3 %4").arg(id, identName, address, d->stripHtml(message)));
-    addMessage(QString("%1 %2@%3 %4").arg(id, identName, address, message));
-}
-
-void
-ChatView::setLog(Aki::LogFile *logFile)
-{
-    d->logFile = logFile;
-}
-
-void
-ChatView::addLogLine(const QString &line)
-{
-    QString colour = QString("<span style='color: #C3C3C3;'>%1</span>")
-                             .arg(line);
-    d->appendMessage(colour, false);
+    d->toLog(msg);
+    d->appendMessage(span);
 }
