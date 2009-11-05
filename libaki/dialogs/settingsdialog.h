@@ -38,10 +38,10 @@ public:
     ~SettingsDialog();
     void addPage(Aki::SettingsPageInterface *page);
     void removePage(Aki::SettingsPageInterface *page);
-private:
-    Q_PRIVATE_SLOT(d, void updateButtons())
-    Q_PRIVATE_SLOT(d, void updateSettings())
-    Q_PRIVATE_SLOT(d, void updateWidgets())
+protected Q_SLOTS:
+    void updateButtons();
+    void updateSettings();
+    void updateWidgets();
 private:
     bool hasChanged();
 private:
