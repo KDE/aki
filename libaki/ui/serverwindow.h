@@ -50,6 +50,9 @@ public:
     Aki::BaseWindow* currentFocusedChannel();
     Aki::BaseWindow* findChannel(const QString &name);
     bool hasInputFocus() const;
+    QStringList rejoinChannelList() const;
+    Aki::ChannelView* mainView();
+    Aki::ChannelView* splitView();
 Q_SIGNALS:
     void dropSuccessful(Aki::BaseWindow *window);
     void customCommand(const QString &command, const QString &message);

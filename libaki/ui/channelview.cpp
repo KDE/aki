@@ -332,6 +332,10 @@ ChannelView::addChannel(const QString &name)
         return;
     }
 
+    if (d->findChannel(name)) {
+        return;
+    }
+
     Aki::ChannelWindow *window = new Aki::ChannelWindow(name, d->identity, d->socket, this);
     window->setChannelView(this);
     window->setNotifications(d->notifications);

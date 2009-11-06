@@ -97,6 +97,18 @@ public:
             if (base && base->view()) {
                 base->view()->addMessage(i18n("Disconnecting"));
             }
+
+            foreach (Aki::BaseWindow *window, mainView->windows()) {
+                switch (window->windowType()) {
+                case Aki::BaseWindow::ChannelWindow: {
+                    Aki::ChannelWindow *channel = qobject_cast<Aki::ChannelWindow*>(window);
+                    foreach (Aki::Irc::User *user, channel->users()) {
+                        channel->removeUser(user);
+                    }
+                    break;
+                }
+                }
+            }
             break;
         }
         case QAbstractSocket::ConnectingState: {
@@ -1161,6 +1173,10 @@ public:
     {
         mainView->addChannel(channel);
         autoRequest.insert("WHO", channel.toLower());
+
+        if (!rejoinChannels.contains(channel.toLower())) {
+            rejoinChannels << channel.toLower();
+        }
     }
 
     void onSelfUMode(const QString &modes)
@@ -1302,6 +1318,8 @@ public:
                         window->setTabColor(Aki::BaseWindow::NewData);
                     }
                     return;
+                } else if (user->nick() == q->socket()->currentNick()) {
+                    rejoinChannels.removeAll(channel.toLower());
                 }
             }
         }
@@ -1409,14 +1427,18 @@ public:
         foreach (Aki::BaseWindow *window, splitView->windows()) {
             if (window && window->windowType() == Aki::BaseWindow::QueryWindow) {
                 Aki::QueryWindow *query = qobject_cast<Aki::QueryWindow*>(window);
-                query->addWho(channel, identName, address, server, nick, flags, hops, realName);
+                if (nick == query->otherUser()->nick() || nick == query->selfUser()->nick()) {
+                    query->addWho(channel, identName, address, server, nick, flags, hops, realName);
+                }
             }
         }
 
         foreach (Aki::BaseWindow *window, mainView->windows()) {
             if (window && window->windowType() == Aki::BaseWindow::QueryWindow) {
                 Aki::QueryWindow *query = qobject_cast<Aki::QueryWindow*>(window);
-                query->addWho(channel, identName, address, server, nick, flags, hops, realName);
+                if (nick == query->otherUser()->nick() || nick == query->selfUser()->nick()) {
+                    query->addWho(channel, identName, address, server, nick, flags, hops, realName);
+                }
             }
         }
     }
@@ -1593,6 +1615,7 @@ public:
     Aki::MessageLog *messageLog;
     QMultiMap<QString,QString> autoRequest;
     QStringList whoRequest;
+    QStringList rejoinChannels;
     QSplitter *splitter;
 }; // End of class ServerWindowPrivate.
 } // End of namespace Aki.
@@ -1966,6 +1989,24 @@ bool
 ServerWindow::hasInputFocus() const
 {
     return false;
+}
+
+QStringList
+ServerWindow::rejoinChannelList() const
+{
+    return d->rejoinChannels;
+}
+
+Aki::ChannelView*
+ServerWindow::mainView()
+{
+    return d->mainView;
+}
+
+Aki::ChannelView*
+ServerWindow::splitView()
+{
+    return d->splitView;
 }
 
 #include "serverwindow.moc"

@@ -160,7 +160,9 @@ public:
         if (window) {
             switch (window->windowType()) {
             case Aki::BaseWindow::ServerWindow: {
-                window->socket()->connectToHost();
+                Aki::ServerWindow *serverWindow = qobject_cast<Aki::ServerWindow*>(window);
+                serverWindow->socket()->setChannelList(serverWindow->rejoinChannelList());
+                serverWindow->socket()->connectToHost();
                 akiDisconnection->setEnabled(true);
                 akiReconnection->setEnabled(false);
                 break;
