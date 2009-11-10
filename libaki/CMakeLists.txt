@@ -34,6 +34,8 @@ set(akicore_SRCS
     plugin/pluginmanager.cpp
     server.cpp
     serverlist/mircparser.cpp
+    serverlist/networkserializer.cpp
+    serverlist/xmlparser.cpp
     ui/basewindow.cpp
     ui/channelmodebar.cpp
     ui/channelview.cpp

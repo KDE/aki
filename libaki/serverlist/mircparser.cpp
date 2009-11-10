@@ -20,6 +20,7 @@
 */
 
 #include "mircparser.h"
+#include <KDebug>
 #include <QTextStream>
 using namespace Aki;
 
@@ -44,58 +45,47 @@ public:
         QString tmp = line.left(line.indexOf('='));
         line.remove(0, tmp.length() + 1);
 
-        // Split the string up
-        // serverSplit[0] = "A5KNet: Random server"
-        // serverSplit[1] = "irc.a5knet.com:6660-6669GROUP:1ran"
-        QStringList serverSplit = line.split("SERVER:");
+        QStringList serversSplit = line.split("SERVER:", QString::SkipEmptyParts, Qt::CaseInsensitive);
+        QString serverName = serversSplit[0];
+        QString addressGroup = serversSplit[1];
 
-        // Now we split the serverSplit[1] to get the group and
-        // the address and port(s).
-        // groupSplit[0] = "irc.a5knet.com:6660-6669"
-        // groupSplit[1] = "1ran"
-        QStringList groupSplit = serverSplit[1].split("GROUP:");
+        server->setName(serverName);
 
-        server->setName(serverSplit[0]);
+        QStringList groupSplit = addressGroup.split("GROUP:", QString::SkipEmptyParts, Qt::CaseInsensitive);
+        QString addressPort = groupSplit[0];
+        QStringList addressPortSplit = addressPort.split(':');
 
-        // Now we split it so we can get the address and port(s)
-        QStringList addressPortSplit = groupSplit[0].split(':');
+        QString address = addressPortSplit[0];
+        QStringList portSplit;
 
-        // We need to check if there is a range of ports. Since
-        // this is a limitation in Aki. As we don't support port
-        // ranges we will have to add each address for each port.
-        if (addressPortSplit[1].contains('-')) {
-            // We get the port and split it in to a low and high port
-            // range.
-            QStringList highLowPort = addressPortSplit[1].split('-');
-            // Get the low.
-            int low = highLowPort[0].toInt();
-            // Get the high and add 1 so we can get the last port.
-            int high = highLowPort[1].toInt() + 1;
-
-            for (int i = low; i < high; ++i) {
-                // Append the new address to the list.
-                // In Aki it is stores add <address>/<port>
-                addresses << addressPortSplit[0] + '/' + QString::number(i);
-            }
-
-        } else if (addressPortSplit[1].contains(',')) {
-            // Now we check if there is multiple ports and it's not a range.
-            QStringList portSplit = addressPortSplit[1].split(',');
-
-            // Iterate over the string list appending the address and port.
-            QStringListIterator portIter(portSplit);
-            while (portIter.hasNext()) {
-                // Addresses are in <address>/<port> format.
-                addresses << addressPortSplit[0] + '/' + portIter.next();
-            }
+        if (addressPortSplit[1].contains(',')) {
+            portSplit = addressPortSplit[1].split(',');
+        } else if (addressPortSplit[1].contains('.')) {
+            portSplit = addressPortSplit[1].split('.');
         } else {
-            // Apparently we just have 1 port.
-            // Addresses are in <address>/<port> format.
-            addresses << addressPortSplit[0] + '/' + addressPortSplit[1];
+            return;
         }
 
-        server->setAddressList(addresses);
-        servers << server;
+        QStringListIterator portIter(portSplit);
+        while (portIter.hasNext()) {
+            QString ports = portIter.next().trimmed();
+            if (ports.contains('-')) {
+                QStringList lowHighSplit = ports.split('-');
+                int low = lowHighSplit[0].toInt();
+                int high = lowHighSplit[1].toInt();
+
+                for (int i = low; i < high + 1; ++i) {
+                    addresses << address + '/' + QString::number(i);
+                }
+            } else {
+                addresses << address + '/' + ports;
+            }
+        }
+
+        if (!addresses.isEmpty()) {
+            server->setAddressList(addresses);
+            servers << server;
+        }
     }
 
     Aki::MIrcParser *q;

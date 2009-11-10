@@ -25,6 +25,7 @@
 #include "config/serverconfig.h"
 #include "networkexporter.h"
 #include "networkimporter.h"
+#include "serverlist/networkserializer.h"
 #include "settings.h"
 #include "server.h"
 #include <KFileDialog>
@@ -469,26 +470,34 @@ public:
         const QString fileName = KFileDialog::getSaveFileName(KUrl(), "*.xml|" +
             i18n("Network file(*.xml)"), q, i18n("Save Network File"));
 
-        QFile file(fileName);
-        if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        Aki::NetworkSerializer *file = new Aki::NetworkSerializer(q);
+        file->setServerList(serverList[identityName]);
+        if (!file->write(fileName)) {
+            KMessageBox::error(q, i18n("Unable to save file %1", fileName));
             return;
         }
 
-        Aki::NetworkExporter *exporter = new Aki::NetworkExporter;
+        /*Aki::NetworkExporter *exporter = new Aki::NetworkExporter;
         exporter->setServerList(serverList[identityName]);
 
         if (!exporter->write(&file)) {
             KMessageBox::error(q, i18n("Unable to save networks to file."));
-        }
+        }*/
     }
 
     void importNetworksClicked()
     {
         const QString identityName = q->identitySelector->currentText();
         const QString fileName = KFileDialog::getOpenFileName(KUrl(), "*.xml|" +
-            i18n("Network file(*.xml)"), q, i18n("Open Network File"));
+            i18n("Network file(*.xml)\n*.ini|mIRC Server List(*.ini)"), q, i18n("Open Network File"));
 
-        QFile file(fileName);
+        Aki::NetworkSerializer *file = new Aki::NetworkSerializer(q);
+        if (!file->read(fileName)) {
+            KMessageBox::error(q, i18n("Unable to import file %1", fileName));
+            return;
+        }
+
+        /*QFile file(fileName);
         if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
             return;
         }
@@ -497,10 +506,11 @@ public:
         if (!import->read(&file)) {
             KMessageBox::error(q, i18n("Unable to load network file: %1", fileName));
             return;
-        }
+        }*/
 
-        Aki::ServerList list = import->serverList();
+        Aki::ServerList list = file->servers();
         if (list.isEmpty()) {
+            kDebug() << "List is empty";
             return;
         }
 
