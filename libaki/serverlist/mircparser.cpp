@@ -82,6 +82,17 @@ public:
             }
         }
 
+        server->setAutoIdentify(false);
+        server->setAutoJoinChannels(false);
+        server->setAutoReconnection(true);
+        server->setConnectOnStartup(false);
+        server->setConnectToRandomServer(false);
+        server->setDefaultEncoding(true);
+        server->setEncoding("UTF-8");
+        server->setRetryAttempts(10);
+        server->setRetryInterval(10);
+        server->setSsl(false);
+
         if (!addresses.isEmpty()) {
             server->setAddressList(addresses);
             servers << server;
