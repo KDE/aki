@@ -17,38 +17,47 @@
 
     You should have received a copy of the GNU Lesser General Public
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
-
 */
 
-#ifndef SETTINGSDIALOG_H
-#define SETTINGSDIALOG_H
+#ifndef SEARCHBAR_H
+#define SEARCHBAR_H
 
-#include <KConfigDialog>
+#include "ui_searchbar.h"
 #include <QScopedPointer>
+#include <QWidget>
 
 namespace Aki
 {
-class SettingsPageInterface;
-class SettingsDialogPrivate;
-class SettingsDialog : public KConfigDialog
+class SearchBarPrivate;
+class SearchBar : public QWidget,
+                  private Ui::SearchBar
 {
     Q_OBJECT
 public:
-    SettingsDialog(QWidget *parent = 0);
-    ~SettingsDialog();
-    void addPage(Aki::SettingsPageInterface *page);
-    void removePage(Aki::SettingsPageInterface *page);
-protected Q_SLOTS:
-    void updateButtons();
-    void updateSettings();
-    void updateWidgets();
+    SearchBar(QWidget *parent = 0);
+    ~SearchBar();
+    QString text() const;
+    void setFound(bool state);
+    void resetPalette();
+    bool isCaseSensitive() const;
+    bool isHighlightAll() const;
+    bool isWrapAround() const;
+Q_SIGNALS:
+    void findNextClicked();
+    void findPreviousClicked();
+    void textEdited(const QString &text);
 private:
-    bool hasChanged();
+    Q_PRIVATE_SLOT(d, void closeButtonClicked())
+    Q_PRIVATE_SLOT(d, void findNextButtonClicked())
+    Q_PRIVATE_SLOT(d, void findPreviousButtonClicked())
+    Q_PRIVATE_SLOT(d, void searchTermsTextEdited(const QString &text))
+    Q_PRIVATE_SLOT(d, void caseSensitiveTriggered(bool checked))
+    Q_PRIVATE_SLOT(d, void highlightAllTriggered(bool checked))
+    Q_PRIVATE_SLOT(d, void wrapAroundTriggered(bool checked))
 private:
-    friend class SettingsDialogPrivate;
-    QScopedPointer<SettingsDialogPrivate> d;
-    typedef QMap<Aki::SettingsPageInterface*, KPageWidgetItem*> PageList;
-}; // End of class SettingsDialog.
+    friend class SearchBarPrivate;
+    QScopedPointer<SearchBarPrivate> d;
+}; // End of class SearchBar.
 } // End of namespace Aki.
 
-#endif // SETTINGSDIALOG_H
+#endif // SEARCHBAR_H

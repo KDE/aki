@@ -50,6 +50,63 @@ public:
         q->chatInput->setFocus();
     }
 
+    void findNextClicked()
+    {
+        QWebPage::FindFlags flags;
+        if (q->searchBar()->isCaseSensitive()) {
+            flags |= QWebPage::FindCaseSensitively;
+        }
+        if (q->searchBar()->isWrapAround()) {
+            flags |= QWebPage::FindWrapsAroundDocument;
+        }
+        if (q->searchBar()->isHighlightAll()) {
+            flags |= QWebPage::HighlightAllOccurrences;
+        }
+
+        bool state = q->view()->findText(q->searchBar()->text(),
+                                         QWebPage::FindBackward | flags);
+        q->searchBar()->setFound(state);
+    }
+
+    void findPreviousClicked()
+    {
+        QWebPage::FindFlags flags;
+        if (q->searchBar()->isCaseSensitive()) {
+            flags |= QWebPage::FindCaseSensitively;
+        }
+        if (q->searchBar()->isWrapAround()) {
+            flags |= QWebPage::FindWrapsAroundDocument;
+        }
+        if (q->searchBar()->isHighlightAll()) {
+            flags |= QWebPage::HighlightAllOccurrences;
+        }
+
+        bool state = q->view()->findText(q->searchBar()->text(), flags);
+        q->searchBar()->setFound(state);
+    }
+
+    void channelSearchTextEdited(const QString &text)
+    {
+        QWebPage::FindFlags flags;
+        if (q->searchBar()->isCaseSensitive()) {
+            flags |= QWebPage::FindCaseSensitively;
+        }
+        if (q->searchBar()->isWrapAround()) {
+            flags |= QWebPage::FindWrapsAroundDocument;
+        }
+        if (q->searchBar()->isHighlightAll()) {
+            flags |= QWebPage::HighlightAllOccurrences;
+        }
+
+        if (text.isEmpty() || text.isNull()) {
+            q->searchBar()->resetPalette();
+            q->view()->findText("", flags);
+        } else {
+            bool state = q->view()->findText(text, flags);
+            q->searchBar()->setFound(state);
+        }
+    }
+
     StatusWindow *q;
     Aki::IdentityConfig *identity;
 }; // End of class StatusWindowPrivate.
@@ -63,6 +120,7 @@ StatusWindow::StatusWindow(const QString &name, Aki::IdentityConfig *identityCon
 
     setupUi(this);
     setView(chatOutput);
+    channelSearch->hide();
     d->identity = identityConfig;
     setSocket(socket);
 
@@ -70,6 +128,12 @@ StatusWindow::StatusWindow(const QString &name, Aki::IdentityConfig *identityCon
             SLOT(textSubmitted()));
     connect(nickSelector, SIGNAL(activated(QString)),
             SLOT(nickSelectorActivated(QString)));
+    connect(channelSearch, SIGNAL(findNextClicked()),
+            SLOT(findNextClicked()));
+    connect(channelSearch, SIGNAL(findPreviousClicked()),
+            SLOT(findPreviousClicked()));
+    connect(channelSearch, SIGNAL(textEdited(QString)),
+            SLOT(channelSearchTextEdited(QString)));
 }
 
 StatusWindow::~StatusWindow()
@@ -141,6 +205,12 @@ StatusWindow::setNewNick(const QString &nick)
 {
     const int index = nickSelector->findText(nick, Qt::MatchExactly);
     nickSelector->setCurrentIndex(index);
+}
+
+Aki::SearchBar*
+StatusWindow::searchBar()
+{
+    return channelSearch;
 }
 
 #include "statuswindow.moc"

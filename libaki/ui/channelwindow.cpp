@@ -552,6 +552,63 @@ public:
         q->userList->update(index);
     }
 
+    void findNextClicked()
+    {
+        QWebPage::FindFlags flags;
+        if (q->searchBar()->isCaseSensitive()) {
+            flags |= QWebPage::FindCaseSensitively;
+        }
+        if (q->searchBar()->isWrapAround()) {
+            flags |= QWebPage::FindWrapsAroundDocument;
+        }
+        if (q->searchBar()->isHighlightAll()) {
+            flags |= QWebPage::HighlightAllOccurrences;
+        }
+
+        bool state = q->view()->findText(q->searchBar()->text(),
+                                         QWebPage::FindBackward | flags);
+        q->searchBar()->setFound(state);
+    }
+
+    void findPreviousClicked()
+    {
+        QWebPage::FindFlags flags;
+        if (q->searchBar()->isCaseSensitive()) {
+            flags |= QWebPage::FindCaseSensitively;
+        }
+        if (q->searchBar()->isWrapAround()) {
+            flags |= QWebPage::FindWrapsAroundDocument;
+        }
+        if (q->searchBar()->isHighlightAll()) {
+            flags |= QWebPage::HighlightAllOccurrences;
+        }
+
+        bool state = q->view()->findText(q->searchBar()->text(), flags);
+        q->searchBar()->setFound(state);
+    }
+
+    void channelSearchTextEdited(const QString &text)
+    {
+        QWebPage::FindFlags flags;
+        if (q->searchBar()->isCaseSensitive()) {
+            flags |= QWebPage::FindCaseSensitively;
+        }
+        if (q->searchBar()->isWrapAround()) {
+            flags |= QWebPage::FindWrapsAroundDocument;
+        }
+        if (q->searchBar()->isHighlightAll()) {
+            flags |= QWebPage::HighlightAllOccurrences;
+        }
+
+        if (text.isEmpty() || text.isNull()) {
+            q->searchBar()->resetPalette();
+            q->view()->findText("", flags);
+        } else {
+            bool state = q->view()->findText(text, flags);
+            q->searchBar()->setFound(state);
+        }
+    }
+
     Aki::ChannelWindow *q;
     Aki::IdentityConfig *identity;
     Aki::ChatParser *parser;
@@ -572,6 +629,7 @@ ChannelWindow::ChannelWindow(const QString &name, Aki::IdentityConfig *identityC
     setSocket(socket);
     setupUi(this);
     setView(chatOutput);
+    channelSearch->hide();
     modeBar()->setEnabled(false);
     setLogFile(new Aki::LogFile(socket->name(), name, this));
     view()->setLog(logFile());
@@ -620,6 +678,12 @@ ChannelWindow::ChannelWindow(const QString &name, Aki::IdentityConfig *identityC
             SLOT(privateStateChanged(bool)));
     connect(chatModes, SIGNAL(moderatedStateChanged(bool)),
             SLOT(moderatedStateChanged(bool)));
+    connect(channelSearch, SIGNAL(findNextClicked()),
+            SLOT(findNextClicked()));
+    connect(channelSearch, SIGNAL(findPreviousClicked()),
+            SLOT(findPreviousClicked()));
+    connect(channelSearch, SIGNAL(textEdited(QString)),
+            SLOT(channelSearchTextEdited(QString)));
 
     socket->rfcMode(name.toLower());
     socket->rfcWho(name.toLower());
@@ -892,6 +956,12 @@ ChannelWindow::showEvent(QShowEvent *event)
 
     splitter->setSizes(sizes);
     Aki::BaseWindow::showEvent(event);
+}
+
+Aki::SearchBar*
+ChannelWindow::searchBar()
+{
+    return channelSearch;
 }
 
 #include "channelwindow.moc"

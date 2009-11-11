@@ -43,25 +43,6 @@ public:
     {
     }
 
-    void updateButtons()
-    {
-        q->enableButtonApply(q->hasChanged());
-    }
-
-    void updateSettings()
-    {
-        foreach (Aki::SettingsPageInterface *page, pageList.keys()) {
-            page->updateSettings();
-        }
-    }
-
-    void updateWidgets()
-    {
-        foreach (Aki::SettingsPageInterface *page, pageList.keys()) {
-            page->updateWidgets();
-        }
-    }
-
     Aki::SettingsDialog *q;
     SettingsDialog::PageList pageList;
 }; // End of class SettingsDialog.
@@ -120,5 +101,24 @@ SettingsDialog::hasChanged()
     
     return changed;
 }
+
+void SettingsDialog::updateButtons()
+    {
+        enableButtonApply(hasChanged());
+    }
+
+    void SettingsDialog::updateSettings()
+    {
+        foreach (Aki::SettingsPageInterface *page, d->pageList.keys()) {
+            page->updateSettings();
+        }
+    }
+
+    void SettingsDialog::updateWidgets()
+    {
+        foreach (Aki::SettingsPageInterface *page, d->pageList.keys()) {
+            page->updateWidgets();
+        }
+    }
 
 #include "settingsdialog.moc"

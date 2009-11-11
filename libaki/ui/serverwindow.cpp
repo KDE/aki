@@ -214,7 +214,6 @@ public:
         Aki::BaseWindow *window = findChannel(q->socket()->name());
         if (window && window->view()) {
             window->view()->addWelcome(message);
-            window->view()->insertHtml("<br/>");
         }
     }
 
@@ -867,49 +866,49 @@ public:
                     }
                 } else if (ch == 'i') {
                     if (state == Give) {
-                        window->view()->addMode(from, ch, QString(), fromYou);
+                        window->view()->addChannelMode(from, ch, QString(), fromYou);
                     } else if (state == Take) {
                         window->view()->addRemoveMode(from, ch, fromYou);
                     }
                 } else if (ch == QChar('m')) {
                     if (state == Give) {
-                        window->view()->addMode(from, ch, QString(), fromYou);
+                        window->view()->addChannelMode(from, ch, QString(), fromYou);
                     } else if (state == Take) {
                         window->view()->addRemoveMode(from, ch, fromYou);
                     }
                 } else if (ch == QChar('p')) {
                     if (state == Give) {
-                        window->view()->addMode(from, ch, QString(), fromYou);
+                        window->view()->addChannelMode(from, ch, QString(), fromYou);
                     } else if (state == Take) {
                         window->view()->addRemoveMode(from, ch, fromYou);
                     }
                 } else if (ch == QChar('s')) {
                     if (state == Give) {
-                        window->view()->addMode(from, ch, QString(), fromYou);
+                        window->view()->addChannelMode(from, ch, QString(), fromYou);
                     } else if (state == Take) {
                         window->view()->addRemoveMode(from, ch, fromYou);
                     }
                 } else if (ch == QChar('t')) {
                     if (state == Give) {
-                        window->view()->addMode(from, ch, QString(), fromYou);
+                        window->view()->addChannelMode(from, ch, QString(), fromYou);
                     } else if (state == Take) {
                         window->view()->addRemoveMode(from, ch, fromYou);
                     }
                 } else if (ch == QChar('n')) {
                     if (state == Give) {
-                        window->view()->addMode(from, ch, QString(), fromYou);
+                        window->view()->addChannelMode(from, ch, QString(), fromYou);
                     } else if (state == Take) {
                         window->view()->addRemoveMode(from, ch, fromYou);
                     }
                 } else if (ch == QChar('l')) {
                     if (state == Give) {
-                        window->view()->addMode(from, ch, QString(), fromYou);
+                        window->view()->addChannelMode(from, ch, QString(), fromYou);
                     } else if (state == Take) {
                         window->view()->addRemoveMode(from, ch, fromYou);
                     }
                 } else if (ch == QChar('k')) {
                     if (state == Give) {
-                        window->view()->addMode(from, ch, QString(), fromYou);
+                        window->view()->addChannelMode(from, ch, QString(), fromYou);
                     } else if (state == Take) {
                         window->view()->addRemoveMode(from, ch, fromYou);
                     }
@@ -1137,6 +1136,11 @@ public:
         if (!channel.isEmpty()) {
             Aki::ChannelWindow *window = qobject_cast<Aki::ChannelWindow*>(findChannel(channel.toLower()));
             if (window && window->view()) {
+                if (q->identity()->isMarkLastPositionEnabled()) {
+                    if (currentFocusedChannel() != window) {
+                        window->view()->insertMarker();
+                    }
+                }
                 window->addMessage(from, message);
             }
         } else if (!to.isEmpty()) {
@@ -1966,6 +1970,18 @@ bool
 ServerWindow::hasInputFocus() const
 {
     return false;
+}
+
+Aki::ChannelView*
+ServerWindow::mainView()
+{
+    return d->mainView;
+}
+
+Aki::ChannelView*
+ServerWindow::splitView()
+{
+    return d->splitView;
 }
 
 #include "serverwindow.moc"
