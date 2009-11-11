@@ -1142,6 +1142,7 @@ public:
                     }
                 }
                 window->addMessage(from, message);
+            
             }
         } else if (!to.isEmpty()) {
             Aki::QueryWindow *window = qobject_cast<Aki::QueryWindow*>(findChannel(from.toLower()));

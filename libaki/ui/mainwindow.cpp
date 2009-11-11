@@ -241,6 +241,9 @@ public:
                         qobject_cast<Aki::StatusWindow*>(base)->view()->clear();
                         break;
                     }
+                    default: {
+                        break;
+                    }
                     }
                 }
 
@@ -256,6 +259,9 @@ public:
                     }
                     case Aki::BaseWindow::StatusWindow: {
                         qobject_cast<Aki::StatusWindow*>(base)->view()->clear();
+                        break;
+                    }
+                    default: {
                         break;
                     }
                     }
@@ -372,6 +378,7 @@ public:
                 break;
             }
             case Aki::BaseWindow::QueryWindow: {
+                qobject_cast<Aki::QueryWindow*>(window)->searchBar()->show();
                 break;
             }
             default: {

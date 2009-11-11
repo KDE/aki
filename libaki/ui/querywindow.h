@@ -54,10 +54,14 @@ public:
     void addMessage(const QString &from, const QString &message);
     void addNick(const QString &oldNick, const QString &newNick);
     bool hasInputFocus() const;
+    Aki::SearchBar* searchBar();
 Q_SIGNALS:
     void textSubmitted(Aki::BaseWindow *window, const QString &message);
 private:
     Q_PRIVATE_SLOT(d, void textSubmitted())
+    Q_PRIVATE_SLOT(d, void findNextClicked())
+    Q_PRIVATE_SLOT(d, void findPreviousClicked())
+    Q_PRIVATE_SLOT(d, void channelSearchTextEdited(const QString &text))
 private:
     friend class QueryWindowPrivate;
     QScopedPointer<QueryWindowPrivate> d;

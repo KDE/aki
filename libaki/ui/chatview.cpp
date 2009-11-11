@@ -316,7 +316,7 @@ ChatView::addCtcpAction(const QString &from, const QString &message)
 void
 ChatView::addCtcpRequest(const QString &from, const QString &type)
 {
-    QString msg = i18n("[Ctcp] Received CTCP-%1 from %2").arg(type, from);
+    QString msg = i18n("[Ctcp] Received CTCP-%1 from %2", from, type);
     QString span = d->span(msg, Aki::Settings::noticeColor());
     d->toLog(msg);
     d->appendMessage(span);
@@ -578,7 +578,7 @@ ChatView::addPrivmsg(const QString &from, const QString &message)
     QString msg = i18nc("Nick, followed by a message", "&lt;%1&gt; %2",
                         from, message);
     QString span = d->span(msg);
-    d->toLog(msg);
+    d->toLog(d->stripHtml(msg));
     d->appendMessage(span);
 }
 
@@ -973,8 +973,8 @@ void
 ChatView::add901(const QString &id, const QString &identName, const QString &address,
                  const QString &message)
 {
-    QString msg = QString("%1 %2@%3 %4").arg(id, identName, address, message);
-    QString span = d->span(msg);
+    QString msg = QString("[901] %1 %2@%3 %4").arg(id, identName, address, message);
+    QString span = d->span(msg, Aki::Settings::noticeColor());
     d->toLog(d->stripHtml(msg));
     d->appendMessage(span);
 }

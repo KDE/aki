@@ -16,7 +16,7 @@
   <layout class="QGridLayout" name="gridLayout_2">
    <item row="0" column="0">
     <layout class="QGridLayout" name="gridLayout">
-     <item row="2" column="0">
+     <item row="3" column="0">
       <widget class="Aki::ChatInput" name="chatInput"/>
      </item>
      <item row="0" column="0">
@@ -28,6 +28,9 @@
      </item>
      <item row="1" column="0">
       <widget class="Aki::ChatView" name="chatOutput" native="true"/>
+     </item>
+     <item row="2" column="0">
+      <widget class="Aki::SearchBar" name="channelSearch" native="true"/>
      </item>
     </layout>
    </item>
@@ -48,6 +51,12 @@
    <class>Aki::ChatView</class>
    <extends>QWidget</extends>
    <header>ui/chatview.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>Aki::SearchBar</class>
+   <extends>QWidget</extends>
+   <header>ui/searchbar.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
