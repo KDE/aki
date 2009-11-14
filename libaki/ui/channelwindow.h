@@ -170,6 +170,7 @@ private:
     Q_PRIVATE_SLOT(d, void whoTimerTimeout())
     Q_PRIVATE_SLOT(d, void chatTopicReturnPressed(const QString &topic))
     Q_PRIVATE_SLOT(d, void splitterMoved(int pos, int index))
+    Q_PRIVATE_SLOT(d, void openQueryTriggered());
 private:
     friend class ChannelWindowPrivate;
     QScopedPointer<ChannelWindowPrivate> d;

@@ -211,6 +211,11 @@ public:
         QObject::connect(kickBanUserDomainAction, SIGNAL(triggered(bool)),
                          q, SLOT(kickBanUserDomainTriggered()));
 
+        QAction *openQueryAction = new QAction(menu);
+        openQueryAction->setText(i18n("Open Query"));
+        QObject::connect(openQueryAction, SIGNAL(triggered(bool)),
+                         q, SLOT(openQueryTriggered()));
+
         kickBanMenu->addAction(kickUserAction);
         kickBanMenu->addAction(banUserAction);
         kickBanMenu->addSeparator();
@@ -228,6 +233,8 @@ public:
         if (currentIndex.isValid()) {
             menu->addMenu(modesMenu);
             menu->addMenu(kickBanMenu);
+            menu->addSeparator();
+            menu->addAction(openQueryAction);
             menu->exec(QCursor::pos());
         }
     }
@@ -550,6 +557,23 @@ public:
         q->userList->model()->setData(index, QVariant::fromValue<Aki::Irc::User*>(user),
                                       Aki::NickListModel::IrcUserRole);
         q->userList->update(index);
+    }
+
+    void openQueryTriggered()
+    {
+        Aki::NickListModel *model = static_cast<Aki::NickListModel*>(q->userList->model());
+        Aki::Irc::User *user = model->data(q->userList->currentIndex(), Aki::NickListModel::IrcUserRole)
+                                    .value<Aki::Irc::User*>();
+
+        Aki::Irc::User *self = 0;
+        foreach (Aki::Irc::User *u, q->users()) {
+            if (u->nick() == q->socket()->currentNick()) {
+                self = u;
+                break;
+            }
+        }
+
+        qobject_cast<Aki::ChannelView*>(q->parent())->addQuery(self, user, QString());
     }
 
     Aki::ChannelWindow *q;
