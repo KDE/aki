@@ -28,9 +28,12 @@
 #include <KEmoticonsTheme>
 #include <KGlobal>
 #include <KLocale>
+#include <KToolInvocation>
+#include <KUrl>
 #include <QScrollBar>
 #include <QWebElement>
 #include <QWebFrame>
+#include <QWebHitTestResult>
 using namespace Aki;
 
 namespace Aki
@@ -50,7 +53,7 @@ public:
         bodyStyle = "font-family: &quot;Sans Serif&quot;; font-size: 13px; font-weight: 400; font-style: normal";
         QString xhtml;
         xhtml += "<!DOCTYPE html PUBLIC &quot;-//W3C//DTD XHTML 1.0 Strict//EN&quot;";
-        xhtml += "&quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;>";
+        xhtml += "&quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd&quot;>";
         xhtml += "<html><head><title>Aki IRC Client</title></head>";
         xhtml += QString("<body style='%1'></body></html>").arg(bodyStyle);
         q->setHtml(QString(xhtml));
@@ -196,6 +199,33 @@ public:
         return result;
     }
 
+    void linkClicked(const QUrl &url)
+    {
+        KUrl newUrl(url);
+        KToolInvocation::invokeBrowser(newUrl.url());
+    }
+
+    void customContextMenuRequested(const QPoint &pos)
+    {
+        QWebHitTestResult hit = mainFrame()->hitTestContent(pos);
+        if (hit.isNull()) {
+            return;
+        }
+
+        if (hit.element().tagName() == 'a' &&
+            hit.element().hasAttribute("href")) {
+            KUrl url(hit.linkUrl());
+
+            if (url.toString()[0] == '#') {
+                // User specific anchor
+            } else {
+                // Normal url
+            }
+        } else {
+            // Some element?
+        }
+    }
+
     Aki::ChatView *q;
     Aki::LogFile *logFile;
     KEmoticonsTheme emoTheme;
@@ -209,9 +239,15 @@ ChatView::ChatView(QWidget *parent)
 {
     d.reset(new Aki::ChatViewPrivate(this));
     setFocusPolicy(Qt::NoFocus);
+    page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
+    setContextMenuPolicy(Qt::CustomContextMenu);
 
+    connect(this, SIGNAL(customContextMenuRequested(QPoint)),
+            SLOT(customContextMenuRequested(QPoint)));
     connect(d->mainFrame(), SIGNAL(contentsSizeChanged(QSize)),
             SLOT(contentsSizeChanged(QSize)));
+    connect(page(), SIGNAL(linkClicked(QUrl)),
+            SLOT(linkClicked(QUrl)));
 }
 
 ChatView::~ChatView()
@@ -279,7 +315,7 @@ ChatView::addChannelModes(const QString &modes)
 void
 ChatView::addChannelModes(const QString &from, const QString &modes)
 {
-    QString msg = i18n("*** %1 sets the channel modes to %2", from, modes);
+    QString msg = i18n("*** %1 sets the channel's mode to %2", from, modes);
     QString span = d->span(msg, Aki::Settings::topicColor());
     d->toLog(msg);
     d->appendMessage(span);
@@ -288,7 +324,7 @@ ChatView::addChannelModes(const QString &from, const QString &modes)
 void
 ChatView::addChannelUrl(const QString &url)
 {
-    QString msg = i18n("*** Channel url: %1", d->url(url));
+    QString msg = i18n("*** Channel URL: %1", d->url(url));
     QString span = d->span(msg, Aki::Settings::topicColor());
     d->toLog(msg);
     d->appendMessage(span);
@@ -316,7 +352,7 @@ ChatView::addCtcpAction(const QString &from, const QString &message)
 void
 ChatView::addCtcpRequest(const QString &from, const QString &type)
 {
-    QString msg = i18n("[Ctcp] Received CTCP-%1 from %2", from, type);
+    QString msg = i18n("[Ctcp] Received CTCP-%1 from %2", type, from);
     QString span = d->span(msg, Aki::Settings::noticeColor());
     d->toLog(msg);
     d->appendMessage(span);
@@ -352,7 +388,7 @@ ChatView::addHelp(const QString &message)
 void
 ChatView::addInvite(const QString &nick, const QString &channel)
 {
-    QString msg = i18n("[Invite] You have invited %1 to channel %2", nick, channel);
+    QString msg = i18n("[Invite] You've' invited %1 to channel %2", nick, channel);
     QString span = d->span(msg, Aki::Settings::inviteColor());
     d->toLog(msg);
     d->appendMessage(span);
@@ -539,7 +575,7 @@ ChatView::addMotd(const QString &message)
 void
 ChatView::addNick(const QString &oldNick, const QString &newNick)
 {
-    QString msg = i18n("*** %1 is now known as as %2", oldNick, newNick);
+    QString msg = i18n("*** %1 is now known as %2", oldNick, newNick);
     QString span = d->span(msg, Aki::Settings::nickColor());
     d->toLog(msg);
     d->appendMessage(span);
@@ -715,13 +751,13 @@ ChatView::addRemoveMode(const QString &fromNick, const QString &toNick, const QC
             msg = i18n("*** You took permission to talk from yourself");
             span = d->span(msg, Aki::Settings::deVoiceColor());
         } else if (fromYou && !toYou) {
-            msg = i18n("*** You took %1 permission to talk", toNick);
+            msg = i18n("*** You took %1's permission to talk", toNick);
             span = d->span(msg, Aki::Settings::deVoiceColor());
         } else if (toYou && !fromYou) {
             msg = i18n("*** %1 took your permission to talk", fromNick);
             span = d->span(msg, Aki::Settings::deVoiceColor());
         } else if (!toYou && !fromYou) {
-            msg = i18n("*** %1 took %2 permission to talk", fromNick, toNick);
+            msg = i18n("*** %1 took %2's permission to talk", fromNick, toNick);
             span = d->span(msg, Aki::Settings::deVoiceColor());
         }
     } else {
@@ -883,9 +919,9 @@ ChatView::addWho(const QString &channel, const QString &userName, const QString 
                  const QString &server, const QString &nick, const QString &flags, int hops,
                  const QString &realName)
 {
-    QString msg = i18n("[Who:%1] <b><u>Username</u></b>: %2, <b><u>Address</u></b>: %3, "
-                       "<b><u>Server</u></b>: %4, <b><u>Nick</u></b>: %5, <b><u>Flags</u></b>: %6, "
-                       "<b><u>Hops</u></b>: %7, <b><u>Real Name</u></b>: %8",
+    QString msg = i18n("[Who:%1] <strong><u>Username</u></strong>: %2, <strong><u>Address</u></strong>: %3, "
+                       "<strong><u>Server</u></strong>: %4, <strong><u>Nick</u></strong>: %5, <strong><u>Flags</u></strong>: %6, "
+                       "<strong><u>Hops</u></strong>: %7, <strong><u>Real Name</u></strong>: %8",
                        Aki::Settings::noticeColor().name(), channel, userName, address, server, nick,
                        flags, hops, realName);
     QString span = d->span(msg, Aki::Settings::noticeColor());
@@ -1015,7 +1051,7 @@ ChatView::insertMarker()
     if (!marker.isNull()) {
         marker.takeFromDocument();
     }
-    body.appendInside("<hr style='background-color:red;' />");
+    body.appendInside("<hr style='background-color: red;' />");
 }
 
 void

@@ -109,6 +109,7 @@ public:
     void clearMarker();
 private:
     Q_PRIVATE_SLOT(d, void contentsSizeChanged(const QSize &size))
+    Q_PRIVATE_SLOT(d, void linkClicked(const QUrl &url))
 private:
     friend class ChatViewPrivate;
     QScopedPointer<ChatViewPrivate> d;
