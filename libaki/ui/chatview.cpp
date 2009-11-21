@@ -172,10 +172,9 @@ ChatView::addChannelUrl(const QString &url)
 void
 ChatView::addCtcp(const QString &from, const QString &message)
 {
-    Q_UNUSED(from);
-    d->toLog(i18n("[Ctcp] %1", message));
-    d->appendMessage(QString("<span style='color: %1;'>[Ctcp] %2</span>")
-        .arg(Aki::Settings::noticeColor().name(), message));
+    d->toLog(i18n("[Ctcp:%1] %2", from, message));
+    d->appendMessage(QString("<span style='color: %1;'>[Ctcp:%2] %3</span>")
+        .arg(Aki::Settings::noticeColor().name(), from, message));
 }
 
 void

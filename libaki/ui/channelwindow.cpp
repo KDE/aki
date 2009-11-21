@@ -55,6 +55,23 @@ public:
         q->chatInput->setFocus();
     }
 
+    void whoIsTriggered()
+    {
+        Aki::NickListModel *model = static_cast<Aki::NickListModel*>(q->userList->model());
+        Aki::Irc::User *user = model->data(q->userList->currentIndex(), Aki::NickListModel::IrcUserRole)
+                                    .value<Aki::Irc::User*>();
+        q->socket()->rfcWhoIs(user->nick());
+    }
+
+    void versionTriggered()
+    {
+        Aki::NickListModel *model = static_cast<Aki::NickListModel*>(q->userList->model());
+        Aki::Irc::User *user = model->data(q->userList->currentIndex(), Aki::NickListModel::IrcUserRole)
+                                    .value<Aki::Irc::User*>();
+        q->socket()->rfcPrivmsg(user->nick().toLatin1(),
+                                q->socket()->encodeString(QString("\x01" "VERSION" "\x01")));
+    }
+
     void banDomainTriggered()
     {
         Aki::NickListModel *model = static_cast<Aki::NickListModel*>(q->userList->model());
@@ -119,6 +136,16 @@ public:
         QMenu *menu = new QMenu(q);
         QMenu *modesMenu = new QMenu(i18n("Modes"), menu);
         QMenu *kickBanMenu = new QMenu(i18n("Kick/Ban"), menu);
+
+        QAction *whoIsAction = new QAction(menu);
+        whoIsAction->setText(i18n("WhoIs"));
+        QObject::connect(whoIsAction, SIGNAL(triggered(bool)),
+                         q, SLOT(whoIsTriggered()));
+
+        QAction *versionAction = new QAction(menu);
+        versionAction->setText(i18n("Version"));
+        QObject::connect(versionAction, SIGNAL(triggered(bool)),
+                         q, SLOT(versionTriggered()));
 
         QAction *giveOpAction = new QAction(modesMenu);
         giveOpAction->setText(i18n("Give Ops"));
@@ -231,6 +258,9 @@ public:
 
         QModelIndex currentIndex = q->userList->currentIndex();
         if (currentIndex.isValid()) {
+            menu->addAction(whoIsAction);
+            menu->addAction(versionAction);
+            menu->addSeparator();
             menu->addMenu(modesMenu);
             menu->addMenu(kickBanMenu);
             menu->addSeparator();
