@@ -191,3 +191,9 @@ BaseWindow::setTabColor(const Aki::BaseWindow::TabColor &color)
         }
     }
 }
+
+Aki::ChannelView*
+BaseWindow::channelView()
+{
+    return d->channelView;
+}

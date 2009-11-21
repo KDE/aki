@@ -573,7 +573,7 @@ public:
             }
         }
 
-        qobject_cast<Aki::ChannelView*>(q->parent())->addQuery(self, user, QString());
+        q->channelView()->addQuery(self, user, QString());
     }
 
     Aki::ChannelWindow *q;

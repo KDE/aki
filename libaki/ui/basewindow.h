@@ -150,6 +150,8 @@ public:
      */
     Aki::ChatView* view();
 
+    Aki::ChannelView* channelView();
+
     void setNotifications(Aki::Notifications *notification);
     Aki::Notifications* notifications();
     void setChannelView(Aki::ChannelView *view);
