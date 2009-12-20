@@ -40,6 +40,7 @@ main(int argc, char **argv)
 
     KCmdLineArgs::init(argc, argv, &aboutData);
     KCmdLineOptions options;
+    options.add("+[url]", ki18n("irc:// Server URL or hostname"));
     options.add("server <address>", ki18n("Server address to connect"), "");
     options.add("port <port>", ki18n("Server port to use"), "6667");
     options.add("nick <nickname>", ki18n("Nickname to use"), "");

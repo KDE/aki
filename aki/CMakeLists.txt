@@ -31,6 +31,7 @@ target_link_libraries(aki ${aki_LIBS})
 install(TARGETS aki ${INSTALL_TARGETS_DEFAULT_ARGS})
 install(FILES akiui.rc DESTINATION ${DATA_INSTALL_DIR}/aki)
 install(FILES aki.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
+install(FILES akiirc.protocol akiirc6.protocol DESTINATION ${SERVICES_INSTALL_DIR})
 
 add_subdirectory(icons)
 #add_subdirectory(dialogs)

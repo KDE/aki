@@ -69,7 +69,7 @@ public:
         Aki::Irc::User *user = model->data(q->userList->currentIndex(), Aki::NickListModel::IrcUserRole)
                                     .value<Aki::Irc::User*>();
         q->socket()->rfcPrivmsg(user->nick().toLatin1(),
-                                q->socket()->encodeString(QString("\x01" "VERSION" "\x01")));
+                                QString("\x01" "VERSION" "\x01"));
     }
 
     void banDomainTriggered()
@@ -533,7 +533,7 @@ public:
 
     void whoTimerTimeout()
     {
-        if (isWhoRunning || (q->userList->count() > Aki::Settings::maxNumberOfUsers())) {
+        if (q->userList->count() > Aki::Settings::maxNumberOfUsers()) {
             whoTimer->stop();
             whoTimer->start(Aki::Settings::updateInterval() * 1000);
         } else {
@@ -681,7 +681,6 @@ ChannelWindow::ChannelWindow(const QString &name, Aki::IdentityConfig *identityC
     if (Aki::Settings::enableWhoLookup()) {
         connect(d->whoTimer, SIGNAL(timeout()),
                 SLOT(whoTimerTimeout()));
-        d->whoTimer->start(Aki::Settings::updateInterval() * 1000);
     }
 }
 
@@ -871,6 +870,8 @@ ChannelWindow::resetWho()
     if (Aki::Settings::enableWhoLookup()) {
         d->whoTimer->stop();
         d->whoTimer->start(Aki::Settings::updateInterval() * 1000);
+    } else {
+        d->whoTimer->stop();
     }
 }
 
