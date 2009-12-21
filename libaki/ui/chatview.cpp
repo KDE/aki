@@ -24,12 +24,14 @@
 #include "logfile.h"
 #include "settings.h"
 #include <KDateTime>
+#include <KDebug>
 #include <KEmoticons>
 #include <KEmoticonsTheme>
 #include <KGlobal>
 #include <KLocale>
 #include <KToolInvocation>
 #include <KUrl>
+#include <QMenu>
 #include <QScrollBar>
 #include <QWebElement>
 #include <QWebFrame>
@@ -149,6 +151,12 @@ public:
         return QString("<a href='%1'>%2</a>").arg(name, u);
     }
 
+    QString userA(const QString &username) const
+    {
+        return QString("<a href='#%1' style='text-decoration: none;'>%2</a>")
+            .arg(stripHtml(username), username);
+    }
+
     QString strong(const QString &message) const
     {
         return "<strong>" + message + "</strong>";
@@ -212,17 +220,30 @@ public:
             return;
         }
 
-        if (hit.element().tagName() == 'a' &&
-            hit.element().hasAttribute("href")) {
+        if (hit.linkElement().tagName() == "A") {
             KUrl url(hit.linkUrl());
 
-            if (url.toString()[0] == '#') {
-                // User specific anchor
+            QMenu *menu = new QMenu(q);
+
+            QAction *copyAction = new QAction(menu);
+            copyAction->setText(i18n("Copy Link Address"));
+
+            QAction *saveAsAction = new QAction(menu);
+            saveAsAction->setText(i18n("Save Link As..."));
+
+            menu->setTitle(i18n("Normal"));
+            menu->addAction(copyAction);
+            menu->addAction(saveAsAction);
+            menu->exec(QCursor::pos());
+        } else if (hit.linkElement().tagName() == "A" && hit.linkElement().hasAttribute("href")) {
+            KUrl url(hit.linkUrl());
+
+            if (url.url()[0] == '#') {
+                QMenu *menu = new QMenu(q);
+                menu->exec(QCursor::pos());
             } else {
-                // Normal url
+                
             }
-        } else {
-            // Some element?
         }
     }
 
@@ -612,7 +633,7 @@ void
 ChatView::addPrivmsg(const QString &from, const QString &message)
 {
     QString msg = i18nc("Nick, followed by a message", "&lt;%1&gt; %2",
-                        from, message);
+                        d->userA(from), message);
     QString span = d->span(msg);
     d->toLog(d->stripHtml(msg));
     d->appendMessage(span);
@@ -622,7 +643,7 @@ void
 ChatView::addPrivmsgHighlight(const QString &from, const QString &message)
 {
     QString msg = i18nc("Nick name, the colour and the message",
-                        "&lt;%1&gt; %2", from, d->span(message, Aki::Settings::highlightColor()));
+                        "&lt;%1&gt; %2", d->userA(from), d->span(message, Aki::Settings::highlightColor()));
     QString span = d->span(msg);
     d->toLog(d->stripHtml(msg));
     d->appendMessage(span);
@@ -1032,8 +1053,8 @@ void
 ChatView::clear()
 {
     QWebElement body = d->mainFrame()->findFirstElement("body");
-    QList<QWebElement> paragraphs = body.findAll("p");
-    QList<QWebElement> markers = body.findAll("hr");
+    QWebElementCollection paragraphs = body.findAll("p");
+    QWebElementCollection markers = body.findAll("hr");
 
     foreach (QWebElement p, paragraphs) {
         p.takeFromDocument();

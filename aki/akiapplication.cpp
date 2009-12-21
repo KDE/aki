@@ -109,6 +109,7 @@ AkiApplication::loadConfigurations(Aki::MainWindow *window)
                 }
 
                 socket->setIdentName("aki");
+                socket->setChannelList(serverConfig->channelList());
                 socket->setNickList(ident->nicknameList());
                 socket->setRealName(ident->realName());
                 socket->setRetryAttemptCount(serverConfig->retryAttemptCount());

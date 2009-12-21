@@ -89,17 +89,17 @@ public:
         return channel;
     }
 
-    void stateChanged(QAbstractSocket::SocketState state)
+    void stateChanged(Aki::Irc::Socket::SocketState state)
     {
         switch (state) {
-        case QAbstractSocket::UnconnectedState: {
+        case Aki::Irc::Socket::UnconnectedState: {
             Aki::BaseWindow *base = currentFocusedChannel();
             if (base && base->view()) {
                 base->view()->addMessage(i18n("Disconnecting"));
             }
             break;
         }
-        case QAbstractSocket::ConnectingState: {
+        case Aki::Irc::Socket::ConnectingState: {
             Aki::BaseWindow *base = findChannel(q->socket()->name());
             if (base && base->view()) {
                 base->view()->addMessage(i18n("Looking up server %1 on port %2", q->socket()->currentAddress(),
@@ -112,7 +112,7 @@ public:
             }
             break;
         }
-        case QAbstractSocket::ConnectedState: {
+        case Aki::Irc::Socket::ConnectedState: {
             Aki::StatusWindow *base = qobject_cast<Aki::StatusWindow*>(findChannel(q->socket()->name()));
             if (base && base->view()) {
                 base->view()->addMessage(i18n("Connected to %1:%2", q->socket()->currentAddress(),
@@ -136,7 +136,7 @@ public:
     }
 
     void onBanList(const QString &channel, const QString &mask, const QString &who,
-                   const QString &time)
+                   const QDateTime &time)
     {
         Q_UNUSED(channel);
         Q_UNUSED(mask);
@@ -144,12 +144,12 @@ public:
         Q_UNUSED(time);
     }
 
-    void onChannelCreated(const QString &channel, const QString &time)
+    void onChannelCreated(const QString &channel, const QDateTime &time)
     {
         Aki::BaseWindow *window = findChannel(channel.toLower());
         if (window && window->view()) {
             if (!Aki::Settings::hideChannelCreation()) {
-                window->view()->addChannelCreated(time);
+                //window->view()->addChannelCreated(time);
             }
         }
     }
@@ -250,9 +250,6 @@ public:
     void onEndOfWho(const QString &channel, const QString &message)
     {
         Aki::ChannelWindow *chan = qobject_cast<Aki::ChannelWindow*>(findChannel(channel.toLower()));
-        if (chan) {
-            chan->setIsWhoRunning(false);
-        }
 
         if (!whoRequest.isEmpty()) {
             const int index = whoRequest.indexOf(channel);
@@ -262,9 +259,15 @@ public:
 
                 if (window && window->view()) {
                     window->view()->addWho(channel, message);
+                } else {
+                    chan->resetWho();
                 }
                 whoRequest.removeAt(index);
             }
+        }
+
+        if (chan) {
+            chan->resetWho();
         }
     }
 
@@ -1083,6 +1086,9 @@ public:
                         !q->socket()->servicePassword().isEmpty() && q->socket()->isAutoIdentifyEnabled()) {
                         q->socket()->rfcPrivmsg("NickServ", "identify " + q->socket()->servicePassword().toLatin1());
                     }
+                    if (!q->socket()->channelList().isEmpty()) {
+                        q->socket()->rfcJoin(q->socket()->channelList());
+                    }
                 }
             }
 
@@ -1225,11 +1231,11 @@ public:
         }
     }
 
-    void onTopicSetBy(const QString &nick, const QString &channel, const QString &time)
+    void onTopicSetBy(const QString &nick, const QString &channel, const QDateTime &time)
     {
         Aki::BaseWindow *window = findChannel(channel.toLower());
         if (window && window->view()) {
-            window->view()->addTopicSetBy(nick, time);
+            //window->view()->addTopicSetBy(nick, time);
         }
     }
 
@@ -1442,13 +1448,13 @@ public:
         }
     }
 
-    void onWhoIsIdle(const QString &nick, const QString &idleTime, const QString &signon,
+    void onWhoIsIdle(const QString &nick, const QDateTime &idleTime, const QDateTime &signon,
                      const QString &info)
     {
         Q_UNUSED(info);
         Aki::BaseWindow *window = currentFocusedChannel();
         if (window && window->view()) {
-            window->view()->addWhoIsIdle(nick, idleTime, signon);
+            //window->view()->addWhoIsIdle(nick, idleTime, signon);
         }
     }
 
@@ -1649,14 +1655,14 @@ ServerWindow::ServerWindow(Aki::IdentityConfig *identityConfig, Aki::Irc::Socket
             d->mainView, SLOT(checkChannelDrop(Aki::BaseWindow*)));
     connect(this, SIGNAL(dropSuccessful(Aki::BaseWindow*)),
             d->mainView, SLOT(checkChannelDrop(Aki::BaseWindow*)));
-    connect(socket, SIGNAL(stateChanged(QAbstractSocket::SocketState)),
-            SLOT(stateChanged(QAbstractSocket::SocketState)));
+    connect(socket, SIGNAL(stateChanged(Aki::Irc::Socket::SocketState)),
+            SLOT(stateChanged(Aki::Irc::Socket::SocketState)));
     connect(socket, SIGNAL(onAway(QString,QString)),
             SLOT(onAway(QString,QString)));
-    connect(socket, SIGNAL(onBanList(QString,QString,QString,QString)),
-            SLOT(onBanList(QString,QString,QString,QString)));
-    connect(socket, SIGNAL(onChannelCreated(QString,QString)),
-            SLOT(onChannelCreated(QString,QString)));
+    connect(socket, SIGNAL(onBanList(QString,QString,QString,QDateTime)),
+            SLOT(onBanList(QString,QString,QString,QDateTime)));
+    connect(socket, SIGNAL(onChannelCreated(QString,QDateTime)),
+            SLOT(onChannelCreated(QString,QDateTime)));
     connect(socket, SIGNAL(onChannelModeIs(QString,QString,QStringList)),
             SLOT(onChannelModeIs(QString,QString,QStringList)));
     connect(socket, SIGNAL(onChannelUrlIs(QString,QString)),
@@ -1829,8 +1835,8 @@ ServerWindow::ServerWindow(Aki::IdentityConfig *identityConfig, Aki::Irc::Socket
             SLOT(onTime(QString,QString)));
     connect(socket, SIGNAL(onTopic(QString,QString)),
             SLOT(onTopic(QString,QString)));
-    connect(socket, SIGNAL(onTopicChanged(QString,QString,QString)),
-            SLOT(onTopicChanged(QString,QString,QString)));
+    connect(socket, SIGNAL(onTopicChanged(QString,QString,QDateTime)),
+            SLOT(onTopicChanged(QString,QString,QDateTime)));
     connect(socket, SIGNAL(onTopicSetBy(QString,QString,QString)),
             SLOT(onTopicSetBy(QString,QString,QString)));
     connect(socket, SIGNAL(onUMode(QString,QString)),

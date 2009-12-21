@@ -496,7 +496,7 @@ public:
 
     void whoTimerTimeout()
     {
-        if (isWhoRunning || (q->userList->count() > Aki::Settings::maxNumberOfUsers())) {
+        if (q->userList->count() > Aki::Settings::maxNumberOfUsers()) {
             whoTimer->stop();
             whoTimer->start(Aki::Settings::updateInterval() * 1000);
         } else {
@@ -691,7 +691,6 @@ ChannelWindow::ChannelWindow(const QString &name, Aki::IdentityConfig *identityC
     if (Aki::Settings::enableWhoLookup()) {
         connect(d->whoTimer, SIGNAL(timeout()),
                 SLOT(whoTimerTimeout()));
-        d->whoTimer->start(Aki::Settings::updateInterval() * 1000);
     }
 }
 

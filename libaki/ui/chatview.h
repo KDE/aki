@@ -110,6 +110,7 @@ public:
 private:
     Q_PRIVATE_SLOT(d, void contentsSizeChanged(const QSize &size))
     Q_PRIVATE_SLOT(d, void linkClicked(const QUrl &url))
+    Q_PRIVATE_SLOT(d, void customContextMenuRequested(const QPoint &pos))
 private:
     friend class ChatViewPrivate;
     QScopedPointer<ChatViewPrivate> d;

@@ -45,7 +45,7 @@ public:
     {
     }
 
-    QList<QByteArray> checkMessageLength(const QString &type, const QString &destination,
+    QStringList checkMessageLength(const QString &type, const QString &destination,
                                                const QString &message, Aki::Irc::User *user)
     {
         const int nickLength = user->nick().length();
@@ -56,15 +56,19 @@ public:
         QTextCodec *codec = window->socket()->codec();
         QTextEncoder *encoder = codec->makeEncoder();
         QByteArray process = encoder->fromUnicode(message);
-        QList<QByteArray> split;
+        QString line = message;
+        QStringList split;
 
         while (process.length() > maxLength - 2) {
-            split.append(process.left(maxLength - 2));
+            QByteArray tmp = process.left(maxLength - 2);
+            QString unconverted = codec->makeDecoder()->toUnicode(tmp);
+            split.append(unconverted);
             process.remove(0, maxLength - 2);
+            line.remove(unconverted);
         }
 
         if (!process.isEmpty()) {
-            split.append(process);
+            split.append(line);
         }
 
         return split;
@@ -264,13 +268,12 @@ public:
                 if (user->nick() == channel->socket()->currentNick()) {
                     QString nickColour = QString("<font color='%1'>%2</font>")
                                             .arg(user->color().name(), user->nick());
-                    QList<QByteArray> messages = checkMessageLength("PRIVMSG", channel->name(), msg, user);
-                    QListIterator<QByteArray> iter(messages);
+                    QStringList messages = checkMessageLength("PRIVMSG", channel->name(), msg, user);
+                    QStringListIterator iter(messages);
 
                     while (iter.hasNext()) {
-                        QByteArray tmp = iter.next();
-                        QString encoded = channel->socket()->decodeString(tmp);
-                        channel->view()->addPrivmsg(nickColour, Aki::Irc::Color::toHtml(encoded));
+                        QString tmp = iter.next();
+                        channel->view()->addPrivmsg(nickColour, Aki::Irc::Color::toHtml(tmp));
                         channel->socket()->rfcPrivmsg(channel->name().toLatin1(), tmp);
                     }
                 }
@@ -281,13 +284,12 @@ public:
             QString nickColour = QString("<font color='%1'>%2</font>")
                                     .arg(query->selfUser()->color().name(),
                                          query->selfUser()->nick());
-            QList<QByteArray> messages = checkMessageLength("PRIVMSG", query->name(), msg, query->otherUser());
+            QStringList messages = checkMessageLength("PRIVMSG", query->name(), msg, query->otherUser());
 
-            QListIterator<QByteArray> iter(messages);
+            QStringListIterator iter(messages);
             while (iter.hasNext()) {
-                QByteArray tmp = iter.next();
-                QString encoded = query->socket()->decodeString(tmp);
-                query->view()->addPrivmsg(nickColour, Aki::Irc::Color::toHtml(encoded));
+                QString tmp = iter.next();
+                query->view()->addPrivmsg(nickColour, Aki::Irc::Color::toHtml(tmp));
                 query->socket()->rfcPrivmsg(query->name().toLatin1(), tmp);
             }
         }
@@ -352,14 +354,13 @@ public:
                         if (user->nick() == channel->socket()->currentNick()) {
                             QString nickColour = QString("<font color='%1'>%2</font>")
                                                     .arg(user->color().name(), user->nick());
-                            QList<QByteArray> messages = checkMessageLength("PRIVMSG", dest, msg, user);
+                            QStringList messages = checkMessageLength("PRIVMSG", dest, msg, user);
 
-                            QListIterator<QByteArray> iter(messages);
+                            QStringListIterator iter(messages);
                             while (iter.hasNext()) {
-                                QByteArray tmp = iter.next();
+                                QString tmp = iter.next();
                                 channel->socket()->rfcPrivmsg(dest.toLatin1(), tmp);
-                                QString decoded = channel->socket()->decodeString(tmp);
-                                channel->view()->addPrivmsg(nickColour, Aki::Irc::Color::toHtml(decoded));
+                                channel->view()->addPrivmsg(nickColour, Aki::Irc::Color::toHtml(tmp));
                             }
                         }
                     }
@@ -369,14 +370,13 @@ public:
                     QString nickColour = QString("<font color='%1'>%2</font>")
                                             .arg(query->selfUser()->color().name(),
                                                  query->selfUser()->nick());
-                    QList<QByteArray> messages = checkMessageLength("PRIVMSG", dest, msg, query->otherUser());
+                    QStringList messages = checkMessageLength("PRIVMSG", dest, msg, query->otherUser());
 
-                    QListIterator<QByteArray> iter(messages);
+                    QStringListIterator iter(messages);
                     while (iter.hasNext()) {
-                        QByteArray tmp = iter.next();
+                        QString tmp = iter.next();
                         query->socket()->rfcPrivmsg(dest.toLatin1(), tmp);
-                        QString decoded = query->socket()->decodeString(tmp);
-                        query->view()->addPrivmsg(nickColour, Aki::Irc::Color::toHtml(decoded));
+                        query->view()->addPrivmsg(nickColour, Aki::Irc::Color::toHtml(tmp));
                     }
                 }
             } else if (Aki::Irc::Rfc2812::isValidNickname(dest)) {
