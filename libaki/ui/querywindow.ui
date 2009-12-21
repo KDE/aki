@@ -15,22 +15,29 @@
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
    <item row="0" column="0">
-    <layout class="QGridLayout" name="gridLayout">
-     <item row="3" column="0">
-      <widget class="Aki::ChatInput" name="chatInput"/>
-     </item>
-     <item row="0" column="0">
+    <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0">
+     <item>
       <widget class="KLineEdit" name="userHostmask">
        <property name="readOnly">
         <bool>true</bool>
        </property>
       </widget>
      </item>
-     <item row="1" column="0">
+     <item>
       <widget class="Aki::ChatView" name="chatOutput" native="true"/>
      </item>
-     <item row="2" column="0">
-      <widget class="Aki::SearchBar" name="channelSearch" native="true"/>
+     <item>
+      <widget class="Aki::SearchBar" name="channelSearch" native="true">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="Aki::ChatInput" name="chatInput"/>
      </item>
     </layout>
    </item>

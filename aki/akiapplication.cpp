@@ -30,6 +30,7 @@
 #include "ui/systemtray.h"
 #include <Aki/Irc/Socket>
 #include <KCmdLineArgs>
+#include <KMessageBox>
 #include <KStandardDirs>
 #include <KWindowSystem>
 #include <QTimer>
@@ -48,6 +49,11 @@ int
 AkiApplication::newInstance()
 {
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+    KUrl url;
+
+    if (args->count() > 0) {
+        url = args->arg(0);
+    }
 
     if (!m_mainWindow) {
         KStandardDirs dirs;
@@ -70,6 +76,10 @@ AkiApplication::newInstance()
 
         m_mainWindow->loadPlugins();
         loadConfigurations(m_mainWindow);
+    }
+
+    if (!url.isEmpty()) {
+        KMessageBox::information(0, url.url());
     }
 
     KWindowSystem::forceActiveWindow(m_mainWindow->winId());
@@ -109,7 +119,6 @@ AkiApplication::loadConfigurations(Aki::MainWindow *window)
                 }
 
                 socket->setIdentName("aki");
-                socket->setChannelList(serverConfig->channelList());
                 socket->setNickList(ident->nicknameList());
                 socket->setRealName(ident->realName());
                 socket->setRetryAttemptCount(serverConfig->retryAttemptCount());
@@ -117,6 +126,7 @@ AkiApplication::loadConfigurations(Aki::MainWindow *window)
                 socket->setServiceName(serverConfig->serviceName());
                 socket->setServicePassword(serverConfig->servicePassword());
                 socket->setSsl(serverConfig->isSslEnabled());
+                socket->setChannelList(serverConfig->channelList());
 
                 if (serverConfig->isConnectOnStartupEnabled()) {
                     ident->setName(identityName);

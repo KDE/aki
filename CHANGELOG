@@ -1,0 +1,14 @@
+Added Features to v0.0.4
+---------------------------------------------------------------------
+Version to the NickView context menu
+WhoIs to the NickView context menu
+Open Query to the NickView context menu
+Include files for plugins
+Disable modebar based on Op status
+MIrc ServerList (servers.ini) support
+
+Fixes to v0.0.4
+---------------------------------------------------------------------
+Resized the modebar buttons
+Fixed the SettingsDialog to save the settings
+Changed the way you import/export network list

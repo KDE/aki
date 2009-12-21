@@ -141,6 +141,8 @@ Q_SIGNALS:
 protected:
     virtual void showEvent(QShowEvent *event);
 private:
+    Q_PRIVATE_SLOT(d, void whoIsTriggered())
+    Q_PRIVATE_SLOT(d, void versionTriggered())
     Q_PRIVATE_SLOT(d, void nickSelectorActivated(const QString &nick));
     Q_PRIVATE_SLOT(d, void banDomainTriggered())
     Q_PRIVATE_SLOT(d, void banHostTriggered())
@@ -176,6 +178,7 @@ private:
     Q_PRIVATE_SLOT(d, void findNextClicked())
     Q_PRIVATE_SLOT(d, void findPreviousClicked())
     Q_PRIVATE_SLOT(d, void channelSearchTextEdited(const QString &text))
+    Q_PRIVATE_SLOT(d, void optionButtonClicked())
 private:
     friend class ChannelWindowPrivate;
     QScopedPointer<ChannelWindowPrivate> d;

@@ -98,27 +98,30 @@ SettingsDialog::hasChanged()
             changed = true;
         }
     }
-    
+
     return changed;
 }
 
-void SettingsDialog::updateButtons()
-    {
-        enableButtonApply(hasChanged());
-    }
+void
+SettingsDialog::updateButtons()
+{
+    enableButtonApply(hasChanged());
+}
 
-    void SettingsDialog::updateSettings()
-    {
-        foreach (Aki::SettingsPageInterface *page, d->pageList.keys()) {
-            page->updateSettings();
-        }
+void
+SettingsDialog::updateSettings()
+{
+    foreach (Aki::SettingsPageInterface *page, d->pageList.keys()) {
+        page->updateSettings();
     }
+}
 
-    void SettingsDialog::updateWidgets()
-    {
-        foreach (Aki::SettingsPageInterface *page, d->pageList.keys()) {
-            page->updateWidgets();
-        }
+void
+SettingsDialog::updateWidgets()
+{
+    foreach (Aki::SettingsPageInterface *page, d->pageList.keys()) {
+        page->updateWidgets();
     }
+}
 
 #include "settingsdialog.moc"

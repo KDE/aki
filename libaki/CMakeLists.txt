@@ -33,6 +33,9 @@ set(akicore_SRCS
     plugin/plugin.cpp
     plugin/pluginmanager.cpp
     server.cpp
+    serverlist/mircparser.cpp
+    serverlist/networkserializer.cpp
+    serverlist/xmlparser.cpp
     ui/basewindow.cpp
     ui/channelmodebar.cpp
     ui/channelview.cpp
@@ -227,3 +230,4 @@ add_subdirectory(interfaces)
 add_subdirectory(plugin)
 add_subdirectory(ui)
 add_subdirectory(dialogs)
+add_subdirectory(serverlist)

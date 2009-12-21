@@ -55,6 +55,23 @@ public:
         q->chatInput->setFocus();
     }
 
+    void whoIsTriggered()
+    {
+        Aki::NickListModel *model = static_cast<Aki::NickListModel*>(q->userList->model());
+        Aki::Irc::User *user = model->data(q->userList->currentIndex(), Aki::NickListModel::IrcUserRole)
+                                    .value<Aki::Irc::User*>();
+        q->socket()->rfcWhoIs(user->nick());
+    }
+
+    void versionTriggered()
+    {
+        Aki::NickListModel *model = static_cast<Aki::NickListModel*>(q->userList->model());
+        Aki::Irc::User *user = model->data(q->userList->currentIndex(), Aki::NickListModel::IrcUserRole)
+                                    .value<Aki::Irc::User*>();
+        q->socket()->rfcPrivmsg(user->nick().toLatin1(),
+                                QString("\x01" "VERSION" "\x01"));
+    }
+
     void banDomainTriggered()
     {
         Aki::NickListModel *model = static_cast<Aki::NickListModel*>(q->userList->model());
@@ -119,6 +136,16 @@ public:
         QMenu *menu = new QMenu(q);
         QMenu *modesMenu = new QMenu(i18n("Modes"), menu);
         QMenu *kickBanMenu = new QMenu(i18n("Kick/Ban"), menu);
+
+        QAction *whoIsAction = new QAction(menu);
+        whoIsAction->setText(i18n("WhoIs"));
+        QObject::connect(whoIsAction, SIGNAL(triggered(bool)),
+                         q, SLOT(whoIsTriggered()));
+
+        QAction *versionAction = new QAction(menu);
+        versionAction->setText(i18n("Version"));
+        QObject::connect(versionAction, SIGNAL(triggered(bool)),
+                         q, SLOT(versionTriggered()));
 
         QAction *giveOpAction = new QAction(modesMenu);
         giveOpAction->setText(i18n("Give Ops"));
@@ -211,6 +238,11 @@ public:
         QObject::connect(kickBanUserDomainAction, SIGNAL(triggered(bool)),
                          q, SLOT(kickBanUserDomainTriggered()));
 
+        QAction *openQueryAction = new QAction(menu);
+        openQueryAction->setText(i18n("Open Query"));
+        QObject::connect(openQueryAction, SIGNAL(triggered(bool)),
+                         q, SLOT(openQueryTriggered()));
+
         kickBanMenu->addAction(kickUserAction);
         kickBanMenu->addAction(banUserAction);
         kickBanMenu->addSeparator();
@@ -226,8 +258,13 @@ public:
 
         QModelIndex currentIndex = q->userList->currentIndex();
         if (currentIndex.isValid()) {
+            menu->addAction(whoIsAction);
+            menu->addAction(versionAction);
+            menu->addSeparator();
             menu->addMenu(modesMenu);
             menu->addMenu(kickBanMenu);
+            menu->addSeparator();
+            menu->addAction(openQueryAction);
             menu->exec(QCursor::pos());
         }
     }
@@ -609,6 +646,11 @@ public:
         }
     }
 
+    void optionButtonClicked()
+    {
+        q->searchBar()->optionButton()->showMenu();
+    }
+
     Aki::ChannelWindow *q;
     Aki::IdentityConfig *identity;
     Aki::ChatParser *parser;
@@ -684,6 +726,8 @@ ChannelWindow::ChannelWindow(const QString &name, Aki::IdentityConfig *identityC
             SLOT(findPreviousClicked()));
     connect(channelSearch, SIGNAL(textEdited(QString)),
             SLOT(channelSearchTextEdited(QString)));
+    connect(channelSearch->optionButton(), SIGNAL(clicked(bool)),
+            SLOT(optionButtonClicked()));
 
     socket->rfcMode(name.toLower());
     socket->rfcWho(name.toLower());
@@ -880,6 +924,8 @@ ChannelWindow::resetWho()
     if (Aki::Settings::enableWhoLookup()) {
         d->whoTimer->stop();
         d->whoTimer->start(Aki::Settings::updateInterval() * 1000);
+    } else {
+        d->whoTimer->stop();
     }
 }
 

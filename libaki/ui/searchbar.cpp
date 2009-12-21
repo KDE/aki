@@ -178,4 +178,10 @@ SearchBar::isWrapAround() const
     return d->isWrapAround;
 }
 
+QToolButton*
+SearchBar::optionButton() const
+{
+    return optionsButton;
+}
+
 #include "searchbar.moc"

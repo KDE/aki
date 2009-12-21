@@ -61,6 +61,7 @@ private:
     Q_PRIVATE_SLOT(d, void findNextClicked())
     Q_PRIVATE_SLOT(d, void findPreviousClicked())
     Q_PRIVATE_SLOT(d, void channelSearchTextEdited(const QString &text))
+    Q_PRIVATE_SLOT(d, void optionButtonClicked())
 private:
     friend class StatusWindowPrivate;
     QScopedPointer<StatusWindowPrivate> d;

@@ -34,7 +34,14 @@
       <widget class="Aki::ChatView" name="chatOutput" native="true"/>
      </item>
      <item row="1" column="0">
-      <widget class="Aki::SearchBar" name="channelSearch" native="true"/>
+      <widget class="Aki::SearchBar" name="channelSearch" native="true">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>

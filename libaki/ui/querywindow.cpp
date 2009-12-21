@@ -103,6 +103,11 @@ public:
         }
     }
 
+    void optionButtonClicked()
+    {
+        q->searchBar()->optionButton()->showMenu();
+    }
+
     QueryWindow *q;
     Aki::Irc::User *self;
     Aki::Irc::User *other;
@@ -138,6 +143,8 @@ QueryWindow::QueryWindow(const QString &name, Aki::Irc::Socket *socket, QWidget 
             SLOT(findPreviousClicked()));
     connect(channelSearch, SIGNAL(textEdited(QString)),
             SLOT(channelSearchTextEdited(QString)));
+    connect(channelSearch->optionButton(), SIGNAL(clicked(bool)),
+            SLOT(optionButtonClicked()));
 }
 
 QueryWindow::~QueryWindow()

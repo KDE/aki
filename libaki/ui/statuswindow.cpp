@@ -107,6 +107,11 @@ public:
         }
     }
 
+    void optionButtonClicked()
+    {
+        q->searchBar()->optionButton()->showMenu();
+    }
+
     StatusWindow *q;
     Aki::IdentityConfig *identity;
 }; // End of class StatusWindowPrivate.
@@ -134,6 +139,8 @@ StatusWindow::StatusWindow(const QString &name, Aki::IdentityConfig *identityCon
             SLOT(findPreviousClicked()));
     connect(channelSearch, SIGNAL(textEdited(QString)),
             SLOT(channelSearchTextEdited(QString)));
+    connect(channelSearch->optionButton(), SIGNAL(clicked(bool)),
+            SLOT(optionButtonClicked()));
 }
 
 StatusWindow::~StatusWindow()

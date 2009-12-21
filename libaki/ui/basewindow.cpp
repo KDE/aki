@@ -17,6 +17,7 @@
 
     You should have received a copy of the GNU Lesser General Public
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
+
 */
 
 #include "basewindow.h"
@@ -189,4 +190,10 @@ BaseWindow::setTabColor(const Aki::BaseWindow::TabColor &color)
             d->channelView->setTabTextColor(currentIndex, newMessageColor);
         }
     }
+}
+
+Aki::ChannelView*
+BaseWindow::channelView()
+{
+    return d->channelView;
 }

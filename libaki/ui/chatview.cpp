@@ -578,6 +578,7 @@ ChatView::addMode(const QString &fromNick, const QString &toNick, const QChar &m
             span = d->span(msg, Aki::Settings::voiceColor());
         }
     } else {
+        return;
     }
 
     d->toLog(msg);

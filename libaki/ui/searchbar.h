@@ -42,6 +42,7 @@ public:
     bool isCaseSensitive() const;
     bool isHighlightAll() const;
     bool isWrapAround() const;
+    QToolButton* optionButton() const;
 Q_SIGNALS:
     void findNextClicked();
     void findPreviousClicked();
