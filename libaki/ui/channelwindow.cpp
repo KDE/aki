@@ -329,7 +329,7 @@ public:
         Aki::NickListModel *model = static_cast<Aki::NickListModel*>(q->userList->model());
         Aki::Irc::User *user = model->data(q->userList->currentIndex(), Aki::NickListModel::IrcUserRole)
                                             .value<Aki::Irc::User*>();
-        q->socket()->rfcKick(q->name(), QString("+b *!%1@%2").arg(user->user(), user->host()));
+        q->socket()->rfcMode(q->name(), QString("+b *!%1@%2").arg(user->user(), user->host()));
         q->socket()->rfcKick(q->name(), user->nick(), identity->kickMessage());
     }
 

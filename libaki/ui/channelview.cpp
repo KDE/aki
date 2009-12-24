@@ -443,7 +443,7 @@ ChannelView::addQuery(Aki::Irc::User *self, Aki::Irc::User *other, const QString
     window->setSelfUser(self);
     window->setOtherUser(other);
 
-    if (!message.isEmpty() || !message.isNull()) {
+    if (!message.isEmpty() && !message.isNull()) {
         window->addMessage(toSelf ? self->nick() : other->nick(), message);
         if (toSelf) {
             window->socket()->rfcPrivmsg(other->nick().toLatin1(), message.toUtf8());

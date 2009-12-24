@@ -164,8 +164,9 @@ public:
         Aki::BaseWindow *window = findChannel(channel.toLower());
         if (window && window->view()) {
             if (!Aki::Settings::hideChannelCreation()) {
-                //window->view()->addChannelCreated(time.toString());
-                #warning "Fix this"
+                KDateTime dt(time);
+                dt = dt.toClockTime();
+                window->view()->addChannelCreated(dt.toString("%B %d, %Y %H:%M:%S"));
             }
         }
     }
@@ -1250,8 +1251,9 @@ public:
     {
         Aki::BaseWindow *window = findChannel(channel.toLower());
         if (window && window->view()) {
-            //window->view()->addTopicSetBy(nick, time);
-            #warning "Fix this"
+            KDateTime dt(time);
+            dt = dt.toClockTime();
+            window->view()->addTopicSetBy(nick, dt.toString("%B %d, %Y %H:%M:%S"));
         }
     }
 
@@ -1476,7 +1478,10 @@ public:
         Q_UNUSED(info);
         Aki::BaseWindow *window = currentFocusedChannel();
         if (window && window->view()) {
-            //window->view()->addWhoIsIdle(nick, idleTime, signon);
+            KDateTime dt(signon);
+            dt = dt.toClockTime();
+            window->view()->addWhoIsIdle(nick, idleTime.toString("%H:%M:%S"),
+                                         dt.toString("%A %B %d %H:%M:%S"));
         }
     }
 

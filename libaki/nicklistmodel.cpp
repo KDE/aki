@@ -133,42 +133,51 @@ NickListModel::flags(const QModelIndex &index) const
 QString
 NickListModel::toolTip(Aki::Irc::User *user) const
 {
+    QString table;
+    table += "<table border='0' cellspacing='0' cellpadding='0'>";
+    table += "<tr><td><strong>Username:</strong></td>";
+    table += QString("<td> %1</td></tr>").arg(user->realName());
+    table += "<tr><td><strong>Hostname:</strong></td>";
+    table += QString("<td> %1</td></tr>").arg(user->hostMask());
+
     QString tip;
-    tip.append(i18n("<b>Username:</b> %1<br/>", user->realName()));
-    tip.append(i18n("<b>Hostname:</b> %1<br/>", user->hostMask()));
 
     if (user->isAway()) {
-        tip.append(i18n("<b>Away Message:</b> %1<br/>", user->awayMessage()));
+        table += "<tr><td><strong>Away Message:</strong></td>";
+        table += QString("<td> %1</td></tr>").arg(user->awayMessage());
     }
 
     QString status;
 
     if (!user->isNormal()) {
-        status.append("<b>Modes:</b> ");
+        table += "<tr><td><strong>Mode:</strong></td>";
+        table += "<td> ";
         if (user->isOp() && !user->isHalfOp() && !user->isVoice()) {
-            status.append(i18n("Operator"));
+            table += i18n("Operator");
         } else if (user->isOp() && user->isHalfOp() && !user->isVoice()) {
-            status.append(i18n("Operator, Half Operator"));
+            table += i18n("Operator, Half-Operator");
         } else if (user->isOp() && user->isHalfOp() && user->isVoice()) {
-            status.append(i18n("Operator, Half Operator, Voice"));
+            table += i18n("Operator, Half-Operator, Voice");
         } else if (!user->isOp() && user->isHalfOp() && !user->isVoice()) {
-            status.append(i18n("Half Operator"));
+            table += i18n("Half-Operator");
         } else if (!user->isOp() && user->isHalfOp() && user->isVoice()) {
-            status.append(i18n("Half Operator, Voice"));
+            table += i18n("Half-Operator, Voice");
         } else if (!user->isOp() && !user->isHalfOp() && user->isVoice()) {
-            status.append(i18n("Voice"));
+            table += i18n("Voice");
         } else if (user->isOp() && !user->isHalfOp() && user->isVoice()) {
-            status.append(i18n("Operator, Voice"));
+            table += i18n("Operator, Voice");
         }
-        tip.append(status);
+        table += "</td></tr>";
     }
 
     if (user->idleTime().isValid()) {
-        tip.append(i18n("<br/><b>Last Message:</b> %1",
-                        user->idleTime().toString("%B %d %Y %H:%M:%S")));
+        table += "<tr><td><strong>Last Message:</strong></td>";
+        table += QString("<td> %1</td></tr>").arg(user->idleTime().toString("%B %d %Y %H:%M:%S"));
     }
 
-    return tip;
+    table += "</table>";
+
+    return table;
 }
 
 NickListModel::NickList
