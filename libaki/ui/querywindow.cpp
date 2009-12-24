@@ -108,6 +108,11 @@ public:
         q->searchBar()->optionButton()->showMenu();
     }
 
+    void findTextTriggered()
+    {
+        q->searchBar()->show();
+    }
+
     QueryWindow *q;
     Aki::Irc::User *self;
     Aki::Irc::User *other;
@@ -145,6 +150,8 @@ QueryWindow::QueryWindow(const QString &name, Aki::Irc::Socket *socket, QWidget 
             SLOT(channelSearchTextEdited(QString)));
     connect(channelSearch->optionButton(), SIGNAL(clicked(bool)),
             SLOT(optionButtonClicked()));
+    connect(chatOutput, SIGNAL(findTextTriggered()),
+            SLOT(findTextTriggered()));
 }
 
 QueryWindow::~QueryWindow()

@@ -112,6 +112,11 @@ public:
         q->searchBar()->optionButton()->showMenu();
     }
 
+    void findTextTriggered()
+    {
+        q->searchBar()->show();
+    }
+
     StatusWindow *q;
     Aki::IdentityConfig *identity;
 }; // End of class StatusWindowPrivate.
@@ -141,6 +146,8 @@ StatusWindow::StatusWindow(const QString &name, Aki::IdentityConfig *identityCon
             SLOT(channelSearchTextEdited(QString)));
     connect(channelSearch->optionButton(), SIGNAL(clicked(bool)),
             SLOT(optionButtonClicked()));
+    connect(chatOutput, SIGNAL(findTextTriggered()),
+            SLOT(findTextTriggered()));
 }
 
 StatusWindow::~StatusWindow()

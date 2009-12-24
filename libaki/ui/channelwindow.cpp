@@ -57,44 +57,47 @@ public:
 
     void whoIsTriggered()
     {
-        Aki::NickListModel *model = static_cast<Aki::NickListModel*>(q->userList->model());
-        Aki::Irc::User *user = model->data(q->userList->currentIndex(), Aki::NickListModel::IrcUserRole)
-                                    .value<Aki::Irc::User*>();
-        q->socket()->rfcWhoIs(user->nick());
+        if (!selectedUser) {
+            return;
+        }
+
+        q->socket()->rfcWhoIs(selectedUser->nick());
     }
 
     void versionTriggered()
     {
-        Aki::NickListModel *model = static_cast<Aki::NickListModel*>(q->userList->model());
-        Aki::Irc::User *user = model->data(q->userList->currentIndex(), Aki::NickListModel::IrcUserRole)
-                                    .value<Aki::Irc::User*>();
-        q->socket()->rfcPrivmsg(user->nick().toLatin1(),
+        if (!selectedUser) {
+            return;
+        }
+
+        q->socket()->rfcPrivmsg(selectedUser->nick().toLatin1(),
                                 QString("\x01" "VERSION" "\x01"));
     }
 
     void banDomainTriggered()
     {
-        Aki::NickListModel *model = static_cast<Aki::NickListModel*>(q->userList->model());
-        Aki::Irc::User *user = model->data(q->userList->currentIndex(), Aki::NickListModel::IrcUserRole)
-                                    .value<Aki::Irc::User*>();
-        q->socket()->rfcMode(q->name(), QString("+b *!*@%1").arg(user->host()));
+        if (!selectedUser) {
+            return;
+        }
+
+        q->socket()->rfcMode(q->name(), QString("+b *!*@%1").arg(selectedUser->host()));
     }
 
     void banHostTriggered()
     {
-        Aki::NickListModel *model = static_cast<Aki::NickListModel*>(q->userList->model());
-        Aki::Irc::User *user = model->data(q->userList->currentIndex(), Aki::NickListModel::IrcUserRole)
-                                            .value<Aki::Irc::User*>();
+        if (!selectedUser) {
+            return;
+        }
 
         QString ipAddress("^[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}$");
         QString cloak("^[^ ]+/[^ ]+$");
 
-        if (user->host().contains(QRegExp(ipAddress))) {
-            q->socket()->rfcMode(q->name(), QString("+b *!*@*,%1").arg(user->host()));
-        } else if (user->host().contains(QRegExp(cloak))) {
-            q->socket()->rfcMode(q->name(), QString("+b *!*@*.%1").arg(user->host()));
+        if (selectedUser->host().contains(QRegExp(ipAddress))) {
+            q->socket()->rfcMode(q->name(), QString("+b *!*@*,%1").arg(selectedUser->host()));
+        } else if (selectedUser->host().contains(QRegExp(cloak))) {
+            q->socket()->rfcMode(q->name(), QString("+b *!*@*.%1").arg(selectedUser->host()));
         } else {
-            QString tmpHost = user->host();
+            QString tmpHost = selectedUser->host();
             QString tmp = tmpHost.mid(0, tmpHost.indexOf(QChar('.')));
             tmpHost.remove(0, tmp.length());
             q->socket()->rfcMode(q->name(), QString("+b *!*@*%1").arg(tmpHost));
@@ -103,29 +106,31 @@ public:
 
     void banUserDomainTriggered()
     {
-        Aki::NickListModel *model = static_cast<Aki::NickListModel*>(q->userList->model());
-        Aki::Irc::User *user = model->data(q->userList->currentIndex(), Aki::NickListModel::IrcUserRole)
-                                            .value<Aki::Irc::User*>();
-        q->socket()->rfcMode(q->name(), QString("+b *!%1@%2").arg(user->user(), user->host()));
+        if (!selectedUser) {
+            return;
+        }
+
+        q->socket()->rfcMode(q->name(), QString("+b *!%1@%2").arg(selectedUser->user(), selectedUser->host()));
     }
 
     void banUserHostTriggered()
     {
-        Aki::NickListModel *model = static_cast<Aki::NickListModel*>(q->userList->model());
-        Aki::Irc::User *user = model->data(q->userList->currentIndex(), Aki::NickListModel::IrcUserRole)
-                                    .value<Aki::Irc::User*>();
+        if (!selectedUser) {
+            return;
+        }
+
         QString ipAddress("^[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}$");
         QString cloak("^[^ ]+/[^ ]+$");
 
-        if (user->host().contains(QRegExp(ipAddress))) {
-            q->socket()->rfcMode(q->name(), QString("+b *!%1@*.%2").arg(user->user(), user->host()));
-        } else if (user->host().contains(QRegExp(cloak))) {
-            q->socket()->rfcMode(q->name(), QString("+b *!%1@*.%2").arg(user->user(), user->host()));
+        if (selectedUser->host().contains(QRegExp(ipAddress))) {
+            q->socket()->rfcMode(q->name(), QString("+b *!%1@*.%2").arg(selectedUser->user(), selectedUser->host()));
+        } else if (selectedUser->host().contains(QRegExp(cloak))) {
+            q->socket()->rfcMode(q->name(), QString("+b *!%1@*.%2").arg(selectedUser->user(), selectedUser->host()));
         } else {
-            QString tmpHost = user->host();
+            QString tmpHost = selectedUser->host();
             QString tmp = tmpHost.mid(0, tmpHost.indexOf(QChar('.')));
             tmpHost.remove(0, tmp.length());
-            q->socket()->rfcMode(q->name(), QString("+b *!%1@*%2").arg(user->user(), tmpHost));
+            q->socket()->rfcMode(q->name(), QString("+b *!%1@*%2").arg(selectedUser->user(), tmpHost));
         }
     }
 
@@ -133,53 +138,58 @@ public:
     {
         Q_UNUSED(pos);
 
-        QMenu *menu = new QMenu(q);
+        QMenu *menu = new QMenu(menu);
+
+        QMenu *ctcpMenu = new QMenu(i18n("CTCP"), menu);
         QMenu *modesMenu = new QMenu(i18n("Modes"), menu);
         QMenu *kickBanMenu = new QMenu(i18n("Kick/Ban"), menu);
 
-        QAction *whoIsAction = new QAction(menu);
+        QAction *whoIsAction = new QAction(ctcpMenu);
         whoIsAction->setText(i18n("WhoIs"));
-        QObject::connect(whoIsAction, SIGNAL(triggered(bool)),
-                         q, SLOT(whoIsTriggered()));
+        q->connect(whoIsAction, SIGNAL(triggered(bool)),
+                   q, SLOT(whoIsTriggered()));
 
-        QAction *versionAction = new QAction(menu);
+        QAction *versionAction = new QAction(ctcpMenu);
         versionAction->setText(i18n("Version"));
-        QObject::connect(versionAction, SIGNAL(triggered(bool)),
-                         q, SLOT(versionTriggered()));
+        q->connect(versionAction, SIGNAL(triggered(bool)),
+                   q, SLOT(versionTriggered()));
+
+        ctcpMenu->addAction(whoIsAction);
+        ctcpMenu->addAction(versionAction);
 
         QAction *giveOpAction = new QAction(modesMenu);
         giveOpAction->setText(i18n("Give Ops"));
         giveOpAction->setIcon(KIcon("irc-operator"));
-        QObject::connect(giveOpAction, SIGNAL(triggered(bool)),
-                         q, SLOT(giveOpTriggered()));
+        q->connect(giveOpAction, SIGNAL(triggered(bool)),
+                   q, SLOT(giveOpTriggered()));
 
         QAction *takeOpAction = new QAction(modesMenu);
         takeOpAction->setText(i18n("Take Ops"));
         takeOpAction->setIcon(KIcon("irc-remove-operator"));
-        QObject::connect(takeOpAction, SIGNAL(triggered(bool)),
-                         q, SLOT(takeOpTriggered()));
+        q->connect(takeOpAction, SIGNAL(triggered(bool)),
+                   q, SLOT(takeOpTriggered()));
 
         QAction *giveHalfOpAction = new QAction(modesMenu);
         giveHalfOpAction->setText(i18n("Give Half-Op"));
-        QObject::connect(giveHalfOpAction, SIGNAL(triggered(bool)),
-                         q, SLOT(giveHalfOpTriggered()));
+        q->connect(giveHalfOpAction, SIGNAL(triggered(bool)),
+                   q, SLOT(giveHalfOpTriggered()));
 
         QAction *takeHalfOpAction = new QAction(modesMenu);
         takeHalfOpAction->setText(i18n("Take Half-Op"));
-        QObject::connect(takeHalfOpAction, SIGNAL(triggered(bool)),
-                         q, SLOT(takeHalfOpTriggered()));
+        q->connect(takeHalfOpAction, SIGNAL(triggered(bool)),
+                   q, SLOT(takeHalfOpTriggered()));
 
         QAction *giveVoiceAction = new QAction(modesMenu);
         giveVoiceAction->setIcon(KIcon("irc-voice"));
         giveVoiceAction->setText(i18n("Give Voice"));
-        QObject::connect(giveVoiceAction, SIGNAL(triggered(bool)),
-                         q, SLOT(giveVoiceTriggered()));
+        q->connect(giveVoiceAction, SIGNAL(triggered(bool)),
+                   q, SLOT(giveVoiceTriggered()));
 
         QAction *takeVoiceAction = new QAction(modesMenu);
         takeVoiceAction->setIcon(KIcon("irc-unvoice"));
         takeVoiceAction->setText(i18n("Take Voice"));
-        QObject::connect(takeVoiceAction, SIGNAL(triggered(bool)),
-                         q, SLOT(takeVoiceTriggered()));
+        q->connect(takeVoiceAction, SIGNAL(triggered(bool)),
+                   q, SLOT(takeVoiceTriggered()));
 
         modesMenu->addAction(giveOpAction);
         modesMenu->addAction(takeOpAction);
@@ -192,56 +202,56 @@ public:
 
         QAction *kickUserAction = new QAction(kickBanMenu);
         kickUserAction->setText(i18n("Kick"));
-        QObject::connect(kickUserAction, SIGNAL(triggered(bool)),
-                         q, SLOT(kickUserTriggered()));
+        q->connect(kickUserAction, SIGNAL(triggered(bool)),
+                   q, SLOT(kickUserTriggered()));
 
         QAction *banUserAction = new QAction(kickBanMenu);
         banUserAction->setText(i18n("Ban"));
 
         QAction *banHostAction = new QAction(kickBanMenu);
         banHostAction->setText(i18n("Ban *!*@*.host"));
-        QObject::connect(banHostAction, SIGNAL(triggered(bool)),
-                         q, SLOT(banHostTriggered()));
+        q->connect(banHostAction, SIGNAL(triggered(bool)),
+                   q, SLOT(banHostTriggered()));
 
         QAction *banDomainAction = new QAction(kickBanMenu);
         banDomainAction->setText(i18n("Ban *!*@domain"));
-        QObject::connect(banDomainAction, SIGNAL(triggered(bool)),
-                         q, SLOT(banDomainTriggered()));
+        q->connect(banDomainAction, SIGNAL(triggered(bool)),
+                   q, SLOT(banDomainTriggered()));
 
         QAction *banUserHostAction = new QAction(kickBanMenu);
         banUserHostAction->setText(i18n("Ban *!user@*.host"));
-        QObject::connect(banUserHostAction, SIGNAL(triggered(bool)),
-                         q, SLOT(banUserHostTriggered()));
+        q->connect(banUserHostAction, SIGNAL(triggered(bool)),
+                   q, SLOT(banUserHostTriggered()));
 
         QAction *banUserDomainAction = new QAction(kickBanMenu);
         banUserDomainAction->setText(i18n("Ban *!user@domain"));
-        QObject::connect(banUserDomainAction, SIGNAL(triggered(bool)),
-                         q, SLOT(banUserDomainTriggered()));
+        q->connect(banUserDomainAction, SIGNAL(triggered(bool)),
+                   q, SLOT(banUserDomainTriggered()));
 
         QAction *kickBanHostAction = new QAction(kickBanMenu);
         kickBanHostAction->setText(i18n("KickBan *!*@*.host"));
-        QObject::connect(kickBanHostAction, SIGNAL(triggered(bool)),
-                         q, SLOT(kickBanHostTriggered()));
+        q->connect(kickBanHostAction, SIGNAL(triggered(bool)),
+                   q, SLOT(kickBanHostTriggered()));
 
         QAction *kickBanDomainAction = new QAction(kickBanMenu);
         kickBanDomainAction->setText(i18n("KickBan *!*@domain"));
-        QObject::connect(kickBanDomainAction, SIGNAL(triggered(bool)),
-                         q, SLOT(kickBanDomainTriggered()));
+        q->connect(kickBanDomainAction, SIGNAL(triggered(bool)),
+                   q, SLOT(kickBanDomainTriggered()));
 
         QAction *kickBanUserHostAction = new QAction(kickBanMenu);
         kickBanUserHostAction->setText(i18n("KickBan *!user@*.host"));
-        QObject::connect(kickBanUserHostAction, SIGNAL(triggered(bool)),
-                         q, SLOT(kickBanUserHostTriggered()));
+        q->connect(kickBanUserHostAction, SIGNAL(triggered(bool)),
+                   q, SLOT(kickBanUserHostTriggered()));
 
         QAction *kickBanUserDomainAction = new QAction(kickBanMenu);
         kickBanUserDomainAction->setText(i18n("KickBan *!user@domain"));
-        QObject::connect(kickBanUserDomainAction, SIGNAL(triggered(bool)),
-                         q, SLOT(kickBanUserDomainTriggered()));
+        q->connect(kickBanUserDomainAction, SIGNAL(triggered(bool)),
+                   q, SLOT(kickBanUserDomainTriggered()));
 
         QAction *openQueryAction = new QAction(menu);
         openQueryAction->setText(i18n("Open Query"));
-        QObject::connect(openQueryAction, SIGNAL(triggered(bool)),
-                         q, SLOT(openQueryTriggered()));
+        q->connect(openQueryAction, SIGNAL(triggered(bool)),
+                   q, SLOT(openQueryTriggered()));
 
         kickBanMenu->addAction(kickUserAction);
         kickBanMenu->addAction(banUserAction);
@@ -258,8 +268,7 @@ public:
 
         QModelIndex currentIndex = q->userList->currentIndex();
         if (currentIndex.isValid()) {
-            menu->addAction(whoIsAction);
-            menu->addAction(versionAction);
+            menu->addMenu(ctcpMenu);
             menu->addSeparator();
             menu->addMenu(modesMenu);
             menu->addMenu(kickBanMenu);
@@ -271,95 +280,102 @@ public:
 
     void giveHalfOpTriggered()
     {
-        Aki::NickListModel *model = static_cast<Aki::NickListModel*>(q->userList->model());
-        Aki::Irc::User *user = model->data(q->userList->currentIndex(), Aki::NickListModel::IrcUserRole)
-                                            .value<Aki::Irc::User*>();
-        q->socket()->rfcMode(q->name(), QString("+h %1").arg(user->nick()));
+        if (!selectedUser) {
+            return;
+        }
+
+        q->socket()->rfcMode(q->name(), QString("+h %1").arg(selectedUser->nick()));
     }
 
     void giveOpTriggered()
     {
-        Aki::NickListModel *model = static_cast<Aki::NickListModel*>(q->userList->model());
-        Aki::Irc::User *user = model->data(q->userList->currentIndex(), Aki::NickListModel::IrcUserRole)
-                                            .value<Aki::Irc::User*>();
-        q->socket()->rfcMode(q->name(), QString("+o %1").arg(user->nick()));
+        if (!selectedUser) {
+            return;
+        }
+
+        q->socket()->rfcMode(q->name(), QString("+o %1").arg(selectedUser->nick()));
     }
 
     void giveVoiceTriggered()
     {
-        Aki::NickListModel *model = static_cast<Aki::NickListModel*>(q->userList->model());
-        Aki::Irc::User *user = model->data(q->userList->currentIndex(), Aki::NickListModel::IrcUserRole)
-                                            .value<Aki::Irc::User*>();
-        q->socket()->rfcMode(q->name(), QString("+v %1").arg(user->nick()));
+        if (!selectedUser) {
+            return;
+        }
+
+        q->socket()->rfcMode(q->name(), QString("+v %1").arg(selectedUser->nick()));
     }
 
     void kickBanDomainTriggered()
     {
-        Aki::NickListModel *model = static_cast<Aki::NickListModel*>(q->userList->model());
-        Aki::Irc::User *user = model->data(q->userList->currentIndex(), Aki::NickListModel::IrcUserRole)
-                                            .value<Aki::Irc::User*>();
-        q->socket()->rfcMode(q->name(), QString("+b *!%1@%2").arg(user->user(), user->host()));
-        q->socket()->rfcKick(q->name(), user->nick(), identity->kickMessage());
+        if (!selectedUser) {
+            return;
+        }
+
+        q->socket()->rfcMode(q->name(), QString("+b *!%1@%2").arg(selectedUser->user(), selectedUser->host()));
+        q->socket()->rfcKick(q->name(), selectedUser->nick(), identity->kickMessage());
     }
 
     void kickBanHostTriggered()
     {
-        Aki::NickListModel *model = static_cast<Aki::NickListModel*>(q->userList->model());
-        Aki::Irc::User *user = model->data(q->userList->currentIndex(), Aki::NickListModel::IrcUserRole)
-                                            .value<Aki::Irc::User*>();
+        if (!selectedUser) {
+            return;
+        }
 
         QString ipAddress("^[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}$");
         QString cloak("^[^ ]+/[^ ]+$");
 
-        if (user->host().contains(QRegExp(ipAddress))) {
-            q->socket()->rfcMode(q->name(), QString("+b *!*@*,%1").arg(user->host()));
-        } else if (user->host().contains(QRegExp(cloak))) {
-            q->socket()->rfcMode(q->name(), QString("+b *!*@*.%1").arg(user->host()));
+        if (selectedUser->host().contains(QRegExp(ipAddress))) {
+            q->socket()->rfcMode(q->name(), QString("+b *!*@*,%1").arg(selectedUser->host()));
+        } else if (selectedUser->host().contains(QRegExp(cloak))) {
+            q->socket()->rfcMode(q->name(), QString("+b *!*@*.%1").arg(selectedUser->host()));
         } else {
-            QString tmpHost = user->host();
+            QString tmpHost = selectedUser->host();
             QString tmp = tmpHost.mid(0, tmpHost.indexOf(QChar('.')));
             tmpHost.remove(0, tmp.length());
             q->socket()->rfcMode(q->name(), QString("+b *!*@*%1").arg(tmpHost));
         }
-        q->socket()->rfcKick(q->name(), user->nick(), identity->kickMessage());
+        q->socket()->rfcKick(q->name(), selectedUser->nick(), identity->kickMessage());
     }
 
     void kickBanUserDomainTriggered()
     {
-        Aki::NickListModel *model = static_cast<Aki::NickListModel*>(q->userList->model());
-        Aki::Irc::User *user = model->data(q->userList->currentIndex(), Aki::NickListModel::IrcUserRole)
-                                            .value<Aki::Irc::User*>();
-        q->socket()->rfcKick(q->name(), QString("+b *!%1@%2").arg(user->user(), user->host()));
-        q->socket()->rfcKick(q->name(), user->nick(), identity->kickMessage());
+        if (!selectedUser) {
+            return;
+        }
+
+        q->socket()->rfcMode(q->name(), QString("+b *!%1@%2").arg(selectedUser->user(), selectedUser->host()));
+        q->socket()->rfcKick(q->name(), selectedUser->nick(), identity->kickMessage());
     }
 
     void kickBanUserHostTriggered()
     {
-        Aki::NickListModel *model = static_cast<Aki::NickListModel*>(q->userList->model());
-        Aki::Irc::User *user = model->data(q->userList->currentIndex(), Aki::NickListModel::IrcUserRole)
-                                    .value<Aki::Irc::User*>();
+        if (!selectedUser) {
+            return;
+        }
+
         QString ipAddress("^[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}$");
         QString cloak("^[^ ]+/[^ ]+$");
 
-        if (user->host().contains(QRegExp(ipAddress))) {
-            q->socket()->rfcMode(q->name(), QString("+b *!%1@*.%2").arg(user->user(), user->host()));
-        } else if (user->host().contains(QRegExp(cloak))) {
-            q->socket()->rfcMode(q->name(), QString("+b *!%1@*.%2").arg(user->user(), user->host()));
+        if (selectedUser->host().contains(QRegExp(ipAddress))) {
+            q->socket()->rfcMode(q->name(), QString("+b *!%1@*.%2").arg(selectedUser->user(), selectedUser->host()));
+        } else if (selectedUser->host().contains(QRegExp(cloak))) {
+            q->socket()->rfcMode(q->name(), QString("+b *!%1@*.%2").arg(selectedUser->user(), selectedUser->host()));
         } else {
-            QString tmpHost = user->host();
+            QString tmpHost = selectedUser->host();
             QString tmp = tmpHost.mid(0, tmpHost.indexOf(QChar('.')));
             tmpHost.remove(0, tmp.length());
-            q->socket()->rfcMode(q->name(), QString("+b *!%1@*%2").arg(user->user(), tmpHost));
+            q->socket()->rfcMode(q->name(), QString("+b *!%1@*%2").arg(selectedUser->user(), tmpHost));
         }
-        q->socket()->rfcKick(q->name(), user->nick(), identity->kickMessage());
+        q->socket()->rfcKick(q->name(), selectedUser->nick(), identity->kickMessage());
     }
 
     void kickUserTriggered()
     {
-        NickListModel *model = static_cast<NickListModel*>(q->userList->model());
-        Aki::Irc::User *user = model->data(q->userList->currentIndex(), NickListModel::IrcUserRole)
-                                            .value<Aki::Irc::User*>();
-        q->socket()->rfcKick(q->name(), user->nick(), identity->kickMessage());
+        if (!selectedUser) {
+            return;
+        }
+
+        q->socket()->rfcKick(q->name(), selectedUser->nick(), identity->kickMessage());
     }
 
     void showCompletion()
@@ -399,26 +415,29 @@ public:
 
     void takeHalfOpTriggered()
     {
-        Aki::NickListModel *model = static_cast<Aki::NickListModel*>(q->userList->model());
-        Aki::Irc::User *user = model->data(q->userList->currentIndex(), Aki::NickListModel::IrcUserRole)
-                                            .value<Aki::Irc::User*>();
-        q->socket()->rfcMode(q->name(), QString("-h %1").arg(user->nick()));
+        if (!selectedUser) {
+            return;
+        }
+
+        q->socket()->rfcMode(q->name(), QString("-h %1").arg(selectedUser->nick()));
     }
 
     void takeOpTriggered()
     {
-        Aki::NickListModel *model = static_cast<Aki::NickListModel*>(q->userList->model());
-        Aki::Irc::User *user = model->data(q->userList->currentIndex(), Aki::NickListModel::IrcUserRole)
-                                            .value<Aki::Irc::User*>();
-        q->socket()->rfcMode(q->name(), QString("-o %1").arg(user->nick()));
+        if (!selectedUser) {
+            return;
+        }
+
+        q->socket()->rfcMode(q->name(), QString("-o %1").arg(selectedUser->nick()));
     }
 
     void takeVoiceTriggered()
     {
-        Aki::NickListModel *model = static_cast<Aki::NickListModel*>(q->userList->model());
-        Aki::Irc::User *user = model->data(q->userList->currentIndex(), Aki::NickListModel::IrcUserRole)
-                                            .value<Aki::Irc::User*>();
-        q->socket()->rfcMode(q->name(), QString("-v %1").arg(user->nick()));
+        if (!selectedUser) {
+            return;
+        }
+
+        q->socket()->rfcMode(q->name(), QString("-v %1").arg(selectedUser->nick()));
     }
 
     void textSubmitted()
@@ -651,9 +670,190 @@ public:
         q->searchBar()->optionButton()->showMenu();
     }
 
+    void userUrlClicked(const QString &nick)
+    {
+        foreach (Aki::Irc::User *u, q->users()) {
+            if (u->nick() == nick) {
+                selectedUser = u;
+                break;
+            }
+        }
+        
+        QMenu *menu = new QMenu(menu);
+        QMenu *ctcpMenu = new QMenu(i18n("CTCP"), menu);
+        QMenu *modesMenu = new QMenu(i18n("Modes"), menu);
+        QMenu *kickBanMenu = new QMenu(i18n("Kick/Ban"), menu);
+
+        QAction *whoIsAction = new QAction(ctcpMenu);
+        whoIsAction->setText(i18n("WhoIs"));
+        q->connect(whoIsAction, SIGNAL(triggered(bool)),
+                   q, SLOT(whoIsTriggered()));
+
+        QAction *versionAction = new QAction(ctcpMenu);
+        versionAction->setText(i18n("Version"));
+        q->connect(versionAction, SIGNAL(triggered(bool)),
+                   q, SLOT(versionTriggered()));
+
+        ctcpMenu->addAction(whoIsAction);
+        ctcpMenu->addAction(versionAction);
+
+        QAction *giveOpAction = new QAction(modesMenu);
+        giveOpAction->setText(i18n("Give Ops"));
+        giveOpAction->setIcon(KIcon("irc-operator"));
+        q->connect(giveOpAction, SIGNAL(triggered(bool)),
+                   q, SLOT(giveOpTriggered()));
+
+        QAction *takeOpAction = new QAction(modesMenu);
+        takeOpAction->setText(i18n("Take Ops"));
+        takeOpAction->setIcon(KIcon("irc-remove-operator"));
+        q->connect(takeOpAction, SIGNAL(triggered(bool)),
+                   q, SLOT(takeOpTriggered()));
+
+        QAction *giveHalfOpAction = new QAction(modesMenu);
+        giveHalfOpAction->setText(i18n("Give Half-Op"));
+        q->connect(giveHalfOpAction, SIGNAL(triggered(bool)),
+                   q, SLOT(giveHalfOpTriggered()));
+
+        QAction *takeHalfOpAction = new QAction(modesMenu);
+        takeHalfOpAction->setText(i18n("Take Half-Op"));
+        q->connect(takeHalfOpAction, SIGNAL(triggered(bool)),
+                   q, SLOT(takeHalfOpTriggered()));
+
+        QAction *giveVoiceAction = new QAction(modesMenu);
+        giveVoiceAction->setIcon(KIcon("irc-voice"));
+        giveVoiceAction->setText(i18n("Give Voice"));
+        q->connect(giveVoiceAction, SIGNAL(triggered(bool)),
+                   q, SLOT(giveVoiceTriggered()));
+
+        QAction *takeVoiceAction = new QAction(modesMenu);
+        takeVoiceAction->setIcon(KIcon("irc-unvoice"));
+        takeVoiceAction->setText(i18n("Take Voice"));
+        q->connect(takeVoiceAction, SIGNAL(triggered(bool)),
+                   q, SLOT(takeVoiceTriggered()));
+
+        modesMenu->addAction(giveOpAction);
+        modesMenu->addAction(takeOpAction);
+        modesMenu->addSeparator();
+        modesMenu->addAction(giveHalfOpAction);
+        modesMenu->addAction(takeHalfOpAction);
+        modesMenu->addSeparator();
+        modesMenu->addAction(giveVoiceAction);
+        modesMenu->addAction(takeVoiceAction);
+
+        QAction *kickUserAction = new QAction(kickBanMenu);
+        kickUserAction->setText(i18n("Kick"));
+        q->connect(kickUserAction, SIGNAL(triggered(bool)),
+                   q, SLOT(kickUserTriggered()));
+
+        QAction *banUserAction = new QAction(kickBanMenu);
+        banUserAction->setText(i18n("Ban"));
+
+        QAction *banHostAction = new QAction(kickBanMenu);
+        banHostAction->setText(i18n("Ban *!*@*.host"));
+        q->connect(banHostAction, SIGNAL(triggered(bool)),
+                   q, SLOT(banHostTriggered()));
+
+        QAction *banDomainAction = new QAction(kickBanMenu);
+        banDomainAction->setText(i18n("Ban *!*@domain"));
+        q->connect(banDomainAction, SIGNAL(triggered(bool)),
+                   q, SLOT(banDomainTriggered()));
+
+        QAction *banUserHostAction = new QAction(kickBanMenu);
+        banUserHostAction->setText(i18n("Ban *!user@*.host"));
+        q->connect(banUserHostAction, SIGNAL(triggered(bool)),
+                   q, SLOT(banUserHostTriggered()));
+
+        QAction *banUserDomainAction = new QAction(kickBanMenu);
+        banUserDomainAction->setText(i18n("Ban *!user@domain"));
+        q->connect(banUserDomainAction, SIGNAL(triggered(bool)),
+                   q, SLOT(banUserDomainTriggered()));
+
+        QAction *kickBanHostAction = new QAction(kickBanMenu);
+        kickBanHostAction->setText(i18n("KickBan *!*@*.host"));
+        q->connect(kickBanHostAction, SIGNAL(triggered(bool)),
+                   q, SLOT(kickBanHostTriggered()));
+
+        QAction *kickBanDomainAction = new QAction(kickBanMenu);
+        kickBanDomainAction->setText(i18n("KickBan *!*@domain"));
+        q->connect(kickBanDomainAction, SIGNAL(triggered(bool)),
+                   q, SLOT(kickBanDomainTriggered()));
+
+        QAction *kickBanUserHostAction = new QAction(kickBanMenu);
+        kickBanUserHostAction->setText(i18n("KickBan *!user@*.host"));
+        q->connect(kickBanUserHostAction, SIGNAL(triggered(bool)),
+                   q, SLOT(kickBanUserHostTriggered()));
+
+        QAction *kickBanUserDomainAction = new QAction(kickBanMenu);
+        kickBanUserDomainAction->setText(i18n("KickBan *!user@domain"));
+        q->connect(kickBanUserDomainAction, SIGNAL(triggered(bool)),
+                   q, SLOT(kickBanUserDomainTriggered()));
+
+        QAction *openQueryAction = new QAction(menu);
+        openQueryAction->setText(i18n("Open Query"));
+        q->connect(openQueryAction, SIGNAL(triggered(bool)),
+                   q, SLOT(openQueryTriggered()));
+
+        kickBanMenu->addAction(kickUserAction);
+        kickBanMenu->addAction(banUserAction);
+        kickBanMenu->addSeparator();
+        kickBanMenu->addAction(banHostAction);
+        kickBanMenu->addAction(banDomainAction);
+        kickBanMenu->addAction(banUserHostAction);
+        kickBanMenu->addAction(banUserDomainAction);
+        kickBanMenu->addSeparator();
+        kickBanMenu->addAction(kickBanHostAction);
+        kickBanMenu->addAction(kickBanDomainAction);
+        kickBanMenu->addAction(kickBanUserHostAction);
+        kickBanMenu->addAction(kickBanUserDomainAction);
+
+        menu->addMenu(ctcpMenu);
+        menu->addSeparator();
+        menu->addMenu(modesMenu);
+        menu->addMenu(kickBanMenu);
+        menu->addSeparator();
+        menu->addAction(openQueryAction);
+        menu->exec(QCursor::pos());
+    }
+
+    void openQueryTriggered()
+    {
+        if (!selectedUser) {
+            return;
+        }
+
+        Aki::Irc::User *self = 0;
+        foreach (Aki::Irc::User *u, q->users()) {
+            if (u->nick() == q->socket()->currentNick()) {
+                self = u;
+                break;
+            }
+        }
+
+        q->channelView()->addQuery(self, selectedUser, QString());
+    }
+
+    void userClicked(const QModelIndex &index)
+    {
+        Aki::NickListModel *model = static_cast<Aki::NickListModel*>(q->userList->model());
+        selectedUser = model->data(index, Aki::NickListModel::IrcUserRole)
+                            .value<Aki::Irc::User*>();
+    }
+
+    void userPressed(const QModelIndex &index)
+    {
+        userClicked(index);
+    }
+
+    void findTextTriggered()
+    {
+        q->searchBar()->show();
+        q->searchBar()->setFocus();
+    }
+
     Aki::ChannelWindow *q;
     Aki::IdentityConfig *identity;
     Aki::ChatParser *parser;
+    Aki::Irc::User *selectedUser;
     QTimer *whoTimer;
     bool isWhoRunning;
 }; // End of class ChannelWindowPrivate.
@@ -728,6 +928,14 @@ ChannelWindow::ChannelWindow(const QString &name, Aki::IdentityConfig *identityC
             SLOT(channelSearchTextEdited(QString)));
     connect(channelSearch->optionButton(), SIGNAL(clicked(bool)),
             SLOT(optionButtonClicked()));
+    connect(chatOutput, SIGNAL(userUrlClicked(QString)),
+            SLOT(userUrlClicked(QString)));
+    connect(userList, SIGNAL(clicked(QModelIndex)),
+            SLOT(userClicked(QModelIndex)));
+    connect(userList, SIGNAL(pressed(QModelIndex)),
+            SLOT(userPressed(QModelIndex)));
+    connect(chatOutput, SIGNAL(findTextTriggered()),
+            SLOT(findTextTriggered()));
 
     socket->rfcMode(name.toLower());
     socket->rfcWho(name.toLower());

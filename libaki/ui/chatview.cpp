@@ -27,10 +27,15 @@
 #include <KDebug>
 #include <KEmoticons>
 #include <KEmoticonsTheme>
+#include <KFileDialog>
+#include <KIO/Job>
 #include <KGlobal>
 #include <KLocale>
+#include <KSaveFile>
 #include <KToolInvocation>
+#include <KUniqueApplication>
 #include <KUrl>
+#include <QClipboard>
 #include <QMenu>
 #include <QScrollBar>
 #include <QWebElement>
@@ -220,31 +225,78 @@ public:
             return;
         }
 
-        if (hit.linkElement().tagName() == "A") {
+        if (hit.linkElement().tagName() == "A" && hit.linkElement().hasAttribute("href")) {
             KUrl url(hit.linkUrl());
+            QString href = url.url().remove("about:blank");
 
+            if (href[0] == '#') {
+                emit q->userUrlClicked(href.remove('#'));
+            } else {
+                QMenu *menu = new QMenu(q);
+
+                QAction *copyUrlAction = new QAction(menu);
+                copyUrlAction->setText(i18n("Copy Link Address"));
+                copyUrlAction->setIcon(KIcon("edit-copy"));
+                q->connect(copyUrlAction, SIGNAL(triggered(bool)),
+                           SLOT(copyUrlTriggered()));
+
+                QAction *saveAsAction = new QAction(menu);
+                saveAsAction->setText(i18n("Save Link As..."));
+                saveAsAction->setIcon(KIcon("document-save-as"));
+                q->connect(saveAsAction, SIGNAL(triggered(bool)),
+                           SLOT(saveAsTriggered()));
+
+                menu->setTitle(i18n("Normal"));
+                menu->addAction(copyUrlAction);
+                menu->addAction(saveAsAction);
+                menu->exec(QCursor::pos());
+            }
+        } else {
             QMenu *menu = new QMenu(q);
 
             QAction *copyAction = new QAction(menu);
-            copyAction->setText(i18n("Copy Link Address"));
+            copyAction->setText(i18n("Copy"));
+            copyAction->setIcon(KIcon("edit-copy"));
+            q->connect(copyAction, SIGNAL(triggered(bool)),
+                       SLOT(copyTriggered()));
 
-            QAction *saveAsAction = new QAction(menu);
-            saveAsAction->setText(i18n("Save Link As..."));
+            QAction *findTextAction = new QAction(menu);
+            findTextAction->setText(i18n("Find Text..."));
+            findTextAction->setIcon(KIcon("edit-find"));
+            q->connect(findTextAction, SIGNAL(triggered(bool)),
+                       SLOT(findTextTriggered()));
 
-            menu->setTitle(i18n("Normal"));
             menu->addAction(copyAction);
-            menu->addAction(saveAsAction);
+            menu->addAction(findTextAction);
             menu->exec(QCursor::pos());
-        } else if (hit.linkElement().tagName() == "A" && hit.linkElement().hasAttribute("href")) {
-            KUrl url(hit.linkUrl());
-
-            if (url.url()[0] == '#') {
-                QMenu *menu = new QMenu(q);
-                menu->exec(QCursor::pos());
-            } else {
-                
-            }
         }
+    }
+
+    void copyUrlTriggered()
+    {
+        QClipboard *cb = KUniqueApplication::clipboard();
+        cb->setText(q->page()->selectedText(), QClipboard::Clipboard);
+    }
+
+    void saveAsTriggered()
+    {
+        KUser user(KUser::UseEffectiveUID);
+        const QString fileName =
+            KFileDialog::getSaveFileName(user.homeDir(), QString(), q, i18n("Save As..."),
+                                         KFileDialog::ConfirmOverwrite);
+
+        KIO::file_copy(q->page()->selectedText(), fileName);
+    }
+
+    void copyTriggered()
+    {
+        QClipboard *cb = KUniqueApplication::clipboard();
+        cb->setText(q->page()->selectedText(), QClipboard::Clipboard);
+    }
+
+    void findTextTriggered()
+    {
+        emit q->findTextTriggered();
     }
 
     Aki::ChatView *q;
@@ -991,7 +1043,7 @@ void
 ChatView::addWhoIsServer(const QString &nick, const QString &server, const QString &info)
 {
     QString msg = i18n("[WhoIs:%1] is online via %2 (%3)", nick, server, info);
-    QString span = d->span(msg);
+    QString span = d->span(msg, Aki::Settings::noticeColor());
     d->toLog(msg);
     d->appendMessage(span);
 }

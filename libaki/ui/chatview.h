@@ -107,10 +107,17 @@ public:
     void clear();
     void insertMarker();
     void clearMarker();
+Q_SIGNALS:
+    void userUrlClicked(const QString &nick);
+    void findTextTriggered();
 private:
     Q_PRIVATE_SLOT(d, void contentsSizeChanged(const QSize &size))
     Q_PRIVATE_SLOT(d, void linkClicked(const QUrl &url))
     Q_PRIVATE_SLOT(d, void customContextMenuRequested(const QPoint &pos))
+    Q_PRIVATE_SLOT(d, void copyUrlTriggered())
+    Q_PRIVATE_SLOT(d, void saveAsTriggered())
+    Q_PRIVATE_SLOT(d, void copyTriggered())
+    Q_PRIVATE_SLOT(d, void findTextTriggered())
 private:
     friend class ChatViewPrivate;
     QScopedPointer<ChatViewPrivate> d;

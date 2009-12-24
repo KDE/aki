@@ -456,10 +456,14 @@ ChannelView::addQuery(Aki::Irc::User *self, Aki::Irc::User *other, const QString
     window->setNotifications(d->notifications);
     window->setSelfUser(self);
     window->setOtherUser(other);
-    window->addMessage(toSelf ? self->nick() : other->nick(), message);
-    if (toSelf) {
-        window->socket()->rfcPrivmsg(other->nick().toLatin1(), message.toUtf8());
+
+    if (!message.isEmpty() && !message.isNull()) {
+        window->addMessage(toSelf ? self->nick() : other->nick(), message);
+        if (toSelf) {
+            window->socket()->rfcPrivmsg(other->nick(), message);
+        }
     }
+
     addTab(window, other->nick());
 
     connect(window, SIGNAL(textSubmitted(Aki::BaseWindow*,QString)),
