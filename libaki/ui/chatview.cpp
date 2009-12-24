@@ -406,8 +406,8 @@ ChatView::addChannelUrl(const QString &url)
 void
 ChatView::addCtcp(const QString &from, const QString &message)
 {
-    QString msg = QString("[Ctcp:%1] %2").arg(message);
-    QString span = d->span(msg, from, Aki::Settings::noticeColor());
+    QString msg = QString("[Ctcp:%1] %2").arg(from, message);
+    QString span = d->span(msg, Aki::Settings::noticeColor());
     d->toLog(msg);
     d->appendMessage(span);
 }
