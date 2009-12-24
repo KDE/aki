@@ -121,6 +121,21 @@ public:
         return 0;
     }
 
+    bool containsChannel(const QString &name)
+    {
+        if (name.isEmpty() || name.isNull()) {
+            return false;
+        }
+
+        foreach (Aki::BaseWindow *window, tabList) {
+            if (window->name().toLower() == name.toLower()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     void _customContextMenuRequested(const QPoint &pos)
     {
         Q_UNUSED(pos);
@@ -332,22 +347,21 @@ ChannelView::addChannel(const QString &name)
         return;
     }
 
-    if (d->findChannel(name)) {
-        return;
+    if (!d->findChannel(name)) {
+        Aki::ChannelWindow *window = new Aki::ChannelWindow(name, d->identity, d->socket, this);
+        window->setChannelView(this);
+        window->setNotifications(d->notifications);
+        window->setNickList(d->socket->nickList());
+        window->setCurrent(true);
+
+        addTab(window, name);
+
+        connect(window, SIGNAL(textSubmitted(Aki::BaseWindow*,QString)),
+                SLOT(_textSubmitted(Aki::BaseWindow*,QString)));
+
+        d->tabList << window;
+        setCurrentIndex(d->tabList.indexOf(window));
     }
-
-    Aki::ChannelWindow *window = new Aki::ChannelWindow(name, d->identity, d->socket, this);
-    window->setChannelView(this);
-    window->setNotifications(d->notifications);
-    window->setNickList(d->socket->nickList());
-    window->setCurrent(true);
-    addTab(window, name);
-
-    connect(window, SIGNAL(textSubmitted(Aki::BaseWindow*,QString)),
-            SLOT(_textSubmitted(Aki::BaseWindow*,QString)));
-
-    d->tabList << window;
-    setCurrentIndex(d->tabList.indexOf(window));
 }
 
 void
@@ -446,7 +460,7 @@ ChannelView::addQuery(Aki::Irc::User *self, Aki::Irc::User *other, const QString
     if (!message.isEmpty() && !message.isNull()) {
         window->addMessage(toSelf ? self->nick() : other->nick(), message);
         if (toSelf) {
-            window->socket()->rfcPrivmsg(other->nick().toLatin1(), message.toUtf8());
+            window->socket()->rfcPrivmsg(other->nick(), message);
         }
     }
 

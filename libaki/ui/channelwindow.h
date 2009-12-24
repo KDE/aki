@@ -35,6 +35,7 @@ namespace Irc
 class Socket;
 class User;
 } // End of namespace Irc.
+class SearchBar;
 class IdentityConfig;
 class ChatParser;
 class ChannelWindowPrivate;
@@ -133,6 +134,8 @@ public:
     virtual bool hasInputFocus() const;
 
     void setNewNick(const QString &nick);
+
+    Aki::SearchBar* searchBar();
 Q_SIGNALS:
     void textSubmitted(Aki::BaseWindow *window, const QString &text);
 protected:
@@ -172,7 +175,15 @@ private:
     Q_PRIVATE_SLOT(d, void whoTimerTimeout())
     Q_PRIVATE_SLOT(d, void chatTopicReturnPressed(const QString &topic))
     Q_PRIVATE_SLOT(d, void splitterMoved(int pos, int index))
-    Q_PRIVATE_SLOT(d, void openQueryTriggered());
+    Q_PRIVATE_SLOT(d, void findNextClicked())
+    Q_PRIVATE_SLOT(d, void findPreviousClicked())
+    Q_PRIVATE_SLOT(d, void channelSearchTextEdited(const QString &text))
+    Q_PRIVATE_SLOT(d, void optionButtonClicked())
+    Q_PRIVATE_SLOT(d, void userUrlClicked(const QString &nick))
+    Q_PRIVATE_SLOT(d, void openQueryTriggered())
+    Q_PRIVATE_SLOT(d, void userClicked(const QModelIndex &index))
+    Q_PRIVATE_SLOT(d, void userPressed(const QModelIndex &index))
+    Q_PRIVATE_SLOT(d, void findTextTriggered())
 private:
     friend class ChannelWindowPrivate;
     QScopedPointer<ChannelWindowPrivate> d;

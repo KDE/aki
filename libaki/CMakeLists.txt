@@ -46,6 +46,7 @@ set(akicore_SRCS
     ui/nicklistdelegate.cpp
     ui/nickview.cpp
     ui/querywindow.cpp
+    ui/searchbar.cpp
     ui/serverview.cpp
     ui/serverwindow.cpp
     ui/statuswindow.cpp
@@ -67,6 +68,7 @@ set(akicore_UIS
     ui/channelmodebar.ui
     ui/channelwindow.ui
     ui/querywindow.ui
+    ui/searchbar.ui
     ui/statuswindow.ui
 )
 
@@ -77,6 +79,7 @@ set(akicore_LIBS
     ${KDE4_KNOTIFYCONFIG_LIBS}
     ${KDE4_KIO_LIBS}
     ${QT_QTNETWORK_LIBRARY}
+    ${QT_QTWEBKIT_LIBRARY}
     akiirc
 )
 

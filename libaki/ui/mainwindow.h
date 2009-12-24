@@ -108,6 +108,8 @@ private:
     Q_PRIVATE_SLOT(d, void configureNotificationsTriggered())
     Q_PRIVATE_SLOT(d, void charSelected(const QChar &ch))
     Q_PRIVATE_SLOT(d, void identityTriggered())
+    Q_PRIVATE_SLOT(d, void findTriggered())
+    Q_PRIVATE_SLOT(d, void clearMarkerLineTriggered())
 private:
     friend class MainWindowPrivate;
     QScopedPointer<MainWindowPrivate> d;

@@ -15,19 +15,29 @@
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
    <item row="0" column="0">
-    <layout class="QGridLayout" name="gridLayout">
-     <item row="1" column="0">
-      <widget class="Aki::ChatView" name="chatOutput"/>
-     </item>
-     <item row="2" column="0">
-      <widget class="Aki::ChatInput" name="chatInput"/>
-     </item>
-     <item row="0" column="0">
+    <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0">
+     <item>
       <widget class="KLineEdit" name="userHostmask">
        <property name="readOnly">
         <bool>true</bool>
        </property>
       </widget>
+     </item>
+     <item>
+      <widget class="Aki::ChatView" name="chatOutput" native="true"/>
+     </item>
+     <item>
+      <widget class="Aki::SearchBar" name="channelSearch" native="true">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="Aki::ChatInput" name="chatInput"/>
      </item>
     </layout>
    </item>
@@ -40,14 +50,21 @@
    <header>klineedit.h</header>
   </customwidget>
   <customwidget>
-   <class>Aki::ChatView</class>
-   <extends>QTextBrowser</extends>
-   <header>ui/chatview.h</header>
-  </customwidget>
-  <customwidget>
    <class>Aki::ChatInput</class>
    <extends>QLineEdit</extends>
    <header>ui/chatinput.h</header>
+  </customwidget>
+  <customwidget>
+   <class>Aki::ChatView</class>
+   <extends>QWidget</extends>
+   <header>ui/chatview.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>Aki::SearchBar</class>
+   <extends>QWidget</extends>
+   <header>ui/searchbar.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

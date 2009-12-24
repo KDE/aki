@@ -46,6 +46,73 @@ public:
         q->chatInput->clear();
     }
 
+    void findNextClicked()
+    {
+        QWebPage::FindFlags flags;
+        if (q->searchBar()->isCaseSensitive()) {
+            flags |= QWebPage::FindCaseSensitively;
+        }
+        if (q->searchBar()->isWrapAround()) {
+            flags |= QWebPage::FindWrapsAroundDocument;
+        }
+        if (q->searchBar()->isHighlightAll()) {
+            flags |= QWebPage::HighlightAllOccurrences;
+        }
+
+        bool state = q->view()->findText(q->searchBar()->text(),
+                                         QWebPage::FindBackward | flags);
+        q->searchBar()->setFound(state);
+    }
+
+    void findPreviousClicked()
+    {
+        QWebPage::FindFlags flags;
+        if (q->searchBar()->isCaseSensitive()) {
+            flags |= QWebPage::FindCaseSensitively;
+        }
+        if (q->searchBar()->isWrapAround()) {
+            flags |= QWebPage::FindWrapsAroundDocument;
+        }
+        if (q->searchBar()->isHighlightAll()) {
+            flags |= QWebPage::HighlightAllOccurrences;
+        }
+
+        bool state = q->view()->findText(q->searchBar()->text(), flags);
+        q->searchBar()->setFound(state);
+    }
+
+    void channelSearchTextEdited(const QString &text)
+    {
+        QWebPage::FindFlags flags;
+        if (q->searchBar()->isCaseSensitive()) {
+            flags |= QWebPage::FindCaseSensitively;
+        }
+        if (q->searchBar()->isWrapAround()) {
+            flags |= QWebPage::FindWrapsAroundDocument;
+        }
+        if (q->searchBar()->isHighlightAll()) {
+            flags |= QWebPage::HighlightAllOccurrences;
+        }
+
+        if (text.isEmpty() || text.isNull()) {
+            q->searchBar()->resetPalette();
+            q->view()->findText("", flags);
+        } else {
+            bool state = q->view()->findText(text, flags);
+            q->searchBar()->setFound(state);
+        }
+    }
+
+    void optionButtonClicked()
+    {
+        q->searchBar()->optionButton()->showMenu();
+    }
+
+    void findTextTriggered()
+    {
+        q->searchBar()->show();
+    }
+
     QueryWindow *q;
     Aki::Irc::User *self;
     Aki::Irc::User *other;
@@ -60,6 +127,7 @@ QueryWindow::QueryWindow(const QString &name, Aki::Irc::Socket *socket, QWidget 
     setupUi(this);
     setSocket(socket);
     setView(chatOutput);
+    channelSearch->hide();
     setLogFile(new Aki::LogFile(socket->name(), name, this));
     view()->setLog(logFile());
 
@@ -74,6 +142,16 @@ QueryWindow::QueryWindow(const QString &name, Aki::Irc::Socket *socket, QWidget 
 
     connect(chatInput, SIGNAL(textSubmitted()),
             SLOT(textSubmitted()));
+    connect(channelSearch, SIGNAL(findNextClicked()),
+            SLOT(findNextClicked()));
+    connect(channelSearch, SIGNAL(findPreviousClicked()),
+            SLOT(findPreviousClicked()));
+    connect(channelSearch, SIGNAL(textEdited(QString)),
+            SLOT(channelSearchTextEdited(QString)));
+    connect(channelSearch->optionButton(), SIGNAL(clicked(bool)),
+            SLOT(optionButtonClicked()));
+    connect(chatOutput, SIGNAL(findTextTriggered()),
+            SLOT(findTextTriggered()));
 }
 
 QueryWindow::~QueryWindow()
@@ -193,6 +271,12 @@ bool
 QueryWindow::hasInputFocus() const
 {
     return chatInput->hasFocus();
+}
+
+Aki::SearchBar*
+QueryWindow::searchBar()
+{
+    return channelSearch;
 }
 
 #include "querywindow.moc"

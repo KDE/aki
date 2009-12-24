@@ -16,10 +16,7 @@
   <layout class="QGridLayout" name="gridLayout_2">
    <item row="0" column="0">
     <layout class="QGridLayout" name="gridLayout">
-     <item row="0" column="0">
-      <widget class="Aki::ChatView" name="chatOutput"/>
-     </item>
-     <item row="1" column="0">
+     <item row="2" column="0">
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
         <widget class="KComboBox" name="nickSelector">
@@ -33,6 +30,19 @@
        </item>
       </layout>
      </item>
+     <item row="0" column="0">
+      <widget class="Aki::ChatView" name="chatOutput" native="true"/>
+     </item>
+     <item row="1" column="0">
+      <widget class="Aki::SearchBar" name="channelSearch" native="true">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
   </layout>
@@ -44,14 +54,21 @@
    <header>kcombobox.h</header>
   </customwidget>
   <customwidget>
-   <class>Aki::ChatView</class>
-   <extends>QTextBrowser</extends>
-   <header>ui/chatview.h</header>
-  </customwidget>
-  <customwidget>
    <class>Aki::ChatInput</class>
    <extends>QLineEdit</extends>
    <header>ui/chatinput.h</header>
+  </customwidget>
+  <customwidget>
+   <class>Aki::ChatView</class>
+   <extends>QWidget</extends>
+   <header>ui/chatview.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>Aki::SearchBar</class>
+   <extends>QWidget</extends>
+   <header>ui/searchbar.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

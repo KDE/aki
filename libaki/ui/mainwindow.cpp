@@ -34,6 +34,7 @@
 #include "settings.h"
 #include "ui/basewindow.h"
 #include "ui/channelwindow.h"
+#include "ui/channelview.h"
 #include "ui/querywindow.h"
 #include "ui/serverview.h"
 #include "ui/serverwindow.h"
@@ -137,6 +138,13 @@ public:
         q->connect(windowMessageLog, SIGNAL(triggered(bool)),
                    SLOT(messageLogTriggered()));
 
+        editClearMarkerLine = new KAction(q);
+        editClearMarkerLine->setText(i18n("Clear Marker"));
+        q->actionCollection()->addAction("clearMarker", editClearMarkerLine);
+        q->connect(editClearMarkerLine, SIGNAL(triggered(bool)),
+                   SLOT(clearMarkerLineTriggered()));
+
+        KStandardAction::find(q, SLOT(findTriggered()), q->actionCollection());
         KStandardAction::preferences(q, SLOT(preferencesTriggered()), q->actionCollection());
         KStandardAction::configureNotifications(q, SLOT(configureNotificationsTriggered()),
                                                 q->actionCollection());
@@ -221,8 +229,45 @@ public:
         foreach (Aki::BaseWindow *window, mainView->serverList()) {
             if (window && window->windowType() == Aki::BaseWindow::ServerWindow) {
                 Aki::ServerWindow *serverWindow = qobject_cast<Aki::ServerWindow*>(window);
-                Q_UNUSED(serverWindow);
-                //foreach (Aki::BaseWindow *channels, serverWindow->
+                foreach (Aki::BaseWindow *base, serverWindow->mainView()->windows()) {
+                    switch (base->windowType()) {
+                    case Aki::BaseWindow::ChannelWindow: {
+                        qobject_cast<Aki::ChannelWindow*>(base)->view()->clear();
+                        break;
+                    }
+                    case Aki::BaseWindow::QueryWindow: {
+                        qobject_cast<Aki::QueryWindow*>(base)->view()->clear();
+                        break;
+                    }
+                    case Aki::BaseWindow::StatusWindow: {
+                        qobject_cast<Aki::StatusWindow*>(base)->view()->clear();
+                        break;
+                    }
+                    default: {
+                        break;
+                    }
+                    }
+                }
+
+                foreach (Aki::BaseWindow *base, serverWindow->splitView()->windows()) {
+                    switch (base->windowType()) {
+                    case Aki::BaseWindow::ChannelWindow: {
+                        qobject_cast<Aki::ChannelWindow*>(base)->view()->clear();
+                        break;
+                    }
+                    case Aki::BaseWindow::QueryWindow: {
+                        qobject_cast<Aki::QueryWindow*>(base)->view()->clear();
+                        break;
+                    }
+                    case Aki::BaseWindow::StatusWindow: {
+                        qobject_cast<Aki::StatusWindow*>(base)->view()->clear();
+                        break;
+                    }
+                    default: {
+                        break;
+                    }
+                    }
+                }
             }
         }
     }
@@ -320,6 +365,46 @@ public:
         }
     }
 
+    void findTriggered()
+    {
+        Aki::ServerWindow *server = qobject_cast<Aki::ServerWindow*>(mainView->currentWindow());
+        Aki::BaseWindow *window = server->currentFocusedChannel();
+        if (window) {
+            switch (window->windowType()) {
+            case Aki::BaseWindow::ChannelWindow: {
+                qobject_cast<Aki::ChannelWindow*>(window)->searchBar()->show();
+                break;
+            }
+            case Aki::BaseWindow::StatusWindow: {
+                qobject_cast<Aki::StatusWindow*>(window)->searchBar()->show();
+                break;
+            }
+            case Aki::BaseWindow::QueryWindow: {
+                qobject_cast<Aki::QueryWindow*>(window)->searchBar()->show();
+                break;
+            }
+            default: {
+                break;
+            }
+            }
+        }
+    }
+
+    void clearMarkerLineTriggered()
+    {
+        if (mainView->currentWindow()->windowType() != Aki::BaseWindow::ServerWindow) {
+            return;
+        }
+
+        Aki::ServerWindow *server = qobject_cast<Aki::ServerWindow*>(mainView->currentWindow());
+        if (server) {
+            Aki::BaseWindow *current = server->currentFocusedChannel();
+            if (current && current->view()) {
+                current->view()->clearMarker();
+            }
+        }
+    }
+
     Aki::MainWindow *q;
     Aki::ServerView *mainView;
     Aki::SettingsDialog *settingsDialog;
@@ -334,6 +419,7 @@ public:
     KAction *windowUrlWatcher;
     KAction *windowClearAllWindows;
     KAction *windowMessageLog;
+    KAction *editClearMarkerLine;
 }; // End of class MainWindowPrivate.
 } // End of namespace Aki.
 
