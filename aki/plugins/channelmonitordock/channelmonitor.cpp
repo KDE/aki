@@ -76,7 +76,7 @@ ChannelMonitor::addMessage(const QString &channel, const QString &from, const QS
 void
 ChannelMonitor::addMessageHighlight(const QString &channel, const QString &from, const QString &message)
 {
-    QString colour = QString("<span>%2: <span style='color: %1;'>&lt;%3&gt; %4</span></span>")
+    QString colour = QString("<span>%2: &lt;%3&gt;<span style='color: %1;'>%4</span></span>")
                         .arg(Aki::Settings::highlightColor().name(), channel, from, message);
     d->appendMessage(colour);
 }

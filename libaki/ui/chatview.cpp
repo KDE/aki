@@ -1141,4 +1141,43 @@ ChatView::clearMarker()
     }
 }
 
+void
+ChatView::addKick(const QString &from, const QString &channel, const QString &nick,
+                  const QString &message, bool toYou, bool fromYou)
+{
+    QString msg;
+    if (toYou && fromYou) {
+        if (message.isEmpty()) {
+            msg = i18nc("channel", "*** You have kicked yourself from %1", channel);
+        } else {
+            msg = i18nc("channel (kick message)","*** You have kicked yourself from %1 (%2)",
+                        channel, message);
+        }
+    } else if (toYou && !fromYou) {
+        if (message.isEmpty()) {
+            msg = i18nc("channel, nickname", "*** You have been kicked from %1 by %2", channel, from);
+        } else {
+            msg = i18nc("channel, nickname (kick message)", "*** You have been kicked from %1 by %2 (%3)",
+                        channel, from, message);
+        }
+    } else if (!toYou && fromYou) {
+        if (message.isEmpty()) {
+            msg = i18nc("nickname, channel", "*** You have kicked %1 from %2", nick, channel);
+        } else {
+            msg = i18nc("nickname, channel (kick message)", "*** You have kicked %1 from %2 (%3)",
+                        nick, channel, message);
+        }
+    } else if (!toYou && !fromYou) {
+        if (message.isEmpty()) {
+            msg = i18nc("nickname, nickname, channel", "*** %1 has kicked %2 from %3", from, nick, channel);
+        } else {
+            msg = i18nc("nickname, nickname, channel (kick message)", "*** %1 has kicked %2 from %3 (%4)",
+                        from, nick, channel, message);
+        }
+    }
+    QString span = d->span(msg, Aki::Settings::kickColor());
+    d->toLog(msg);
+    d->appendMessage(span);
+}
+
 #include "chatview.moc"

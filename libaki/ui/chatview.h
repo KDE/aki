@@ -107,6 +107,8 @@ public:
     void clear();
     void insertMarker();
     void clearMarker();
+    void addKick(const QString &from, const QString &channel, const QString &nick,
+                 const QString &message, bool toYou = false, bool fromYou = false);
 Q_SIGNALS:
     void userUrlClicked(const QString &nick);
     void findTextTriggered();

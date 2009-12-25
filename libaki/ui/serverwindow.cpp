@@ -771,11 +771,27 @@ public:
         }
     }
 
-    void onKick(const QString &channel, const QString &nick, const QString &message)
+    void onKick(const QString &from, const QString &channel, const QString &nick, const QString &message)
     {
-        Q_UNUSED(channel);
-        Q_UNUSED(nick);
-        Q_UNUSED(message);
+        Aki::ChannelWindow *window = qobject_cast<Aki::ChannelWindow*>(findChannel(channel.toLower()));
+        if (window && window->view()) {
+            bool fromYou = (from.toLower() == q->socket()->currentNick().toLower());
+            bool toYou = (nick.toLower() == q->socket()->currentNick().toLower());
+            window->view()->addKick(from, channel, nick, message, toYou, fromYou);
+
+            if (toYou) {
+                foreach (Aki::Irc::User *user, window->users()) {
+                    window->removeUser(user);
+                }
+            } else {
+                foreach (Aki::Irc::User *user, window->users()) {
+                    if (user->nick().toLower() == nick.toLower()) {
+                        window->removeUser(user);
+                        break;
+                    }
+                }
+            }
+        }
     }
 
     void onLocalUsers(const QString &message)
@@ -1818,8 +1834,8 @@ ServerWindow::ServerWindow(Aki::IdentityConfig *identityConfig, Aki::Irc::Socket
             SLOT(onISupport(QString)));
     connect(socket, SIGNAL(onIsOn(QStringList)),
             SLOT(onIsOn(QStringList)));
-    connect(socket, SIGNAL(onKick(QString,QString,QString)),
-            SLOT(onKick(QString,QString,QString)));
+    connect(socket, SIGNAL(onKick(QString,QString,QString,QString)),
+            SLOT(onKick(QString,QString,QString,QString)));
     connect(socket, SIGNAL(onLocalUsers(QString)),
             SLOT(onLocalUsers(QString)));
     connect(socket, SIGNAL(onLUserChannels(int,QString)),

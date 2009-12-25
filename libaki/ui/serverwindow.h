@@ -130,7 +130,8 @@ private:
     Q_PRIVATE_SLOT(d, void onInviting(const QString &nick, const QString &channel))
     Q_PRIVATE_SLOT(d, void onIsOn(const QStringList &nicks))
     Q_PRIVATE_SLOT(d, void onISupport(const QString &message))
-    Q_PRIVATE_SLOT(d, void onKick(const QString &channel, const QString &nick, const QString &message))
+    Q_PRIVATE_SLOT(d, void onKick(const QString &from, const QString &channel, const QString &nick,
+                                  const QString &message))
     Q_PRIVATE_SLOT(d, void onLocalUsers(const QString &message))
     Q_PRIVATE_SLOT(d, void onLUserChannels(int count, const QString &message))
     Q_PRIVATE_SLOT(d, void onLUserClient(const QString &message))
