@@ -4,6 +4,7 @@ set(akicore_SRCS
     chatparser.cpp
     config/configfile.cpp
     config/identityconfig.cpp
+    config/replaceconfig.cpp
     config/serverconfig.cpp
     dialogs/charselectordialog.cpp
     dialogs/colorpage.cpp
@@ -16,6 +17,7 @@ set(akicore_SRCS
     dialogs/messagelog.cpp
     dialogs/pluginpage.cpp
     dialogs/quickconnectiondialog.cpp
+    dialogs/replacedialog.cpp
     dialogs/serverpage.cpp
     dialogs/serverwelcomepage.cpp
     dialogs/settingsdialog.cpp
@@ -63,6 +65,7 @@ set(akicore_UIS
     dialogs/ircpage.ui
     dialogs/logpage.ui
     dialogs/quickconnection.ui
+    dialogs/replacedialog.ui
     dialogs/serverpage.ui
     dialogs/serverwelcomepage.ui
     ui/channelmodebar.ui

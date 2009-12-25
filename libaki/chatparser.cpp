@@ -21,6 +21,7 @@
 
 #include "chatparser.h"
 #include "config/identityconfig.h"
+#include "config/replaceconfig.h"
 #include "logfile.h"
 #include "ui/basewindow.h"
 #include "ui/channelwindow.h"
@@ -262,6 +263,20 @@ public:
             return;
         }
 
+        Aki::ReplaceConfig *replace = new Aki::ReplaceConfig(q);
+        QList<Aki::ReplaceConfig::ReplaceItem> items = replace->wordList();
+
+        foreach (Aki::ReplaceConfig::ReplaceItem item, items) {
+            if (item.replacementMethod.toLower() == "both" ||
+                item.replacementMethod.toLower() == "outcoming") {
+                if (item.regex) {
+                    msg.replace(QRegExp(item.text), item.replacementText);
+                } else {
+                    msg.replace(item.text, item.replacementText, Qt::CaseSensitive);
+                }
+            }
+        }
+
         if (window->windowType() == Aki::BaseWindow::ChannelWindow) {
             Aki::ChannelWindow *channel = qobject_cast<Aki::ChannelWindow*>(window);
             foreach (Aki::Irc::User *user, channel->users()) {
@@ -341,6 +356,20 @@ public:
         if (msg.isEmpty()) {
             window->socket()->rfcPrivmsg("", msg.toUtf8());
             return;
+        }
+
+        Aki::ReplaceConfig *replace = new Aki::ReplaceConfig(q);
+        QList<Aki::ReplaceConfig::ReplaceItem> items = replace->wordList();
+
+        foreach (Aki::ReplaceConfig::ReplaceItem item, items) {
+            if (item.replacementMethod.toLower() == "both" ||
+                item.replacementMethod.toLower() == "outcoming") {
+                if (item.regex) {
+                    msg.replace(QRegExp(item.text), item.replacementText);
+                } else {
+                    msg.replace(item.text, item.replacementText, Qt::CaseSensitive);
+                }
+            }
         }
 
         QString dest = msg.left(msg.indexOf(QChar(' ')));

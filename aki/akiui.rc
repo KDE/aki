@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui name="aki" version="17">
+<gui name="aki" version="18">
     <MenuBar>
         <Menu name="file">
             <Text context="@title:menu">&amp;Aki</Text>
@@ -34,6 +34,7 @@
             <Action name="charselector" />
             <Action name="urlWatcher" />
             <Action name="messageLog" />
+            <Action name="replaceDialog" />
             <Separator />
         </Menu>
   </MenuBar>

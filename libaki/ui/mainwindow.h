@@ -110,6 +110,7 @@ private:
     Q_PRIVATE_SLOT(d, void identityTriggered())
     Q_PRIVATE_SLOT(d, void findTriggered())
     Q_PRIVATE_SLOT(d, void clearMarkerLineTriggered())
+    Q_PRIVATE_SLOT(d, void replaceDialogTriggered())
 private:
     friend class MainWindowPrivate;
     QScopedPointer<MainWindowPrivate> d;

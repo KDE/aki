@@ -22,6 +22,8 @@
 #include "channelwindow.h"
 #include "chatparser.h"
 #include "config/identityconfig.h"
+#include "config/replaceconfig.h"
+#include "dialogs/replacedialog.h"
 #include "logfile.h"
 #include "nicklistmodel.h"
 #include "notifications.h"
@@ -1039,6 +1041,21 @@ ChannelWindow::removeMode(const QString &nick, const QString &mode)
 void
 ChannelWindow::addMessage(const QString &from, const QString &message)
 {
+    Aki::ReplaceConfig *replace = new Aki::ReplaceConfig(this);
+    QList<Aki::ReplaceConfig::ReplaceItem> items = replace->wordList();
+    QString msg = message;
+
+    foreach (Aki::ReplaceConfig::ReplaceItem item, items) {
+        if (item.replacementMethod.toLower() == "both" ||
+            item.replacementMethod.toLower() == "incoming") {
+            if (item.regex) {
+                msg.replace(QRegExp(item.text), item.replacementText);
+            } else {
+                msg.replace(item.text, item.replacementText, Qt::CaseSensitive);
+            }
+        }
+    }
+    
     foreach (Aki::Irc::User *user, userList->users()) {
         if (user->nick() == from) {
             user->setIdleTime(KDateTime::currentLocalDateTime());
@@ -1047,17 +1064,17 @@ ChannelWindow::addMessage(const QString &from, const QString &message)
             QString colour = QString("<font color='%1'>%2</font>")
                                     .arg(user->color().name(), user->nick());
 
-            if (message.contains(QRegExp(match))) {
-                view()->addPrivmsgHighlight(colour, Aki::Irc::Color::toHtml(message));
+            if (msg.contains(QRegExp(match))) {
+                view()->addPrivmsgHighlight(colour, Aki::Irc::Color::toHtml(msg));
                 if (!isCurrent()) {
                     if (notifications()) {
-                        notifications()->highlight(from, message);
+                        notifications()->highlight(from, msg);
                     }
                     setTabColor(Highlight);
                 }
                 return;
             } else {
-                view()->addPrivmsg(colour, Aki::Irc::Color::toHtml(message));
+                view()->addPrivmsg(colour, Aki::Irc::Color::toHtml(msg));
                 if (!isCurrent()) {
                     setTabColor(NewMessage);
                 }

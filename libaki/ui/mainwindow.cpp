@@ -26,6 +26,7 @@
 #include "dialogs/identitydialog.h"
 #include "dialogs/messagelog.h"
 #include "dialogs/quickconnectiondialog.h"
+#include "dialogs/replacedialog.h"
 #include "dialogs/settingsdialog.h"
 #include "dialogs/welcomedialog.h"
 #include "interfaces/settingspageinterface.h"
@@ -63,7 +64,8 @@ public:
         : q(qq),
         mainView(0),
         settingsDialog(0),
-        messageLog(0)
+        messageLog(0),
+        replaceDialog(0)
     {
     }
 
@@ -125,6 +127,12 @@ public:
         q->actionCollection()->addAction("urlWatcher", windowUrlWatcher);
         q->connect(windowUrlWatcher, SIGNAL(triggered(bool)),
                    SLOT(urlWatcherTriggered()));
+
+        windowReplaceDialog = new KAction(q);
+        windowReplaceDialog->setText(i18n("Replace Text..."));
+        q->actionCollection()->addAction("replaceDialog", windowReplaceDialog);
+        q->connect(windowReplaceDialog, SIGNAL(triggered(bool)),
+                   SLOT(replaceDialogTriggered()));
 
         windowClearAllWindows = new KAction(q);
         windowClearAllWindows->setText(i18n("Clear All Windows"));
@@ -222,6 +230,12 @@ public:
 
     void urlWatcherTriggered()
     {
+    }
+
+    void replaceDialogTriggered()
+    {
+        replaceDialog->reloadData();
+        replaceDialog->show();
     }
 
     void clearAllWindowsTriggered()
@@ -409,6 +423,7 @@ public:
     Aki::ServerView *mainView;
     Aki::SettingsDialog *settingsDialog;
     Aki::MessageLog *messageLog;
+    Aki::ReplaceDialog *replaceDialog;
     KAction *akiNewServerTab;
     KAction *akiQuickConnection;
     KAction *akiReconnection;
@@ -419,6 +434,7 @@ public:
     KAction *windowUrlWatcher;
     KAction *windowClearAllWindows;
     KAction *windowMessageLog;
+    KAction *windowReplaceDialog;
     KAction *editClearMarkerLine;
 }; // End of class MainWindowPrivate.
 } // End of namespace Aki.
@@ -429,6 +445,7 @@ MainWindow::MainWindow(QWidget *parent)
     d.reset(new Aki::MainWindowPrivate(this));
     restoreAkiDefaultWindowTitle();
     d->messageLog = new Aki::MessageLog(this);
+    d->replaceDialog = new Aki::ReplaceDialog(this);
     d->createMenus();
 
     d->mainView = new ServerView(this, this);

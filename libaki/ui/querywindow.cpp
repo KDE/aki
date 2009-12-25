@@ -21,6 +21,7 @@
 */
 
 #include "querywindow.h"
+#include "config/replaceconfig.h"
 #include "logfile.h"
 #include "settings.h"
 #include "ui/channelview.h"
@@ -221,6 +222,21 @@ QueryWindow::addWho(const QString &channel, const QString &identName, const QStr
 void
 QueryWindow::addMessage(const QString &from, const QString &message)
 {
+    Aki::ReplaceConfig *replace = new Aki::ReplaceConfig(this);
+    QList<Aki::ReplaceConfig::ReplaceItem> items = replace->wordList();
+    QString msg = message;
+
+    foreach (Aki::ReplaceConfig::ReplaceItem item, items) {
+        if (item.replacementMethod.toLower() == "both" ||
+            item.replacementMethod.toLower() == "incoming") {
+            if (item.regex) {
+                msg.replace(QRegExp(item.text), item.replacementText);
+            } else {
+                msg.replace(item.text, item.replacementText, Qt::CaseSensitive);
+            }
+        }
+    }
+    
     if (from == selfUser()->nick()) {
         QString match = "\\s*" + QRegExp::escape(socket()->currentNick()) + ":*\\s*";
         QString colour = QString("<font color='%1'>%2</font>").arg(selfUser()->color().name(), selfUser()->nick());
