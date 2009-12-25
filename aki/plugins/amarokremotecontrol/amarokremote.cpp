@@ -117,7 +117,7 @@ AmarokRemote::metaData() const
     text.replace("%t", map["title"].toString());
     text.replace("%a", map["artist"].toString());
     text.replace("%A", map["album"].toString());
-    text.replace("%n", map["track number"].toString());
+    text.replace("%n", map["tracknumber"].toString());
     text.replace("%p", map["time"].toString());
     text.replace("%r", ratingStr);
     text.replace("%y", map["year"].toString());

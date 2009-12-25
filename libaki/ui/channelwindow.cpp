@@ -681,7 +681,7 @@ public:
             }
         }
         
-        QMenu *menu = new QMenu(menu);
+        QMenu *menu = new QMenu(q);
         QMenu *ctcpMenu = new QMenu(i18n("CTCP"), menu);
         QMenu *modesMenu = new QMenu(i18n("Modes"), menu);
         QMenu *kickBanMenu = new QMenu(i18n("Kick/Ban"), menu);
