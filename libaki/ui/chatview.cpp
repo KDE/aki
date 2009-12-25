@@ -100,7 +100,11 @@ public:
 
     QString convertEmotes(const QString &str) const
     {
-        return parseEmoticons(str, KEmoticonsTheme::StrictParse);
+        if (Aki::Settings::enableEmotions()) {
+            return parseEmoticons(str, KEmoticonsTheme::StrictParse);
+        } else {
+            return str;
+        }
     }
 
     QString messageTime() const

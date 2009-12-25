@@ -190,6 +190,9 @@
         <entry name="nickCaseSensitive" type="Bool">
             <default>false</default>
         </entry>
+        <entry name="enableEmotions" type="Bool">
+            <default>false</default>
+        </entry>
     </group>
     <group name="IrcPage">
         <entry name="conferenceMode" type="Bool">
