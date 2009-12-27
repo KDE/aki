@@ -40,7 +40,7 @@ public:
 } // End of namespace Aki.
 
 ColorPage::ColorPage(QWidget *parent)
-    : Aki::SettingsPageInterface(i18n("Color"), Aki::Settings::self(),
+    : Aki::SettingsPageInterface(i18nc("Color for the way you display it", "Color"), Aki::Settings::self(),
                                  "fill-color", i18n("Configure Color Settings"),
                                  parent)
 {

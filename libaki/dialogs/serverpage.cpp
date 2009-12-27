@@ -159,7 +159,7 @@ public:
             serverConfig->deleteGroup(identityName + QChar('-') + item->text());
 
             // Search for network and remove it from the list.
-            foreach (Aki::ServerPointer server, serverList[identityName]) {
+            foreach (const Aki::ServerPointer &server, serverList[identityName]) {
                 // Does this server match the selected server.
                 if (server->name() == item->text()) {
                     const int index = serverList[identityName].indexOf(server);
@@ -210,7 +210,7 @@ public:
 
                 // Search for the network that matches the old name
                 // And update it.
-                foreach (Aki::ServerPointer server, serverList[identityName]) {
+                foreach (const Aki::ServerPointer &server, serverList[identityName]) {
                     // Does the server name match the old name?
                     if (server->name() == oldName) {
                         const int index = serverList[identityName].indexOf(server);
@@ -296,7 +296,7 @@ public:
         // Get the current network name
         const QString networkName = q->networkList->currentItem()->text();
 
-        foreach (Aki::ServerPointer server, serverList[identityName]) {
+        foreach (const Aki::ServerPointer &server, serverList[identityName]) {
             if (server->name() == networkName) {
                 return server;
             }
@@ -516,7 +516,7 @@ public:
 
         q->networkList->clear();
 
-        foreach (Aki::ServerPointer s, list) {
+        foreach (const Aki::ServerPointer &s, list) {
             q->networkList->addItem(s->name());
         }
 

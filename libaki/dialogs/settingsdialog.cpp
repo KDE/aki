@@ -93,7 +93,7 @@ bool
 SettingsDialog::hasChanged()
 {
     bool changed = false;
-    foreach (Aki::SettingsPageInterface *page, d->pageList.keys()) {
+    foreach (const Aki::SettingsPageInterface *page, d->pageList.keys()) {
         if (page->hasChanged()) {
             changed = true;
         }

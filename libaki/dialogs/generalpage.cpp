@@ -40,7 +40,7 @@ public:
 } // End of namespace Aki.
 
 GeneralPage::GeneralPage(QWidget *parent)
-    : Aki::SettingsPageInterface(i18n("General"), Aki::Settings::self(),
+    : Aki::SettingsPageInterface(i18nc("General options for configuration", "General"), Aki::Settings::self(),
                                  "configure", i18n("Configure General Settings"),
                                  parent)
 {

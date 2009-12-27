@@ -273,7 +273,7 @@ XmlParser::write(QIODevice *device)
     d->writer.writeStartElement("http://aki.kde.org/aki", "servers");
     d->writer.writeAttribute("xmlns:network", "http://aki.kde.org/aki/network");
 
-    foreach (Aki::ServerPointer s, d->servers) {
+    foreach (const Aki::ServerPointer &s, d->servers) {
         d->writer.writeStartElement("network");
 
         d->writer.writeTextElement("network:name", s->name());

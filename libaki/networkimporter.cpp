@@ -185,7 +185,7 @@ public:
                 if (q->name() == "server") {
                     QString address = q->attributes().value("address").toString();
                     QString port = q->attributes().value("port").toString();
-                    addresses << (address + "/" + port);
+                    addresses << (address + '/' + port);
                     q->readNext();
                 } else if (q->name() == "connectToRandomServer") {
                     bool enabled = q->attributes().value("enable") == "1";

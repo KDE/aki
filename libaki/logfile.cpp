@@ -50,51 +50,51 @@ public:
         month = qBound(1, month, 12);
         switch (month) {
         case 1: {
-            return QString(i18n("January"));
+            return QString(i18nc("Month", "January"));
             break;
         }
         case 2: {
-            return QString(i18n("February"));
+            return QString(i18nc("Month", "February"));
             break;
         }
         case 3: {
-            return QString(i18n("March"));
+            return QString(i18nc("Month", "March"));
             break;
         }
         case 4: {
-            return QString(i18n("April"));
+            return QString(i18nc("Month", "April"));
             break;
         }
         case 5: {
-            return QString(i18n("May"));
+            return QString(i18nc("Month", "May"));
             break;
         }
         case 6: {
-            return QString(i18n("June"));
+            return QString(i18nc("Month", "June"));
             break;
         }
         case 7: {
-            return QString(i18n("July"));
+            return QString(i18nc("Month", "July"));
             break;
         }
         case 8: {
-            return QString(i18n("August"));
+            return QString(i18nc("Month", "August"));
             break;
         }
         case 9: {
-            return QString(i18n("September"));
+            return QString(i18nc("Month", "September"));
             break;
         }
         case 10: {
-            return QString(i18n("October"));
+            return QString(i18nc("Month", "October"));
             break;
         }
         case 11: {
-            return QString(i18n("November"));
+            return QString(i18nc("Month", "November"));
             break;
         }
         case 12: {
-            return QString(i18n("December"));
+            return QString(i18nc("Month", "December"));
             break;
         }
         default: {

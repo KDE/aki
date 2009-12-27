@@ -70,7 +70,7 @@ NetworkExporter::write(QIODevice *device)
     d->stream.writeStartElement("http://aki.kde.org/aki", "servers");
     d->stream.writeAttribute("xmlns:network", "http://aki.kde.org/aki/network");
 
-    foreach (Aki::ServerPointer s, d->serverList) {
+    foreach (const Aki::ServerPointer &s, d->serverList) {
         d->stream.writeStartElement("network");
 
         d->stream.writeTextElement("network:name", s->name());

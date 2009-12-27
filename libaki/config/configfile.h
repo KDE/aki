@@ -43,7 +43,7 @@ public:
      * @param name Name of the configuration file.
      * @param parent Parent of the object.
      */
-    ConfigFile(const QString &name, QObject *parent = 0);
+    explicit ConfigFile(const QString &name, QObject *parent = 0);
     /**
      * Destroys the object.
      */

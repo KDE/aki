@@ -96,12 +96,12 @@ public:
         QString msg = message;
 
         if (!msg.isEmpty()) {
-            if (msg.contains(QChar(' '))) {
-                QString nick = msg.left(msg.indexOf(QChar(' ')));
+            if (msg.contains(' ')) {
+                QString nick = msg.left(msg.indexOf(' '));
                 msg.remove(0, nick.length() + 1);
 
                 if (!msg.isEmpty()) {
-                    window->socket()->rfcPrivmsg(nick.toLatin1(), QString("\x01%1\x01").arg(msg).toUtf8());
+                    window->socket()->rfcPrivmsg(nick, QString("\x01%1\x01").arg(msg));
                 } else {
                     if (window->view()) {
                         window->view()->addHelp(i18n("/ctcp <nick> <message>, sends message to nick, common ones"
@@ -127,12 +127,12 @@ public:
         QString msg = message;
 
         if (!msg.isEmpty()) {
-            QString nick = msg.left(msg.indexOf(QChar(' ')));
+            QString nick = msg.left(msg.indexOf(' '));
             msg.remove(0, nick.length() + 1);
 
             if (!msg.isEmpty()) {
                 QString password = msg;
-                window->socket()->rfcPrivmsg("nickserv", "GHOST " + nick.toLatin1() + password.toLatin1());
+                window->socket()->rfcPrivmsg("nickserv", "GHOST " + nick + ' ' + password);
             } else {
                 if (window->view()) {
                     window->view()->addHelp(i18n("/ghost <nick> <password>, kill a ghost nick."));
@@ -158,7 +158,7 @@ public:
         }
 
         if (!msg.isEmpty()) {
-            if (msg.contains(QChar(' '))) {
+            if (msg.contains(' ')) {
                 window->socket()->rfcInvite(msg, window->name());
             } else {
             }
@@ -188,8 +188,8 @@ public:
         QString msg = message;
 
         if (!msg.isEmpty()) {
-            if (msg.contains(QChar(' '))) {
-                QString channel = msg.left(msg.indexOf(QChar(' ')));
+            if (msg.contains(' ')) {
+                QString channel = msg.left(msg.indexOf(' '));
                 msg.remove(0, channel.length() + 1);
 
                 QString keys = msg;
@@ -210,8 +210,8 @@ public:
         QString msg = message;
 
         if (!msg.isEmpty()) {
-            if (msg.contains(QChar(' '))) {
-                QString nick = msg.left(msg.indexOf(QChar(' ')));
+            if (msg.contains(' ')) {
+                QString nick = msg.left(msg.indexOf(' '));
                 msg.remove(0, nick.length() + 1);
 
                 QString message = msg;
@@ -266,7 +266,7 @@ public:
         Aki::ReplaceConfig *replace = new Aki::ReplaceConfig(q);
         QList<Aki::ReplaceConfig::ReplaceItem> items = replace->wordList();
 
-        foreach (Aki::ReplaceConfig::ReplaceItem item, items) {
+        foreach (const Aki::ReplaceConfig::ReplaceItem &item, items) {
             if (item.replacementMethod.toLower() == "both" ||
                 item.replacementMethod.toLower() == "outcoming") {
                 if (item.regex) {
@@ -289,7 +289,7 @@ public:
                     while (iter.hasNext()) {
                         QString tmp = iter.next();
                         channel->view()->addPrivmsg(nickColour, Aki::Irc::Color::toHtml(tmp));
-                        channel->socket()->rfcPrivmsg(channel->name().toLatin1(), tmp);
+                        channel->socket()->rfcPrivmsg(channel->name(), tmp);
                     }
                 }
             }
@@ -305,7 +305,7 @@ public:
             while (iter.hasNext()) {
                 QString tmp = iter.next();
                 query->view()->addPrivmsg(nickColour, Aki::Irc::Color::toHtml(tmp));
-                query->socket()->rfcPrivmsg(query->name().toLatin1(), tmp);
+                query->socket()->rfcPrivmsg(query->name(), tmp);
             }
         }
     }
@@ -315,8 +315,8 @@ public:
         QString msg = message;
 
         if (!msg.isEmpty()) {
-            if (msg.contains(QChar(' '))) {
-                QString channel = msg.left(msg.indexOf(QChar(' ')));
+            if (msg.contains(' ')) {
+                QString channel = msg.left(msg.indexOf(' '));
                 msg.remove(0, channel.length() + 1);
 
                 if (Aki::Irc::Rfc2812::isValidChannel(channel)) {
@@ -354,14 +354,14 @@ public:
         QString msg = message;
 
         if (msg.isEmpty()) {
-            window->socket()->rfcPrivmsg("", msg.toUtf8());
+            window->socket()->rfcPrivmsg("", msg);
             return;
         }
 
         Aki::ReplaceConfig *replace = new Aki::ReplaceConfig(q);
         QList<Aki::ReplaceConfig::ReplaceItem> items = replace->wordList();
 
-        foreach (Aki::ReplaceConfig::ReplaceItem item, items) {
+        foreach (const Aki::ReplaceConfig::ReplaceItem &item, items) {
             if (item.replacementMethod.toLower() == "both" ||
                 item.replacementMethod.toLower() == "outcoming") {
                 if (item.regex) {
@@ -372,7 +372,7 @@ public:
             }
         }
 
-        QString dest = msg.left(msg.indexOf(QChar(' ')));
+        QString dest = msg.left(msg.indexOf(' '));
         msg.remove(0, dest.length() + 1);
 
         if (!msg.isEmpty()) {
@@ -388,7 +388,7 @@ public:
                             QStringListIterator iter(messages);
                             while (iter.hasNext()) {
                                 QString tmp = iter.next();
-                                channel->socket()->rfcPrivmsg(dest.toLatin1(), tmp);
+                                channel->socket()->rfcPrivmsg(dest, tmp);
                                 channel->view()->addPrivmsg(nickColour, Aki::Irc::Color::toHtml(tmp));
                             }
                         }
@@ -404,7 +404,7 @@ public:
                     QStringListIterator iter(messages);
                     while (iter.hasNext()) {
                         QString tmp = iter.next();
-                        query->socket()->rfcPrivmsg(dest.toLatin1(), tmp);
+                        query->socket()->rfcPrivmsg(dest, tmp);
                         query->view()->addPrivmsg(nickColour, Aki::Irc::Color::toHtml(tmp));
                     }
                 }
@@ -476,8 +476,8 @@ public:
         QString msg = message;
 
         if (!msg.isEmpty()) {
-            if (msg.contains(QChar(' '))) {
-                QString target = msg.left(msg.indexOf(QChar(' ')));
+            if (msg.contains(' ')) {
+                QString target = msg.left(msg.indexOf(' '));
                 msg.remove(0, target.length() + 1);
 
                 window->socket()->rfcWhoIs(target, msg);
@@ -494,8 +494,8 @@ public:
         QString msg = message;
 
         if (!msg.isEmpty()) {
-            if (msg.contains(QChar(' '))) {
-                QString nick = msg.left(msg.indexOf(QChar(' ')));
+            if (msg.contains(' ')) {
+                QString nick = msg.left(msg.indexOf(' '));
                 msg.remove(0, nick.length() + 1);
 
                 if (!msg.isEmpty()) {
@@ -543,8 +543,8 @@ ChatParser::parse(const QString &data)
         // IRC commands are single while others are not.
         // This makes a easier check so nothing bad will go wrong
         // We should always expect the worst and prepare for it.
-        if (message.contains(QChar(' '))) {
-            command = message.left(message.indexOf(QChar(' '))).toLower();
+        if (message.contains(' ')) {
+            command = message.left(message.indexOf(' ')).toLower();
             message.remove(0, command.length() + 1);
         } else {
             command = message.toLower();
@@ -565,7 +565,7 @@ ChatParser::parse(const QString &data)
             }
             d->window->socket()->rfcMode(d->window->name(), "+b");
         } else if (command == "chanserv") {
-            d->window->socket()->rfcPrivmsg("chanserv", message.toUtf8());
+            d->window->socket()->rfcPrivmsg("chanserv", message);
         } else if (command == "clear") {
             if (d->window->view()) {
                 d->window->view()->clear();
@@ -573,14 +573,14 @@ ChatParser::parse(const QString &data)
         } else if (command == "ctcp") {
             d->parseCtcp(message);
         } else if (command == "cs") {
-            d->window->socket()->rfcPrivmsg("chanserv", message.toUtf8());
+            d->window->socket()->rfcPrivmsg("chanserv", message);
         } else if (command == "ghost") {
             d->parseGhost(message);
         } else if (command == "invite") {
             d->parseInvite(message);
         } else if (command == "ison") {
             d->parseIsOn(message);
-        } else if (command == QChar('j')) {
+        } else if (command == "j") {
             d->parseJoin(message);
         } else if (command == "join") {
             d->parseJoin(message);
@@ -597,9 +597,9 @@ ChatParser::parse(const QString &data)
         } else if (command == "nick") {
             d->parseNick(message);
         } else if (command == "nickserv") {
-            d->window->socket()->rfcPrivmsg("nickserv", message.toUtf8());
+            d->window->socket()->rfcPrivmsg("nickserv", message);
         } else if (command == "ns") {
-            d->window->socket()->rfcPrivmsg("nickserv", message.toUtf8());
+            d->window->socket()->rfcPrivmsg("nickserv", message);
         } else if (command == "privmsg") {
             d->parsePrivmsg(message);
         } else if (command == "time") {

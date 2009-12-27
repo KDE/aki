@@ -100,7 +100,7 @@ AmarokRemote::metaData() const
     QString ratingStr;
     int rating = map["rating"].toInt();
     if (rating == 0) {
-        ratingStr = "0";
+        ratingStr = '0';
     } else if (rating == 1) {
         ratingStr = QTextCodec::codecForName("UTF-8")->toUnicode("\xE2\x9C\xB6");
     } else if (rating == 2) {

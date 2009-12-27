@@ -58,7 +58,7 @@ MessageLog::MessageLog(QWidget *parent)
     d->view = new KTextBrowser(this, true);
     setMainWidget(d->view);
     setButtons(User1 | Close);
-    setButtonText(User1, i18n("Clear"));
+    setButtonText(User1, i18nc("Clear the text view", "Clear"));
     setWindowTitle(i18n("Aki Message Log"));
 
     connect(this, SIGNAL(user1Clicked()),

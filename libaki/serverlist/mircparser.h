@@ -31,6 +31,7 @@ namespace Aki
 class MIrcParserPrivate;
 class MIrcParser : public QObject
 {
+    Q_OBJECT
 public:
     MIrcParser(QObject *parent = 0);
     ~MIrcParser();
