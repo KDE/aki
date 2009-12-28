@@ -89,6 +89,8 @@ public:
     void setChatParser(Aki::ChatParser *parser);
 
     QList<Aki::BaseWindow*> windows();
+
+    bool isSplitEnabled() const;
 public Q_SLOTS:
     /**
      * Removes a channel by index @p index.
@@ -125,6 +127,8 @@ public Q_SLOTS:
     void addStatus(const QString &name);
 
     void addQuery(Aki::Irc::User *self, Aki::Irc::User *other, const QString &message, bool toSelf = false);
+
+    void setSplitEnabled(bool enabled);
 Q_SIGNALS:
     /**
      * Emitted when the window @p window is dropped to this
@@ -132,6 +136,8 @@ Q_SIGNALS:
      * @param window Window that was dropped on to this window.
      */
     void dropSuccessful(Aki::BaseWindow *window);
+
+    void splitStatusChanged(bool enabled);
 protected:
     virtual void dragEnterEvent(QDragEnterEvent *event);
 private:

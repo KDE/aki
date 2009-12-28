@@ -56,9 +56,6 @@ public:
 Q_SIGNALS:
     void dropSuccessful(Aki::BaseWindow *window);
     void customCommand(const QString &command, const QString &message);
-protected:
-    virtual void dragEnterEvent(QDragEnterEvent *event);
-    virtual void dropEvent(QDropEvent *event);
 private:
     Q_PRIVATE_SLOT(d, void stateChanged(Aki::Irc::Socket::SocketState state))
     Q_PRIVATE_SLOT(d, void onAway(const QString &nick, const QString &message))

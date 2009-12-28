@@ -55,7 +55,7 @@ AkiStatusBar::updateChannelName(const QString &name)
 void
 AkiStatusBar::updateLagMeter(quint16 count)
 {
-    m_lagMeter->setText(i18n("Lag: %1ms", count));
+    m_lagMeter->setText(i18n("Lag: %1 ms", count));
 }
 
 void

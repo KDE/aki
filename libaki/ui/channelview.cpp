@@ -300,6 +300,11 @@ ChannelView::dragEnterEvent(QDragEnterEvent *event)
 
         Aki::BaseWindow *window = reinterpret_cast<Aki::BaseWindow*>(data);
         emit dropSuccessful(window);
+
+        if (count() == 0) {
+            setSplitEnabled(true);
+        }
+
         addChannel(window);
     } else {
         event->ignore();
@@ -336,7 +341,7 @@ ChannelView::removeChannel(const QString &name)
     d->tabList.removeOne(window);
 
     if (count() == 0) {
-        d->isSplit = false;
+        setSplitEnabled(false);
     }
 }
 
@@ -408,6 +413,7 @@ ChannelView::checkChannelDrop(Aki::BaseWindow *window)
         removeChannel(d->tabList.indexOf(window));
 
         if (d->tabList.count() == 0) {
+            emit splitStatusChanged(false);
             hide();
         }
     }
@@ -512,6 +518,18 @@ QList<Aki::BaseWindow*>
 ChannelView::windows()
 {
     return d->tabList;
+}
+
+void
+ChannelView::setSplitEnabled(bool enabled)
+{
+    d->isSplit = enabled;
+}
+
+bool
+ChannelView::isSplitEnabled() const
+{
+    return d->isSplit;
 }
 
 #include "channelview.moc"

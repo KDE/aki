@@ -1687,8 +1687,11 @@ ServerWindow::ServerWindow(Aki::IdentityConfig *identityConfig, Aki::Irc::Socket
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     d->mainView = new Aki::ChannelView(identityConfig, socket, d->parser, notifications,
                                        this);
+    d->mainView->setSplitEnabled(false);
+                                       
     d->splitView = new Aki::ChannelView(identityConfig, this);
     d->splitView->hide();
+    d->splitView->setSplitEnabled(true);
 
     d->splitter = new QSplitter(Qt::Vertical, this);
     d->splitter->addWidget(d->splitView);
@@ -1704,6 +1707,10 @@ ServerWindow::ServerWindow(Aki::IdentityConfig *identityConfig, Aki::Irc::Socket
             d->mainView, SLOT(checkChannelDrop(Aki::BaseWindow*)));
     connect(this, SIGNAL(dropSuccessful(Aki::BaseWindow*)),
             d->mainView, SLOT(checkChannelDrop(Aki::BaseWindow*)));
+    connect(d->splitView, SIGNAL(splitStatusChanged(bool)),
+            d->mainView, SLOT(setSplitEnabled(bool)));
+    connect(d->mainView, SIGNAL(splitStatusChanged(bool)),
+            d->splitView, SLOT(setSplitEnabled(bool)));
     connect(socket, SIGNAL(stateChanged(Aki::Irc::Socket::SocketState)),
             SLOT(stateChanged(Aki::Irc::Socket::SocketState)));
     connect(socket, SIGNAL(onAway(QString,QString)),
@@ -1946,56 +1953,6 @@ ServerWindow::identity()
     return d->identityConfig;
 }
 
-void
-ServerWindow::dragEnterEvent(QDragEnterEvent *event)
-{
-    const QMimeData *data = event->mimeData();
-    const QStringList formats = data->formats();
-
-    if (formats.contains("application/aki-tab")) {
-        if (d->splitView->isHidden() || d->mainView->isHidden()) {
-            event->acceptProposedAction();
-        } else {
-            event->ignore();
-        }
-    } else {
-        event->ignore();
-    }
-}
-
-void
-ServerWindow::dropEvent(QDropEvent *event)
-{
-    const QMimeData *data = event->mimeData();
-    const QStringList formats = data->formats();
-
-    if (formats.contains("application/aki-tab")) {
-        event->setDropAction(Qt::MoveAction);
-        event->accept();
-
-        QByteArray itemData = event->mimeData()->data("application/aki-tab");
-        QDataStream stream(&itemData, QIODevice::ReadOnly);
-        stream.setVersion(QDataStream::Qt_4_5);
-
-        quint64 data;
-        stream >> data;
-
-        Aki::BaseWindow *window = reinterpret_cast<Aki::BaseWindow*>(data);
-
-        if (d->splitView->isHidden()) {
-            emit dropSuccessful(window);
-            d->splitView->addChannel(window);
-            d->splitView->show();
-        } else if (d->mainView->isHidden()) {
-            emit dropSuccessful(window);
-            d->mainView->addChannel(window);
-            d->mainView->show();
-        }
-    } else {
-        event->ignore();
-    }
-}
-
 Aki::BaseWindow*
 ServerWindow::currentFocusedChannel()
 {
@@ -2015,10 +1972,14 @@ ServerWindow::createNewView(Aki::BaseWindow *window)
         window->setCurrent(true);
         d->splitView->addChannel(window);
         d->splitView->show();
+        d->splitView->setSplitEnabled(true);
+        d->mainView->setSplitEnabled(true);
     } else if(d->mainView->isHidden()) {
         window->setCurrent(true);
         d->mainView->addChannel(window);
         d->mainView->show();
+        d->splitView->setSplitEnabled(true);
+        d->mainView->setSplitEnabled(true);
     }
 }
 
