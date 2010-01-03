@@ -39,6 +39,8 @@
 #include <KPushButton>
 #include <QDragEnterEvent>
 #include <QMenu>
+#include <QQueue>
+#include <QTimer>
 using namespace Aki;
 
 namespace Aki
@@ -52,6 +54,7 @@ public:
         socket(0),
         isSplit(false)
     {
+        whoQueue.clear();
     }
 
     void _tabCloseRequested(int index)
@@ -206,12 +209,41 @@ public:
         parser->parse(text);
     }
 
+    void whoAdded(const QString &channel)
+    {
+        whoQueue.append(channel.toLower());
+        Aki::ChannelWindow *window = qobject_cast<Aki::ChannelWindow*>(findChannel(channel.toLower()));
+        if (window) {
+            window->setIsWhoRunning(true);
+        }
+    }
+
+    void whoRemoved(const QString &channel)
+    {
+        Aki::ChannelWindow *window = qobject_cast<Aki::ChannelWindow*>(findChannel(channel.toLower()));
+        if (window) {
+            window->setIsWhoRunning(false);
+        }
+    }
+
+    void whoQueueTimeout()
+    {
+        if (!whoQueue.isEmpty()) {
+            QString channel = whoQueue.dequeue();
+            socket->rfcWho(channel);
+            emit q->whoRemoved(channel);
+        }
+    }
+
+
     ChannelView *q;
     Aki::IdentityConfig *identity;
     Aki::Irc::Socket *socket;
     Aki::ChatParser *parser;
     Aki::Notifications *notifications;
     ChannelView::WindowList tabList;
+    QQueue<QString> whoQueue;
+    QTimer *whoQueueTimer;
     bool isSplit;
 }; // End of class ChannelViewPrivate;
 } // End of namespace Aki.
@@ -242,6 +274,13 @@ ChannelView::ChannelView(Aki::IdentityConfig *identityConfig, QWidget *parent)
             SLOT(_tabMoved(int,int)));
     connect(tabBar(), SIGNAL(customContextMenuRequested(QPoint)),
             SLOT(_customContextMenuRequested(QPoint)));
+
+    d->whoQueueTimer = new QTimer(this);
+    d->whoQueueTimer->start(25000);
+    connect(d->whoQueueTimer, SIGNAL(timeout()),
+            SLOT(whoQueueTimeout()));
+    connect(this, SIGNAL(whoRemoved(QString)),
+            SLOT(whoRemoved(QString)));
 }
 
 ChannelView::ChannelView(Aki::IdentityConfig *identityConfig, Aki::Irc::Socket *socket,
@@ -274,6 +313,13 @@ ChannelView::ChannelView(Aki::IdentityConfig *identityConfig, Aki::Irc::Socket *
     connect(tabBar(), SIGNAL(customContextMenuRequested(QPoint)),
             SLOT(_customContextMenuRequested(QPoint)));
 
+    d->whoQueueTimer = new QTimer(this);
+    d->whoQueueTimer->start(25000);
+    connect(d->whoQueueTimer, SIGNAL(timeout()),
+            SLOT(whoQueueTimeout()));
+    connect(this, SIGNAL(whoRemoved(QString)),
+            SLOT(whoRemoved(QString)));
+
     addStatus(socket->name());
 }
 
@@ -293,7 +339,7 @@ ChannelView::dragEnterEvent(QDragEnterEvent *event)
 
         QByteArray itemData = event->mimeData()->data("application/aki-tab");
         QDataStream stream(&itemData, QIODevice::ReadOnly);
-        stream.setVersion(QDataStream::Qt_4_5);
+        stream.setVersion(QDataStream::Qt_4_6);
 
         quint64 data;
         stream >> data;
@@ -363,9 +409,15 @@ ChannelView::addChannel(const QString &name)
 
         connect(window, SIGNAL(textSubmitted(Aki::BaseWindow*,QString)),
                 SLOT(_textSubmitted(Aki::BaseWindow*,QString)));
+        connect(window, SIGNAL(whoAdded(QString)),
+                SLOT(whoAdded(QString)));
 
         d->tabList << window;
         setCurrentIndex(d->tabList.indexOf(window));
+    } else {
+        Aki::ChannelWindow *window = qobject_cast<Aki::ChannelWindow*>(findChannel(name));
+        window->populateUserList();
+        window->resetWho(true);
     }
 }
 

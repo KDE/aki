@@ -127,7 +127,7 @@ public:
     void addWho(const QString &channel, const QString &identName, const QString &address,
                 const QString &server, const QString &nick, const QString &flags,
                 int hops, const QString &realName);
-    void resetWho();
+    void resetWho(bool join = false);
 
     void addNick(const QString &oldNick, const QString &newNick);
 
@@ -136,8 +136,12 @@ public:
     void setNewNick(const QString &nick);
 
     Aki::SearchBar* searchBar();
+
+    void clearUserList();
+    void populateUserList();
 Q_SIGNALS:
     void textSubmitted(Aki::BaseWindow *window, const QString &text);
+    void whoAdded(const QString &channel);
 protected:
     virtual void showEvent(QShowEvent *event);
 private:

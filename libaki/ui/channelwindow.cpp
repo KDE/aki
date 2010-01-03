@@ -47,7 +47,12 @@ class ChannelWindowPrivate
 {
 public:
     ChannelWindowPrivate(ChannelWindow *qq)
-        : q(qq)
+        : q(qq),
+        identity(0),
+        parser(0),
+        selectedUser(0),
+        whoTimer(0),
+        isWhoRunning(false)
     {
     }
 
@@ -554,11 +559,11 @@ public:
 
     void whoTimerTimeout()
     {
-        if (q->userList->count() > Aki::Settings::maxNumberOfUsers()) {
+        if (isWhoRunning || q->userList->count() > Aki::Settings::maxNumberOfUsers()) {
             whoTimer->stop();
             whoTimer->start(Aki::Settings::updateInterval() * 1000);
         } else {
-            q->socket()->rfcWho(q->name());
+            emit q->whoAdded(q->name().toLower());
         }
     }
 
@@ -945,6 +950,7 @@ ChannelWindow::ChannelWindow(const QString &name, Aki::IdentityConfig *identityC
     if (Aki::Settings::enableWhoLookup()) {
         connect(d->whoTimer, SIGNAL(timeout()),
                 SLOT(whoTimerTimeout()));
+        d->whoTimer->start(Aki::Settings::updateInterval() * 1000);
     }
 }
 
@@ -1144,8 +1150,12 @@ ChannelWindow::addWho(const QString &channel, const QString &identName, const QS
 }
 
 void
-ChannelWindow::resetWho()
+ChannelWindow::resetWho(bool join)
 {
+    if (join) {
+        emit whoAdded(name().toLower());
+    }
+
     if (Aki::Settings::enableWhoLookup()) {
         d->whoTimer->stop();
         d->whoTimer->start(Aki::Settings::updateInterval() * 1000);
@@ -1232,6 +1242,16 @@ Aki::SearchBar*
 ChannelWindow::searchBar()
 {
     return channelSearch;
+}
+
+void
+ChannelWindow::clearUserList()
+{
+}
+
+void
+ChannelWindow::populateUserList()
+{
 }
 
 #include "channelwindow.moc"

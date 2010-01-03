@@ -63,7 +63,7 @@ TabBar::mousePressEvent(QMouseEvent *event)
 
             QByteArray encoded;
             QDataStream stream(&encoded, QIODevice::WriteOnly);
-            stream.setVersion(QDataStream::Qt_4_5);
+            stream.setVersion(QDataStream::Qt_4_6);
 
             Aki::ChannelView *view = qobject_cast<Aki::ChannelView*>(parentWidget());
             stream << reinterpret_cast<quint64>(view->widget(tabAt(event->pos())));

@@ -138,6 +138,8 @@ Q_SIGNALS:
     void dropSuccessful(Aki::BaseWindow *window);
 
     void splitStatusChanged(bool enabled);
+
+    void whoRemoved(const QString &channel);
 protected:
     virtual void dragEnterEvent(QDragEnterEvent *event);
 private:
@@ -148,6 +150,9 @@ private:
     Q_PRIVATE_SLOT(d, void _splitView())
     Q_PRIVATE_SLOT(d, void _closeTab())
     Q_PRIVATE_SLOT(d, void _textSubmitted(Aki::BaseWindow *window, const QString &text))
+    Q_PRIVATE_SLOT(d, void whoAdded(const QString &channel))
+    Q_PRIVATE_SLOT(d, void whoQueueTimeout())
+    Q_PRIVATE_SLOT(d, void whoRemoved(const QString &channel))
 private:
     friend class ChannelViewPrivate;
     QScopedPointer<ChannelViewPrivate> d;
