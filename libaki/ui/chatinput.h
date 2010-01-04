@@ -37,6 +37,7 @@ public:
     ChatInput(QWidget *parent = 0);
     ~ChatInput();
     void setNickCompletionList(const QStringList &list);
+    void insertCompletion(const QString &nick);
 Q_SIGNALS:
     void showCompletion();
     void textSubmitted();

@@ -417,7 +417,12 @@ public:
         }
 
         qSort(nicks);
-        q->chatInput->setNickCompletionList(nicks);
+
+        if (nicks.count() == 1) {
+            q->chatInput->insertCompletion(nicks.at(0));
+        } else {
+            q->chatInput->setNickCompletionList(nicks);
+        }
     }
 
     void takeHalfOpTriggered()

@@ -42,30 +42,7 @@ public:
 
     void insertCompletion(const QString &nick)
     {
-        int oldPosition;
-        int position;
-
-        oldPosition = position = q->cursorPosition();
-        QString input = q->text();
-
-        while (position && input[position - 1] != QChar(' ')) {
-            --position;
-        }
-
-        input.remove(position, oldPosition - position);
-
-        if  (position) {
-            input.insert(position, nick);
-            position += nick.length();
-        } else {
-            const QString prefix = Aki::Settings::nickCompletionPrefix();
-            const QString suffix = Aki::Settings::nickCompletionSuffix();
-            input.insert(position, prefix + nick + suffix);
-            position += prefix.length() + nick.length() + suffix.length();
-        }
-
-        q->setText(input + QChar(' '));
-        q->setCursorPosition(position + 1);
+        q->insertCompletion(nick);
     }
 
     enum {
@@ -130,9 +107,9 @@ ChatInput::keyPressEvent(QKeyEvent *event)
             emit textSubmitted();
         } else {
             if (d->completionBox->currentItem()) {
-                d->insertCompletion(d->completionBox->currentItem()->text());
+                insertCompletion(d->completionBox->currentItem()->text());
             } else {
-                d->insertCompletion(d->completionBox->item(0)->text());
+                insertCompletion(d->completionBox->item(0)->text());
             }
             d->completionBox->hide();
         }
@@ -215,6 +192,35 @@ ChatInput::setNickCompletionList(const QStringList &list)
 {
     d->completionBox->setItems(list);
     d->completionBox->popup();
+}
+
+void
+ChatInput::insertCompletion(const QString &nick)
+{
+    int oldPosition;
+    int position;
+
+    oldPosition = position = cursorPosition();
+    QString input = text();
+
+    while (position && input[position - 1] != QChar(' ')) {
+        --position;
+    }
+
+    input.remove(position, oldPosition - position);
+
+    if  (position) {
+        input.insert(position, nick);
+        position += nick.length();
+    } else {
+        const QString prefix = Aki::Settings::nickCompletionPrefix();
+        const QString suffix = Aki::Settings::nickCompletionSuffix();
+        input.insert(position, prefix + nick + suffix);
+        position += prefix.length() + nick.length() + suffix.length();
+    }
+
+    setText(input + QChar(' '));
+    setCursorPosition(position + 1);
 }
 
 #include "chatinput.moc"
