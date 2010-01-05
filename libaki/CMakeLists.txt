@@ -6,6 +6,7 @@ set(akicore_SRCS
     config/identityconfig.cpp
     config/replaceconfig.cpp
     config/serverconfig.cpp
+    dialogs/channeltopicdialog.cpp
     dialogs/charselectordialog.cpp
     dialogs/colorpage.cpp
     dialogs/generalpage.cpp
@@ -57,6 +58,7 @@ set(akicore_SRCS
 )
 
 set(akicore_UIS
+    dialogs/channeltopicdialog.ui
     dialogs/colorpage.ui
     dialogs/generalpage.ui
     dialogs/identitydialog.ui
