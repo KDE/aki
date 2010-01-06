@@ -109,9 +109,11 @@ public:
     void clearMarker();
     void addKick(const QString &from, const QString &channel, const QString &nick,
                  const QString &message, bool toYou = false, bool fromYou = false);
+    void setChannel(bool channel);
 Q_SIGNALS:
     void userUrlClicked(const QString &nick);
     void findTextTriggered();
+    void channelTopicHistoryTriggered();
 private:
     Q_PRIVATE_SLOT(d, void contentsSizeChanged(const QSize &size))
     Q_PRIVATE_SLOT(d, void linkClicked(const QUrl &url))
@@ -120,6 +122,7 @@ private:
     Q_PRIVATE_SLOT(d, void saveAsTriggered())
     Q_PRIVATE_SLOT(d, void copyTriggered())
     Q_PRIVATE_SLOT(d, void findTextTriggered())
+    Q_PRIVATE_SLOT(d, void topicHistoryTriggered())
 private:
     friend class ChatViewPrivate;
     QScopedPointer<ChatViewPrivate> d;

@@ -38,11 +38,12 @@ class ChannelTopicDialog : public KDialog,
 public:
     ChannelTopicDialog(QWidget *parent = 0);
     virtual ~ChannelTopicDialog();
-    void addTopicHistoryEntry(qint64 secs, const QString &nickname,
+    void addTopicHistoryEntry(const QString &nickname,
                               const QString &topic);
     QString nickname(int row) const;
     KDateTime date(int row) const;
     void setTopicEditRights(bool enabled);
+    virtual void showEvent(QShowEvent *event);
 Q_SIGNALS:
     void changedTopic(const QString &topic);
 private:

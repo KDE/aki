@@ -1249,12 +1249,15 @@ public:
 
     void onTopicChanged(const QString &nick, const QString &channel, const QString &topic)
     {
+        kDebug() << "Is this firing?";
         Aki::BaseWindow *window = findChannel(channel.toLower());
         if (window && window->view()) {
             switch (window->windowType()) {
             case Aki::BaseWindow::ChannelWindow: {
                 Aki::ChannelWindow *channel = qobject_cast<Aki::ChannelWindow*>(window);
                 channel->setTopic(topic);
+                channel->addTopicHistory(nick, topic);
+                kDebug() << "Is this firing?";
                 channel->view()->addTopicChanged(nick, Aki::Irc::Color::toHtml(topic));
                 if (!channel->isCurrent()) {
                     channel->setTabColor(Aki::BaseWindow::NewData);
@@ -1891,8 +1894,8 @@ ServerWindow::ServerWindow(Aki::IdentityConfig *identityConfig, Aki::Irc::Socket
             SLOT(onTime(QString,QString)));
     connect(socket, SIGNAL(onTopic(QString,QString)),
             SLOT(onTopic(QString,QString)));
-    connect(socket, SIGNAL(onTopicChanged(QString,QString,QDateTime)),
-            SLOT(onTopicChanged(QString,QString,QDateTime)));
+    connect(socket, SIGNAL(onTopicChanged(QString,QString,QString)),
+            SLOT(onTopicChanged(QString,QString,QString)));
     connect(socket, SIGNAL(onTopicSetBy(QString,QString,QDateTime)),
             SLOT(onTopicSetBy(QString,QString,QDateTime)));
     connect(socket, SIGNAL(onUMode(QString,QString)),

@@ -38,6 +38,9 @@ public:
     {
         if (isModified) {
             emit q->changedTopic(q->topicEditable->toPlainText());
+            q->topicEditable->clear();
+            q->topic->clear();
+            isModified = false;
         }
     }
 
@@ -45,7 +48,8 @@ public:
     {
         if (isModified) {
             q->topicEditable->clear();
-            q->topicEditable->appendPlainText(q->topicHistory->currentItem()->text(2));
+            q->topic->clear();
+            isModified = false;
         }
     }
 
@@ -97,12 +101,11 @@ ChannelTopicDialog::~ChannelTopicDialog()
 }
 
 void
-ChannelTopicDialog::addTopicHistoryEntry(qint64 secs, const QString &nickname,
+ChannelTopicDialog::addTopicHistoryEntry(const QString &nickname,
                                          const QString &topic)
 {
     QTreeWidgetItem *entry = new QTreeWidgetItem(topicHistory);
-    KDateTime dt;
-    dt.setTime_t(secs);
+    KDateTime dt = KDateTime::currentLocalDateTime();
     dt = dt.toClockTime();
     entry->setText(0, dt.toString("%d/%m/%Y %H:%M:%S"));
     entry->setText(1, nickname);
@@ -151,6 +154,16 @@ ChannelTopicDialog::setTopicEditRights(bool enabled)
 {
     topicEditable->setEnabled(enabled);
     topicEditable->setReadOnly(!enabled);
+}
+
+void
+ChannelTopicDialog::showEvent(QShowEvent* event)
+{
+    if (topicHistory->topLevelItemCount() != 0) {
+        topicHistory->setCurrentItem(topicHistory->topLevelItem(0));
+        d->itemClicked(topicHistory->topLevelItem(0));
+    }
+    KDialog::showEvent(event);
 }
 
 #include "channeltopicdialog.moc"

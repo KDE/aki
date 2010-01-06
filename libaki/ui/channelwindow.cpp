@@ -23,6 +23,7 @@
 #include "chatparser.h"
 #include "config/identityconfig.h"
 #include "config/replaceconfig.h"
+#include "dialogs/channeltopicdialog.h"
 #include "dialogs/replacedialog.h"
 #include "logfile.h"
 #include "nicklistmodel.h"
@@ -512,8 +513,24 @@ public:
     {
         if (state) {
             q->socket()->rfcMode(q->name(), "+t");
+            foreach (const Aki::Irc::User *user, q->userList->users()) {
+                if (user->nick() == q->socket()->currentNick()) {
+                    if (user->isOp()) {
+                        topicDialog->setTopicEditRights(true);
+                    } else {
+                        topicDialog->setTopicEditRights(false);
+                    }
+                    return;
+                }
+            }
         } else {
             q->socket()->rfcMode(q->name(), "-t");
+            foreach (const Aki::Irc::User *user, q->userList->users()) {
+                if (user->nick() == q->socket()->currentNick()) {
+                    topicDialog->setTopicEditRights(true);
+                    return;
+                }
+            }
         }
     }
 
@@ -596,6 +613,7 @@ public:
         if (user->nick() == q->socket()->currentNick()) {
             if (mode == "o") {
                 q->modeBar()->setEnabled(true);
+                topicDialog->setTopicEditRights(true);
             }
         }
 
@@ -612,6 +630,7 @@ public:
         if (user->nick() == q->socket()->currentNick()) {
             if (mode == "o") {
                 q->modeBar()->setEnabled(false);
+                topicDialog->setTopicEditRights(!q->modeBar()->isTopicProtectionEnabled());
             }
         }
 
@@ -862,12 +881,24 @@ public:
         q->searchBar()->setFocus();
     }
 
+    void channelTopicHistoryTriggered()
+    {
+        topicDialog->show();
+    }
+
+    void changedTopic(const QString &topic)
+    {
+        q->socket()->rfcTopic(q->name(), topic);
+    }
+
     Aki::ChannelWindow *q;
     Aki::IdentityConfig *identity;
     Aki::ChatParser *parser;
     Aki::Irc::User *selectedUser;
+    Aki::ChannelTopicDialog *topicDialog;
     QTimer *whoTimer;
     bool isWhoRunning;
+    bool isTopicProtectionEnabled;
 }; // End of class ChannelWindowPrivate.
 } // End of namespace Aki.
 
@@ -887,6 +918,11 @@ ChannelWindow::ChannelWindow(const QString &name, Aki::IdentityConfig *identityC
     modeBar()->setEnabled(false);
     setLogFile(new Aki::LogFile(socket->name(), name, this));
     view()->setLog(logFile());
+
+    chatOutput->setChannel(true);
+
+    d->topicDialog = new Aki::ChannelTopicDialog(this);
+    d->topicDialog->setWindowTitle(i18n("Channel Topic History - %1", name));
 
     chatInput->setFocus();
 
@@ -948,6 +984,10 @@ ChannelWindow::ChannelWindow(const QString &name, Aki::IdentityConfig *identityC
             SLOT(userPressed(QModelIndex)));
     connect(chatOutput, SIGNAL(findTextTriggered()),
             SLOT(findTextTriggered()));
+    connect(chatOutput, SIGNAL(channelTopicHistoryTriggered()),
+            SLOT(channelTopicHistoryTriggered()));
+    connect(d->topicDialog, SIGNAL(changedTopic(QString)),
+            SLOT(changedTopic(QString)));
 
     socket->rfcMode(name.toLower());
     socket->rfcWho(name.toLower());
@@ -986,7 +1026,15 @@ ChannelWindow::modeBar()
 void
 ChannelWindow::addUser(Aki::Irc::User *user)
 {
-    user->setParent(this);
+    if (user->nick() == socket()->currentNick()) {
+        if (user->isOp()) {
+            d->topicDialog->setTopicEditRights(true);
+        } else if (!user->isOp() && !modeBar()->isTopicProtectionEnabled()) {
+            d->topicDialog->setTopicEditRights(true);
+        } else if (!user->isOp() && modeBar()->isTopicProtectionEnabled()) {
+            d->topicDialog->setTopicEditRights(false);
+        }
+    }
     userList->addUser(user);
 }
 
@@ -1257,6 +1305,12 @@ ChannelWindow::clearUserList()
 void
 ChannelWindow::populateUserList()
 {
+}
+
+void
+ChannelWindow::addTopicHistory(const QString &nickname, const QString &topic)
+{
+    d->topicDialog->addTopicHistoryEntry(nickname, topic);
 }
 
 #include "channelwindow.moc"

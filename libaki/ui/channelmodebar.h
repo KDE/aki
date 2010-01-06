@@ -85,6 +85,14 @@ public:
     void disablePrivateButton(bool disable);
     void enableModeratedButton(bool enable);
     void disableModeratedButton(bool disable);
+    bool isChannelKeyEnabled() const;
+    bool isChannelLimitEnabled() const;
+    bool isTopicProtectionEnabled() const;
+    bool isNoOutsideMessagesEnabled() const;
+    bool isSecretEnabled() const;
+    bool isInviteOnlyEnabled() const;
+    bool isPrivateEnabled() const;
+    bool isModeratedEnabled() const;
 Q_SIGNALS:
     /**
      * Emitted when the channel key button has been pushed,

@@ -139,6 +139,8 @@ public:
 
     void clearUserList();
     void populateUserList();
+
+    void addTopicHistory(const QString &nickname, const QString &topic);
 Q_SIGNALS:
     void textSubmitted(Aki::BaseWindow *window, const QString &text);
     void whoAdded(const QString &channel);
@@ -188,6 +190,8 @@ private:
     Q_PRIVATE_SLOT(d, void userClicked(const QModelIndex &index))
     Q_PRIVATE_SLOT(d, void userPressed(const QModelIndex &index))
     Q_PRIVATE_SLOT(d, void findTextTriggered())
+    Q_PRIVATE_SLOT(d, void channelTopicHistoryTriggered())
+    Q_PRIVATE_SLOT(d, void changedTopic(const QString &topic))
 private:
     friend class ChannelWindowPrivate;
     QScopedPointer<ChannelWindowPrivate> d;

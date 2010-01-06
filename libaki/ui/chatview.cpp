@@ -52,7 +52,8 @@ public:
         : q(qq),
         logFile(0),
         userMoved(false),
-        isMarkedWaiting(false)
+        isMarkedWaiting(false),
+        isChannel(false)
     {
         KEmoticons emoticons;
         emoTheme = emoticons.theme();
@@ -270,8 +271,17 @@ public:
             q->connect(findTextAction, SIGNAL(triggered(bool)),
                        SLOT(findTextTriggered()));
 
+            QAction *channelTopicHistoryAction = new QAction(menu);
+            channelTopicHistoryAction->setText(i18n("Channel Topic History..."));
+            channelTopicHistoryAction->setEnabled(isChannel);
+            q->connect(channelTopicHistoryAction, SIGNAL(triggered(bool)),
+                       SLOT(topicHistoryTriggered()));
+
             menu->addAction(copyAction);
             menu->addAction(findTextAction);
+            menu->addSeparator();
+            menu->addAction(channelTopicHistoryAction);
+            
             menu->exec(QCursor::pos());
         }
     }
@@ -303,11 +313,17 @@ public:
         emit q->findTextTriggered();
     }
 
+    void topicHistoryTriggered()
+    {
+        emit q->channelTopicHistoryTriggered();
+    }
+
     Aki::ChatView *q;
     Aki::LogFile *logFile;
     KEmoticonsTheme emoTheme;
     bool userMoved;
     bool isMarkedWaiting;
+    bool isChannel;
 }; // End of class ChatViewPrivate.
 } // End of namespace Aki.
 
@@ -1178,6 +1194,12 @@ ChatView::addKick(const QString &from, const QString &channel, const QString &ni
     QString span = d->span(msg, Aki::Settings::kickColor());
     d->toLog(msg);
     d->appendMessage(span);
+}
+
+void
+ChatView::setChannel(bool channel)
+{
+    d->isChannel = channel;
 }
 
 #include "chatview.moc"

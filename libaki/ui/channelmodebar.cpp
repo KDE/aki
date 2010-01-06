@@ -268,4 +268,52 @@ ChannelModeBar::disableModeratedButton(bool disable)
     moderatedChannel->setChecked(!disable);
 }
 
+bool
+ChannelModeBar::isChannelKeyEnabled() const
+{
+    return keywordChannel->isChecked();
+}
+
+bool
+ChannelModeBar::isChannelLimitEnabled() const
+{
+    return limitChannel->isChecked();
+}
+
+bool
+ChannelModeBar::isInviteOnlyEnabled() const
+{
+    return inviteOnlyChannel->isChecked();
+}
+
+bool
+ChannelModeBar::isModeratedEnabled() const
+{
+    return moderatedChannel->isChecked();
+}
+
+bool
+ChannelModeBar::isNoOutsideMessagesEnabled() const
+{
+    return noOutsideMessagesChannel->isChecked();
+}
+
+bool
+ChannelModeBar::isPrivateEnabled() const
+{
+    return privateChannel->isChecked();
+}
+
+bool
+ChannelModeBar::isSecretEnabled() const
+{
+    return secretChannel->isChecked();
+}
+
+bool
+ChannelModeBar::isTopicProtectionEnabled() const
+{
+    return topicProtectionChannel->isChecked();
+}
+
 #include "channelmodebar.moc"
