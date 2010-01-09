@@ -1119,8 +1119,8 @@ public:
                         !q->socket()->servicePassword().isEmpty() && q->socket()->isAutoIdentifyEnabled()) {
                         q->socket()->rfcPrivmsg("NickServ", "identify " + q->socket()->servicePassword().toLatin1());
                     }
-                    if (!q->socket()->channelList().isEmpty()) {
-                        q->socket()->rfcJoin(q->socket()->channelList());
+                    if (!rejoinChannels.isEmpty()) {
+                        q->socket()->rfcJoin(rejoinChannels);
                     }
                 }
             }
@@ -2008,6 +2008,12 @@ Aki::ChannelView*
 ServerWindow::splitView()
 {
     return d->splitView;
+}
+
+void
+ServerWindow::setChannelList(const QStringList &channelList)
+{
+    d->rejoinChannels = channelList;
 }
 
 #include "serverwindow.moc"

@@ -27,6 +27,7 @@
 #include "dialogs/messagelog.h"
 #include "interfaces/maininterface.h"
 #include "notifications.h"
+#include "settings.h"
 #include "ui/basewindow.h"
 #include "ui/tabbar.h"
 #include "ui/serverwindow.h"
@@ -116,6 +117,29 @@ public:
         }
     }
 
+    void serverTabPositionChanged(int index)
+    {
+        kDebug() << "Index: " << index;
+        switch (Aki::Settings::serverTabPosition()) {
+        case 0: {
+            q->setTabPosition(QTabWidget::North);
+            break;
+        }
+        case 1: {
+            q->setTabPosition(QTabWidget::South);
+            break;
+        }
+        case 2: {
+            q->setTabPosition(QTabWidget::West);
+            break;
+        }
+        case 3: {
+            q->setTabPosition(QTabWidget::East);
+            break;
+        }
+        }
+    }
+
     Aki::ServerView *q;
     QList<Aki::BaseWindow*> tabList;
     Aki::Notifications *notifications;
@@ -145,10 +169,31 @@ ServerView::ServerView(KMainWindow *window, QWidget *parent)
     connect(bar, SIGNAL(tabMoved(int,int)),
             SLOT(_tabMoved(int,int)));
 
-    setTabPosition(North);
+    switch (Aki::Settings::serverTabPosition()) {
+    case 0: {
+        setTabPosition(North);
+        break;
+    }
+    case 1: {
+        setTabPosition(South);
+        break;
+    }
+    case 2: {
+        setTabPosition(West);
+        break;
+    }
+    case 3: {
+        setTabPosition(East);
+        break;
+    }
+    }
+
     setTabsClosable(true);
     setTabCloseActivatePrevious(true);
     setMovable(true);
+
+    connect(Aki::Settings::self(), SIGNAL(serverTabPositionChanged(int)),
+            SLOT(serverTabPositionChanged(int)));
 }
 
 ServerView::~ServerView()
@@ -156,7 +201,8 @@ ServerView::~ServerView()
 }
 
 void
-ServerView::addServer(IdentityConfig *identityConfig, Aki::Irc::Socket *socket)
+ServerView::addServer(IdentityConfig *identityConfig, Aki::Irc::Socket *socket,
+                      const QStringList &channelList)
 {
     if (!socket || !identityConfig) {
         return;
@@ -165,6 +211,7 @@ ServerView::addServer(IdentityConfig *identityConfig, Aki::Irc::Socket *socket)
     Aki::ServerWindow *window = new Aki::ServerWindow(identityConfig, socket, d->notifications,
                                                       d->messageLog, this);
     window->setCurrent(true);
+    window->setChannelList(channelList);
     connect(window, SIGNAL(customCommand(QString,QString)),
             SIGNAL(customCommand(QString,QString)));
     addTab(window, socket->name());

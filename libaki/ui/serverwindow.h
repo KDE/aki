@@ -53,6 +53,7 @@ public:
     QStringList rejoinChannelList() const;
     Aki::ChannelView* mainView();
     Aki::ChannelView* splitView();
+    void setChannelList(const QStringList &channelList);
 Q_SIGNALS:
     void dropSuccessful(Aki::BaseWindow *window);
     void customCommand(const QString &command, const QString &message);

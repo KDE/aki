@@ -114,6 +114,8 @@ SettingsDialog::updateSettings()
     foreach (Aki::SettingsPageInterface *page, d->pageList.keys()) {
         page->updateSettings();
     }
+
+    KConfigDialog::updateSettings();
 }
 
 void
@@ -122,6 +124,8 @@ SettingsDialog::updateWidgets()
     foreach (Aki::SettingsPageInterface *page, d->pageList.keys()) {
         page->updateWidgets();
     }
+
+    KConfigDialog::updateWidgets();
 }
 
 #include "settingsdialog.moc"

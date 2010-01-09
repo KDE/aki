@@ -177,7 +177,7 @@ public:
             switch (window->windowType()) {
             case Aki::BaseWindow::ServerWindow: {
                 Aki::ServerWindow *serverWindow = qobject_cast<Aki::ServerWindow*>(window);
-                serverWindow->socket()->setChannelList(serverWindow->rejoinChannelList());
+                //serverWindow->socket()->setChannelList(serverWindow->rejoinChannelList());
                 serverWindow->socket()->connectToHost();
                 akiDisconnection->setEnabled(true);
                 akiReconnection->setEnabled(false);
@@ -336,7 +336,7 @@ public:
         ctcp->blockVersion(Aki::Settings::ignoreVersion());
         socket->setCtcp(ctcp);
 
-        mainView->addServer(config, socket);
+        mainView->addServer(config, socket, QStringList());
         socket->connectToHost();
     }
 

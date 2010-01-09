@@ -88,7 +88,7 @@ set(akicore_LIBS
     akiirc
 )
 
-kde4_add_kcfg_files(akicore_SRCS settings.kcfgc)
+kde4_add_kcfg_files(akicore_SRCS GENERATE_MOC settings.kcfgc)
 kde4_add_ui_files(akicore_SRCS ${akicore_UIS})
 kde4_add_library(akicore SHARED ${akicore_SRCS})
 target_link_libraries(akicore ${akicore_LIBS})

@@ -60,7 +60,8 @@ public:
      * @param identityConfig Identify configuration.
      * @param socket IRC socket.
      */
-    void addServer(Aki::IdentityConfig *identityConfig, Aki::Irc::Socket *socket);
+    void addServer(Aki::IdentityConfig *identityConfig, Aki::Irc::Socket *socket,
+                   const QStringList &channelList);
     /**
      * Clears all the window text for all the windows and the channels they occupy.
      */
@@ -105,6 +106,8 @@ Q_SIGNALS:
     void serverAdded(Aki::Irc::Socket *socket);
     void serverRemoved(Aki::Irc::Socket *socket);
     void customCommand(const QString &command, const QString &message);
+private:
+    Q_PRIVATE_SLOT(d, void serverTabPositionChanged(int index))
 private:
     friend class ServerViewPrivate;
     QScopedPointer<ServerViewPrivate> d;

@@ -162,7 +162,9 @@ ChannelTopicDialog::showEvent(QShowEvent* event)
     if (topicHistory->topLevelItemCount() != 0) {
         topicHistory->setCurrentItem(topicHistory->topLevelItem(0));
         d->itemClicked(topicHistory->topLevelItem(0));
+        d->isModified = false;
     }
+
     KDialog::showEvent(event);
 }
 

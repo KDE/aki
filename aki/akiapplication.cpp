@@ -126,11 +126,10 @@ AkiApplication::loadConfigurations(Aki::MainWindow *window)
                 socket->setServiceName(serverConfig->serviceName());
                 socket->setServicePassword(serverConfig->servicePassword());
                 socket->setSsl(serverConfig->isSslEnabled());
-                socket->setChannelList(serverConfig->channelList());
 
                 if (serverConfig->isConnectOnStartupEnabled()) {
                     ident->setName(identityName);
-                    window->mainView()->addServer(ident, socket);
+                    window->mainView()->addServer(ident, socket, serverConfig->channelList());
                     socket->connectToHost();
                 }
             }
