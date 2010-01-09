@@ -27,6 +27,7 @@
 #include "ircpage.h"
 #include "logpage.h"
 #include "pluginpage.h"
+#include "proxypage.h"
 #include "serverpage.h"
 #include "settings.h"
 #include <KDebug>
@@ -61,6 +62,7 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     addPage(new Aki::ServerPage(this));
     addPage(new Aki::IrcPage(this));
     addPage(new Aki::LogPage(this));
+    addPage(new Aki::ProxyPage(this));
 }
 
 SettingsDialog::~SettingsDialog()

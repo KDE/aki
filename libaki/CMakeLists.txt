@@ -17,6 +17,7 @@ set(akicore_SRCS
     dialogs/logpage.cpp
     dialogs/messagelog.cpp
     dialogs/pluginpage.cpp
+    dialogs/proxypage.cpp
     dialogs/quickconnectiondialog.cpp
     dialogs/replacedialog.cpp
     dialogs/serverpage.cpp
@@ -67,6 +68,7 @@ set(akicore_UIS
     dialogs/ircpage.ui
     dialogs/logpage.ui
     dialogs/quickconnection.ui
+    dialogs/proxypage.ui
     dialogs/replacedialog.ui
     dialogs/serverpage.ui
     dialogs/serverwelcomepage.ui

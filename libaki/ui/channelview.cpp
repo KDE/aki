@@ -25,6 +25,7 @@
 #include "config/identityconfig.h"
 #include "logfile.h"
 #include "notifications.h"
+#include "settings.h"
 #include "ui/basewindow.h"
 #include "ui/channelwindow.h"
 #include "ui/querywindow.h"
@@ -259,7 +260,25 @@ ChannelView::ChannelView(Aki::IdentityConfig *identityConfig, QWidget *parent)
     setTabBar(bar);
     tabBar()->setContextMenuPolicy(Qt::CustomContextMenu);
 
-    setTabPosition(South);
+    switch (Aki::Settings::channelTabPosition()) {
+    case 0: {
+        setTabPosition(North);
+        break;
+    }
+    case 1: {
+        setTabPosition(South);
+        break;
+    }
+    case 2: {
+        setTabPosition(West);
+        break;
+    }
+    case 3: {
+        setTabPosition(East);
+        break;
+    }
+    }
+
     setTabsClosable(true);
     setTabCloseActivatePrevious(true);
     setMovable(true);
@@ -298,7 +317,25 @@ ChannelView::ChannelView(Aki::IdentityConfig *identityConfig, Aki::Irc::Socket *
     setTabBar(bar);
     tabBar()->setContextMenuPolicy(Qt::CustomContextMenu);
 
-    setTabPosition(South);
+    switch (Aki::Settings::channelTabPosition()) {
+    case 0: {
+        setTabPosition(North);
+        break;
+    }
+    case 1: {
+        setTabPosition(South);
+        break;
+    }
+    case 2: {
+        setTabPosition(West);
+        break;
+    }
+    case 3: {
+        setTabPosition(East);
+        break;
+    }
+    }
+
     setTabsClosable(true);
     setTabCloseActivatePrevious(true);
     setMovable(true);
