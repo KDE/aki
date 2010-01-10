@@ -78,8 +78,7 @@ public:
             return;
         }
 
-        q->socket()->rfcPrivmsg(selectedUser->nick().toLatin1(),
-                                QString("\x01" "VERSION" "\x01"));
+        q->socket()->rfcCtcpVersion(selectedUser->nick());
     }
 
     void banDomainTriggered()
@@ -146,7 +145,7 @@ public:
     {
         Q_UNUSED(pos);
 
-        QMenu *menu = new QMenu(menu);
+        QMenu *menu = new QMenu(q);
 
         QMenu *ctcpMenu = new QMenu(i18n("CTCP"), menu);
         QMenu *modesMenu = new QMenu(i18n("Modes"), menu);

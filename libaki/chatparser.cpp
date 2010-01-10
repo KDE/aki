@@ -101,7 +101,7 @@ public:
                 msg.remove(0, nick.length() + 1);
 
                 if (!msg.isEmpty()) {
-                    window->socket()->rfcPrivmsg(nick, QString("\x01%1\x01").arg(msg));
+                    window->socket()->rfcPrivmsg(nick, QString("\x01%1\x01").arg(msg.toUpper()));
                 } else {
                     if (window->view()) {
                         window->view()->addHelp(i18n("/ctcp <nick> <message>, sends message to nick, common ones"

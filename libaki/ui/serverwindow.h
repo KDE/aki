@@ -147,6 +147,7 @@ private:
     Q_PRIVATE_SLOT(d, void onNick(const QString &oldNick, const QString &newNick))
     Q_PRIVATE_SLOT(d, void onNotice(const QString &from, const QString &message))
     Q_PRIVATE_SLOT(d, void onNoticeAuth(const QString &message))
+    Q_PRIVATE_SLOT(d, void onNoticeCtcpTime(const QString &nick, const QString &time))
     Q_PRIVATE_SLOT(d, void onNoticeCtcpVersion(const QString &nick, const QString &version))
     Q_PRIVATE_SLOT(d, void onNoTopic(const QString &channel, const QString &message))
     Q_PRIVATE_SLOT(d, void onNowAway(const QString &message))

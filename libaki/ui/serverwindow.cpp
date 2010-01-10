@@ -1139,6 +1139,14 @@ public:
         }
     }
 
+    void onNoticeCtcpTime(const QString &nick, const QString &time)
+    {
+        Aki::BaseWindow *window = currentFocusedChannel();
+        if (window && window->view()) {
+            window->view()->addCtcp(nick, Aki::Irc::Color::toHtml(time));
+        }
+    }
+
     void onNoticeCtcpVersion(const QString &nick, const QString &version)
     {
         Aki::BaseWindow *window = currentFocusedChannel();
@@ -1876,6 +1884,8 @@ ServerWindow::ServerWindow(Aki::IdentityConfig *identityConfig, Aki::Irc::Socket
             SLOT(onNotice(QString,QString)));
     connect(socket, SIGNAL(onNoticeAuth(QString)),
             SLOT(onNoticeAuth(QString)));
+    connect(socket, SIGNAL(onNoticeCtcpTime(QString,QString)),
+            SLOT(onNoticeCtcpTime(QString,QString)));
     connect(socket, SIGNAL(onNoticeCtcpVersion(QString,QString)),
             SLOT(onNoticeCtcpVersion(QString,QString)));
     connect(socket, SIGNAL(onNoTopic(QString,QString)),
