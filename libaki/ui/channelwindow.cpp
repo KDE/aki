@@ -611,9 +611,24 @@ public:
         user->setModes(tmpModes + mode);
 
         if (user->nick() == q->socket()->currentNick()) {
-            if (mode == "o") {
+            if (user->isOp()) {
                 q->modeBar()->setEnabled(true);
                 topicDialog->setTopicEditRights(true);
+                for (int i = 0; i < q->nickSelector->count(); ++i) {
+                    q->nickSelector->setItemIcon(i, KIcon("aki_operator"));
+                }
+            } else if (user->isHalfOp()) {
+                for (int i = 0; i < q->nickSelector->count(); ++i) {
+                    q->nickSelector->setItemIcon(i, KIcon("aki_halfop"));
+                }
+            } else if (user->isVoice()) {
+                for (int i = 0; i < q->nickSelector->count(); ++i) {
+                    q->nickSelector->setItemIcon(i, KIcon("aki_voice"));
+                }
+            } else if (user->isNormal()) {
+                for (int i = 0; i < q->nickSelector->count(); ++i) {
+                    q->nickSelector->setItemIcon(i, KIcon("aki_normal"));
+                }
             }
         }
 
@@ -628,9 +643,24 @@ public:
         user->removeModes(mode);
 
         if (user->nick() == q->socket()->currentNick()) {
-            if (mode == "o") {
+            if (user->isOp()) {
                 q->modeBar()->setEnabled(false);
                 topicDialog->setTopicEditRights(!q->modeBar()->isTopicProtectionEnabled());
+                for (int i = 0; i < q->nickSelector->count(); ++i) {
+                    q->nickSelector->setItemIcon(i, KIcon("aki_operator"));
+                }
+            } else if (user->isHalfOp()) {
+                for (int i = 0; i < q->nickSelector->count(); ++i) {
+                    q->nickSelector->setItemIcon(i, KIcon("aki_halfop"));
+                }
+            } else if (user->isVoice()) {
+                for (int i = 0; i < q->nickSelector->count(); ++i) {
+                    q->nickSelector->setItemIcon(i, KIcon("aki_voice"));
+                }
+            } else if (user->isNormal()) {
+                for (int i = 0; i < q->nickSelector->count(); ++i) {
+                    q->nickSelector->setItemIcon(i, KIcon("aki_normal"));
+                }
             }
         }
 
@@ -1034,6 +1064,24 @@ ChannelWindow::addUser(Aki::Irc::User *user)
         } else if (!user->isOp() && modeBar()->isTopicProtectionEnabled()) {
             d->topicDialog->setTopicEditRights(false);
         }
+
+        if (user->isOp()) {
+            for (int i = 0; i < nickSelector->count(); ++i) {
+                nickSelector->setItemIcon(i, KIcon("aki_operator"));
+            }
+        } else if (user->isHalfOp()) {
+            for (int i = 0; i < nickSelector->count(); ++i) {
+                nickSelector->setItemIcon(i, KIcon("aki_halfop"));
+            }
+        } else if (user->isVoice()) {
+            for (int i = 0; i < nickSelector->count(); ++i) {
+                nickSelector->setItemIcon(i, KIcon("aki_voice"));
+            }
+        } else if (user->isNormal()) {
+            for (int i = 0; i < nickSelector->count(); ++i) {
+                nickSelector->setItemIcon(i, KIcon("aki_normal"));
+            }
+        }
     }
     userList->addUser(user);
 }
@@ -1192,6 +1240,26 @@ ChannelWindow::addWho(const QString &channel, const QString &identName, const QS
                     user->setAway(true);
                 } else {
                     kDebug() << "Unsupported flag: " << c;
+                }
+            }
+
+            if (user->nick() == socket()->currentNick()) {
+                if (user->isOp()) {
+                    for (int i = 0; i < nickSelector->count(); ++i) {
+                        nickSelector->setItemIcon(i, KIcon("aki_operator"));
+                    }
+                } else if (user->isHalfOp()) {
+                    for (int i = 0; i < nickSelector->count(); ++i) {
+                        nickSelector->setItemIcon(i, KIcon("aki_halfop"));
+                    }
+                } else if (user->isVoice()) {
+                    for (int i = 0; i < nickSelector->count(); ++i) {
+                        nickSelector->setItemIcon(i, KIcon("aki_voice"));
+                    }
+                } else if (user->isNormal()) {
+                    for (int i = 0; i < nickSelector->count(); ++i) {
+                        nickSelector->setItemIcon(i, KIcon("aki_normal"));
+                    }
                 }
             }
 
