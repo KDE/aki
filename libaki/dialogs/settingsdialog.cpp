@@ -40,12 +40,26 @@ class SettingsDialogPrivate
 {
 public:
     SettingsDialogPrivate(Aki::SettingsDialog *qq)
-        : q(qq)
+        : q(qq),
+        generalPage(0),
+        colorPage(0),
+        pluginPage(0),
+        serverPage(0),
+        ircPage(0),
+        logPage(0),
+        proxyPage(0)
     {
     }
 
     Aki::SettingsDialog *q;
     SettingsDialog::PageList pageList;
+    Aki::GeneralPage *generalPage;
+    Aki::ColorPage *colorPage;
+    Aki::PluginPage *pluginPage;
+    Aki::ServerPage *serverPage;
+    Aki::IrcPage *ircPage;
+    Aki::LogPage *logPage;
+    Aki::ProxyPage *proxyPage;
 }; // End of class SettingsDialog.
 } // End of namespace Aki.
 
@@ -56,13 +70,30 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     setButtons(Help | Ok | Cancel | Apply);
     setSizeGripEnabled(true);
 
-    addPage(new Aki::GeneralPage(this));
-    addPage(new Aki::ColorPage(this));
-    addPage(new Aki::PluginPage(this));
-    addPage(new Aki::ServerPage(this));
-    addPage(new Aki::IrcPage(this));
-    addPage(new Aki::LogPage(this));
-    addPage(new Aki::ProxyPage(this));
+    d->generalPage = new Aki::GeneralPage(this);
+    connect(d->generalPage, SIGNAL(serverTabPositionChanged(int)),
+            this, SIGNAL(serverTabPositionChanged(int)));
+    connect(d->generalPage, SIGNAL(channelTabPositionChanged(int)),
+            this, SIGNAL(channelTabPositionChanged(int)));
+    addPage(d->generalPage);
+
+    d->colorPage = new Aki::ColorPage(this);
+    addPage(d->colorPage);
+
+    d->pluginPage = new Aki::PluginPage(this);
+    addPage(d->pluginPage);
+
+    d->serverPage = new Aki::ServerPage(this);
+    addPage(d->serverPage);
+
+    d->ircPage = new Aki::IrcPage(this);
+    addPage(d->ircPage);
+
+    d->logPage = new Aki::LogPage(this);
+    addPage(d->logPage);
+
+    d->proxyPage = new Aki::ProxyPage(this);
+    addPage(d->proxyPage);
 }
 
 SettingsDialog::~SettingsDialog()

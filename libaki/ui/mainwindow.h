@@ -111,6 +111,8 @@ private:
     Q_PRIVATE_SLOT(d, void findTriggered())
     Q_PRIVATE_SLOT(d, void clearMarkerLineTriggered())
     Q_PRIVATE_SLOT(d, void replaceDialogTriggered())
+    Q_PRIVATE_SLOT(d, void serverTabPositionChanged(int index))
+    Q_PRIVATE_SLOT(d, void channelTabPositionChanged(int index))
 private:
     friend class MainWindowPrivate;
     QScopedPointer<MainWindowPrivate> d;

@@ -22,6 +22,7 @@
 
 #include "generalpage.h"
 #include "settings.h"
+#include <KDebug>
 #include <KLocale>
 using namespace Aki;
 
@@ -35,6 +36,16 @@ public:
     {
     }
 
+    void serverTabPositionActivated(int index)
+    {
+        emit q->serverTabPositionChanged(index);
+    }
+
+    void channelTabPositionActivated(int index)
+    {
+        emit q->channelTabPositionChanged(index);
+    }
+
     Aki::GeneralPage *q;
 }; // End of class GeneralPagePrivate.
 } // End of namespace Aki.
@@ -44,8 +55,17 @@ GeneralPage::GeneralPage(QWidget *parent)
                                  "configure", i18n("Configure General Settings"),
                                  parent)
 {
-    d.reset(new GeneralPagePrivate(this));
+    d.reset(new Aki::GeneralPagePrivate(this));
     setupUi(this);
+
+    connect(kcfg_serverTabPosition, SIGNAL(activated(int)),
+            SLOT(serverTabPositionActivated(int)));
+    connect(kcfg_channelTabPosition, SIGNAL(activated(int)),
+            SLOT(channelTabPositionActivated(int)));
+}
+
+GeneralPage::~GeneralPage()
+{
 }
 
 void
@@ -59,4 +79,4 @@ GeneralPage::hasChanged() const
     return false;
 }
 
-#include "generalpage.h"
+#include "generalpage.moc"

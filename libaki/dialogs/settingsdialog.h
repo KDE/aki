@@ -38,6 +38,9 @@ public:
     ~SettingsDialog();
     void addPage(Aki::SettingsPageInterface *page);
     void removePage(Aki::SettingsPageInterface *page);
+Q_SIGNALS:
+    void serverTabPositionChanged(int index);
+    void channelTabPositionChanged(int index);
 protected Q_SLOTS:
     void updateButtons();
     void updateSettings();

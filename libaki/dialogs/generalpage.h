@@ -33,10 +33,18 @@ class GeneralPagePrivate;
 class GeneralPage : public Aki::SettingsPageInterface,
                     public Ui::GeneralPage
 {
+    Q_OBJECT
 public:
     GeneralPage(QWidget *parent = 0);
+    ~GeneralPage();
     virtual void updateSettings();
     virtual bool hasChanged() const;
+Q_SIGNALS:
+    void serverTabPositionChanged(int index);
+    void channelTabPositionChanged(int index);
+private:
+    Q_PRIVATE_SLOT(d, void serverTabPositionActivated(int index))
+    Q_PRIVATE_SLOT(d, void channelTabPositionActivated(int index))
 private:
     friend class GeneralPagePrivate;
     QScopedPointer<GeneralPagePrivate> d;

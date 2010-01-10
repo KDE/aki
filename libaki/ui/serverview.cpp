@@ -117,10 +117,9 @@ public:
         }
     }
 
-    void serverTabPositionChanged(int index)
+    void serverTabPosition(int index)
     {
-        kDebug() << "Index: " << index;
-        switch (Aki::Settings::serverTabPosition()) {
+        switch (index) {
         case 0: {
             q->setTabPosition(QTabWidget::North);
             break;
@@ -169,31 +168,11 @@ ServerView::ServerView(KMainWindow *window, QWidget *parent)
     connect(bar, SIGNAL(tabMoved(int,int)),
             SLOT(_tabMoved(int,int)));
 
-    switch (Aki::Settings::serverTabPosition()) {
-    case 0: {
-        setTabPosition(North);
-        break;
-    }
-    case 1: {
-        setTabPosition(South);
-        break;
-    }
-    case 2: {
-        setTabPosition(West);
-        break;
-    }
-    case 3: {
-        setTabPosition(East);
-        break;
-    }
-    }
+    d->serverTabPosition(Aki::Settings::serverTabPosition());
 
     setTabsClosable(true);
     setTabCloseActivatePrevious(true);
     setMovable(true);
-
-    connect(Aki::Settings::self(), SIGNAL(serverTabPositionChanged(int)),
-            SLOT(serverTabPositionChanged(int)));
 }
 
 ServerView::~ServerView()

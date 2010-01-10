@@ -419,6 +419,57 @@ public:
         }
     }
 
+    void serverTabPositionChanged(int index)
+    {
+        switch (index) {
+        case 0: {
+            mainView->setTabPosition(QTabWidget::North);
+            break;
+        }
+        case 1: {
+            mainView->setTabPosition(QTabWidget::South);
+            break;
+        }
+        case 2: {
+            mainView->setTabPosition(QTabWidget::West);
+            break;
+        }
+        case 3: {
+            mainView->setTabPosition(QTabWidget::East);
+            break;
+        }
+        }
+    }
+
+    void channelTabPositionChanged(int index)
+    {
+        for (int i = 0; i < mainView->count(); ++i) {
+            Aki::ServerWindow *window = qobject_cast<Aki::ServerWindow*>(mainView->widget(i));
+            switch (index) {
+            case 0: {
+                window->mainView()->setTabPosition(QTabWidget::North);
+                window->splitView()->setTabPosition(QTabWidget::North);
+                break;
+            }
+            case 1: {
+                window->mainView()->setTabPosition(QTabWidget::South);
+                window->splitView()->setTabPosition(QTabWidget::South);
+                break;
+            }
+            case 2: {
+                window->mainView()->setTabPosition(QTabWidget::West);
+                window->splitView()->setTabPosition(QTabWidget::West);
+                break;
+            }
+            case 3: {
+                window->mainView()->setTabPosition(QTabWidget::East);
+                window->splitView()->setTabPosition(QTabWidget::East);
+                break;
+            }
+            }
+        }
+    }
+
     Aki::MainWindow *q;
     Aki::ServerView *mainView;
     Aki::SettingsDialog *settingsDialog;
@@ -539,6 +590,10 @@ MainWindow::loadPlugins()
 {
     Aki::PluginManager::self()->init(this);
     d->settingsDialog = new Aki::SettingsDialog(this);
+    connect(d->settingsDialog, SIGNAL(serverTabPositionChanged(int)),
+            SLOT(serverTabPositionChanged(int)));
+    connect(d->settingsDialog, SIGNAL(channelTabPositionChanged(int)),
+            SLOT(channelTabPositionChanged(int)));
     Aki::PluginManager::self()->loadPlugins();
 }
 

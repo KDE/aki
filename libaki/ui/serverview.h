@@ -107,8 +107,6 @@ Q_SIGNALS:
     void serverRemoved(Aki::Irc::Socket *socket);
     void customCommand(const QString &command, const QString &message);
 private:
-    Q_PRIVATE_SLOT(d, void serverTabPositionChanged(int index))
-private:
     friend class ServerViewPrivate;
     QScopedPointer<ServerViewPrivate> d;
 
