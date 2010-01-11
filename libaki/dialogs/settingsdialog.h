@@ -41,6 +41,8 @@ public:
 Q_SIGNALS:
     void serverTabPositionChanged(int index);
     void channelTabPositionChanged(int index);
+    void showNickListToggled(bool enabled);
+    void showModeBarToggled(bool enabled);
 protected Q_SLOTS:
     void updateButtons();
     void updateSettings();

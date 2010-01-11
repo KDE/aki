@@ -470,6 +470,60 @@ public:
         }
     }
 
+    void showNickListToggled(bool enabled)
+    {
+        for (int i = 0; i < mainView->count(); ++i) {
+            Aki::ServerWindow *window = qobject_cast<Aki::ServerWindow*>(mainView->widget(i));
+            for (int j = 0; j < window->mainView()->count(); ++j) {
+                Aki::BaseWindow *base = qobject_cast<Aki::BaseWindow*>(window->mainView()->widget(j));
+                if (base && base->windowType() == Aki::BaseWindow::ChannelWindow) {
+                    if (enabled) {
+                        qobject_cast<Aki::ChannelWindow*>(base)->showNickList();
+                    } else {
+                        qobject_cast<Aki::ChannelWindow*>(base)->hideNickList();
+                    }
+                }
+            }
+            for (int j = 0; j < window->splitView()->count(); ++j) {
+                Aki::BaseWindow *base = qobject_cast<Aki::BaseWindow*>(window->splitView()->widget(j));
+                if (base && base->windowType() == Aki::BaseWindow::ChannelWindow) {
+                    if (enabled) {
+                        qobject_cast<Aki::ChannelWindow*>(base)->showNickList();
+                    } else {
+                        qobject_cast<Aki::ChannelWindow*>(base)->hideNickList();
+                    }
+                }
+            }
+        }
+    }
+
+    void showModeBarToggled(bool enabled)
+    {
+        for (int i = 0; i < mainView->count(); ++i) {
+            Aki::ServerWindow *window = qobject_cast<Aki::ServerWindow*>(mainView->widget(i));
+            for (int j = 0; j < window->mainView()->count(); ++j) {
+                Aki::BaseWindow *base = qobject_cast<Aki::BaseWindow*>(window->mainView()->widget(j));
+                if (base && base->windowType() == Aki::BaseWindow::ChannelWindow) {
+                    if (enabled) {
+                        qobject_cast<Aki::ChannelWindow*>(base)->modeBar()->show();
+                    } else {
+                        qobject_cast<Aki::ChannelWindow*>(base)->modeBar()->hide();
+                    }
+                }
+            }
+            for (int j = 0; j < window->splitView()->count(); ++j) {
+                Aki::BaseWindow *base = qobject_cast<Aki::BaseWindow*>(window->splitView()->widget(j));
+                if (base && base->windowType() == Aki::BaseWindow::ChannelWindow) {
+                    if (enabled) {
+                        qobject_cast<Aki::ChannelWindow*>(base)->modeBar()->show();
+                    } else {
+                        qobject_cast<Aki::ChannelWindow*>(base)->modeBar()->hide();
+                    }
+                }
+            }
+        }
+    }
+
     Aki::MainWindow *q;
     Aki::ServerView *mainView;
     Aki::SettingsDialog *settingsDialog;
@@ -594,6 +648,10 @@ MainWindow::loadPlugins()
             SLOT(serverTabPositionChanged(int)));
     connect(d->settingsDialog, SIGNAL(channelTabPositionChanged(int)),
             SLOT(channelTabPositionChanged(int)));
+    connect(d->settingsDialog, SIGNAL(showNickListToggled(bool)),
+            SLOT(showNickListToggled(bool)));
+    connect(d->settingsDialog, SIGNAL(showModeBarToggled(bool)),
+            SLOT(showModeBarToggled(bool)));
     Aki::PluginManager::self()->loadPlugins();
 }
 

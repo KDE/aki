@@ -141,6 +141,9 @@ public:
     void populateUserList();
 
     void addTopicHistory(const QString &nickname, const QString &topic);
+
+    void showNickList();
+    void hideNickList();
 Q_SIGNALS:
     void textSubmitted(Aki::BaseWindow *window, const QString &text);
     void whoAdded(const QString &channel);

@@ -34,6 +34,16 @@ public:
     {
     }
 
+    void showNickListToggled(bool enabled)
+    {
+        emit q->showNickListToggled(enabled);
+    }
+
+    void showModeBarToggled(bool enabled)
+    {
+        emit q->showModeBarToggled(enabled);
+    }
+
     Aki::IrcPage *q;
 }; // End of class IrcPagePrivate.
 } // End of namespace Aki.
@@ -45,6 +55,11 @@ IrcPage::IrcPage(QWidget *parent)
 {
     d.reset(new IrcPagePrivate(this));
     setupUi(this);
+
+    connect(kcfg_showNickList, SIGNAL(toggled(bool)),
+            SLOT(showNickListToggled(bool)));
+    connect(kcfg_showChannelModeBar, SIGNAL(toggled(bool)),
+            SLOT(showModeBarToggled(bool)));
 }
 
 IrcPage::~IrcPage()

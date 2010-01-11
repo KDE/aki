@@ -948,6 +948,18 @@ ChannelWindow::ChannelWindow(const QString &name, Aki::IdentityConfig *identityC
     setLogFile(new Aki::LogFile(socket->name(), name, this));
     view()->setLog(logFile());
 
+    if (Aki::Settings::showChannelModeBar()) {
+        modeBar()->show();
+    } else {
+        modeBar()->hide();
+    }
+
+    if (Aki::Settings::showNickList()) {
+        showNickList();
+    } else {
+        hideNickList();
+    }
+
     chatOutput->setChannel(true);
 
     d->topicDialog = new Aki::ChannelTopicDialog(this);
@@ -1378,6 +1390,18 @@ void
 ChannelWindow::addTopicHistory(const QString &nickname, const QString &topic)
 {
     d->topicDialog->addTopicHistoryEntry(nickname, topic);
+}
+
+void
+ChannelWindow::showNickList()
+{
+    userList->show();
+}
+
+void
+ChannelWindow::hideNickList()
+{
+    userList->hide();
 }
 
 #include "channelwindow.moc"

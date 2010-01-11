@@ -72,9 +72,9 @@ SettingsDialog::SettingsDialog(QWidget *parent)
 
     d->generalPage = new Aki::GeneralPage(this);
     connect(d->generalPage, SIGNAL(serverTabPositionChanged(int)),
-            this, SIGNAL(serverTabPositionChanged(int)));
+            SIGNAL(serverTabPositionChanged(int)));
     connect(d->generalPage, SIGNAL(channelTabPositionChanged(int)),
-            this, SIGNAL(channelTabPositionChanged(int)));
+            SIGNAL(channelTabPositionChanged(int)));
     addPage(d->generalPage);
 
     d->colorPage = new Aki::ColorPage(this);
@@ -87,6 +87,10 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     addPage(d->serverPage);
 
     d->ircPage = new Aki::IrcPage(this);
+    connect(d->ircPage, SIGNAL(showNickListToggled(bool)),
+            SIGNAL(showNickListToggled(bool)));
+    connect(d->ircPage, SIGNAL(showModeBarToggled(bool)),
+            SIGNAL(showModeBarToggled(bool)));
     addPage(d->ircPage);
 
     d->logPage = new Aki::LogPage(this);

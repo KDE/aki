@@ -39,6 +39,12 @@ public:
     ~IrcPage();
     virtual void updateSettings();
     virtual bool hasChanged() const;
+Q_SIGNALS:
+    void showNickListToggled(bool enabled);
+    void showModeBarToggled(bool enabled);
+private:
+    Q_PRIVATE_SLOT(d, void showNickListToggled(bool enabled))
+    Q_PRIVATE_SLOT(d, void showModeBarToggled(bool enabled))
 private:
     friend class IrcPagePrivate;
     QScopedPointer<IrcPagePrivate> d;

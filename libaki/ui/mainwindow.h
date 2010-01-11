@@ -113,6 +113,8 @@ private:
     Q_PRIVATE_SLOT(d, void replaceDialogTriggered())
     Q_PRIVATE_SLOT(d, void serverTabPositionChanged(int index))
     Q_PRIVATE_SLOT(d, void channelTabPositionChanged(int index))
+    Q_PRIVATE_SLOT(d, void showNickListToggled(bool enabled))
+    Q_PRIVATE_SLOT(d, void showModeBarToggled(bool enabled))
 private:
     friend class MainWindowPrivate;
     QScopedPointer<MainWindowPrivate> d;
