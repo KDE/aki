@@ -32,6 +32,7 @@
 #include "ui/statuswindow.h"
 #include <Aki/Irc/Color>
 #include <Aki/Irc/Ctcp>
+#include <aki/irc/nickinfo.h>
 #include <Aki/Irc/Rfc2812>
 #include <Aki/Irc/Socket>
 #include <Aki/Irc/User>
@@ -242,11 +243,11 @@ public:
         }
     }
 
-    void onCtcpRequest(const QString &from, const QString &type)
+    void onCtcpRequest(const Aki::Irc::NickInfo &from, const QString &type)
     {
         Aki::BaseWindow *window = currentFocusedChannel();
         if (window && window->view()) {
-            window->view()->addCtcpRequest(from, type);
+            window->view()->addCtcpRequest(from.nick(), type);
         }
     }
 
@@ -736,11 +737,11 @@ public:
         }
     }
 
-    void onInvite(const QString &from, const QString &channel)
+    void onInvite(const Aki::Irc::NickInfo &from, const QString &channel)
     {
         int response =
         KMessageBox::questionYesNo(0, i18n("%1 has invited you to join channel: %2.\n"
-                                              "Would you like to accept the invitation?", from, channel),
+                                              "Would you like to accept the invitation?", from.nick(), channel),
                                               i18n("Received a channel invitation"));
         if (response == KMessageBox::Yes) {
             q->socket()->rfcJoin(channel);
@@ -771,13 +772,14 @@ public:
         }
     }
 
-    void onKick(const QString &from, const QString &channel, const QString &nick, const QString &message)
+    void onKick(const Aki::Irc::NickInfo &from, const QString &channel,
+                const QString &nick, const QString &message)
     {
         Aki::ChannelWindow *window = qobject_cast<Aki::ChannelWindow*>(findChannel(channel.toLower()));
         if (window && window->view()) {
-            bool fromYou = (from.toLower() == q->socket()->currentNick().toLower());
+            bool fromYou = (from.nick().toLower() == q->socket()->currentNick().toLower());
             bool toYou = (nick.toLower() == q->socket()->currentNick().toLower());
-            window->view()->addKick(from, channel, nick, message, toYou, fromYou);
+            window->view()->addKick(from.nick(), channel, nick, message, toYou, fromYou);
 
             if (toYou) {
                 foreach (Aki::Irc::User *user, window->users()) {
@@ -842,8 +844,8 @@ public:
         }
     }
 
-    void onMode(const QString &from, const QString &channel, const QString &modes,
-                const QString &nick)
+    void onMode(const Aki::Irc::NickInfo &from, const QString &channel,
+                const QString &modes, const QString &nick)
     {
         Aki::ChannelWindow *window = qobject_cast<Aki::ChannelWindow*>(findChannel(channel.toLower()));
         if (window && window->view()) {
@@ -854,7 +856,7 @@ public:
             };
             int state = None;
 
-            bool fromYou = (from == window->socket()->currentNick());
+            bool fromYou = (from.nick() == window->socket()->currentNick());
             bool toYou = (nick == window->socket()->currentNick());
 
             if (!window->isCurrent()) {
@@ -872,88 +874,88 @@ public:
                     state = Take;
                 } else if (ch == QChar('o')) {
                     if (state == Give) {
-                        window->view()->addMode(from, nick, ch, toYou, fromYou);
+                        window->view()->addMode(from.nick(), nick, ch, toYou, fromYou);
                         window->addMode(nick, ch);
                     } else if (state == Take) {
-                        window->view()->addRemoveMode(from, nick, ch, toYou, fromYou);
+                        window->view()->addRemoveMode(from.nick(), nick, ch, toYou, fromYou);
                         window->removeMode(nick, ch);
                     }
                 } else if (ch == QChar('h')) {
                     if (state == Give) {
-                        window->view()->addMode(from, nick, ch, toYou, fromYou);
+                        window->view()->addMode(from.nick(), nick, ch, toYou, fromYou);
                         window->addMode(nick, ch);
                     } else if (state == Give) {
-                        window->view()->addRemoveMode(from, nick, ch, toYou, fromYou);
+                        window->view()->addRemoveMode(from.nick(), nick, ch, toYou, fromYou);
                         window->removeMode(nick, ch);
                     }
                 } else if (ch == QChar('v')) {
                     if (state == Give) {
-                        window->view()->addMode(from, nick, ch, toYou, fromYou);
+                        window->view()->addMode(from.nick(), nick, ch, toYou, fromYou);
                         window->addMode(nick, ch);
                     } else if (state == Take) {
-                        window->view()->addRemoveMode(from, nick, ch, toYou, fromYou);
+                        window->view()->addRemoveMode(from.nick(), nick, ch, toYou, fromYou);
                         window->removeMode(nick, ch);
                     }
                 } else if (ch == QChar('b')) {
                     if (state == Give) {
-                        window->view()->addBan(from, nick);
+                        window->view()->addBan(from.nick(), nick);
                     } else if (state == Take) {
-                        window->view()->addRemoveBan(from, nick);
+                        window->view()->addRemoveBan(from.nick(), nick);
                     }
                 } else if (ch == 'i') {
                     if (state == Give) {
-                        window->view()->addChannelMode(from, ch, QString(), fromYou);
+                        window->view()->addChannelMode(from.nick(), ch, QString(), fromYou);
                     } else if (state == Take) {
-                        window->view()->addRemoveMode(from, ch, fromYou);
+                        window->view()->addRemoveMode(from.nick(), ch, fromYou);
                     }
                 } else if (ch == QChar('m')) {
                     if (state == Give) {
-                        window->view()->addChannelMode(from, ch, QString(), fromYou);
+                        window->view()->addChannelMode(from.nick(), ch, QString(), fromYou);
                     } else if (state == Take) {
-                        window->view()->addRemoveMode(from, ch, fromYou);
+                        window->view()->addRemoveMode(from.nick(), ch, fromYou);
                     }
                 } else if (ch == QChar('p')) {
                     if (state == Give) {
-                        window->view()->addChannelMode(from, ch, QString(), fromYou);
+                        window->view()->addChannelMode(from.nick(), ch, QString(), fromYou);
                     } else if (state == Take) {
-                        window->view()->addRemoveMode(from, ch, fromYou);
+                        window->view()->addRemoveMode(from.nick(), ch, fromYou);
                     }
                 } else if (ch == QChar('s')) {
                     if (state == Give) {
-                        window->view()->addChannelMode(from, ch, QString(), fromYou);
+                        window->view()->addChannelMode(from.nick(), ch, QString(), fromYou);
                     } else if (state == Take) {
-                        window->view()->addRemoveMode(from, ch, fromYou);
+                        window->view()->addRemoveMode(from.nick(), ch, fromYou);
                     }
                 } else if (ch == QChar('t')) {
                     if (state == Give) {
-                        window->view()->addChannelMode(from, ch, QString(), fromYou);
+                        window->view()->addChannelMode(from.nick(), ch, QString(), fromYou);
                     } else if (state == Take) {
-                        window->view()->addRemoveMode(from, ch, fromYou);
+                        window->view()->addRemoveMode(from.nick(), ch, fromYou);
                     }
                 } else if (ch == QChar('n')) {
                     if (state == Give) {
-                        window->view()->addChannelMode(from, ch, QString(), fromYou);
+                        window->view()->addChannelMode(from.nick(), ch, QString(), fromYou);
                     } else if (state == Take) {
-                        window->view()->addRemoveMode(from, ch, fromYou);
+                        window->view()->addRemoveMode(from.nick(), ch, fromYou);
                     }
                 } else if (ch == QChar('l')) {
                     if (state == Give) {
-                        window->view()->addChannelMode(from, ch, QString(), fromYou);
+                        window->view()->addChannelMode(from.nick(), ch, QString(), fromYou);
                     } else if (state == Take) {
-                        window->view()->addRemoveMode(from, ch, fromYou);
+                        window->view()->addRemoveMode(from.nick(), ch, fromYou);
                     }
                 } else if (ch == QChar('k')) {
                     if (state == Give) {
-                        window->view()->addChannelMode(from, ch, QString(), fromYou);
+                        window->view()->addChannelMode(from.nick(), ch, QString(), fromYou);
                     } else if (state == Take) {
-                        window->view()->addRemoveMode(from, ch, fromYou);
+                        window->view()->addRemoveMode(from.nick(), ch, fromYou);
                     }
                 }
             }
         }
     }
 
-    void onMode(const QString &from, const QString &channel, const QString &modes,
+    void onMode(const Aki::Irc::NickInfo &from, const QString &channel, const QString &modes,
                 const QStringList &params)
     {
         Q_UNUSED(from);
@@ -1058,23 +1060,23 @@ public:
         }
     }
 
-    void onNick(const QString &oldNick, const QString &newNick)
+    void onNick(const Aki::Irc::NickInfo &oldNick, const QString &newNick)
     {
         foreach (Aki::BaseWindow *window, splitView->windows()) {
             switch (window->windowType()) {
             case Aki::BaseWindow::StatusWindow: {
                 Aki::StatusWindow *status = qobject_cast<Aki::StatusWindow*>(window);
-                status->addNick(oldNick, newNick);
+                status->addNick(oldNick.nick(), newNick);
                 break;
             }
             case Aki::BaseWindow::QueryWindow: {
                 Aki::QueryWindow *query = qobject_cast<Aki::QueryWindow*>(window);
-                query->addNick(oldNick, newNick);
+                query->addNick(oldNick.nick(), newNick);
                 break;
             }
             case Aki::BaseWindow::ChannelWindow: {
                 Aki::ChannelWindow *channel = qobject_cast<Aki::ChannelWindow*>(window);
-                channel->addNick(oldNick, newNick);
+                channel->addNick(oldNick.nick(), newNick);
                 break;
             }
             default: {
@@ -1087,17 +1089,17 @@ public:
             switch (window->windowType()) {
             case Aki::BaseWindow::StatusWindow: {
                 Aki::StatusWindow *status = qobject_cast<Aki::StatusWindow*>(window);
-                status->addNick(oldNick, newNick);
+                status->addNick(oldNick.nick(), newNick);
                 break;
             }
             case Aki::BaseWindow::QueryWindow: {
                 Aki::QueryWindow *query = qobject_cast<Aki::QueryWindow*>(window);
-                query->addNick(oldNick, newNick);
+                query->addNick(oldNick.nick(), newNick);
                 break;
             }
             case Aki::BaseWindow::ChannelWindow: {
                 Aki::ChannelWindow *channel = qobject_cast<Aki::ChannelWindow*>(window);
-                channel->addNick(oldNick, newNick);
+                channel->addNick(oldNick.nick(), newNick);
                 break;
             }
             default: {
@@ -1107,14 +1109,14 @@ public:
         }
     }
 
-    void onNotice(const QString &from, const QString &message)
+    void onNotice(const Aki::Irc::NickInfo &from, const QString &message)
     {
         Aki::BaseWindow *window = currentFocusedChannel();
         if (window && window->view()) {
-            window->view()->addNotice(from, Aki::Irc::Color::toHtml(message));
+            window->view()->addNotice(from.nick(), Aki::Irc::Color::toHtml(message));
 
-            if (Aki::Irc::Rfc2812::isValidNickname(from)) {
-                if (from == "NickServ" && message.contains("This nickname is registered", Qt::CaseInsensitive)) {
+            if (Aki::Irc::Rfc2812::isValidNickname(from.nick())) {
+                if (from.nick() == "NickServ" && message.contains("This nickname is registered", Qt::CaseInsensitive)) {
                     if (q->socket()->serviceName().toLower().trimmed() == "nickserv" &&
                         !q->socket()->servicePassword().isEmpty() && q->socket()->isAutoIdentifyEnabled()) {
                         q->socket()->rfcPrivmsg("NickServ", "identify " + q->socket()->servicePassword().toLatin1());
@@ -1139,19 +1141,19 @@ public:
         }
     }
 
-    void onNoticeCtcpTime(const QString &nick, const QString &time)
+    void onNoticeCtcpTime(const Aki::Irc::NickInfo &user, const QString &time)
     {
         Aki::BaseWindow *window = currentFocusedChannel();
         if (window && window->view()) {
-            window->view()->addCtcp(nick, Aki::Irc::Color::toHtml(time));
+            window->view()->addCtcp(user.nick(), Aki::Irc::Color::toHtml(time));
         }
     }
 
-    void onNoticeCtcpVersion(const QString &nick, const QString &version)
+    void onNoticeCtcpVersion(const Aki::Irc::NickInfo &user, const QString &version)
     {
         Aki::BaseWindow *window = currentFocusedChannel();
         if (window && window->view()) {
-            window->view()->addCtcp(nick, Aki::Irc::Color::toHtml(version));
+            window->view()->addCtcp(user.nick(), Aki::Irc::Color::toHtml(version));
         }
     }
 
@@ -1177,8 +1179,8 @@ public:
         Q_UNUSED(server2)
     }
 
-    void onPrivmsg(const QString &channel, const QString &from, const QString &to,
-                   const QString &message)
+    void onPrivmsg(const QString &channel, const Aki::Irc::NickInfo &from,
+                   const Aki::Irc::NickInfo &to, const QString &message)
     {
         if (!channel.isEmpty()) {
             Aki::ChannelWindow *window = qobject_cast<Aki::ChannelWindow*>(findChannel(channel.toLower()));
@@ -1188,20 +1190,19 @@ public:
                         window->view()->insertMarker();
                     }
                 }
-                window->addMessage(from, message);
-            
+                window->addMessage(from.nick(), message);
             }
-        } else if (!to.isEmpty()) {
-            Aki::QueryWindow *window = qobject_cast<Aki::QueryWindow*>(findChannel(from.toLower()));
+        } else if (!to.nick().isEmpty()) {
+            Aki::QueryWindow *window = qobject_cast<Aki::QueryWindow*>(findChannel(from.nick().toLower()));
             if (window && window->view()) {
-                window->addMessage(from, message);
+                window->addMessage(from.nick(), message);
             } else {
                 Aki::Irc::User *self = new Aki::Irc::User("", q);
-                self->setNick(to);
+                self->setNick(to.nick());
                 self->setColor(randomColor());
 
                 Aki::Irc::User *other = new Aki::Irc::User("", q);
-                other->setNick(from);
+                other->setNick(from.nick());
                 other->setColor(randomColor());
 
                 mainView->addQuery(self, other, message);
@@ -1255,7 +1256,7 @@ public:
         }
     }
 
-    void onTopicChanged(const QString &nick, const QString &channel, const QString &topic)
+    void onTopicChanged(const Aki::Irc::NickInfo &nick, const QString &channel, const QString &topic)
     {
         kDebug() << "Is this firing?";
         Aki::BaseWindow *window = findChannel(channel.toLower());
@@ -1264,9 +1265,9 @@ public:
             case Aki::BaseWindow::ChannelWindow: {
                 Aki::ChannelWindow *channel = qobject_cast<Aki::ChannelWindow*>(window);
                 channel->setTopic(topic);
-                channel->addTopicHistory(nick, topic);
+                channel->addTopicHistory(nick.nick(), topic);
                 kDebug() << "Is this firing?";
-                channel->view()->addTopicChanged(nick, Aki::Irc::Color::toHtml(topic));
+                channel->view()->addTopicChanged(nick.nick(), Aki::Irc::Color::toHtml(topic));
                 if (!channel->isCurrent()) {
                     channel->setTabColor(Aki::BaseWindow::NewData);
                 }
@@ -1289,11 +1290,11 @@ public:
         }
     }
 
-    void onUMode(const QString &nick, const QString &modes)
+    void onUMode(const Aki::Irc::NickInfo &user, const QString &modes)
     {
         Aki::BaseWindow *window = currentFocusedChannel();
         if (window && window->view()) {
-            window->view()->addUMode(nick, modes);
+            window->view()->addUMode(user.nick(), modes);
         }
     }
 
@@ -1321,20 +1322,16 @@ public:
         }
     }
 
-    void onUserJoin(const QString &hostMask, const QString &channel)
+    void onUserJoin(const Aki::Irc::NickInfo &user, const QString &channel)
     {
         Aki::ChannelWindow *window = qobject_cast<Aki::ChannelWindow*>(findChannel(channel.toLower()));
         if (window && window->view()) {
-            const QString nick = Aki::Irc::Rfc2812::nickFromMask(hostMask);
-            const QString user = Aki::Irc::Rfc2812::userFromMask(hostMask);
-            const QString host = Aki::Irc::Rfc2812::hostFromMask(hostMask);
-
-            Aki::Irc::User *ircUser = new Aki::Irc::User(hostMask, q);
+            Aki::Irc::User *ircUser = new Aki::Irc::User(user.hostmask(), q);
             ircUser->setColor(randomColor());
             window->addUser(ircUser);
 
             if (!Aki::Settings::conferenceMode()) {
-                window->view()->addUserJoin(channel, nick, hostMask);
+                window->view()->addUserJoin(channel, user.nick(), user.hostmask());
             }
 
             if (!window->isCurrent()) {
@@ -1343,48 +1340,50 @@ public:
         }
     }
 
-    void onUserPart(const QString &hostMask, const QString &channel, const QString &message)
+    void onUserPart(const Aki::Irc::NickInfo &user, const QString &channel, const QString &message)
     {
         Aki::ChannelWindow *window = qobject_cast<Aki::ChannelWindow*>(findChannel(channel.toLower()));
         if (window && window->view()) {
-            const QString nick = Aki::Irc::Rfc2812::nickFromMask(hostMask);
-            const QString user = Aki::Irc::Rfc2812::userFromMask(hostMask);
-            const QString host = Aki::Irc::Rfc2812::hostFromMask(hostMask);
-
-            foreach (Aki::Irc::User *user, window->users()) {
-                if (user->nick() == nick) {
-                    window->removeUser(user);
+            foreach (Aki::Irc::User *u, window->users()) {
+                if (u->nick() == user.nick()) {
+                    window->removeUser(u);
 
                     if (!Aki::Settings::conferenceMode()) {
-                        window->view()->addUserPart(channel, nick, hostMask, Aki::Irc::Color::toHtml(message));
+                        if (message.contains(
+                            QRegExp("^[^\\s\\.]+\\.[^\\s\\.]+\\.[^\\s\\.]+\\s[^\\s\\.]+\\.[^\\s\\.]+\\.[^\\s\\.]+$")
+                        )) {
+                            if (!Aki::Settings::hideNetsplits()) {
+                                window->view()->addUserPart(channel, user.nick(), user.hostmask(),
+                                                            Aki::Irc::Color::toHtml(message));
+                            }
+                        } else {
+                            window->view()->addUserPart(channel, user.nick(), user.hostmask(),
+                                                        Aki::Irc::Color::toHtml(message));
+                        }
                     }
 
                     if (!window->isCurrent()) {
                         window->setTabColor(Aki::BaseWindow::NewData);
                     }
                     return;
-                } else if (user->nick() == q->socket()->currentNick()) {
+                } else if (u->nick() == q->socket()->currentNick()) {
                     rejoinChannels.removeAll(channel.toLower());
                 }
             }
         }
     }
 
-    void onUserQuit(const QString &hostMask, const QString &message)
+    void onUserQuit(const Aki::Irc::NickInfo &user, const QString &message)
     {
-        const QString nick = Aki::Irc::Rfc2812::nickFromMask(hostMask);
-        const QString user = Aki::Irc::Rfc2812::userFromMask(hostMask);
-        const QString host = Aki::Irc::Rfc2812::hostFromMask(hostMask);
-
         foreach (Aki::BaseWindow *base, splitView->windows()) {
             if (base && base->windowType() == Aki::BaseWindow::ChannelWindow) {
                 Aki::ChannelWindow *channel = qobject_cast<Aki::ChannelWindow*>(base);
-                foreach (Aki::Irc::User *user, channel->users()) {
-                    if (user->nick() == nick) {
-                        channel->removeUser(user);
+                foreach (Aki::Irc::User *u, channel->users()) {
+                    if (u->nick() == user.nick()) {
+                        channel->removeUser(u);
 
                         if (!Aki::Settings::conferenceMode()) {
-                            channel->view()->addUserQuit(nick, hostMask, message);
+                            channel->view()->addUserQuit(user.nick(), user.hostmask(), message);
                         }
 
                         if (!channel->isCurrent()) {
@@ -1398,12 +1397,12 @@ public:
         foreach (Aki::BaseWindow *base, mainView->windows()) {
             if (base && base->windowType() == Aki::BaseWindow::ChannelWindow) {
                 Aki::ChannelWindow *channel = qobject_cast<Aki::ChannelWindow*>(base);
-                foreach (Aki::Irc::User *user, channel->users()) {
-                    if (user->nick() == nick) {
-                        channel->removeUser(user);
+                foreach (Aki::Irc::User *u, channel->users()) {
+                    if (u->nick() == user.nick()) {
+                        channel->removeUser(u);
 
                         if (!Aki::Settings::conferenceMode()) {
-                            channel->view()->addUserQuit(nick, hostMask, message);
+                            channel->view()->addUserQuit(user.nick(), user.hostmask(), message);
                         }
 
                         if (!channel->isCurrent()) {
@@ -1738,8 +1737,8 @@ ServerWindow::ServerWindow(Aki::IdentityConfig *identityConfig, Aki::Irc::Socket
             SLOT(onCreated(QString)));
     connect(socket, SIGNAL(onCtcpAction(QString,QString,QString)),
             SLOT(onCtcpAction(QString,QString,QString)));
-    connect(socket, SIGNAL(onCtcpRequest(QString,QString)),
-            SLOT(onCtcpRequest(QString,QString)));
+    connect(socket, SIGNAL(onCtcpRequest(Aki::Irc::NickInfo,QString)),
+            SLOT(onCtcpRequest(Aki::Irc::NickInfo,QString)));
     connect(socket, SIGNAL(onEndOfMotd(QString)),
             SLOT(onEndOfMotd(QString)));
     connect(socket, SIGNAL(onEndOfNames(QString,QString)),
@@ -1844,16 +1843,16 @@ ServerWindow::ServerWindow(Aki::IdentityConfig *identityConfig, Aki::Irc::Socket
             SLOT(onGlobalUsers(QString)));
     connect(socket, SIGNAL(onHighConnectCount(QString)),
             SLOT(onHighConnectCount(QString)));
-    connect(socket, SIGNAL(onInvite(QString,QString)),
-            SLOT(onInvite(QString,QString)));
+    connect(socket, SIGNAL(onInvite(Aki::Irc::NickInfo,QString)),
+            SLOT(onInvite(Aki::Irc::NickInfo,QString)));
     connect(socket, SIGNAL(onInviting(QString,QString)),
             SLOT(onInviting(QString,QString)));
     connect(socket, SIGNAL(onISupport(QString)),
             SLOT(onISupport(QString)));
     connect(socket, SIGNAL(onIsOn(QStringList)),
             SLOT(onIsOn(QStringList)));
-    connect(socket, SIGNAL(onKick(QString,QString,QString,QString)),
-            SLOT(onKick(QString,QString,QString,QString)));
+    connect(socket, SIGNAL(onKick(Aki::Irc::NickInfo,QString,QString,QString)),
+            SLOT(onKick(Aki::Irc::NickInfo,QString,QString,QString)));
     connect(socket, SIGNAL(onLocalUsers(QString)),
             SLOT(onLocalUsers(QString)));
     connect(socket, SIGNAL(onLUserChannels(int,QString)),
@@ -1866,10 +1865,10 @@ ServerWindow::ServerWindow(Aki::IdentityConfig *identityConfig, Aki::Irc::Socket
             SLOT(onLUserOp(int,QString)));
     connect(socket, SIGNAL(onLUserUnknown(int,QString)),
             SLOT(onLUserUnknown(int,QString)));
-    connect(socket, SIGNAL(onMode(QString,QString,QString,QString)),
-            SLOT(onMode(QString,QString,QString,QString)));
-    connect(socket, SIGNAL(onMode(QString,QString,QString,QStringList)),
-            SLOT(onMode(QString,QString,QString,QStringList)));
+    connect(socket, SIGNAL(onMode(Aki::Irc::NickInfo,QString,QString,QString)),
+            SLOT(onMode(Aki::Irc::NickInfo,QString,QString,QString)));
+    connect(socket, SIGNAL(onMode(Aki::Irc::NickInfo,QString,QString,QStringList)),
+            SLOT(onMode(Aki::Irc::NickInfo,QString,QString,QStringList)));
     connect(socket, SIGNAL(onMotd(QString)),
             SLOT(onMotd(QString)));
     connect(socket, SIGNAL(onMotdStart(QString)),
@@ -1878,24 +1877,24 @@ ServerWindow::ServerWindow(Aki::IdentityConfig *identityConfig, Aki::Irc::Socket
             SLOT(onMyInfo(QString)));
     connect(socket, SIGNAL(onNameReply(QString,QString)),
             SLOT(onNameReply(QString,QString)));
-    connect(socket, SIGNAL(onNick(QString,QString)),
-            SLOT(onNick(QString,QString)));
-    connect(socket, SIGNAL(onNotice(QString,QString)),
-            SLOT(onNotice(QString,QString)));
+    connect(socket, SIGNAL(onNick(Aki::Irc::NickInfo,QString)),
+            SLOT(onNick(Aki::Irc::NickInfo,QString)));
+    connect(socket, SIGNAL(onNotice(Aki::Irc::NickInfo,QString)),
+            SLOT(onNotice(Aki::Irc::NickInfo,QString)));
     connect(socket, SIGNAL(onNoticeAuth(QString)),
             SLOT(onNoticeAuth(QString)));
-    connect(socket, SIGNAL(onNoticeCtcpTime(QString,QString)),
-            SLOT(onNoticeCtcpTime(QString,QString)));
-    connect(socket, SIGNAL(onNoticeCtcpVersion(QString,QString)),
-            SLOT(onNoticeCtcpVersion(QString,QString)));
+    connect(socket, SIGNAL(onNoticeCtcpTime(Aki::Irc::NickInfo,QString)),
+            SLOT(onNoticeCtcpTime(Aki::Irc::NickInfo,QString)));
+    connect(socket, SIGNAL(onNoticeCtcpVersion(Aki::Irc::NickInfo,QString)),
+            SLOT(onNoticeCtcpVersion(Aki::Irc::NickInfo,QString)));
     connect(socket, SIGNAL(onNoTopic(QString,QString)),
             SLOT(onNoTopic(QString,QString)));
     connect(socket, SIGNAL(onNowAway(QString)),
             SLOT(onNowAway(QString)));
     connect(socket, SIGNAL(onPong(QString,QString)),
             SLOT(onPong(QString,QString)));
-    connect(socket, SIGNAL(onPrivmsg(QString,QString,QString,QString)),
-            SLOT(onPrivmsg(QString,QString,QString,QString)));
+    connect(socket, SIGNAL(onPrivmsg(QString,Aki::Irc::NickInfo,Aki::Irc::NickInfo,QString)),
+            SLOT(onPrivmsg(QString,Aki::Irc::NickInfo,Aki::Irc::NickInfo,QString)));
     connect(socket, SIGNAL(onSelfJoin(QString)),
             SLOT(onSelfJoin(QString)));
     connect(socket, SIGNAL(onSelfUMode(QString)),
@@ -1904,24 +1903,24 @@ ServerWindow::ServerWindow(Aki::IdentityConfig *identityConfig, Aki::Irc::Socket
             SLOT(onTime(QString,QString)));
     connect(socket, SIGNAL(onTopic(QString,QString)),
             SLOT(onTopic(QString,QString)));
-    connect(socket, SIGNAL(onTopicChanged(QString,QString,QString)),
-            SLOT(onTopicChanged(QString,QString,QString)));
+    connect(socket, SIGNAL(onTopicChanged(Aki::Irc::NickInfo,QString,QString)),
+            SLOT(onTopicChanged(Aki::Irc::NickInfo,QString,QString)));
     connect(socket, SIGNAL(onTopicSetBy(QString,QString,QDateTime)),
             SLOT(onTopicSetBy(QString,QString,QDateTime)));
-    connect(socket, SIGNAL(onUMode(QString,QString)),
-            SLOT(onUMode(QString,QString)));
+    connect(socket, SIGNAL(onUMode(Aki::Irc::NickInfo,QString)),
+            SLOT(onUMode(Aki::Irc::NickInfo,QString)));
     connect(socket, SIGNAL(onUModeIs(QString)),
             SLOT(onUModeIs(QString)));
     connect(socket, SIGNAL(onUnAway(QString)),
             SLOT(onUnAway(QString)));
     connect(socket, SIGNAL(onUserHost(QStringList,QStringList)),
             SLOT(onUserHost(QStringList,QStringList)));
-    connect(socket, SIGNAL(onUserJoin(QString,QString)),
-            SLOT(onUserJoin(QString,QString)));
-    connect(socket, SIGNAL(onUserPart(QString,QString,QString)),
-            SLOT(onUserPart(QString,QString,QString)));
-    connect(socket, SIGNAL(onUserQuit(QString,QString)),
-            SLOT(onUserQuit(QString,QString)));
+    connect(socket, SIGNAL(onUserJoin(Aki::Irc::NickInfo,QString)),
+            SLOT(onUserJoin(Aki::Irc::NickInfo,QString)));
+    connect(socket, SIGNAL(onUserPart(Aki::Irc::NickInfo,QString,QString)),
+            SLOT(onUserPart(Aki::Irc::NickInfo,QString,QString)));
+    connect(socket, SIGNAL(onUserQuit(Aki::Irc::NickInfo,QString)),
+            SLOT(onUserQuit(Aki::Irc::NickInfo,QString)));
     connect(socket, SIGNAL(onVersion(QString)),
             SLOT(onVersion(QString)));
     connect(socket, SIGNAL(onWelcome(QString)),
@@ -1932,8 +1931,8 @@ ServerWindow::ServerWindow(Aki::IdentityConfig *identityConfig, Aki::Irc::Socket
             SLOT(onWhoIsChannels(QString,QString)));
     connect(socket, SIGNAL(onWhoIsIdentified(QString,QString)),
             SLOT(onWhoIsIdentified(QString,QString)));
-    connect(socket, SIGNAL(onWhoIsIdle(QString,QString,QString,QString)),
-            SLOT(onWhoIsIdle(QString,QString,QString,QString)));
+    connect(socket, SIGNAL(onWhoIsIdle(QString,QDateTime,QDateTime,QString)),
+            SLOT(onWhoIsIdle(QString,QDateTime,QDateTime,QString)));
     connect(socket, SIGNAL(onWhoIsOperator(QString,QString)),
             SLOT(onWhoIsOperator(QString,QString)));
     connect(socket, SIGNAL(onWhoIsServer(QString,QString,QString)),

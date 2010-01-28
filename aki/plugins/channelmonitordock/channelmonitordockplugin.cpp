@@ -28,6 +28,7 @@
 #include "ui/serverview.h"
 #include "ui/serverwindow.h"
 #include <Aki/Irc/Color>
+#include <aki/irc/nickinfo.h>
 #include <Aki/Irc/Socket>
 #include <Aki/Irc/User>
 #include <KActionCollection>
@@ -92,8 +93,8 @@ ChannelMonitorDockPlugin::load()
 void
 ChannelMonitorDockPlugin::slotServerAdded(Aki::Irc::Socket *socket)
 {
-    connect(socket, SIGNAL(onPrivmsg(QString,QString,QString,QString)),
-            SLOT(slotOnPrivmsg(QString,QString,QString,QString)));
+    connect(socket, SIGNAL(onPrivmsg(QString,Aki::Irc::NickInfo,Aki::Irc::NickInfo,QString)),
+            SLOT(slotOnPrivmsg(QString,Aki::Irc::NickInfo,Aki::Irc::NickInfo,QString)));
     connect(socket, SIGNAL(onCtcpAction(QString,QString,QString)),
             SLOT(slotOnCtcpAction(QString,QString,QString)));
 }
@@ -101,15 +102,15 @@ ChannelMonitorDockPlugin::slotServerAdded(Aki::Irc::Socket *socket)
 void
 ChannelMonitorDockPlugin::slotServerRemoved(Aki::Irc::Socket *socket)
 {
-    disconnect(socket, SIGNAL(onPrivmsg(QString,QString,QString,QString)),
-               this, SLOT(slotOnPrivmsg(QString,QString,QString,QString)));
+    disconnect(socket, SIGNAL(onPrivmsg(QString,Aki::Irc::NickInfo,Aki::Irc::NickInfo,QString)),
+               this, SLOT(slotOnPrivmsg(QString,Aki::Irc::NickInfo,Aki::Irc::NickInfo,QString)));
     disconnect(socket, SIGNAL(onCtcpAction(QString,QString,QString)),
                this, SLOT(slotOnCtcpAction(QString,QString,QString)));
 }
 
 void
-ChannelMonitorDockPlugin::slotOnPrivmsg(const QString &channel, const QString &from,
-                                        const QString &to, const QString &message)
+ChannelMonitorDockPlugin::slotOnPrivmsg(const QString &channel, const Aki::Irc::NickInfo &from,
+                                        const Aki::Irc::NickInfo &to, const QString &message)
 {
     Q_UNUSED(to);
 
@@ -129,7 +130,7 @@ ChannelMonitorDockPlugin::slotOnPrivmsg(const QString &channel, const QString &f
     }
 
     foreach (Aki::Irc::User *user, channelWin->users()) {
-        if (user->nick() == from) {
+        if (user->nick() == from.nick()) {
             QString matchString = "\\s*" + QRegExp::escape(socket->currentNick()) + ":*\\s*";
             if (message.contains(QRegExp(matchString))) {
                 QString colour = QString("<font color='%1'>%2</font>")

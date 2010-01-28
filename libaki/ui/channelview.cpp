@@ -32,6 +32,7 @@
 #include "ui/serverwindow.h"
 #include "ui/statuswindow.h"
 #include "ui/tabbar.h"
+#include <aki/irc/nickinfo.h>
 #include <Aki/Irc/Socket>
 #include <Aki/Irc/User>
 #include <KDebug>

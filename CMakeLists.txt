@@ -8,10 +8,15 @@ set(AKI_VERSION "${AKI_VERSION_MAJOR}.${AKI_VERSION_MINOR}.${AKI_VERSION_PATCH}"
 set(AKI_SOVERSION 0)
 
 set(QT_MIN_VERSION "4.6.0")
+set(KDE4_MIN_VERSION "4.3.80")
 
 find_package(KDE4 REQUIRED)
 include(KDE4Defaults)
+include(MacroLogFeature)
 find_package(AkiIrc 0.0.3 REQUIRED)
+macro_log_feature(KDE4_FOUND "kdelibs" "The toolkit Aki uses to build" "http://www.kde.org" TRUE "4.3.80" "")
+macro_log_feature(AKIIRC_FOUND "akiirc" "IRC Library for Aki" "http://www.akiirc.org" TRUE "0.0.3" "")
+macro_log_feature(QT_QTWEBKIT_FOUND "qtwebkit" "Webkit library for Aki" "http://qt.nokia.org" TRUE "4.6.0" "")
 
 include(MacroWriteBasicCMakeVersionFile)
 
@@ -55,3 +60,5 @@ install(FILES aki.notifyrc DESTINATION ${DATA_INSTALL_DIR}/aki)
 add_subdirectory(aki)
 add_subdirectory(cmake)
 add_subdirectory(libaki)
+
+macro_display_feature_log()

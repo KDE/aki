@@ -1,3 +1,5 @@
+include(MacroOptionalAddSubdirectory)
+
 include_directories(
     ${CMAKE_SOURCE_DIR}/libaki/
     ${CMAKE_BINARY_DIR}/libaki/
@@ -34,5 +36,5 @@ install(FILES aki.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
 install(FILES akiirc.protocol akiirc6.protocol DESTINATION ${SERVICES_INSTALL_DIR})
 
 add_subdirectory(icons)
-#add_subdirectory(dialogs)
-add_subdirectory(plugins)
+add_subdirectory(dialogs)
+macro_optional_add_subdirectory(plugins)

@@ -573,9 +573,9 @@ ServerPage::ServerPage(QWidget *parent)
     connect(addNetworkButton, SIGNAL(clicked(bool)),
             SLOT(addNetworkClicked()));
     connect(deleteNetworkButton, SIGNAL(clicked(bool)),
-            SLOT(seleteNetworkClicked()));
+            SLOT(deleteNetworkClicked()));
     connect(editNetworkButton, SIGNAL(clicked(bool)),
-            SLOT(wditNetworkClicked()));
+            SLOT(editNetworkClicked()));
     connect(identitySelector, SIGNAL(activated(QString)),
             SLOT(identityActivated(QString)));
     connect(autoJoinChannels, SIGNAL(clicked(bool)),

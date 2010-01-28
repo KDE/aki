@@ -23,6 +23,7 @@
 #include "chatview.h"
 #include "logfile.h"
 #include "settings.h"
+#include <aki/irc/nickinfo.h>
 #include <KDateTime>
 #include <KDebug>
 #include <KEmoticons>

@@ -30,6 +30,7 @@ namespace Aki
 class ServerView;
 namespace Irc
 {
+class NickInfo;
 class Socket;
 } // End of namespace Irc.
 } // End of namespace Aki.
@@ -47,8 +48,8 @@ public:
 private Q_SLOTS:
     void slotServerAdded(Aki::Irc::Socket *socket);
     void slotServerRemoved(Aki::Irc::Socket *socket);
-    void slotOnPrivmsg(const QString &channel, const QString &from,
-                       const QString &to, const QString &message);
+    void slotOnPrivmsg(const QString &channel, const Aki::Irc::NickInfo &from,
+                       const Aki::Irc::NickInfo &to, const QString &message);
     void slotOnCtcpAction(const QString &from, const QString &to,
                           const QString &message);
 private:

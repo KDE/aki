@@ -49,6 +49,7 @@ Q_SIGNALS:
     void customCommand(const QString &command, const QString &message = QString());
     void whoRequest(const QString &channel);
     void queryMessage(const QString &to, const QString &message);
+    void listRequest(const QString &channel);
 private:
     friend class ChatParserPrivate;
     QScopedPointer<ChatParserPrivate> d;

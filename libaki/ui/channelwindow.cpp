@@ -31,6 +31,7 @@
 #include "settings.h"
 #include "ui/channelview.h"
 #include <Aki/Irc/Color>
+#include <aki/irc/nickinfo.h>
 #include <Aki/Irc/Socket>
 #include <Aki/Irc/User>
 #include <KDebug>
@@ -738,7 +739,7 @@ public:
                 break;
             }
         }
-        
+
         QMenu *menu = new QMenu(q);
         QMenu *ctcpMenu = new QMenu(i18n("CTCP"), menu);
         QMenu *modesMenu = new QMenu(i18n("Modes"), menu);
@@ -1176,7 +1177,7 @@ ChannelWindow::addMessage(const QString &from, const QString &message)
     
     foreach (Aki::Irc::User *user, userList->users()) {
         if (user->nick() == from) {
-            user->setIdleTime(KDateTime::currentLocalDateTime());
+            user->setIdleTime(QDateTime::currentDateTime());
 
             QString match = "\\s*" + QRegExp::escape(socket()->currentNick()) + ":*\\s*";
             QString colour = QString("<font color='%1'>%2</font>")

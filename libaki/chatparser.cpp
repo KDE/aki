@@ -228,6 +228,11 @@ public:
         }
     }
 
+    void parseList(const QString &message)
+    {
+        QString msg = message;
+    }
+
     void parseLUsers(const QString &message)
     {
         QString msg = message;
@@ -586,6 +591,8 @@ ChatParser::parse(const QString &data)
             d->parseJoin(message);
         } else if (command == "kick") {
             d->parseKick(message);
+        } else if (command == "list") {
+            d->parseList(message);
         } else if (command == "lusers") {
             d->parseLUsers(message);
         } else if (command == "me") {

@@ -22,6 +22,7 @@
 
 #include "quickconnectiondialog.h"
 #include <KUser>
+#include <QRegExpValidator>
 using namespace Aki;
 
 namespace Aki
@@ -82,6 +83,8 @@ QuickConnectionDialog::QuickConnectionDialog(QWidget *parent)
     QWidget *widget = new QWidget(this);
     setupUi(widget);
     setMainWidget(widget);
+
+    serverPort->setValidator(new QRegExpValidator(QRegExp("^\\d+$"), this));
 
     setButtons(Ok | Cancel);
     setSizeGripEnabled(true);

@@ -29,6 +29,10 @@
 
 namespace Aki
 {
+namespace Irc
+{
+class NickInfo;
+} // End of namepace Irc.
 class LogFile;
 class ChatViewPrivate;
 class LIBAKI_EXPORT ChatView : public QWebView
@@ -58,7 +62,7 @@ public:
     void addMessage(const QString &message);
     void addChannelMode(const QString &fromNick, const QChar &mode, const QString &params = QString(),
                         bool self = false);
-    void addMode(const QString &fromNick, const QString &toNick, const QChar &mode,
+    void addMode(const QString &from, const QString &toNick, const QChar &mode,
                  bool toYou = false, bool fromYou = false);
     void addMotd(const QString &message);
     void addNick(const QString &oldNick, const QString &newNick);

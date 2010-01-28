@@ -49,6 +49,7 @@ public:
         logPage(0),
         proxyPage(0)
     {
+        pageList.clear();
     }
 
     Aki::SettingsDialog *q;
