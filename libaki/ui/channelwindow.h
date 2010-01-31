@@ -152,7 +152,7 @@ protected:
 private:
     Q_PRIVATE_SLOT(d, void whoIsTriggered())
     Q_PRIVATE_SLOT(d, void versionTriggered())
-    Q_PRIVATE_SLOT(d, void nickSelectorActivated(const QString &nick));
+    Q_PRIVATE_SLOT(d, void nickSelectorActivated(const QString &nick))
     Q_PRIVATE_SLOT(d, void banDomainTriggered())
     Q_PRIVATE_SLOT(d, void banHostTriggered())
     Q_PRIVATE_SLOT(d, void banUserDomainTriggered())

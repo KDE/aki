@@ -39,7 +39,7 @@
 #include <QAction>
 
 K_PLUGIN_FACTORY(ChannelMonitorDockPluginFactory, registerPlugin<ChannelMonitorDockPlugin>();)
-K_EXPORT_PLUGIN(ChannelMonitorDockPluginFactory("aki_channelmonitordockplugin"));
+K_EXPORT_PLUGIN(ChannelMonitorDockPluginFactory("aki_channelmonitordockplugin"))
 
 ChannelMonitorDockPlugin::ChannelMonitorDockPlugin(QObject *parent, const QVariantList &args)
     : Aki::Plugin(parent)

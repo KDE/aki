@@ -251,6 +251,14 @@ public:
         }
     }
 
+    void onEndOfExceptList(const QString &channel, const QString &message)
+    {
+    }
+
+    void onEndOfList(const QString &message)
+    {
+    }
+
     void onEndOfMotd(const QString &message)
     {
         Aki::BaseWindow *window = findChannel(q->socket()->name());
@@ -796,6 +804,10 @@ public:
         }
     }
 
+    void onList(const QString &channel, const QString &userCount, const QString &topic)
+    {
+    }
+
     void onLocalUsers(const QString &message)
     {
         Aki::BaseWindow *window = currentFocusedChannel();
@@ -1290,6 +1302,11 @@ public:
         }
     }
 
+    void onTryAgain(const QString &message)
+    {
+        
+    }
+
     void onUMode(const Aki::Irc::NickInfo &user, const QString &modes)
     {
         Aki::BaseWindow *window = currentFocusedChannel();
@@ -1739,6 +1756,10 @@ ServerWindow::ServerWindow(Aki::IdentityConfig *identityConfig, Aki::Irc::Socket
             SLOT(onCtcpAction(QString,QString,QString)));
     connect(socket, SIGNAL(onCtcpRequest(Aki::Irc::NickInfo,QString)),
             SLOT(onCtcpRequest(Aki::Irc::NickInfo,QString)));
+    connect(socket, SIGNAL(onEndOfExceptList(QString,QString)),
+            SLOT(onEndOfExceptList(QString,QString)));
+    connect(socket, SIGNAL(onEndOfList(QString)),
+            SLOT(onEndOfList(QString)));
     connect(socket, SIGNAL(onEndOfMotd(QString)),
             SLOT(onEndOfMotd(QString)));
     connect(socket, SIGNAL(onEndOfNames(QString,QString)),
@@ -1853,6 +1874,8 @@ ServerWindow::ServerWindow(Aki::IdentityConfig *identityConfig, Aki::Irc::Socket
             SLOT(onIsOn(QStringList)));
     connect(socket, SIGNAL(onKick(Aki::Irc::NickInfo,QString,QString,QString)),
             SLOT(onKick(Aki::Irc::NickInfo,QString,QString,QString)));
+    connect(socket, SIGNAL(onList(QString,QString,QString)),
+            SLOT(onList(QString,QString,QString)));
     connect(socket, SIGNAL(onLocalUsers(QString)),
             SLOT(onLocalUsers(QString)));
     connect(socket, SIGNAL(onLUserChannels(int,QString)),
@@ -1907,6 +1930,8 @@ ServerWindow::ServerWindow(Aki::IdentityConfig *identityConfig, Aki::Irc::Socket
             SLOT(onTopicChanged(Aki::Irc::NickInfo,QString,QString)));
     connect(socket, SIGNAL(onTopicSetBy(QString,QString,QDateTime)),
             SLOT(onTopicSetBy(QString,QString,QDateTime)));
+    connect(socket, SIGNAL(onTryAgain(QString)),
+            SLOT(onTryAgain(QString)));
     connect(socket, SIGNAL(onUMode(Aki::Irc::NickInfo,QString)),
             SLOT(onUMode(Aki::Irc::NickInfo,QString)));
     connect(socket, SIGNAL(onUModeIs(QString)),

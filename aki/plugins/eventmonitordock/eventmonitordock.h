@@ -1,6 +1,6 @@
 /*
     This file is part of Aki IRC.
-    Copyright 2009 Keith Rusler <xzekex@live.co.uk>
+    Copyright 2009 - 2010 Keith Rusler <xzekex@live.co.uk>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -17,28 +17,34 @@
 
     You should have received a copy of the GNU Lesser General Public
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
+
 */
 
-#ifndef KONSOLEDOCK_H
-#define KONSOLEDOCK_H
+#ifndef EVENTMONITORDOCK_H
+#define EVENTMONITORDOCK_H
 
 #include <QDockWidget>
+#include <QScopedPointer>
+#include <QTreeWidgetItem>
 
-namespace KParts
+class EventItem;
+class EventMonitorDockPrivate;
+class EventMonitorDock : public QDockWidget
 {
-class Part;
-} // End of namespace KParts.
-
-class KonsoleDock : public QDockWidget
-{
+    Q_OBJECT
 public:
-    KonsoleDock(QWidget *parent = 0);
-    ~KonsoleDock();
+    EventMonitorDock(QWidget *parent = 0);
+    ~EventMonitorDock();
+    void addItem(const EventItem &item);
+    void removeItem(int index);
+    void clear();
 private:
-    bool initPart();
-private:
-    Q_DISABLE_COPY(KonsoleDock)
-    KParts::Part *m_part;
-}; // End of class KonsoleDock.
+    enum {
+        CustomType = QTreeWidgetItem::UserType,
+        IrcEventRole = Qt::UserRole
+    }; // End of anonymous enum.
+    friend class EventMonitorDockPrivate;
+    QScopedPointer<EventMonitorDockPrivate> d;
+}; // End of class EventMonitorDock.
 
-#endif // KONSOLEDOCK_H
+#endif // EVENTMONITORDOCK_H

@@ -40,7 +40,7 @@ Q_SIGNALS:
 private:
     CharSelectorDialog();
     ~CharSelectorDialog();
-    Q_DISABLE_COPY(CharSelectorDialog);
+    Q_DISABLE_COPY(CharSelectorDialog)
 private:
     Q_PRIVATE_SLOT(d, void _user1Clicked())
 private:

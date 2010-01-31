@@ -31,7 +31,7 @@
 #include <QAction>
 
 K_PLUGIN_FACTORY(KonsoleDockPluginFactory, registerPlugin<KonsoleDockPlugin>();)
-K_EXPORT_PLUGIN(KonsoleDockPluginFactory("aki_konsoledockplugin"));
+K_EXPORT_PLUGIN(KonsoleDockPluginFactory("aki_konsoledockplugin"))
 
 KonsoleDockPlugin::KonsoleDockPlugin(QObject *parent, const QVariantList &args)
     : Aki::Plugin(parent)

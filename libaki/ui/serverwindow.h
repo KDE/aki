@@ -70,6 +70,8 @@ private:
     Q_PRIVATE_SLOT(d, void onCtcpAction(const QString &from, const QString &to,
                                         const QString &message))
     Q_PRIVATE_SLOT(d, void onCtcpRequest(const Aki::Irc::NickInfo &from, const QString &type))
+    Q_PRIVATE_SLOT(d, void onEndOfExceptList(const QString &channel, const QString &message))
+    Q_PRIVATE_SLOT(d, void onEndOfList(const QString &message))
     Q_PRIVATE_SLOT(d, void onEndOfMotd(const QString &message))
     Q_PRIVATE_SLOT(d, void onEndOfNames(const QString &channel, const QString &message))
     Q_PRIVATE_SLOT(d, void onEndOfWho(const QString &channel, const QString &message))
@@ -130,6 +132,7 @@ private:
     Q_PRIVATE_SLOT(d, void onISupport(const QString &message))
     Q_PRIVATE_SLOT(d, void onKick(const Aki::Irc::NickInfo &from, const QString &channel, const QString &nick,
                                   const QString &message))
+    Q_PRIVATE_SLOT(d, void onList(const QString &channel, const QString &userCount, const QString &topic))
     Q_PRIVATE_SLOT(d, void onLocalUsers(const QString &message))
     Q_PRIVATE_SLOT(d, void onLUserChannels(int count, const QString &message))
     Q_PRIVATE_SLOT(d, void onLUserClient(const QString &message))
@@ -160,6 +163,7 @@ private:
     Q_PRIVATE_SLOT(d, void onTopic(const QString &channel, const QString &topic))
     Q_PRIVATE_SLOT(d, void onTopicChanged(const Aki::Irc::NickInfo &nick, const QString &channel, const QString &topic))
     Q_PRIVATE_SLOT(d, void onTopicSetBy(const QString &nick, const QString &channel, const QDateTime &time))
+    Q_PRIVATE_SLOT(d, void onTryAgain(const QString &message))
     Q_PRIVATE_SLOT(d, void onUMode(const Aki::Irc::NickInfo &user, const QString &modes))
     Q_PRIVATE_SLOT(d, void onUModeIs(const QString &modes))
     Q_PRIVATE_SLOT(d, void onUnAway(const QString &message))

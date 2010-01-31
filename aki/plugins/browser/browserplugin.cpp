@@ -30,7 +30,7 @@
 #include <KPluginFactory>
 
 K_PLUGIN_FACTORY(BrowserPluginFactory, registerPlugin<BrowserPlugin>();)
-K_EXPORT_PLUGIN(BrowserPluginFactory("aki_browserplugin"));
+K_EXPORT_PLUGIN(BrowserPluginFactory("aki_browserplugin"))
 
 BrowserPlugin::BrowserPlugin(QObject *parent, const QVariantList &args)
     : Aki::Plugin(parent)

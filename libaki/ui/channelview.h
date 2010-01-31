@@ -129,7 +129,7 @@ public Q_SLOTS:
 
     void addQuery(Aki::Irc::User *self, Aki::Irc::User *other, const QString &message, bool toSelf = false);
 
-    void setSplitEnabled(bool enabled);;
+    void setSplitEnabled(bool enabled);
 Q_SIGNALS:
     /**
      * Emitted when the window @p window is dropped to this

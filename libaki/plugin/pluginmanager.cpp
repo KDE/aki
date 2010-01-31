@@ -40,7 +40,7 @@ public:
 }; // End of namespace PluginManagerPrivate.
 } // End of namespace Aki.
 
-K_GLOBAL_STATIC(PluginManagerPrivate, pluginManager);
+K_GLOBAL_STATIC(PluginManagerPrivate, pluginManager)
 
 PluginManager::PluginManager()
 {

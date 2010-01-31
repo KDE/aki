@@ -38,7 +38,7 @@
 #include <ui/statuswindow.h>
 
 K_PLUGIN_FACTORY(AmarokRemoteControlPluginFactory, registerPlugin<AmarokRemoteControlPlugin>();)
-K_EXPORT_PLUGIN(AmarokRemoteControlPluginFactory("aki_amarokremotecontrolplugin"));
+K_EXPORT_PLUGIN(AmarokRemoteControlPluginFactory("aki_amarokremotecontrolplugin"))
 
 AmarokRemoteControlPlugin::AmarokRemoteControlPlugin(QObject *parent, const QVariantList &args)
     : Aki::Plugin(parent)

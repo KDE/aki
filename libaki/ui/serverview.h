@@ -110,7 +110,7 @@ private:
     friend class ServerViewPrivate;
     QScopedPointer<ServerViewPrivate> d;
 
-    Q_PRIVATE_SLOT(d, void _closeTabTriggered());
+    Q_PRIVATE_SLOT(d, void _closeTabTriggered())
     Q_PRIVATE_SLOT(d, void _currentChanged(int))
     Q_PRIVATE_SLOT(d, void _tabCloseRequested(int))
     Q_PRIVATE_SLOT(d, void _tabMoved(int, int))

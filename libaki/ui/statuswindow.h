@@ -56,7 +56,7 @@ Q_SIGNALS:
 protected:
     virtual void showEvent(QShowEvent *event);
 private:
-    Q_PRIVATE_SLOT(d, void textSubmitted());
+    Q_PRIVATE_SLOT(d, void textSubmitted())
     Q_PRIVATE_SLOT(d, void nickSelectorActivated(const QString &nick))
     Q_PRIVATE_SLOT(d, void findNextClicked())
     Q_PRIVATE_SLOT(d, void findPreviousClicked())
