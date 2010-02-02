@@ -27,6 +27,7 @@
 class ChannelMonitorDockPrivate;
 class ChannelMonitorDock : public QDockWidget
 {
+    Q_OBJECT
 public:
     ChannelMonitorDock(QWidget *parent = 0);
     ~ChannelMonitorDock();

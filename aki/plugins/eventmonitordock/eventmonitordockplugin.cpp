@@ -22,9 +22,15 @@
 
 #include "eventmonitordockplugin.h"
 #include "akiversion.h"
+#include "eventitem.h"
 #include "eventmonitordock.h"
 #include "interfaces/maininterface.h"
 #include "ui/serverview.h"
+#include <aki/irc/nickinfo.h>
+#include <Aki/Irc/Socket>
+#include <Aki/Ui/ChannelWindow>
+#include <Aki/Ui/ServerWindow>
+#include <KActionCollection>
 #include <KPluginFactory>
 
 class EventMonitorDockPluginPrivate
@@ -35,6 +41,149 @@ public:
         serverView(0),
         dock(0)
     {
+    }
+
+    void serverAdded(Aki::Irc::Socket *socket)
+    {
+        q->connect(socket, SIGNAL(onPrivmsg(QString,Aki::Irc::NickInfo,Aki::Irc::NickInfo,QString)),
+                   SLOT(onPrivmsg(QString,Aki::Irc::NickInfo,Aki::Irc::NickInfo,QString)));
+        q->connect(socket, SIGNAL(onKick(Aki::Irc::NickInfo,QString,QString,QString)),
+                   SLOT(onKick(Aki::Irc::NickInfo,QString,QString,QString)));
+        q->connect(socket, SIGNAL(onNotice(Aki::Irc::NickInfo,QString)),
+                   SLOT(onNotice(Aki::Irc::NickInfo,QString)));
+        q->connect(socket, SIGNAL(onCtcpRequest(Aki::Irc::NickInfo,QString)),
+                   SLOT(onCtcpRequest(Aki::Irc::NickInfo,QString)));
+    }
+
+    void serverRemoved(Aki::Irc::Socket *socket)
+    {
+        q->disconnect(socket, SIGNAL(onPrivmsg(QString,Aki::Irc::NickInfo,Aki::Irc::NickInfo,QString)),
+                      q, SLOT(onPrivmsg(QString,Aki::Irc::NickInfo,Aki::Irc::NickInfo,QString)));
+        q->disconnect(socket, SIGNAL(onKick(Aki::Irc::NickInfo,QString,QString,QString)),
+                      q, SLOT(onKick(Aki::Irc::NickInfo,QString,QString,QString)));
+        q->disconnect(socket, SIGNAL(onNotice(Aki::Irc::NickInfo,QString)),
+                      q, SLOT(onNotice(Aki::Irc::NickInfo,QString)));
+        q->disconnect(socket, SIGNAL(onCtcpRequest(Aki::Irc::NickInfo,QString)),
+                      q, SLOT(onCtcpRequest(Aki::Irc::NickInfo,QString)));
+    }
+
+    void onCtcpRequest(const Aki::Irc::NickInfo &from, const QString &type)
+    {
+        Aki::Irc::Socket *socket = qobject_cast<Aki::Irc::Socket*>(q->sender());
+        if (!socket) {
+            return;
+        }
+
+        EventItem event;
+        event.setChannel("");
+        event.setFrom(from);
+        event.setServer(socket->name());
+        
+        const QString tmp = type.toLower();
+
+        if (tmp == "clientinfo") {
+            event.setMessage(i18n("%1 wants to know your client capabilities", from.nick()));
+            event.setEvent(EventItem::CtcpClientInfoEvent);
+        } else if (tmp == "ping") {
+            event.setMessage(i18n("%1 pinged you", from.nick()));
+            event.setEvent(EventItem::CtcpPingEvent);
+        } else if (tmp == "source") {
+            event.setMessage(i18n("%1 wanted your clients source", from.nick()));
+            event.setEvent(EventItem::CtcpSourceEvent);
+        } else if (tmp == "time") {
+            event.setMessage(i18n("%1 wanted your timezone info", from.nick()));
+            event.setEvent(EventItem::CtcpTimeEvent);
+        } else if (tmp == "userinfo") {
+            event.setMessage(i18n("%1 wanted your custom info", from.nick()));
+            event.setEvent(EventItem::CtcpUserInfoEvent);
+        } else if (tmp == "version") {
+            event.setMessage(i18n("%1 wanted your clients version", from.nick()));
+            event.setEvent(EventItem::CtcpVersionEvent);
+        } else {
+            event.setMessage(i18n("%1 wanted an unknown CTCP", from.nick()));
+            event.setEvent(EventItem::UnknownEvent);
+        }
+
+        if (dock) {
+            dock->addItem(event);
+        }
+    }
+
+    void onPrivmsg(const QString &channel, const Aki::Irc::NickInfo &from, const Aki::Irc::NickInfo &to,
+                   const QString &message)
+    {
+        Aki::Irc::Socket *socket = qobject_cast<Aki::Irc::Socket*>(q->sender());
+        if (!socket) {
+            return;
+        }
+
+        if (to.nick().toLower() == socket->currentNick().toLower()) {
+            EventItem event;
+            event.setChannel("");
+            event.setEvent(EventItem::PrivmsgEvent);
+            event.setFrom(from);
+            event.setMessage(message);
+            event.setServer(socket->name());
+
+            if (dock) {
+                dock->addItem(event);
+            }
+            return;
+        } else {
+            QString matchString = "\\s*" + QRegExp::escape(socket->currentNick()) + ":*\\s*";
+            if (message.contains(QRegExp(matchString))) {
+                EventItem event;
+                event.setChannel(channel);
+                event.setEvent(EventItem::HighlightEvent);
+                event.setFrom(from);
+                event.setMessage(message);
+                event.setServer(socket->name());
+
+                if (dock) {
+                    dock->addItem(event);
+                }
+            }
+        }
+    }
+
+    void onKick(const Aki::Irc::NickInfo &from, const QString &channel, const QString &nick,
+                const QString &message)
+    {
+        Q_UNUSED(nick);
+        Aki::Irc::Socket *socket = qobject_cast<Aki::Irc::Socket*>(q->sender());
+        if (!socket) {
+            return;
+        }
+
+        EventItem event;
+        event.setChannel(channel);
+        event.setEvent(EventItem::KickedEvent);
+        event.setFrom(from);
+        event.setMessage(message);
+        event.setServer(socket->name());
+
+        if (dock) {
+            dock->addItem(event);
+        }
+    }
+
+    void onNotice(const Aki::Irc::NickInfo &from, const QString &message)
+    {
+        Aki::Irc::Socket *socket = qobject_cast<Aki::Irc::Socket*>(q->sender());
+        if (!socket) {
+            return;
+        }
+
+        EventItem event;
+        event.setChannel("");
+        event.setEvent(EventItem::NoticeEvent);
+        event.setFrom(from);
+        event.setMessage(message);
+        event.setServer(socket->name());
+
+        if (dock) {
+            dock->addItem(event);
+        }
     }
 
     EventMonitorDockPlugin *q;
@@ -67,12 +216,33 @@ EventMonitorDockPlugin::checkVersion(const QString& version)
 void
 EventMonitorDockPlugin::unload()
 {
+    mainInterface()->removeDock(d->dock);
+
+    delete d->dock;
+
+    disconnect(d->serverView, SIGNAL(serverAdded(Aki::Irc::Socket*)),
+               this, SLOT(slotServerAdded(Aki::Irc::Socket*)));
+    disconnect(d->serverView, SIGNAL(serverRemoved(Aki::Irc::Socket*)),
+               this, SLOT(slotServerRemoved(Aki::Irc::Socket*)));
 }
 
 void
 EventMonitorDockPlugin::load()
 {
+    d->dock = new EventMonitorDock;
+
+    QAction *eventMonitorAction = d->dock->toggleViewAction();
+    actionCollection()->addAction("event", eventMonitorAction);
+    setXMLFile("aki_eventmonitordockpluginui.rc");
+
     d->serverView = mainInterface()->mainView();
+
+    mainInterface()->addDock(d->dock, Qt::BottomDockWidgetArea, Qt::Vertical);
+
+    connect(d->serverView, SIGNAL(serverAdded(Aki::Irc::Socket*)),
+            SLOT(serverAdded(Aki::Irc::Socket*)));
+    connect(d->serverView, SIGNAL(serverRemoved(Aki::Irc::Socket*)),
+            SLOT(serverRemoved(Aki::Irc::Socket*)));
 }
 
 #include "eventmonitordockplugin.moc"

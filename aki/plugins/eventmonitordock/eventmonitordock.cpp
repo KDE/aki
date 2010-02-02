@@ -23,8 +23,10 @@
 #include "eventmonitordock.h"
 #include "eventitem.h"
 #include <aki/irc/nickinfo.h>
+#include <KAction>
 #include <KGlobal>
 #include <KLocale>
+#include <KMenu>
 #include <QTreeWidget>
 
 class EventMonitorDockPrivate
@@ -36,16 +38,38 @@ public:
     {
     }
 
+    void customContextMenuRequested(const QPoint &pos)
+    {
+        Q_UNUSED(pos);
+        KMenu *menu = new KMenu;
+
+        KAction *clear = new KAction(i18n("Clear Events"), menu);
+        q->connect(clear, SIGNAL(triggered(bool)),
+                   SLOT(clearTriggered()));
+
+        menu->addAction(clear);
+
+        if (menu) {
+            menu->exec(QCursor::pos());
+        }
+    }
+
+    void clearTriggered()
+    {
+        q->clear();
+    }
+
     EventMonitorDock *q;
     QTreeWidget *eventTree;
 }; // End of class EventMonitorDockPrivate.
 
 EventMonitorDock::EventMonitorDock(QWidget *parent)
-    : QDockWidget(parent)
+    : QDockWidget(i18n("Event Monitor"), parent)
 {
     d.reset(new EventMonitorDockPrivate(this));
-    setObjectName(i18n("Event Monitor"));
+    setObjectName("EventMonitorDock");
     d->eventTree = new QTreeWidget(this);
+    setWidget(d->eventTree);
 
     QTreeWidgetItem *header = d->eventTree->headerItem();
     header->setText(0, i18n("Time"));
@@ -63,6 +87,10 @@ EventMonitorDock::EventMonitorDock(QWidget *parent)
     d->eventTree->setRootIsDecorated(false);
     d->eventTree->setItemsExpandable(false);
     d->eventTree->setExpandsOnDoubleClick(false);
+
+    d->eventTree->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(d->eventTree, SIGNAL(customContextMenuRequested(QPoint)),
+            SLOT(customContextMenuRequested(QPoint)));
 }
 
 EventMonitorDock::~EventMonitorDock()
@@ -72,13 +100,7 @@ EventMonitorDock::~EventMonitorDock()
 void
 EventMonitorDock::clear()
 {
-    if (d->eventTree->topLevelItemCount() == 0) {
-        return;
-    }
-
-    for (int i = 0; i < d->eventTree->topLevelItemCount(); ++i) {
-        removeItem(i);
-    }
+    d->eventTree->clear();
 }
 
 void

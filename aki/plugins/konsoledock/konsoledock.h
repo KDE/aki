@@ -31,6 +31,7 @@ class Part;
 
 class KonsoleDock : public QDockWidget
 {
+    Q_OBJECT
 public:
     KonsoleDock(QWidget *parent = 0);
     ~KonsoleDock();

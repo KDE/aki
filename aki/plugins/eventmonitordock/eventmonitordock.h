@@ -39,6 +39,9 @@ public:
     void removeItem(int index);
     void clear();
 private:
+    Q_PRIVATE_SLOT(d, void clearTriggered())
+    Q_PRIVATE_SLOT(d, void customContextMenuRequested(const QPoint &pos))
+private:
     enum {
         CustomType = QTreeWidgetItem::UserType,
         IrcEventRole = Qt::UserRole

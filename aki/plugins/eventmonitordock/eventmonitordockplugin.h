@@ -37,6 +37,15 @@ public:
     virtual void unload();
     virtual void load();
 private:
+    Q_PRIVATE_SLOT(d, void serverAdded(Aki::Irc::Socket *socket))
+    Q_PRIVATE_SLOT(d, void serverRemoved(Aki::Irc::Socket *socket))
+    Q_PRIVATE_SLOT(d, void onPrivmsg(const QString &channel, const Aki::Irc::NickInfo &from,
+                                     const Aki::Irc::NickInfo &to, const QString &message))
+    Q_PRIVATE_SLOT(d, void onKick(const Aki::Irc::NickInfo &from, const QString &channel,
+                                  const QString &nick, const QString &message))
+    Q_PRIVATE_SLOT(d, void onNotice(const Aki::Irc::NickInfo &from, const QString &message))
+    Q_PRIVATE_SLOT(d, void onCtcpRequest(const Aki::Irc::NickInfo &from, const QString &type))
+private:
     friend class EventMonitorDockPluginPrivate;
     EventMonitorDockPluginPrivate* const d;
 }; // End of class EventMonitorDockPlugin.

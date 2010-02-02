@@ -556,6 +556,9 @@ MainWindow::MainWindow(QWidget *parent)
     d->mainView = new ServerView(this, this);
     d->mainView->addMessageLog(d->messageLog);
     setCentralWidget(d->mainView);
+
+    setDockNestingEnabled(true);
+    setDockOptions(AllowNestedDocks | AllowTabbedDocks | AnimatedDocks | VerticalTabs);
 }
 
 MainWindow::~MainWindow()
@@ -590,7 +593,8 @@ void
 MainWindow::addDock(QDockWidget *dock, Qt::DockWidgetArea area,
                     Qt::Orientation orientation)
 {
-    addDockWidget(area, dock, orientation);
+    dock->setParent(this);
+    addDockWidget(area, dock);
 }
 
 void
