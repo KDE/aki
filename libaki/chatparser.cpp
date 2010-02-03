@@ -46,6 +46,31 @@ public:
     {
     }
 
+    /**
+     * Removes a part of the string to the first whitespace and returns it.
+     * @return String to first whitespace if a space is found; else it returns
+     * the whole string. If no string in @p message it returns an null string.
+     * @param message Pointer to the message.
+     * @param hasWhitespace true if the string had whitespace; false otherwise
+     */
+    QString removeToSpace(QString *message, bool *hasWhitespace)
+    {
+        if (message->isEmpty() && message->isNull()) {
+            *hasWhitespace = false;
+            return QString();
+        }
+
+        if (message->contains(' ')) {
+            QString msg = message->left(message->indexOf(' '));
+            message->remove(0, msg.length() + 1);
+            *hasWhitespace = true;
+            return msg;
+        } else {
+            *hasWhitespace = false;
+            return *message;
+        }
+    }
+
     QStringList checkMessageLength(const QString &type, const QString &destination,
                                                const QString &message, Aki::Irc::User *user)
     {
@@ -423,6 +448,70 @@ public:
         }
     }
 
+    void parseServer(const QString &message)
+    {
+        QString msg = message;
+        if (message.isEmpty() && message.isNull()) {
+            return;
+        }
+
+        bool ssl = false;
+        bool hasWhitespace = false;
+        bool ok = false;
+        quint16 port = 6667;
+        QString host;
+        QString password;
+
+        QString tmp = removeToSpace(&msg, &hasWhitespace);
+        if (tmp == "-ssl") {
+            ssl = true;
+        } else {
+            host = tmp;
+        }
+
+        if (!hasWhitespace) {
+            emit q->newServerRequest(window->socket()->currentNick(), host, port, ssl, password);
+            return;
+        }
+
+        tmp = removeToSpace(&msg, &hasWhitespace);
+        if (ssl) {
+            host = tmp;
+        } else {
+            tmp.toUShort(&ok);
+            if (ok) {
+                port = tmp.toUShort();
+            } else {
+                password = tmp;
+            }
+        }
+
+        if (!hasWhitespace) {
+            emit q->newServerRequest(window->socket()->currentNick(), host, port, ssl, password);
+            return;
+        }
+
+        tmp = removeToSpace(&msg, &hasWhitespace);
+        if (ssl) {
+            tmp.toUShort(&ok);
+            if (ok) {
+                port = tmp.toUShort();
+            } else {
+                password = tmp;
+            }
+        }
+
+        if (!hasWhitespace) {
+            emit q->newServerRequest(window->socket()->currentNick(), host, port, ssl, password);
+            return;
+        }
+
+        tmp = removeToSpace(&msg, &hasWhitespace);
+        if (ssl) {
+            password = tmp;
+        }
+    }
+
     void parseTopic(const QString &message)
     {
         QString msg = message;
@@ -609,6 +698,8 @@ ChatParser::parse(const QString &data)
             d->window->socket()->rfcPrivmsg("nickserv", message);
         } else if (command == "privmsg") {
             d->parsePrivmsg(message);
+        } else if (command == "server") {
+            d->parseServer(message);
         } else if (command == "time") {
             d->window->socket()->rfcTime();
         } else if (command == "topic") {

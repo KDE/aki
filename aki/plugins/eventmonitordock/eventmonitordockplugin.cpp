@@ -25,11 +25,11 @@
 #include "eventitem.h"
 #include "eventmonitordock.h"
 #include "interfaces/maininterface.h"
+#include "ui/channelwindow.h"
+#include "ui/serverwindow.h"
 #include "ui/serverview.h"
 #include <aki/irc/nickinfo.h>
 #include <Aki/Irc/Socket>
-#include <Aki/Ui/ChannelWindow>
-#include <Aki/Ui/ServerWindow>
 #include <KActionCollection>
 #include <KPluginFactory>
 

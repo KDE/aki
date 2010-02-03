@@ -143,6 +143,12 @@ public:
         }
     }
 
+    void sslErrors(const QList<Aki::Irc::Socket::SslError> &errors)
+    {
+        Aki::BaseWindow *base = findChannel(q->socket()->name());
+        base->socket()->ignoreSslErrors();
+    }
+
     void onAway(const QString &nick, const QString &message)
     {
         Aki::BaseWindow *window = currentFocusedChannel();
@@ -1270,7 +1276,6 @@ public:
 
     void onTopicChanged(const Aki::Irc::NickInfo &nick, const QString &channel, const QString &topic)
     {
-        kDebug() << "Is this firing?";
         Aki::BaseWindow *window = findChannel(channel.toLower());
         if (window && window->view()) {
             switch (window->windowType()) {
@@ -1278,7 +1283,6 @@ public:
                 Aki::ChannelWindow *channel = qobject_cast<Aki::ChannelWindow*>(window);
                 channel->setTopic(topic);
                 channel->addTopicHistory(nick.nick(), topic);
-                kDebug() << "Is this firing?";
                 channel->view()->addTopicChanged(nick.nick(), Aki::Irc::Color::toHtml(topic));
                 if (!channel->isCurrent()) {
                     channel->setTabColor(Aki::BaseWindow::NewData);
@@ -1541,6 +1545,14 @@ public:
         }
     }
 
+    void onWhoIsSecure(const QString &nick, const QString &message)
+    {
+        Aki::BaseWindow *window = currentFocusedChannel();
+        if (window && window->view()) {
+            window->view()->addWhoIs(nick, message);
+        }
+    }
+
     void onWhoIsServer(const QString &nick, const QString &server, const QString &info)
     {
         Aki::BaseWindow *window = currentFocusedChannel();
@@ -1740,6 +1752,8 @@ ServerWindow::ServerWindow(Aki::IdentityConfig *identityConfig, Aki::Irc::Socket
             d->splitView, SLOT(setSplitEnabled(bool)));
     connect(socket, SIGNAL(stateChanged(Aki::Irc::Socket::SocketState)),
             SLOT(stateChanged(Aki::Irc::Socket::SocketState)));
+    connect(socket, SIGNAL(sslErrors(QList<Aki::Irc::Socket::SslError>)),
+            SLOT(sslErrors(QList<Aki::Irc::Socket::SslError>)));
     connect(socket, SIGNAL(onAway(QString,QString)),
             SLOT(onAway(QString,QString)));
     connect(socket, SIGNAL(onBanList(QString,QString,QString,QDateTime)),
@@ -1978,6 +1992,8 @@ ServerWindow::ServerWindow(Aki::IdentityConfig *identityConfig, Aki::Irc::Socket
             SLOT(whoRequested(QString)));
     connect(d->parser, SIGNAL(queryMessage(QString,QString)),
             SLOT(queryMessage(QString,QString)));
+    connect(d->parser, SIGNAL(newServerRequest(QString,QString,quint16,bool,QString)),
+            SIGNAL(newServerRequest(QString,QString,quint16,bool,QString)));
 }
 
 ServerWindow::~ServerWindow()

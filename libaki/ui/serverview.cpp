@@ -31,6 +31,7 @@
 #include "ui/basewindow.h"
 #include "ui/tabbar.h"
 #include "ui/serverwindow.h"
+#include <Aki/Irc/Ctcp>
 #include <Aki/Irc/Socket>
 #include <KDebug>
 #include <KIcon>
@@ -139,6 +140,44 @@ public:
         }
     }
 
+    void newServerRequest(const QString &nick, const QString &address, quint16 port, bool ssl,
+                          const QString &password)
+    {
+        Aki::IdentityConfig *config = new Aki::IdentityConfig(q);
+        config->setCurrentGroup("Custom Connection");
+        config->setAwayNickname(QString("%1|away").arg(nick));
+        QStringList nicks;
+        nicks << nick << (nick + '_') << (nick + "__");
+        config->setNicknameList(nicks);
+        config->setRealName("Aki");
+
+        Aki::Irc::Socket *socket = new Aki::Irc::Socket(address, q);
+        socket->setAddressList(QStringList() << address + '/' + QString::number(port));
+        socket->setAutoIdentify(false);
+        socket->setAutoReconnect(true);
+        socket->setIdentName("Aki");
+        socket->setNickList(config->nicknameList());
+        socket->setRealName(config->realName());
+        socket->setRetryAttemptCount(10);
+        socket->setRetryInterval(10);
+        socket->setSsl(ssl);
+        socket->setServicePassword(password);
+
+        Aki::Irc::Ctcp *ctcp = new Aki::Irc::Ctcp(q);
+        ctcp->setVersionString(Aki::Settings::ctcpVersionMessage());
+        ctcp->blockClientInfo(Aki::Settings::ignoreClientInfo());
+        ctcp->blockDcc(Aki::Settings::ignoreDcc());
+        ctcp->blockPing(Aki::Settings::ignorePing());
+        ctcp->blockSource(Aki::Settings::ignoreSource());
+        ctcp->blockTime(Aki::Settings::ignoreTime());
+        ctcp->blockUserInfo(Aki::Settings::ignoreUserInfo());
+        ctcp->blockVersion(Aki::Settings::ignoreVersion());
+        socket->setCtcp(ctcp);
+
+        q->addServer(config, socket, QStringList());
+        socket->connectToHost();
+    }
+
     Aki::ServerView *q;
     QList<Aki::BaseWindow*> tabList;
     Aki::Notifications *notifications;
@@ -193,6 +232,8 @@ ServerView::addServer(IdentityConfig *identityConfig, Aki::Irc::Socket *socket,
     window->setChannelList(channelList);
     connect(window, SIGNAL(customCommand(QString,QString)),
             SIGNAL(customCommand(QString,QString)));
+    connect(window, SIGNAL(newServerRequest(QString,QString,quint16,bool,QString)),
+            SLOT(newServerRequest(QString,QString,quint16,bool,QString)));
     addTab(window, socket->name());
     d->tabList << window;
     setCurrentIndex(d->tabList.indexOf(window));

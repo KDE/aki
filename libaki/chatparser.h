@@ -50,6 +50,8 @@ Q_SIGNALS:
     void whoRequest(const QString &channel);
     void queryMessage(const QString &to, const QString &message);
     void listRequest(const QString &channel);
+    void newServerRequest(const QString &nick, const QString &server, quint16 port,
+                          bool ssl, const QString &password);
 private:
     friend class ChatParserPrivate;
     QScopedPointer<ChatParserPrivate> d;

@@ -114,6 +114,8 @@ private:
     Q_PRIVATE_SLOT(d, void _currentChanged(int))
     Q_PRIVATE_SLOT(d, void _tabCloseRequested(int))
     Q_PRIVATE_SLOT(d, void _tabMoved(int, int))
+    Q_PRIVATE_SLOT(d, void newServerRequest(const QString &nick, const QString &address, quint16 port,
+                                            bool ssl, const QString &password))
 }; // End of class ServerView.
 } // End of namespace Aki.
 

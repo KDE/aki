@@ -57,8 +57,11 @@ public:
 Q_SIGNALS:
     void dropSuccessful(Aki::BaseWindow *window);
     void customCommand(const QString &command, const QString &message);
+    void newServerRequest(const QString &nick, const QString &address, quint16 port, bool ssl,
+                          const QString &password);
 private:
     Q_PRIVATE_SLOT(d, void stateChanged(Aki::Irc::Socket::SocketState state))
+    Q_PRIVATE_SLOT(d, void sslErrors(const QList<Aki::Irc::Socket::SslError> &errors))
     Q_PRIVATE_SLOT(d, void onAway(const QString &nick, const QString &message))
     Q_PRIVATE_SLOT(d, void onBanList(const QString &channel, const QString &mask,
                                      const QString &who, const QDateTime &time))
@@ -181,6 +184,7 @@ private:
     Q_PRIVATE_SLOT(d, void onWhoIsIdle(const QString &nick, const QDateTime &idleTime, const QDateTime &signon,
                                        const QString &info))
     Q_PRIVATE_SLOT(d, void onWhoIsOperator(const QString &nick, const QString &message))
+    Q_PRIVATE_SLOT(d, void onWhoIsSecure(const QString &nick, const QString &message))
     Q_PRIVATE_SLOT(d, void onWhoIsServer(const QString &nick, const QString &server, const QString &info))
     Q_PRIVATE_SLOT(d, void onWhoIsUser(const QString &nick, const QString &userName, const QString &address,
                                        const QString &info))
