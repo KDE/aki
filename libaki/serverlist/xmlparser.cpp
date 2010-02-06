@@ -255,7 +255,7 @@ XmlParser::write(QIODevice *device)
     }
 
     if (!device->isWritable()) {
-        kWarning("Device is in reading mode. Make sure you didn't call read already.");
+        kWarning() << "Device is in reading mode. Make sure you didn't call read already.";
         return false;
     }
 
