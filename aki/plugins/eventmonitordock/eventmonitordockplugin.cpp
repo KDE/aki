@@ -155,6 +155,10 @@ public:
             return;
         }
 
+        if (nick.toLower() != socket->currentNick().toLower()) {
+            return;
+        }
+
         EventItem event;
         event.setChannel(channel);
         event.setEvent(EventItem::KickedEvent);
