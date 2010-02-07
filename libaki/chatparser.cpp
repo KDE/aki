@@ -170,6 +170,83 @@ public:
         }
     }
 
+    void parseHelp(const QString &message)
+    {
+        QString msg = message.toLower();
+
+        if (message.isEmpty() && message.isNull()) {
+            return;
+        }
+
+        if (!window->view()) {
+            return;
+        }
+
+        if (msg == "away") {
+            window->view()->addHelp(i18n("<html>Usage: AWAY &lt;reason&gt;, Marks you away</html>"));
+        } else if (msg == "ban") {
+            window->view()->addHelp(i18n("<html>Usage: BAN &lt;mask&gt; [&lt;bantype&gt;], Bans everyone matching the mask."
+                                         " (Requires ChanOp)</html>"));
+        } else if (msg == "chanserv") {
+        } else if (msg == "clear") {
+            window->view()->addHelp(i18n("<html>Usage: CLEAR, Clears the chat window</html>"));
+        } else if (msg == "ctcp") {
+            window->view()->addHelp(i18n("<html>Usage: CTCP &lt;nick&gt; &lt;message&gt;, Send CTCP message to nick</html>"));
+        } else if (msg == "cs") {
+        } else if (msg == "ghost") {
+            window->view()->addHelp(i18n("<html>Usage: GHOST &lt;nick&gt; &lt;password&gt;, Kill a ghosted nickname</html>"));
+        } else if (msg == "invite") {
+            window->view()->addHelp(i18n("<html>Usage: INVITE &lt;nick&gt; [&lt;channel&gt;], invites someone to a channel, "
+                                         "by default the current channel (needs ChanOp)</html>"));
+        } else if (msg == "ison") {
+            //window->view()->addHelp(i18n(""));
+        } else if (msg == "j") {
+            window->view()->addHelp(i18n("<html>Usage: JOIN &lt;channel&gt;, joins the channel</html>"));
+        } else if (msg == "join") {
+            window->view()->addHelp(i18n("<html>Usage: JOIN &lt;channel&gt;, joins the channel</html>"));
+        } else if (msg == "kick") {
+            window->view()->addHelp(i18n("<html>Usage: KICK &lt;nick&gt; &lt;reason&gt;, kicks the nick from the "
+                                         "current channel (needs ChanOp)</html>"));
+        } else if (msg == "list") {
+        } else if (msg == "lusers") {
+            //window->view()->addHelp(i18n("<html></html>"));
+        } else if (msg == "me") {
+            window->view()->addHelp(i18n("<html>Usage: ME &lt;action&gt;, Sends the action to the current channel. "
+                                         "Actions are messages in 3rd person mode of oneself.</html>"));
+        } else if (msg == "mode") {
+            //window->view()->addHelp(i18n("<html></html>"));
+        } else if (msg == "msg") {
+            //window->view()->addHelp(i18n("<html></html>"));
+        } else if (msg == "nick") {
+            //window->view()->addHelp(i18n("<html></html>"));
+        } else if (msg == "nickserv") {
+            //window->view()->addHelp(i18n("<html></html>"));
+        } else if (msg == "ns") {
+        } else if (msg == "privmsg") {
+            //window->view()->addHelp(i18n("<html></html>"));
+        } else if (msg == "server") {
+            //window->view()->addHelp(i18n("<html></html>"));
+        } else if (msg == "time") {
+            //window->view()->addHelp(i18n("<html></html>"));
+        } else if (msg == "topic") {
+            //window->view()->addHelp(i18n("<html></html>"));
+        } else if (msg == "umode") {
+            //window->view()->addHelp(i18n("<html></html>"));
+        } else if (msg == "unaway") {
+            //window->view()->addHelp(i18n("<html></html>"));
+        } else if (msg == "userhost") {
+            //window->view()->addHelp(i18n("<html></html>"));
+        } else if (msg == "version") {
+            //window->view()->addHelp(i18n("<html></html>"));
+        } else if (msg == "who") {
+            //window->view()->addHelp(i18n("<html></html>"));
+        } else if (msg == "whois") {
+            //window->view()->addHelp(i18n("<html></html>"));
+        } else if (msg == "whowas") {
+            //window->view()->addHelp(i18n("<html></html>"));
+        }
+    }
+
     void parseInvite(const QString &message)
     {
         QString msg = message;
@@ -670,6 +747,8 @@ ChatParser::parse(const QString &data)
             d->window->socket()->rfcPrivmsg("chanserv", message);
         } else if (command == "ghost") {
             d->parseGhost(message);
+        } else if (command == "help") {
+            d->parseHelp(message);
         } else if (command == "invite") {
             d->parseInvite(message);
         } else if (command == "ison") {
