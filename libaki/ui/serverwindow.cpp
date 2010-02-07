@@ -113,6 +113,7 @@ public:
                 }
                 }
             }
+            connected = false;
             break;
         }
         case Aki::Irc::Socket::ConnectingState: {
@@ -270,6 +271,13 @@ public:
         Aki::BaseWindow *window = findChannel(q->socket()->name());
         if (window && window->view()) {
             window->view()->addMotd(message);
+        }
+
+        if (!connected) {
+            if (!rejoinChannels.isEmpty()) {
+                q->socket()->rfcJoin(rejoinChannels);
+            }
+            connected = true;
         }
     }
 
@@ -1137,10 +1145,7 @@ public:
                 if (from.nick() == "NickServ" && message.contains("This nickname is registered", Qt::CaseInsensitive)) {
                     if (q->socket()->serviceName().toLower().trimmed() == "nickserv" &&
                         !q->socket()->servicePassword().isEmpty() && q->socket()->isAutoIdentifyEnabled()) {
-                        q->socket()->rfcPrivmsg("NickServ", "identify " + q->socket()->servicePassword().toLatin1());
-                    }
-                    if (!rejoinChannels.isEmpty()) {
-                        q->socket()->rfcJoin(rejoinChannels);
+                        q->socket()->rfcPrivmsg("NickServ", "identify " + q->socket()->servicePassword());
                     }
                 }
             }
@@ -1693,6 +1698,7 @@ public:
     QStringList whoRequest;
     QStringList rejoinChannels;
     QSplitter *splitter;
+    bool connected;
 }; // End of class ServerWindowPrivate.
 } // End of namespace Aki.
 
