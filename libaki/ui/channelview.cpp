@@ -39,10 +39,7 @@
 #include <KIcon>
 #include <KLocale>
 #include <KPushButton>
-#include <QDragEnterEvent>
-#include <QMenu>
-#include <QQueue>
-#include <QTimer>
+#include <QtGui>
 using namespace Aki;
 
 namespace Aki
@@ -50,16 +47,23 @@ namespace Aki
 class ChannelViewPrivate
 {
 public:
-    ChannelViewPrivate(ChannelView *qq)
+    ChannelViewPrivate(Aki::ChannelView *qq)
         : q(qq),
         identity(0),
         socket(0),
+        parser(0),
+        notifications(0),
+        whoQueueTimer(0),
+        contextMenu(0),
+        splitViewAction(0),
+        closeTabAction(0),
         isSplit(false)
     {
+        tabList.clear();
         whoQueue.clear();
     }
 
-    void _tabCloseRequested(int index)
+    void tabCloseRequested(int index)
     {
         Aki::BaseWindow *window = qobject_cast<Aki::BaseWindow*>(q->widget(index));
 
@@ -75,6 +79,7 @@ public:
             break;
         }
         default: {
+            return;
             break;
         }
         }
@@ -82,130 +87,83 @@ public:
         if (window->logFile()) {
             window->logFile()->close();
         }
-        q->removeChannel(index);
+
+        q->takeChannel(window);
+        delete window;
 
         if (q->count() == 0) {
             q->hide();
         }
     }
 
-    void _currentChanged(int index)
+    void currentChanged(int index)
     {
-        if (q->count() == 0 || index == -1 || tabList.count() == 0) {
+        if (q->count() == 0 || tabList.count() == 0) {
             return;
         }
 
         for (int i = 0; i < tabList.count(); ++i) {
             if (i == index) {
-                tabList[i]->setCurrent(true);
-                const QString name = tabList[i]->name();
-                const QString serverName = tabList[i]->socket()->name();
+                Aki::BaseWindow *window = tabList[i];
+                window->setCurrent(true);
+                const QString name = window->name();
+                const QString serverName = window->socket()->name();
             } else {
                 tabList[i]->setCurrent(false);
             }
         }
     }
 
-    void _tabMoved(int oldIndex, int newIndex)
+    void tabMoved(int oldIndex, int newIndex)
     {
         qSwap(tabList[oldIndex], tabList[newIndex]);
     }
 
-    Aki::BaseWindow* findChannel(const QString &name)
+    void buildContextMenu()
     {
-        if (name.isEmpty() || name.isNull()) {
-            return 0;
-        }
+        contextMenu = new QMenu(q);
+        splitViewAction = new QAction(KIcon("tab-duplicate"), i18n("Split View"), contextMenu);
+        splitViewAction->setEnabled((q->count() > 1) && !isSplit);
+        q->connect(splitViewAction, SIGNAL(triggered(bool)),
+                   q, SLOT(splitView()));
 
-        foreach (Aki::BaseWindow *window, tabList) {
-            if (window->name().toLower() == name.toLower()) {
-                return window;
-            }
-        }
+        closeTabAction = new QAction(KIcon("tab-close"), i18n("Close Tab"), contextMenu);
+        closeTabAction->setEnabled((q->count() > 1) && !isSplit);
+        q->connect(closeTabAction, SIGNAL(triggered(bool)),
+                   q, SLOT(closeTab()));
 
-        return 0;
+        contextMenu->addAction(splitViewAction);
+        contextMenu->addSeparator();
+        contextMenu->addAction(closeTabAction);
     }
 
-    bool containsChannel(const QString &name)
+    void customContextMenuRequested()
     {
-        if (name.isEmpty() || name.isNull()) {
-            return false;
-        }
-
-        foreach (Aki::BaseWindow *window, tabList) {
-            if (window->name().toLower() == name.toLower()) {
-                return true;
-            }
-        }
-
-        return false;
+        bool enabled = ((q->count() > 1) && !isSplit);
+        splitViewAction->setEnabled(enabled);
+        closeTabAction->setEnabled(enabled);
+        contextMenu->popup(QCursor::pos());
     }
 
-    void _customContextMenuRequested(const QPoint &pos)
+    void splitView()
     {
-        Q_UNUSED(pos);
-
-        QMenu *menu = new QMenu(q);
-
-        QAction *splitView = new QAction(menu);
-        splitView->setIcon(KIcon("tab-duplicate"));
-        splitView->setText(i18n("Split View"));
-        splitView->setEnabled((q->count() > 1 && !isSplit) ? true : false);
-        QObject::connect(splitView, SIGNAL(triggered(bool)),
-                         q, SLOT(_splitView()));
-
-        QAction *closeTab = new QAction(menu);
-        closeTab->setIcon(KIcon("tab-close"));
-        closeTab->setShortcut(Qt::CTRL + Qt::Key_W);
-        closeTab->setText(i18n("Close Tab"));
-        closeTab->setEnabled((q->count() > 1) ? true : false);
-        QObject::connect(closeTab, SIGNAL(triggered(bool)),
-                         q, SLOT(_closeTab()));
-
-        menu->addAction(splitView);
-        menu->addSeparator();
-        menu->addAction(closeTab);
-        menu->popup(QCursor::pos());
-    }
-
-    void _splitView()
-    {
-        Aki::BaseWindow *currentWindow = tabList.value(q->currentIndex());
-        q->removeChannel(q->currentIndex());
+        const int currentIndex = q->currentIndex();
+        Aki::BaseWindow *current = tabList.value(currentIndex);
+        q->takeChannel(current);
 
         QSplitter *splitter = qobject_cast<QSplitter*>(q->parentWidget());
-        qobject_cast<Aki::ServerWindow*>(splitter->parentWidget())->createNewView(currentWindow);
+        Aki::ServerWindow *serverWindow = qobject_cast<Aki::ServerWindow*>(splitter->parentWidget());
+        serverWindow->createNewView(current);
 
-        tabList.value(q->currentIndex())->setCurrent(true);
         isSplit = true;
     }
 
-    void _closeTab()
+    void closeTab()
     {
-        Aki::BaseWindow *window = qobject_cast<Aki::BaseWindow*>(q->widget(q->currentIndex()));
-
-        switch (window->windowType()) {
-        case Aki::BaseWindow::ChannelWindow: {
-            window->socket()->rfcPart(window->name(), identity->partMessage());
-            break;
-        }
-        default: {
-            break;
-        }
-        }
-
-        if (window->logFile()) {
-            window->logFile()->close();
-        }
-
-        q->removeChannel(window->name());
-
-        if (q->count() == 0) {
-            q->hide();
-        }
+        tabCloseRequested(q->currentIndex());
     }
 
-    void _textSubmitted(Aki::BaseWindow *window, const QString &text)
+    void textSubmitted(Aki::BaseWindow *window, const QString &text)
     {
         parser->setWindow(window);
         parser->parse(text);
@@ -214,17 +172,10 @@ public:
     void whoAdded(const QString &channel)
     {
         whoQueue.append(channel.toLower());
-        Aki::ChannelWindow *window = qobject_cast<Aki::ChannelWindow*>(findChannel(channel.toLower()));
+        Aki::ChannelWindow *window = qobject_cast<Aki::ChannelWindow*>(q->findChannel(channel));
+
         if (window) {
             window->setIsWhoRunning(true);
-        }
-    }
-
-    void whoRemoved(const QString &channel)
-    {
-        Aki::ChannelWindow *window = qobject_cast<Aki::ChannelWindow*>(findChannel(channel.toLower()));
-        if (window) {
-            window->setIsWhoRunning(false);
         }
     }
 
@@ -237,48 +188,64 @@ public:
         }
     }
 
+    void whoRemoved(const QString &channel)
+    {
+        Aki::ChannelWindow *window = qobject_cast<Aki::ChannelWindow*>(q->findChannel(channel));
+        if (window) {
+            window->setIsWhoRunning(false);
+        }
+    }
 
-    ChannelView *q;
+    void setTabPosition(int type)
+    {
+        switch (type) {
+        case 0: {
+            q->setTabPosition(QTabWidget::North);
+            break;
+        }
+        case 1: {
+            q->setTabPosition(QTabWidget::South);
+            break;
+        }
+        case 2: {
+            q->setTabPosition(QTabWidget::West);
+            break;
+        }
+        case 3: {
+            q->setTabPosition(QTabWidget::East);
+            break;
+        }
+        }
+    }
+
+    Aki::ChannelView *q;
     Aki::IdentityConfig *identity;
     Aki::Irc::Socket *socket;
     Aki::ChatParser *parser;
     Aki::Notifications *notifications;
-    ChannelView::WindowList tabList;
+    Aki::ChannelView::WindowList tabList;
     QQueue<QString> whoQueue;
     QTimer *whoQueueTimer;
+    QMenu *contextMenu;
+    QAction *splitViewAction;
+    QAction *closeTabAction;
     bool isSplit;
-}; // End of class ChannelViewPrivate;
+}; // End of class ChannelViewPrivate.
 } // End of namespace Aki.
 
 ChannelView::ChannelView(Aki::IdentityConfig *identityConfig, QWidget *parent)
     : KTabWidget(parent)
 {
     d.reset(new Aki::ChannelViewPrivate(this));
-
-    Aki::TabBar *bar = new Aki::TabBar(this);
     d->identity = identityConfig;
 
+    Aki::TabBar *bar = new Aki::TabBar(this);
     setTabBar(bar);
+
     tabBar()->setContextMenuPolicy(Qt::CustomContextMenu);
 
-    switch (Aki::Settings::channelTabPosition()) {
-    case 0: {
-        setTabPosition(North);
-        break;
-    }
-    case 1: {
-        setTabPosition(South);
-        break;
-    }
-    case 2: {
-        setTabPosition(West);
-        break;
-    }
-    case 3: {
-        setTabPosition(East);
-        break;
-    }
-    }
+    d->buildContextMenu();
+    d->setTabPosition(Aki::Settings::channelTabPosition());
 
     setTabsClosable(true);
     setTabCloseActivatePrevious(true);
@@ -287,13 +254,13 @@ ChannelView::ChannelView(Aki::IdentityConfig *identityConfig, QWidget *parent)
     setFocusPolicy(Qt::StrongFocus);
 
     connect(this, SIGNAL(tabCloseRequested(int)),
-            SLOT(_tabCloseRequested(int)));
+            SLOT(tabCloseRequested(int)));
     connect(this, SIGNAL(currentChanged(int)),
-            SLOT(_currentChanged(int)));
+            SLOT(currentChanged(int)));
     connect(tabBar(), SIGNAL(tabMoved(int,int)),
-            SLOT(_tabMoved(int,int)));
+            SLOT(tabMoved(int,int)));
     connect(tabBar(), SIGNAL(customContextMenuRequested(QPoint)),
-            SLOT(_customContextMenuRequested(QPoint)));
+            SLOT(customContextMenuRequested()));
 
     d->whoQueueTimer = new QTimer(this);
     d->whoQueueTimer->start(25000);
@@ -303,53 +270,38 @@ ChannelView::ChannelView(Aki::IdentityConfig *identityConfig, QWidget *parent)
             SLOT(whoRemoved(QString)));
 }
 
-ChannelView::ChannelView(Aki::IdentityConfig *identityConfig, Aki::Irc::Socket *socket,
-                         Aki::ChatParser *parser, Aki::Notifications *notification, QWidget *parent)
+ChannelView::ChannelView(Aki::IdentityConfig *identityConfig, Aki::Irc::Socket *socket, Aki::ChatParser *parser,
+                         Aki::Notifications *notifications, QWidget *parent)
     : KTabWidget(parent)
 {
     d.reset(new Aki::ChannelViewPrivate(this));
-
-    Aki::TabBar *bar = new Aki::TabBar(this);
     d->identity = identityConfig;
     d->socket = socket;
     d->parser = parser;
-    d->notifications = notification;
+    d->notifications = notifications;
 
+    Aki::TabBar *bar = new Aki::TabBar(this);
     setTabBar(bar);
+
     tabBar()->setContextMenuPolicy(Qt::CustomContextMenu);
 
-    switch (Aki::Settings::channelTabPosition()) {
-    case 0: {
-        setTabPosition(North);
-        break;
-    }
-    case 1: {
-        setTabPosition(South);
-        break;
-    }
-    case 2: {
-        setTabPosition(West);
-        break;
-    }
-    case 3: {
-        setTabPosition(East);
-        break;
-    }
-    }
+    d->buildContextMenu();
+    d->setTabPosition(Aki::Settings::channelTabPosition());
 
     setTabsClosable(true);
     setTabCloseActivatePrevious(true);
     setMovable(true);
     setAcceptDrops(true);
+    setFocusPolicy(Qt::StrongFocus);
 
     connect(this, SIGNAL(tabCloseRequested(int)),
-            SLOT(_tabCloseRequested(int)));
+            SLOT(tabCloseRequested(int)));
     connect(this, SIGNAL(currentChanged(int)),
-            SLOT(_currentChanged(int)));
+            SLOT(currentChanged(int)));
     connect(tabBar(), SIGNAL(tabMoved(int,int)),
-            SLOT(_tabMoved(int,int)));
+            SLOT(tabMoved(int,int)));
     connect(tabBar(), SIGNAL(customContextMenuRequested(QPoint)),
-            SLOT(_customContextMenuRequested(QPoint)));
+            SLOT(customContextMenuRequested()));
 
     d->whoQueueTimer = new QTimer(this);
     d->whoQueueTimer->start(25000);
@@ -363,6 +315,162 @@ ChannelView::ChannelView(Aki::IdentityConfig *identityConfig, Aki::Irc::Socket *
 
 ChannelView::~ChannelView()
 {
+    
+}
+
+void
+ChannelView::addChannel(const QString &name)
+{
+    if (name.isEmpty() || name.isNull()) {
+        return;
+    }
+
+    if (!findChannel(name)) {
+        Aki::ChannelWindow *window = new Aki::ChannelWindow(name, d->identity, d->socket);
+        window->setChannelView(this);
+        window->setNotifications(d->notifications);
+        window->setNickList(d->socket->nickList());
+        window->setCurrent(true);
+
+        addTab(window, name);
+
+        connect(window, SIGNAL(textSubmitted(Aki::BaseWindow*,QString)),
+                SLOT(textSubmitted(Aki::BaseWindow*,QString)));
+        connect(window, SIGNAL(whoAdded(QString)),
+                SLOT(whoAdded(QString)));
+
+        d->tabList.append(window);
+        setCurrentIndex(d->tabList.indexOf(window));
+    } else {
+        Aki::ChannelWindow *window = qobject_cast<Aki::ChannelWindow*>(findChannel(name));
+        window->populateUserList();
+        window->resetWho(true);
+    }
+}
+
+bool
+ChannelView::addChannel(Aki::BaseWindow *channel)
+{
+    Q_ASSERT(channel);
+
+    if (findChannel(channel->name())) {
+        return false;
+    }
+
+    switch (channel->windowType()) {
+    case Aki::BaseWindow::ChannelWindow: {
+        Aki::ChannelWindow *window = qobject_cast<Aki::ChannelWindow*>(channel);
+        d->tabList.append(window);
+        addTab(window, window->name());
+        break;
+    }
+    case Aki::BaseWindow::StatusWindow: {
+        Aki::StatusWindow *window = qobject_cast<Aki::StatusWindow*>(channel);
+        d->tabList.append(window);
+        addTab(window, window->name());
+        break;
+    }
+    case Aki::BaseWindow::QueryWindow: {
+        Aki::QueryWindow *window = qobject_cast<Aki::QueryWindow*>(channel);
+        d->tabList.append(window);
+        addTab(window, window->name());
+        break;
+    }
+    default: {
+        kError() << "Window type not supported yet!";
+        return false;
+        break;
+    }
+    }
+
+    channel->setChannelView(this);
+    setCurrentIndex(d->tabList.indexOf(channel));
+    return true;
+}
+
+void
+ChannelView::addQuery(Aki::Irc::User *self, Aki::Irc::User *other, const QString &message, bool toSelf)
+{
+    if (!self || !other) {
+        return;
+    }
+
+    if (findChannel(other->nick())) {
+        return;
+    }
+
+    Aki::QueryWindow *window = new Aki::QueryWindow(other->nick(), d->socket);
+    window->setChannelView(this);
+    window->setCurrent(true);
+    window->setNotifications(d->notifications);
+    window->setSelfUser(self);
+    window->setOtherUser(other);
+
+    if (!message.isEmpty() || !message.isNull()) {
+        window->addMessage(toSelf ? self->nick() : other->nick(), message);
+        if (toSelf) {
+            window->socket()->rfcPrivmsg(other->nick(), message);
+        }
+    }
+
+    addTab(window, other->nick());
+
+    connect(window, SIGNAL(textSubmitted(Aki::BaseWindow*,QString)),
+            SLOT(textSubmitted(Aki::BaseWindow*,QString)));
+
+    d->tabList.append(window);
+    setCurrentIndex(d->tabList.indexOf(window));
+}
+
+void
+ChannelView::addStatus(const QString &name)
+{
+    if (name.isEmpty() || name.isNull()) {
+        return;
+    }
+
+    if (findChannel(name)) {
+        return;
+    }
+
+    Aki::StatusWindow *window = new Aki::StatusWindow(name, d->identity, d->socket);
+    window->setCurrent(true);
+    window->setChannelView(this);
+    window->setNotifications(d->notifications);
+    window->setNickList(d->socket->nickList());
+
+    addTab(window, name);
+
+    connect(window, SIGNAL(textSubmitted(Aki::BaseWindow*,QString)),
+            SLOT(textSubmitted(Aki::BaseWindow*,QString)));
+
+    d->tabList.append(window);
+    setCurrentIndex(d->tabList.indexOf(window));
+}
+
+void
+ChannelView::checkChannelDrop(BaseWindow *window)
+{
+    if (d->tabList.contains(window)) {
+        takeChannel(window);
+
+        if (d->tabList.count() == 0) {
+            emit splitStatusChanged(false);
+            hide();
+        }
+    }
+}
+
+BaseWindow*
+ChannelView::currentChannel()
+{
+    foreach (Aki::BaseWindow *window, d->tabList) {
+        if (window->isCurrent()) {
+            return window;
+        }
+    }
+
+    return 0;
 }
 
 void
@@ -384,17 +492,42 @@ ChannelView::dragEnterEvent(QDragEnterEvent *event)
 
         Aki::BaseWindow *window = reinterpret_cast<Aki::BaseWindow*>(data);
         emit dropSuccessful(window);
+        if (addChannel(window)) {
+            kDebug() << QString("%1 successfully added %2").arg(objectName(), window->name());
+        } else {
+            return;
+        }
 
         if (count() == 0) {
             setSplitEnabled(true);
         }
-
-        addChannel(window);
     } else {
-        event->ignore();
+        setSplitEnabled(true);
     }
 
     KTabWidget::dragEnterEvent(event);
+}
+
+BaseWindow*
+ChannelView::findChannel(const QString &name)
+{
+    if (name.isEmpty() || name.isNull()) {
+        return 0;
+    }
+
+    foreach (Aki::BaseWindow *window, d->tabList) {
+        if (window->name().toLower() == name.toLower()) {
+            return window;
+        }
+    }
+
+    return 0;
+}
+
+bool
+ChannelView::isSplitEnabled() const
+{
+    return d->isSplit;
 }
 
 void
@@ -414,7 +547,7 @@ ChannelView::removeChannel(const QString &name)
         return;
     }
 
-    Aki::BaseWindow *window = d->findChannel(name);
+    Aki::BaseWindow *window = findChannel(name);
     if (!window) {
         return;
     }
@@ -422,7 +555,7 @@ ChannelView::removeChannel(const QString &name)
     const int index = d->tabList.indexOf(window);
 
     removeTab(index);
-    d->tabList.removeOne(window);
+    delete d->tabList.takeAt(index);
 
     if (count() == 0) {
         setSplitEnabled(false);
@@ -430,184 +563,9 @@ ChannelView::removeChannel(const QString &name)
 }
 
 void
-ChannelView::addChannel(const QString &name)
-{
-    if (name.isEmpty() || name.isNull()) {
-        return;
-    }
-
-    if (!d->findChannel(name)) {
-        Aki::ChannelWindow *window = new Aki::ChannelWindow(name, d->identity, d->socket, this);
-        window->setChannelView(this);
-        window->setNotifications(d->notifications);
-        window->setNickList(d->socket->nickList());
-        window->setCurrent(true);
-
-        addTab(window, name);
-
-        connect(window, SIGNAL(textSubmitted(Aki::BaseWindow*,QString)),
-                SLOT(_textSubmitted(Aki::BaseWindow*,QString)));
-        connect(window, SIGNAL(whoAdded(QString)),
-                SLOT(whoAdded(QString)));
-
-        d->tabList << window;
-        setCurrentIndex(d->tabList.indexOf(window));
-    } else {
-        Aki::ChannelWindow *window = qobject_cast<Aki::ChannelWindow*>(findChannel(name));
-        window->populateUserList();
-        window->resetWho(true);
-    }
-}
-
-void
-ChannelView::addChannel(Aki::BaseWindow *channel)
-{
-    Q_ASSERT(channel);
-
-    if (d->findChannel(channel->name())) {
-        return;
-    }
-
-    switch (channel->windowType()) {
-    case Aki::BaseWindow::ChannelWindow: {
-        Aki::ChannelWindow *window = qobject_cast<Aki::ChannelWindow*>(channel);
-        addTab(window, window->name());
-        break;
-    }
-    case Aki::BaseWindow::StatusWindow: {
-        Aki::StatusWindow *status = qobject_cast<Aki::StatusWindow*>(channel);
-        addTab(status, status->name());
-        break;
-    }
-    case Aki::BaseWindow::QueryWindow: {
-        Aki::QueryWindow *query = qobject_cast<Aki::QueryWindow*>(channel);
-        addTab(query, query->name());
-        break;
-    }
-    default: {
-        kError() << "Window type not supported yet!";
-        return; 
-        break;
-    }
-    }
-
-    channel->setChannelView(this);
-    d->tabList << channel;
-    setCurrentIndex(d->tabList.indexOf(channel));
-}
-
-void
-ChannelView::checkChannelDrop(Aki::BaseWindow *window)
-{
-    if (d->tabList.contains(window)) {
-        removeChannel(d->tabList.indexOf(window));
-
-        if (d->tabList.count() == 0) {
-            emit splitStatusChanged(false);
-            hide();
-        }
-    }
-}
-
-void
-ChannelView::addStatus(const QString &name)
-{
-    if (name.isEmpty() || name.isNull()) {
-        return;
-    }
-
-    if (d->findChannel(name)) {
-        return;
-    }
-
-    Aki::StatusWindow *window = new Aki::StatusWindow(name, d->identity, d->socket, this);
-    window->setCurrent(true);
-    window->setChannelView(this);
-    window->setNotifications(d->notifications);
-    window->setNickList(d->socket->nickList());
-    addTab(window, name);
-
-    connect(window, SIGNAL(textSubmitted(Aki::BaseWindow*,QString)),
-            SLOT(_textSubmitted(Aki::BaseWindow*,QString)));
-
-    d->tabList << window;
-    setCurrentIndex(d->tabList.indexOf(window));
-}
-
-void
-ChannelView::addQuery(Aki::Irc::User *self, Aki::Irc::User *other, const QString &message,
-                      bool toSelf)
-{
-    if (!self || !other) {
-        return;
-    }
-
-    if (d->findChannel(other->nick())) {
-        return;
-    }
-
-    Aki::QueryWindow *window = new Aki::QueryWindow(other->nick(), d->socket, this);
-    window->setChannelView(this);
-    window->setCurrent(true);
-    window->setNotifications(d->notifications);
-    window->setSelfUser(self);
-    window->setOtherUser(other);
-
-    if (!message.isEmpty() && !message.isNull()) {
-        window->addMessage(toSelf ? self->nick() : other->nick(), message);
-        if (toSelf) {
-            window->socket()->rfcPrivmsg(other->nick(), message);
-        }
-    }
-
-    addTab(window, other->nick());
-
-    connect(window, SIGNAL(textSubmitted(Aki::BaseWindow*,QString)),
-            SLOT(_textSubmitted(Aki::BaseWindow*,QString)));
-
-    d->tabList << window;
-    setCurrentIndex(d->tabList.indexOf(window));
-}
-
-Aki::StatusWindow*
-ChannelView::statusWindow()
-{
-    foreach (Aki::BaseWindow *window, d->tabList) {
-        if (window->windowType() == Aki::BaseWindow::StatusWindow) {
-            return qobject_cast<Aki::StatusWindow*>(window);
-        }
-    }
-    return 0;
-}
-
-Aki::BaseWindow*
-ChannelView::findChannel(const QString &name)
-{
-    return d->findChannel(name);
-}
-
-Aki::BaseWindow*
-ChannelView::currentChannel()
-{
-    foreach (Aki::BaseWindow *window, d->tabList) {
-        if (window->isCurrent()) {
-            return window;
-        }
-    }
-
-    return 0;
-}
-
-void
-ChannelView::setChatParser(Aki::ChatParser *parser)
+ChannelView::setChatParser(ChatParser *parser)
 {
     d->parser = parser;
-}
-
-QList<Aki::BaseWindow*>
-ChannelView::windows()
-{
-    return d->tabList;
 }
 
 void
@@ -616,10 +574,30 @@ ChannelView::setSplitEnabled(bool enabled)
     d->isSplit = enabled;
 }
 
-bool
-ChannelView::isSplitEnabled() const
+void
+ChannelView::takeChannel(Aki::BaseWindow *window)
 {
-    return d->isSplit;
+    if (!window) {
+        return;
+    }
+
+    const int index = d->tabList.indexOf(window);
+    if (index == -1) {
+        return;
+    }
+
+    d->tabList.removeAt(index);
+    removeTab(index);
+
+    if (count() == 0) {
+        setSplitEnabled(false);
+    }
+}
+
+ChannelView::WindowList
+ChannelView::windows()
+{
+    return d->tabList;
 }
 
 #include "channelview.moc"
