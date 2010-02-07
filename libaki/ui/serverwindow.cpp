@@ -1727,10 +1727,12 @@ ServerWindow::ServerWindow(Aki::IdentityConfig *identityConfig, Aki::Irc::Socket
     d->mainView = new Aki::ChannelView(identityConfig, socket, d->parser, notifications,
                                        this);
     d->mainView->setSplitEnabled(false);
+    d->mainView->setObjectName("mainView");
                                        
     d->splitView = new Aki::ChannelView(identityConfig, this);
     d->splitView->hide();
     d->splitView->setSplitEnabled(true);
+    d->splitView->setObjectName("splitView");
 
     d->splitter = new QSplitter(Qt::Vertical, this);
     d->splitter->addWidget(d->splitView);
@@ -1744,8 +1746,8 @@ ServerWindow::ServerWindow(Aki::IdentityConfig *identityConfig, Aki::Irc::Socket
             d->splitView, SLOT(checkChannelDrop(Aki::BaseWindow*)));
     connect(d->splitView, SIGNAL(dropSuccessful(Aki::BaseWindow*)),
             d->mainView, SLOT(checkChannelDrop(Aki::BaseWindow*)));
-    connect(this, SIGNAL(dropSuccessful(Aki::BaseWindow*)),
-            d->mainView, SLOT(checkChannelDrop(Aki::BaseWindow*)));
+    //connect(this, SIGNAL(dropSuccessful(Aki::BaseWindow*)),
+    //        d->mainView, SLOT(checkChannelDrop(Aki::BaseWindow*)));
     connect(d->splitView, SIGNAL(splitStatusChanged(bool)),
             d->mainView, SLOT(setSplitEnabled(bool)));
     connect(d->mainView, SIGNAL(splitStatusChanged(bool)),
