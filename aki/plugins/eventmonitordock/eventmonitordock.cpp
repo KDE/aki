@@ -24,9 +24,11 @@
 #include "eventitem.h"
 #include <aki/irc/nickinfo.h>
 #include <KAction>
+#include <KDebug>
 #include <KGlobal>
 #include <KLocale>
 #include <KMenu>
+#include <QHeaderView>
 #include <QTreeWidget>
 
 class EventMonitorDockPrivate
@@ -91,6 +93,8 @@ EventMonitorDock::EventMonitorDock(QWidget *parent)
     d->eventTree->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(d->eventTree, SIGNAL(customContextMenuRequested(QPoint)),
             SLOT(customContextMenuRequested(QPoint)));
+
+    d->eventTree->header()->setResizeMode(QHeaderView::ResizeToContents);
 }
 
 EventMonitorDock::~EventMonitorDock()
@@ -107,7 +111,7 @@ void
 EventMonitorDock::addItem(const EventItem& item)
 {
     QTreeWidgetItem *event = new QTreeWidgetItem(EventMonitorDock::CustomType);
-    event->setText(0, KGlobal::locale()->formatDateTime(item.time()));
+    event->setText(0, KGlobal::locale()->formatDateTime(item.time(), KLocale::ShortDate, KLocale::Seconds));
 
     switch (item.event()) {
     case EventItem::UnknownEvent: {
@@ -172,12 +176,19 @@ EventMonitorDock::addItem(const EventItem& item)
     }
     }
 
-    event->setText(2, item.message());
+    QString msg = item.message();
+    if (msg.length() > MESSAGE_LENGTH) {
+        msg = msg.mid(0, MESSAGE_LENGTH);
+    } else {
+        msg = msg;
+    }
+
+    event->setText(2, msg);
     event->setText(3, item.from().nick());
     event->setText(4, item.server());
     event->setText(5, item.channel());
-    
     event->setData(0, EventMonitorDock::IrcEventRole, QVariant::fromValue<EventItem>(item));
+
     d->eventTree->addTopLevelItem(event);
 }
 

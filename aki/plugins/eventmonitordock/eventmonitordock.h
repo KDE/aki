@@ -46,6 +46,9 @@ private:
         CustomType = QTreeWidgetItem::UserType,
         IrcEventRole = Qt::UserRole
     }; // End of anonymous enum.
+    enum {
+        MESSAGE_LENGTH = 1024 * 2
+    };
     friend class EventMonitorDockPrivate;
     QScopedPointer<EventMonitorDockPrivate> d;
 }; // End of class EventMonitorDock.
