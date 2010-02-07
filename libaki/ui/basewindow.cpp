@@ -63,7 +63,6 @@ BaseWindow::BaseWindow(const QString &name, const Aki::BaseWindow::WindowType &t
     d.reset(new Aki::BaseWindowPrivate);
     d->name = name;
     d->type = type;
-    setAttribute(Qt::WA_DeleteOnClose, true);
 }
 
 BaseWindow::~BaseWindow()
