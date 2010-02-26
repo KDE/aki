@@ -1,6 +1,6 @@
 /*
     This file is part of Aki IRC.
-    Copyright 2009 Keith Rusler <xzekex@live.co.uk>
+    Copyright 2009 - 2010 Keith Rusler <xzekex@live.co.uk>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -20,31 +20,42 @@
 
 */
 
-#ifndef AKIAPPLICATION_H
-#define AKIAPPLICATION_H
+#ifndef AKI_IRCURL_H
+#define AKI_IRCURL_H
 
-#include <KUniqueApplication>
+#include "libaki_export.h"
 #include <KUrl>
+#include <QScopedPointer>
 
 namespace Aki
 {
-class MainWindow;
-class SystemTray;
+class IrcUrlPrivate;
+class LIBAKI_EXPORT IrcUrl
+{
+public:
+    IrcUrl();
+    IrcUrl(const KUrl &url);
+    IrcUrl(const IrcUrl &copy);
+    ~IrcUrl();
+    IrcUrl& operator=(const IrcUrl &rhs);
+    void setProtocol(const QString &protocol);
+    QString protocol() const;
+    bool hasPort() const;
+    void setPort(quint16 port);
+    quint16 port() const;
+    bool hasChannel() const;
+    void setChannel(const QString &channel);
+    QString channel() const;
+    bool hasUsername() const;
+    void setUsername(const QString &username);
+    QString username() const;
+    bool hasHost() const;
+    void setHost(const QString &host);
+    QString host() const;
+private:
+    friend class IrcUrlPrivate;
+    QScopedPointer<IrcUrlPrivate> d;
+}; // End of class IrcUrl.
 } // End of namespace Aki.
 
-class AkiApplication : public KUniqueApplication
-{
-    Q_OBJECT
-public:
-    AkiApplication();
-    ~AkiApplication();
-    virtual int newInstance();
-private:
-    void loadConfigurations(Aki::MainWindow *window);
-    void loadUrlArgument(const KUrl &url, Aki::MainWindow *window);
-private:
-    Aki::SystemTray *m_tray;
-    Aki::MainWindow *m_mainWindow;
-}; // End of class AkiApplication.
-
-#endif // AKIAPPLICATION_H
+#endif // AKI_IRCURL_H

@@ -169,7 +169,7 @@ public:
 
     void onChannelCreated(const QString &channel, const QDateTime &time)
     {
-        Aki::BaseWindow *window = findChannel(channel.toLower());
+        Aki::BaseWindow *window = findChannel(channel);
         if (window && window->view()) {
             if (!Aki::Settings::hideChannelCreation()) {
                 KDateTime dt(time);
@@ -179,10 +179,27 @@ public:
         }
     }
 
+    void onChannelMessage(const QString &channel, const Aki::Irc::NickInfo &sender,
+                          const QString &message)
+    {
+        kDebug() << "Channel: " << channel;
+        kDebug() << "Sender: " << sender.nick();
+        kDebug() << "Message: " << message;
+        Aki::ChannelWindow *window = qobject_cast<Aki::ChannelWindow*>(findChannel(channel));
+        if (window && window->view()) {
+            if (q->identity()->isMarkLastPositionEnabled()) {
+                if (currentFocusedChannel() != window) {
+                    window->view()->insertMarker();
+                }
+            }
+            window->addMessage(sender.nick(), message);
+        }
+    }
+
     void onChannelModeIs(const QString &channel, const QString &modes,
                          const QStringList &params)
     {
-        Aki::ChannelWindow *window = qobject_cast<Aki::ChannelWindow*>(findChannel(channel.toLower()));
+        Aki::ChannelWindow *window = qobject_cast<Aki::ChannelWindow*>(findChannel(channel));
         if (window && window->view()) {
             QStringList modeStrs;
             int indexParams = 0;
@@ -228,7 +245,7 @@ public:
 
     void onChannelUrlIs(const QString &channel, const QString &url)
     {
-        Aki::BaseWindow *window = findChannel(channel.toLower());
+        Aki::BaseWindow *window = findChannel(channel);
         if (window && window->view()) {
             window->view()->addChannelUrl(url);
         }
@@ -289,7 +306,7 @@ public:
 
     void onEndOfWho(const QString &channel, const QString &message)
     {
-        Aki::ChannelWindow *chan = qobject_cast<Aki::ChannelWindow*>(findChannel(channel.toLower()));
+        Aki::ChannelWindow *chan = qobject_cast<Aki::ChannelWindow*>(findChannel(channel));
 
         if (!whoRequest.isEmpty()) {
             const int index = whoRequest.indexOf(channel);
@@ -354,7 +371,7 @@ public:
     void onErrorBanListFull(const QString &channel, const QString &ban,
                             const QString &message)
     {
-        Aki::BaseWindow *window = findChannel(channel.toLower());
+        Aki::BaseWindow *window = findChannel(channel);
         if (window && window->view()) {
             window->view()->addError(QString("%1 %2 %3").arg(channel, ban, message));
         }
@@ -370,7 +387,7 @@ public:
 
     void onErrorCannotSendToChannel(const QString &channel, const QString &message)
     {
-        Aki::BaseWindow *window = findChannel(channel.toLower());
+        Aki::BaseWindow *window = findChannel(channel);
         if (window && window->view()) {
             window->view()->addError(channel, message);
         }
@@ -520,7 +537,7 @@ public:
 
     void onErrorNoChanModes(const QString &channel, const QString &message)
     {
-        Aki::BaseWindow *window = findChannel(channel.toLower());
+        Aki::BaseWindow *window = findChannel(channel);
         if (window && window->view()) {
             window->view()->addError(channel, message);
         }
@@ -797,7 +814,7 @@ public:
     void onKick(const Aki::Irc::NickInfo &from, const QString &channel,
                 const QString &nick, const QString &message)
     {
-        Aki::ChannelWindow *window = qobject_cast<Aki::ChannelWindow*>(findChannel(channel.toLower()));
+        Aki::ChannelWindow *window = qobject_cast<Aki::ChannelWindow*>(findChannel(channel));
         if (window && window->view()) {
             bool fromYou = (from.nick().toLower() == q->socket()->currentNick().toLower());
             bool toYou = (nick.toLower() == q->socket()->currentNick().toLower());
@@ -873,7 +890,7 @@ public:
     void onMode(const Aki::Irc::NickInfo &from, const QString &channel,
                 const QString &modes, const QString &nick)
     {
-        Aki::ChannelWindow *window = qobject_cast<Aki::ChannelWindow*>(findChannel(channel.toLower()));
+        Aki::ChannelWindow *window = qobject_cast<Aki::ChannelWindow*>(findChannel(channel));
         if (window && window->view()) {
             enum {
                 None,
@@ -985,7 +1002,7 @@ public:
                 const QStringList &params)
     {
         Q_UNUSED(from);
-        Aki::ChannelWindow *window = qobject_cast<Aki::ChannelWindow*>(findChannel(channel.toLower()));
+        Aki::ChannelWindow *window = qobject_cast<Aki::ChannelWindow*>(findChannel(channel));
         if (window && window->view()) {
             QStringList modeStrs;
             int indexParams = 0;
@@ -1055,7 +1072,7 @@ public:
 
     void onNameReply(const QString &channel, const QString &names)
     {
-        Aki::ChannelWindow *window = qobject_cast<Aki::ChannelWindow*>(findChannel(channel.toLower()));
+        Aki::ChannelWindow *window = qobject_cast<Aki::ChannelWindow*>(findChannel(channel));
         if (window && window->view()) {
             QStringList tmp = names.split(QChar(' '), QString::SkipEmptyParts);
             QStringListIterator iter(tmp);
@@ -1182,7 +1199,7 @@ public:
 
     void onNoTopic(const QString &channel, const QString &message)
     {
-        Aki::BaseWindow *window = findChannel(channel.toLower());
+        Aki::BaseWindow *window = findChannel(channel);
         if (window && window->view()) {
             window->view()->addTopic(Aki::Irc::Color::toHtml(message));
         }
@@ -1202,11 +1219,31 @@ public:
         Q_UNUSED(server2)
     }
 
+    void onPrivateMessage(const Aki::Irc::NickInfo &sender, const QString &message)
+    {
+        Aki::QueryWindow *window = qobject_cast<Aki::QueryWindow*>(findChannel(sender.nick()));
+        if (window && window->view()) {
+            window->addMessage(sender.nick(), message);
+        } else {
+            const QString currentNick = q->socket()->currentNick();
+
+            Aki::Irc::User *self = new Aki::Irc::User("", q);
+            self->setNick(currentNick);
+            self->setColor(randomColor());
+
+            Aki::Irc::User *other = new Aki::Irc::User("", q);
+            other->setNick(sender.nick());
+            other->setColor(randomColor());
+
+            mainView->addQuery(self, other, message, currentNick.toLower() == sender.nick().toLower());
+        }
+    }
+
     void onPrivmsg(const QString &channel, const Aki::Irc::NickInfo &from,
                    const Aki::Irc::NickInfo &to, const QString &message)
     {
         if (!channel.isEmpty()) {
-            Aki::ChannelWindow *window = qobject_cast<Aki::ChannelWindow*>(findChannel(channel.toLower()));
+            Aki::ChannelWindow *window = qobject_cast<Aki::ChannelWindow*>(findChannel(channel));
             if (window && window->view()) {
                 if (q->identity()->isMarkLastPositionEnabled()) {
                     if (currentFocusedChannel() != window) {
@@ -1216,7 +1253,7 @@ public:
                 window->addMessage(from.nick(), message);
             }
         } else if (!to.nick().isEmpty()) {
-            Aki::QueryWindow *window = qobject_cast<Aki::QueryWindow*>(findChannel(from.nick().toLower()));
+            Aki::QueryWindow *window = qobject_cast<Aki::QueryWindow*>(findChannel(from.nick()));
             if (window && window->view()) {
                 window->addMessage(from.nick(), message);
             } else {
@@ -1261,7 +1298,7 @@ public:
 
     void onTopic(const QString &channel, const QString &topic)
     {
-        Aki::BaseWindow *window = findChannel(channel.toLower());
+        Aki::BaseWindow *window = findChannel(channel);
         if (window && window->view()) {
             switch (window->windowType()) {
             case Aki::BaseWindow::ChannelWindow: {
@@ -1281,7 +1318,7 @@ public:
 
     void onTopicChanged(const Aki::Irc::NickInfo &nick, const QString &channel, const QString &topic)
     {
-        Aki::BaseWindow *window = findChannel(channel.toLower());
+        Aki::BaseWindow *window = findChannel(channel);
         if (window && window->view()) {
             switch (window->windowType()) {
             case Aki::BaseWindow::ChannelWindow: {
@@ -1303,7 +1340,7 @@ public:
 
     void onTopicSetBy(const QString &nick, const QString &channel, const QDateTime &time)
     {
-        Aki::BaseWindow *window = findChannel(channel.toLower());
+        Aki::BaseWindow *window = findChannel(channel);
         if (window && window->view()) {
             KDateTime dt(time);
             dt = dt.toClockTime();
@@ -1350,7 +1387,7 @@ public:
 
     void onUserJoin(const Aki::Irc::NickInfo &user, const QString &channel)
     {
-        Aki::ChannelWindow *window = qobject_cast<Aki::ChannelWindow*>(findChannel(channel.toLower()));
+        Aki::ChannelWindow *window = qobject_cast<Aki::ChannelWindow*>(findChannel(channel));
         if (window && window->view()) {
             Aki::Irc::User *ircUser = new Aki::Irc::User(user.hostmask(), q);
             ircUser->setColor(randomColor());
@@ -1368,7 +1405,7 @@ public:
 
     void onUserPart(const Aki::Irc::NickInfo &user, const QString &channel, const QString &message)
     {
-        Aki::ChannelWindow *window = qobject_cast<Aki::ChannelWindow*>(findChannel(channel.toLower()));
+        Aki::ChannelWindow *window = qobject_cast<Aki::ChannelWindow*>(findChannel(channel));
         if (window && window->view()) {
             foreach (Aki::Irc::User *u, window->users()) {
                 if (u->nick() == user.nick()) {
@@ -1483,7 +1520,7 @@ public:
             current->view()->addWho(channel, identName, address, server, nick, flags, hops, realName);
         }
 
-        Aki::BaseWindow *window = findChannel(channel.toLower());
+        Aki::BaseWindow *window = findChannel(channel);
         if (window && window->view()) {
             if (autoRequest.contains("WHO", channel.toLower())) {
                 if (window->windowType() == Aki::BaseWindow::ChannelWindow) {
@@ -1660,7 +1697,7 @@ public:
         whoRequest.append(channel);
         q->socket()->rfcWho(channel);
 
-        Aki::ChannelWindow *window = qobject_cast<Aki::ChannelWindow*>(findChannel(channel.toLower()));
+        Aki::ChannelWindow *window = qobject_cast<Aki::ChannelWindow*>(findChannel(channel));
         if (window) {
             window->resetWho();
         }
@@ -1668,12 +1705,12 @@ public:
 
     void queryMessage(const QString &to, const QString &message)
     {
-        Aki::QueryWindow *window = qobject_cast<Aki::QueryWindow*>(findChannel(to.toLower()));
+        Aki::QueryWindow *window = qobject_cast<Aki::QueryWindow*>(findChannel(to));
 
         if (window && window->view()) {
             window->addMessage(q->socket()->currentNick(), message);
             if (to != q->socket()->currentNick()) {
-                window->socket()->rfcPrivmsg(window->otherUser()->nick().toLatin1(), message.toUtf8());
+                window->socket()->rfcPrivmsg(window->otherUser()->nick(), message);
             }
         } else {
             Aki::Irc::User *self = new Aki::Irc::User("", q);
@@ -1768,6 +1805,8 @@ ServerWindow::ServerWindow(Aki::IdentityConfig *identityConfig, Aki::Irc::Socket
             SLOT(onBanList(QString,QString,QString,QDateTime)));
     connect(socket, SIGNAL(onChannelCreated(QString,QDateTime)),
             SLOT(onChannelCreated(QString,QDateTime)));
+    connect(socket, SIGNAL(onChannelMessage(QString,Aki::Irc::NickInfo,QString)),
+            SLOT(onChannelMessage(QString,Aki::Irc::NickInfo,QString)));
     connect(socket, SIGNAL(onChannelModeIs(QString,QString,QStringList)),
             SLOT(onChannelModeIs(QString,QString,QStringList)));
     connect(socket, SIGNAL(onChannelUrlIs(QString,QString)),
@@ -1938,8 +1977,8 @@ ServerWindow::ServerWindow(Aki::IdentityConfig *identityConfig, Aki::Irc::Socket
             SLOT(onNowAway(QString)));
     connect(socket, SIGNAL(onPong(QString,QString)),
             SLOT(onPong(QString,QString)));
-    connect(socket, SIGNAL(onPrivmsg(QString,Aki::Irc::NickInfo,Aki::Irc::NickInfo,QString)),
-            SLOT(onPrivmsg(QString,Aki::Irc::NickInfo,Aki::Irc::NickInfo,QString)));
+    connect(socket, SIGNAL(onPrivateMessage(Aki::Irc::NickInfo,QString)),
+            SLOT(onPrivateMessage(Aki::Irc::NickInfo,QString)));
     connect(socket, SIGNAL(onSelfJoin(QString)),
             SLOT(onSelfJoin(QString)));
     connect(socket, SIGNAL(onSelfUMode(QString)),

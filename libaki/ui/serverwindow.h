@@ -66,6 +66,8 @@ private:
     Q_PRIVATE_SLOT(d, void onBanList(const QString &channel, const QString &mask,
                                      const QString &who, const QDateTime &time))
     Q_PRIVATE_SLOT(d, void onChannelCreated(const QString &channel, const QDateTime &time))
+    Q_PRIVATE_SLOT(d, void onChannelMessage(const QString &channel, const Aki::Irc::NickInfo &sender,
+                                            const QString &message))
     Q_PRIVATE_SLOT(d, void onChannelModeIs(const QString &channel, const QString &modes,
                                            const QStringList &params))
     Q_PRIVATE_SLOT(d, void onChannelUrlIs(const QString &channel, const QString &url))
@@ -158,8 +160,7 @@ private:
     Q_PRIVATE_SLOT(d, void onNoTopic(const QString &channel, const QString &message))
     Q_PRIVATE_SLOT(d, void onNowAway(const QString &message))
     Q_PRIVATE_SLOT(d, void onPong(const QString &server, const QString &server2))
-    Q_PRIVATE_SLOT(d, void onPrivmsg(const QString &channel, const Aki::Irc::NickInfo &from,
-                                     const Aki::Irc::NickInfo &to, const QString &message))
+    Q_PRIVATE_SLOT(d, void onPrivateMessage(const Aki::Irc::NickInfo, const QString &message))
     Q_PRIVATE_SLOT(d, void onSelfJoin(const QString &channel))
     Q_PRIVATE_SLOT(d, void onSelfUMode(const QString &modes))
     Q_PRIVATE_SLOT(d, void onTime(const QString &server, const QString &time))

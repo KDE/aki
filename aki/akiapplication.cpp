@@ -79,7 +79,7 @@ AkiApplication::newInstance()
     }
 
     if (!url.isEmpty()) {
-        KMessageBox::information(0, url.url());
+        loadUrlArgument(url, m_mainWindow);
     }
 
     KWindowSystem::forceActiveWindow(m_mainWindow->winId());
@@ -134,5 +134,43 @@ AkiApplication::loadConfigurations(Aki::MainWindow *window)
                 }
             }
         }
+    }
+}
+
+void
+AkiApplication::loadUrlArgument(const KUrl &url, Aki::MainWindow *window)
+{
+    if (url.protocol().toLower() == "irc" ||
+        url.protocol().toLower() == "ircs" ||
+        url.protocol().toLower() == "irc6")
+    {
+        Aki::IdentityConfig *identityConfig = new Aki::IdentityConfig(this);
+        Aki::ServerConfig *serverConfig = new Aki::ServerConfig(this);
+        identityConfig->setCurrentGroup("Custom Connection");
+        serverConfig->setCurrentGroup("Custom Server");
+
+        Aki::Irc::Socket *socket = new Aki::Irc::Socket(url.host(), window->mainView());
+        socket->setAddressList(QStringList() << (url.host()));
+        socket->setAutoIdentify(serverConfig->isAutoIdentifyEnabled());
+        socket->setAutoReconnect(serverConfig->isAutoReconnectionEnabled());
+        socket->setEncoding(serverConfig->encoding().toLatin1());
+        socket->setIdentName("aki");
+        socket->setNickList(identityConfig->nicknameList());
+        socket->setRealName(identityConfig->realName());
+        socket->setRetryAttemptCount(serverConfig->retryAttemptCount());
+        socket->setRetryInterval(serverConfig->retryInterval());
+        socket->setServiceName(serverConfig->serviceName());
+        socket->setServicePassword(serverConfig->servicePassword());
+
+        if (url.protocol().toLower() == "ircs") {
+            socket->setSsl(true);
+        } else {
+            socket->setSsl(false);
+        }
+
+        QStringList channels;
+
+        window->mainView()->addServer(identityConfig, socket, channels);
+        socket->connectToHost();
     }
 }

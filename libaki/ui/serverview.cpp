@@ -88,16 +88,17 @@ public:
         }
 
         for (int i = 0; i < tabList.count(); ++i) {
+            Aki::BaseWindow *window = tabList[i];
             if (i == index) {
-                tabList[i]->setCurrent(true);
+                window->setCurrent(true);
 
-                if (tabList[i]->windowType() == Aki::BaseWindow::ServerWindow) {
-                    const QString name = tabList[i]->name();
-                    const QString channelName = qobject_cast<Aki::ServerWindow*>(tabList[i])->currentFocusedChannel()->name();
+                if (window->windowType() == Aki::BaseWindow::ServerWindow) {
+                    const QString name = window->name();
+                    const QString channelName = qobject_cast<Aki::ServerWindow*>(window)->currentFocusedChannel()->name();
                     window->setWindowTitle(i18n("Aki IRC Client %1 - %3 (%2)", AKI_VERSION_STR, name, channelName));
                 }
             } else {
-                tabList[i]->setCurrent(false);
+                window->setCurrent(false);
             }
         }
     }

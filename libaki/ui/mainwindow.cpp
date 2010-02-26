@@ -311,7 +311,7 @@ public:
         QStringList nicks;
         nicks << nickname << (nickname + '_') << (nickname + "__");
         config->setNicknameList(nicks);
-        config->setRealName("Aki");
+        config->setRealName("aki");
 
         Aki::Irc::Socket *socket = new Aki::Irc::Socket(address, q);
         socket->setAddressList(QStringList() << address + '/' + QString::number(port));

@@ -96,6 +96,8 @@ public:
         if (!process.isEmpty()) {
             split.append(line);
         }
+        
+        delete encoder;
 
         return split;
     }

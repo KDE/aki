@@ -28,6 +28,7 @@ set(akicore_SRCS
     interfaces/maininterface.cpp
     interfaces/settingspageinterface.cpp
     interfaces/windowinterface.cpp
+    ircurl.cpp
     logfile.cpp
     networkexporter.cpp
     networkimporter.cpp
