@@ -1,0 +1,18 @@
+[Desktop Entry]
+Name=Media Control
+Name[x-test]=xxMedia Controlxx
+Comment=Media controller for different desktop media players
+Comment[x-test]=xxMedia controller for different desktop media playersxx
+Type=Service
+Icon=
+ServiceTypes=Aki/Plugin
+X-KDE-Library=akimediacontrolplugin
+X-KDE-PluginInfo-Author=Keith Rusler
+X-KDE-PluginInfo-Email=xzekex@live.co.uk
+X-KDE-PluginInfo-Name=MediaControlPlugin
+X-KDE-PluginInfo-Version=0.0.1
+X-KDE-PluginInfo-Website=http://www.kde.org
+X-KDE-PluginInfo-Category=Plugins
+X-KDE-PluginInfo-Depends=
+X-KDE-PluginInfo-License=GPL
+X-KDE-PluginInfo-EnabledByDefault=true
