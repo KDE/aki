@@ -96,9 +96,9 @@ MediaRemote::nextTrack()
 void
 MediaRemote::open()
 {
-    if (_name == "vlc") {
+    if (_name == "VLC") {
         KProcess::startDetached("vlc");
-    } else if (_name == "amarok") {
+    } else if (_name == "Amarok") {
         KProcess::startDetached("amarok");
     }
 }
@@ -125,7 +125,7 @@ void
 MediaRemote::setPlayer(const QString& name)
 {
     _name = name;
-    _interfaceService = QString("org.mpris.%1").arg(_name);
+    _interfaceService = QString("org.mpris.%1").arg(_name.toLower());
     _interface.reset(new QDBusInterface(_interfaceService, "/Player", _interfaceName,
                                         QDBusConnection::sessionBus()));
 }

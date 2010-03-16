@@ -1177,7 +1177,7 @@ ChannelWindow::addMessage(const QString &from, const QString &message)
     
     foreach (Aki::Irc::User *user, userList->users()) {
         if (user->nick() == from) {
-            user->setIdleTime(QDateTime::currentDateTime());
+            user->setIdleTime(KDateTime::currentLocalDateTime().toClockTime());
 
             QString match = "\\s*" + QRegExp::escape(socket()->currentNick()) + ":*\\s*";
             QString colour = QString("<font color='%1'>%2</font>")

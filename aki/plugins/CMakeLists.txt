@@ -1,4 +1,4 @@
-add_subdirectory(amarokremotecontrol)
+
 add_subdirectory(konsoledock)
 add_subdirectory(channelmonitordock)
 add_subdirectory(browser)

@@ -159,7 +159,7 @@ public:
     }
 
     void onBanList(const QString &channel, const QString &mask, const QString &who,
-                   const QDateTime &time)
+                   const KDateTime &time)
     {
         Q_UNUSED(channel);
         Q_UNUSED(mask);
@@ -167,14 +167,12 @@ public:
         Q_UNUSED(time);
     }
 
-    void onChannelCreated(const QString &channel, const QDateTime &time)
+    void onChannelCreated(const QString &channel, const KDateTime &time)
     {
         Aki::BaseWindow *window = findChannel(channel);
         if (window && window->view()) {
             if (!Aki::Settings::hideChannelCreation()) {
-                KDateTime dt(time);
-                dt = dt.toClockTime();
-                window->view()->addChannelCreated(dt.toString("%B %d, %Y %H:%M:%S"));
+                window->view()->addChannelCreated(time.toString("%B %d, %Y %H:%M:%S"));
             }
         }
     }
@@ -182,9 +180,6 @@ public:
     void onChannelMessage(const QString &channel, const Aki::Irc::NickInfo &sender,
                           const QString &message)
     {
-        kDebug() << "Channel: " << channel;
-        kDebug() << "Sender: " << sender.nick();
-        kDebug() << "Message: " << message;
         Aki::ChannelWindow *window = qobject_cast<Aki::ChannelWindow*>(findChannel(channel));
         if (window && window->view()) {
             if (q->identity()->isMarkLastPositionEnabled()) {
@@ -1338,13 +1333,11 @@ public:
         }
     }
 
-    void onTopicSetBy(const QString &nick, const QString &channel, const QDateTime &time)
+    void onTopicSetBy(const QString &nick, const QString &channel, const KDateTime &time)
     {
         Aki::BaseWindow *window = findChannel(channel);
         if (window && window->view()) {
-            KDateTime dt(time);
-            dt = dt.toClockTime();
-            window->view()->addTopicSetBy(nick, dt.toString("%B %d, %Y %H:%M:%S"));
+            window->view()->addTopicSetBy(nick, time.toString("%B %d, %Y %H:%M:%S"));
         }
     }
 
@@ -1566,16 +1559,14 @@ public:
         }
     }
 
-    void onWhoIsIdle(const QString &nick, const QDateTime &idleTime,
-                     const QDateTime &signon, const QString &info)
+    void onWhoIsIdle(const QString &nick, const KDateTime &idleTime,
+                     const KDateTime &signon, const QString &info)
     {
         Q_UNUSED(info);
         Aki::BaseWindow *window = currentFocusedChannel();
         if (window && window->view()) {
-            KDateTime dt(signon);
-            dt = dt.toClockTime();
             window->view()->addWhoIsIdle(nick, idleTime.toString("%H:%M:%S"),
-                                         dt.toString("%A %B %d %H:%M:%S"));
+                                         signon.toString("%A %B %d %H:%M:%S"));
         }
     }
 
@@ -1801,10 +1792,10 @@ ServerWindow::ServerWindow(Aki::IdentityConfig *identityConfig, Aki::Irc::Socket
             SLOT(sslErrors(QList<Aki::Irc::Socket::SslError>)));
     connect(socket, SIGNAL(onAway(QString,QString)),
             SLOT(onAway(QString,QString)));
-    connect(socket, SIGNAL(onBanList(QString,QString,QString,QDateTime)),
-            SLOT(onBanList(QString,QString,QString,QDateTime)));
-    connect(socket, SIGNAL(onChannelCreated(QString,QDateTime)),
-            SLOT(onChannelCreated(QString,QDateTime)));
+    connect(socket, SIGNAL(onBanList(QString,QString,QString,KDateTime)),
+            SLOT(onBanList(QString,QString,QString,KDateTime)));
+    connect(socket, SIGNAL(onChannelCreated(QString,KDateTime)),
+            SLOT(onChannelCreated(QString,KDateTime)));
     connect(socket, SIGNAL(onChannelMessage(QString,Aki::Irc::NickInfo,QString)),
             SLOT(onChannelMessage(QString,Aki::Irc::NickInfo,QString)));
     connect(socket, SIGNAL(onChannelModeIs(QString,QString,QStringList)),
@@ -1989,8 +1980,8 @@ ServerWindow::ServerWindow(Aki::IdentityConfig *identityConfig, Aki::Irc::Socket
             SLOT(onTopic(QString,QString)));
     connect(socket, SIGNAL(onTopicChanged(Aki::Irc::NickInfo,QString,QString)),
             SLOT(onTopicChanged(Aki::Irc::NickInfo,QString,QString)));
-    connect(socket, SIGNAL(onTopicSetBy(QString,QString,QDateTime)),
-            SLOT(onTopicSetBy(QString,QString,QDateTime)));
+    connect(socket, SIGNAL(onTopicSetBy(QString,QString,KDateTime)),
+            SLOT(onTopicSetBy(QString,QString,KDateTime)));
     connect(socket, SIGNAL(onTryAgain(QString)),
             SLOT(onTryAgain(QString)));
     connect(socket, SIGNAL(onUMode(Aki::Irc::NickInfo,QString)),
@@ -2017,8 +2008,8 @@ ServerWindow::ServerWindow(Aki::IdentityConfig *identityConfig, Aki::Irc::Socket
             SLOT(onWhoIsChannels(QString,QString)));
     connect(socket, SIGNAL(onWhoIsIdentified(QString,QString)),
             SLOT(onWhoIsIdentified(QString,QString)));
-    connect(socket, SIGNAL(onWhoIsIdle(QString,QDateTime,QDateTime,QString)),
-            SLOT(onWhoIsIdle(QString,QDateTime,QDateTime,QString)));
+    connect(socket, SIGNAL(onWhoIsIdle(QString,KDateTime,KDateTime,QString)),
+            SLOT(onWhoIsIdle(QString,KDateTime,KDateTime,QString)));
     connect(socket, SIGNAL(onWhoIsOperator(QString,QString)),
             SLOT(onWhoIsOperator(QString,QString)));
     connect(socket, SIGNAL(onWhoIsServer(QString,QString,QString)),

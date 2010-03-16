@@ -75,18 +75,12 @@ public:
                         Aki::ChannelWindow *channel = qobject_cast<Aki::ChannelWindow*>(window);
                         channel->view()->addCtcpAction(window->socket()->currentNick(), metaData);
                         channel->socket()->rfcCtcpAction(channel->name(), metaData);
-
-                        if (visualDisplay) {
-                        }
                         break;
                     }
                     case Aki::BaseWindow::QueryWindow: {
                         Aki::QueryWindow *query = qobject_cast<Aki::QueryWindow*>(window);
                         query->view()->addCtcpAction(window->socket()->currentNick(), metaData);
                         query->socket()->rfcCtcpAction(query->name(), metaData);
-
-                        if (visualDisplay) {
-                        }
                         break;
                     }
                     default: {
@@ -119,13 +113,19 @@ public:
             } else if (message.contains(QRegExp("^volume ([0-9][0-9]?|100)$"))) {
                 remote->setVolume(message.split(' ')[1].toInt());
             } else if (message == "amarok") {
-                remote->setPlayer("amarok");
-                config->setPlayerName("amarok");
+                remote->setPlayer("Amarok");
+                config->setPlayerName("Amarok");
             } else if (message == "vlc") {
-                remote->setPlayer("vlc");
-                config->setPlayerName("vlc");
+                remote->setPlayer("VLC");
+                config->setPlayerName("VLC");
             }
         }
+    }
+
+    void playerChanged(const QString &name)
+    {
+        remote->setPlayer(name);
+        config->setPlayerName(name);
     }
 
     MediaControl *q;
@@ -160,6 +160,8 @@ MediaControl::unload()
 {
     disconnect(mainInterface()->mainView(), SIGNAL(customCommand(QString,QString)),
                this, SLOT(customCommand(QString,QString)));
+    disconnect(d->config, SIGNAL(playerChanged(QString)),
+               this, SLOT(playerChanged(QString)));
     mainInterface()->removeSettingsPage(d->config);
 }
 
@@ -168,6 +170,8 @@ MediaControl::load()
 {
     connect(mainInterface()->mainView(), SIGNAL(customCommand(QString,QString)),
             SLOT(customCommand(QString,QString)));
+    connect(d->config, SIGNAL(playerChanged(QString)),
+            SLOT(playerChanged(QString)));
     mainInterface()->addSettingsPage(d->config);
 }
 

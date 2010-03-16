@@ -36,7 +36,9 @@ public:
     virtual bool hasChanged() const;
     virtual void updateSettings();
     QString playerName(int index) const;
-    void setPlayerName(const QString &text);
+    void setPlayerName(const QString &name);
+Q_SIGNALS:
+    void playerChanged(const QString &name);
 private:
     Q_PRIVATE_SLOT(d, void titleTriggered())
     Q_PRIVATE_SLOT(d, void artistTriggered())
@@ -47,6 +49,8 @@ private:
     Q_PRIVATE_SLOT(d, void yearTriggered())
     Q_PRIVATE_SLOT(d, void dateTriggered())
     Q_PRIVATE_SLOT(d, void genreTriggered())
+    Q_PRIVATE_SLOT(d, void playerNameTriggered())
+    Q_PRIVATE_SLOT(d, void playerActivated(const QString &name))
 private:
     friend class MediaConfigPrivate;
     QScopedPointer<MediaConfigPrivate> d;

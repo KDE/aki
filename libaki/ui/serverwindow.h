@@ -64,8 +64,8 @@ private:
     Q_PRIVATE_SLOT(d, void sslErrors(const QList<Aki::Irc::Socket::SslError> &errors))
     Q_PRIVATE_SLOT(d, void onAway(const QString &nick, const QString &message))
     Q_PRIVATE_SLOT(d, void onBanList(const QString &channel, const QString &mask,
-                                     const QString &who, const QDateTime &time))
-    Q_PRIVATE_SLOT(d, void onChannelCreated(const QString &channel, const QDateTime &time))
+                                     const QString &who, const KDateTime &time))
+    Q_PRIVATE_SLOT(d, void onChannelCreated(const QString &channel, const KDateTime &time))
     Q_PRIVATE_SLOT(d, void onChannelMessage(const QString &channel, const Aki::Irc::NickInfo &sender,
                                             const QString &message))
     Q_PRIVATE_SLOT(d, void onChannelModeIs(const QString &channel, const QString &modes,
@@ -166,7 +166,7 @@ private:
     Q_PRIVATE_SLOT(d, void onTime(const QString &server, const QString &time))
     Q_PRIVATE_SLOT(d, void onTopic(const QString &channel, const QString &topic))
     Q_PRIVATE_SLOT(d, void onTopicChanged(const Aki::Irc::NickInfo &nick, const QString &channel, const QString &topic))
-    Q_PRIVATE_SLOT(d, void onTopicSetBy(const QString &nick, const QString &channel, const QDateTime &time))
+    Q_PRIVATE_SLOT(d, void onTopicSetBy(const QString &nick, const QString &channel, const KDateTime &time))
     Q_PRIVATE_SLOT(d, void onTryAgain(const QString &message))
     Q_PRIVATE_SLOT(d, void onUMode(const Aki::Irc::NickInfo &user, const QString &modes))
     Q_PRIVATE_SLOT(d, void onUModeIs(const QString &modes))
@@ -182,7 +182,7 @@ private:
                                  int hops, const QString &realName))
     Q_PRIVATE_SLOT(d, void onWhoIsChannels(const QString &nick, const QString &channels))
     Q_PRIVATE_SLOT(d, void onWhoIsIdentified(const QString &nick, const QString &info))
-    Q_PRIVATE_SLOT(d, void onWhoIsIdle(const QString &nick, const QDateTime &idleTime, const QDateTime &signon,
+    Q_PRIVATE_SLOT(d, void onWhoIsIdle(const QString &nick, const KDateTime &idleTime, const KDateTime &signon,
                                        const QString &info))
     Q_PRIVATE_SLOT(d, void onWhoIsOperator(const QString &nick, const QString &message))
     Q_PRIVATE_SLOT(d, void onWhoIsSecure(const QString &nick, const QString &message))

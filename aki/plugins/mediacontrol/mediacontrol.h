@@ -31,13 +31,14 @@ class MediaControl : public Aki::Plugin
 {
     Q_OBJECT
 public:
-    MediaControl(QObject *parent, const QVariantList &args);
+    explicit MediaControl(QObject *parent, const QVariantList &args);
     ~MediaControl();
     virtual bool checkVersion(const QString& version);
     virtual void unload();
     virtual void load();
 private:
     Q_PRIVATE_SLOT(d, void customCommand(const QString &command, const QString &message))
+    Q_PRIVATE_SLOT(d, void playerChanged(const QString &name))
 private:
     friend class MediaControlPrivate;
     MediaControlPrivate *d;

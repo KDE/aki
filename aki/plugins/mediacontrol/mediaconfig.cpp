@@ -36,6 +36,9 @@ public:
 
     void setupActions()
     {
+        q->connect(q->kcfg_player, SIGNAL(activated(QString)),
+                   SLOT(playerActivated(QString)));
+
         menu = new KMenu(q);
 
         KAction *title = new KAction(KIcon(), i18n("Title - %t"), menu);
@@ -73,6 +76,10 @@ public:
         KAction *genre = new KAction(KIcon(), i18n("Genre - %g"), menu);
         q->connect(genre, SIGNAL(triggered(bool)),
                    q, SLOT(genreTriggered()));
+
+        KAction *playerName = new KAction(KIcon(), i18n("Player Name - %c"), menu);
+        q->connect(playerName, SIGNAL(triggered(bool)),
+                   q, SLOT(playerNameTriggered()));
 
         menu->addAction(title);
         menu->addAction(artist);
@@ -139,6 +146,17 @@ public:
     {
         const QString text = q->kcfg_playingStatus->text();
         q->kcfg_playingStatus->setText(text + " %g");
+    }
+
+    void playerNameTriggered()
+    {
+        const QString text = q->kcfg_playingStatus->text();
+        q->kcfg_playingStatus->setText(text + " %c");
+    }
+
+    void playerActivated(const QString &name)
+    {
+        emit q->playerChanged(name);
     }
 
     MediaConfig *q;
