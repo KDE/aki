@@ -54,7 +54,7 @@ NickListModel::data(const QModelIndex &index, int role) const
         return QVariant();
     }
 
-    if (index.row() >= d->nickList.count()) {
+    if (index.row() > d->nickList.count()) {
         return QVariant();
     }
 

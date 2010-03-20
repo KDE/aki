@@ -1,0 +1,241 @@
+<!DOCTYPE QtCreatorProject>
+<qtcreator>
+ <data>
+  <variable>RunConfiguration0-BaseEnvironmentBase</variable>
+  <value type="int">2</value>
+ </data>
+ <data>
+  <variable>RunConfiguration0-CMakeRunConfiguation.Title</variable>
+  <value type="QString">aki</value>
+ </data>
+ <data>
+  <variable>RunConfiguration0-CMakeRunConfiguration.Arguments</variable>
+  <value type="QString"></value>
+ </data>
+ <data>
+  <variable>RunConfiguration0-CMakeRunConfiguration.Target</variable>
+  <value type="QString">/home/zeke/Projects/git/aki/build/aki/aki</value>
+ </data>
+ <data>
+  <variable>RunConfiguration0-CMakeRunConfiguration.UseTerminal</variable>
+  <value type="bool">false</value>
+ </data>
+ <data>
+  <variable>RunConfiguration0-CMakeRunConfiguration.UserEnvironmentChanges</variable>
+  <valuelist type="QVariantList"/>
+ </data>
+ <data>
+  <variable>RunConfiguration0-CMakeRunConfiguration.UserWorkingDirectory</variable>
+  <value type="QString"></value>
+ </data>
+ <data>
+  <variable>RunConfiguration0-CMakeRunConfiguration.WorkingDirectory</variable>
+  <value type="QString"></value>
+ </data>
+ <data>
+  <variable>RunConfiguration0-RunConfiguration.name</variable>
+  <value type="QString">aki</value>
+ </data>
+ <data>
+  <variable>RunConfiguration0-type</variable>
+  <value type="QString">CMakeProjectManager.CMakeRunConfiguration</value>
+ </data>
+ <data>
+  <variable>activeRunConfiguration</variable>
+  <value type="int">0</value>
+ </data>
+ <data>
+  <variable>activebuildconfiguration</variable>
+  <value type="QString">all</value>
+ </data>
+ <data>
+  <variable>buildConfiguration-all</variable>
+  <valuemap type="QVariantMap">
+   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString">all</value>
+   <value key="buildDirectory" type="QString">/home/zeke/Projects/git/aki/build</value>
+   <value key="msvcVersion" type="QString"></value>
+  </valuemap>
+ </data>
+ <data>
+  <variable>buildconfiguration-all-buildstep0</variable>
+  <valuemap type="QVariantMap">
+   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString">all</value>
+   <valuelist key="abstractProcess.Environment" type="QVariantList">
+    <value type="QString">CONFIG_PROTECT=/usr/share/X11/xkb /usr/share/config</value>
+    <value type="QString">CONFIG_PROTECT_MASK=/etc/gentoo-release /etc/sandbox.d /etc/fonts/fonts.conf /etc/gconf /etc/terminfo /etc/ca-certificates.conf /etc/revdep-rebuild</value>
+    <value type="QString">CVS_RSH=ssh</value>
+    <value type="QString">DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-hsqVDELMgS,guid=0a805143da819b8cb290db194b9dd4cd</value>
+    <value type="QString">DESKTOP_SESSION=KDE-4</value>
+    <value type="QString">DISPLAY=:0.0</value>
+    <value type="QString">DM_CONTROL=/var/run/xdmctl</value>
+    <value type="QString">DVDCSS_CACHE=/home/zeke/.dvdcss/</value>
+    <value type="QString">DVDCSS_METHOD=key</value>
+    <value type="QString">DVDCSS_RAW_DEVICE=/dev/rdvd</value>
+    <value type="QString">DVDCSS_VERBOSE=0</value>
+    <value type="QString">EDITOR=/bin/nano</value>
+    <value type="QString">GCC_SPECS=</value>
+    <value type="QString">GDK_USE_XFT=1</value>
+    <value type="QString">GS_LIB=/home/zeke/.fonts</value>
+    <value type="QString">GTK2_RC_FILES=/etc/gtk-2.0/gtkrc:/home/zeke/.gtkrc-2.0::/home/zeke/.kde4/share/config/gtkrc-2.0</value>
+    <value type="QString">GTK_RC_FILES=/etc/gtk/gtkrc:/home/zeke/.gtkrc::/home/zeke/.kde4/share/config/gtkrc</value>
+    <value type="QString">HOME=/home/zeke</value>
+    <value type="QString">INFOPATH=/usr/share/info:/usr/share/binutils-data/x86_64-pc-linux-gnu/2.20.1/info:/usr/share/gcc-data/x86_64-pc-linux-gnu/4.4.3/info</value>
+    <value type="QString">KDE_FULL_SESSION=true</value>
+    <value type="QString">KDE_MULTIHEAD=false</value>
+    <value type="QString">KDE_SESSION_UID=1000</value>
+    <value type="QString">KDE_SESSION_VERSION=4</value>
+    <value type="QString">LANG=en_GB.UTF-8</value>
+    <value type="QString">LANGUAGE=</value>
+    <value type="QString">LC_COLLATE=C</value>
+    <value type="QString">LESS=-R -M --shift 5</value>
+    <value type="QString">LESSOPEN=|lesspipe.sh %s</value>
+    <value type="QString">LOGNAME=zeke</value>
+    <value type="QString">MANPATH=/usr/local/share/man:/usr/share/man:/usr/share/binutils-data/x86_64-pc-linux-gnu/2.20.1/man:/usr/share/gcc-data/x86_64-pc-linux-gnu/4.4.3/man</value>
+    <value type="QString">OPENGL_PROFILE=nvidia</value>
+    <value type="QString">PAGER=/usr/bin/less</value>
+    <value type="QString">PATH=/usr/local/bin:/usr/bin:/bin:/opt/bin:/usr/x86_64-pc-linux-gnu/gcc-bin/4.4.3:/usr/lib64/subversion/bin</value>
+    <value type="QString">PWD=/home/zeke</value>
+    <value type="QString">QT_PLUGIN_PATH=/home/zeke/.kde4/lib64/kde4/plugins/:/usr/lib64/kde4/plugins/</value>
+    <value type="QString">R_HOME=/usr/lib64/R</value>
+    <value type="QString">SANE_CONFIG_DIR=/etc/sane.d</value>
+    <value type="QString">SESSION_MANAGER=local/narfxeon:@/tmp/.ICE-unix/2589,unix/narfxeon:/tmp/.ICE-unix/2589</value>
+    <value type="QString">SHELL=/bin/bash</value>
+    <value type="QString">SHLVL=1</value>
+    <value type="QString">STRIGI_PLUGIN_PATH=/usr/lib64/strigi:</value>
+    <value type="QString">USB_DEVFS_PATH=/dev/bus/usb</value>
+    <value type="QString">USER=zeke</value>
+    <value type="QString">WINDOWPATH=7</value>
+    <value type="QString">XCURSOR_THEME=Oxygen_Blue</value>
+    <value type="QString">XDG_CONFIG_DIRS=/etc/xdg</value>
+    <value type="QString">XDG_DATA_DIRS=/usr/share:/usr/local/share:/usr/share</value>
+    <value type="QString">XDG_MENU_PREFIX=kde-4.4-</value>
+    <value type="QString">XDG_SESSION_COOKIE=6d2ecb740e6ac56c3ce0ea574b96ea19-1268634828.814540-872590835</value>
+    <value type="QString">XDM_MANAGED=method=classic</value>
+    <value type="QString">_=/usr/lib64/kde4/libexec/start_kdeinit_wrapper</value>
+   </valuelist>
+   <value key="abstractProcess.IgnoreReturnValue" type="bool">false</value>
+   <valuelist key="abstractProcess.arguments" type="QVariantList">
+    <value type="QString">aki</value>
+    <value type="QString">-j9</value>
+   </valuelist>
+   <value key="abstractProcess.command" type="QString">make</value>
+   <value key="abstractProcess.enabled" type="bool">true</value>
+   <value key="abstractProcess.workingDirectory" type="QString">/home/zeke/Projects/git/aki/build</value>
+   <valuelist key="additionalArguments" type="QVariantList">
+    <value type="QString">-j9</value>
+   </valuelist>
+   <valuelist key="buildTargets" type="QVariantList">
+    <value type="QString">aki</value>
+   </valuelist>
+  </valuemap>
+ </data>
+ <data>
+  <variable>buildconfiguration-all-cleanstep0</variable>
+  <valuemap type="QVariantMap">
+   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString">all</value>
+   <valuelist key="abstractProcess.Environment" type="QVariantList">
+    <value type="QString">CONFIG_PROTECT=/usr/share/X11/xkb /usr/share/config</value>
+    <value type="QString">CONFIG_PROTECT_MASK=/etc/gentoo-release /etc/sandbox.d /etc/fonts/fonts.conf /etc/gconf /etc/terminfo /etc/ca-certificates.conf /etc/revdep-rebuild</value>
+    <value type="QString">CVS_RSH=ssh</value>
+    <value type="QString">DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-hsqVDELMgS,guid=0a805143da819b8cb290db194b9dd4cd</value>
+    <value type="QString">DESKTOP_SESSION=KDE-4</value>
+    <value type="QString">DISPLAY=:0.0</value>
+    <value type="QString">DM_CONTROL=/var/run/xdmctl</value>
+    <value type="QString">DVDCSS_CACHE=/home/zeke/.dvdcss/</value>
+    <value type="QString">DVDCSS_METHOD=key</value>
+    <value type="QString">DVDCSS_RAW_DEVICE=/dev/rdvd</value>
+    <value type="QString">DVDCSS_VERBOSE=0</value>
+    <value type="QString">EDITOR=/bin/nano</value>
+    <value type="QString">GCC_SPECS=</value>
+    <value type="QString">GDK_USE_XFT=1</value>
+    <value type="QString">GS_LIB=/home/zeke/.fonts</value>
+    <value type="QString">GTK2_RC_FILES=/etc/gtk-2.0/gtkrc:/home/zeke/.gtkrc-2.0::/home/zeke/.kde4/share/config/gtkrc-2.0</value>
+    <value type="QString">GTK_RC_FILES=/etc/gtk/gtkrc:/home/zeke/.gtkrc::/home/zeke/.kde4/share/config/gtkrc</value>
+    <value type="QString">HOME=/home/zeke</value>
+    <value type="QString">INFOPATH=/usr/share/info:/usr/share/binutils-data/x86_64-pc-linux-gnu/2.20.1/info:/usr/share/gcc-data/x86_64-pc-linux-gnu/4.4.3/info</value>
+    <value type="QString">KDE_FULL_SESSION=true</value>
+    <value type="QString">KDE_MULTIHEAD=false</value>
+    <value type="QString">KDE_SESSION_UID=1000</value>
+    <value type="QString">KDE_SESSION_VERSION=4</value>
+    <value type="QString">LANG=en_GB.UTF-8</value>
+    <value type="QString">LANGUAGE=</value>
+    <value type="QString">LC_COLLATE=C</value>
+    <value type="QString">LESS=-R -M --shift 5</value>
+    <value type="QString">LESSOPEN=|lesspipe.sh %s</value>
+    <value type="QString">LOGNAME=zeke</value>
+    <value type="QString">MANPATH=/usr/local/share/man:/usr/share/man:/usr/share/binutils-data/x86_64-pc-linux-gnu/2.20.1/man:/usr/share/gcc-data/x86_64-pc-linux-gnu/4.4.3/man</value>
+    <value type="QString">OPENGL_PROFILE=nvidia</value>
+    <value type="QString">PAGER=/usr/bin/less</value>
+    <value type="QString">PATH=/usr/local/bin:/usr/bin:/bin:/opt/bin:/usr/x86_64-pc-linux-gnu/gcc-bin/4.4.3:/usr/lib64/subversion/bin</value>
+    <value type="QString">PWD=/home/zeke</value>
+    <value type="QString">QT_PLUGIN_PATH=/home/zeke/.kde4/lib64/kde4/plugins/:/usr/lib64/kde4/plugins/</value>
+    <value type="QString">R_HOME=/usr/lib64/R</value>
+    <value type="QString">SANE_CONFIG_DIR=/etc/sane.d</value>
+    <value type="QString">SESSION_MANAGER=local/narfxeon:@/tmp/.ICE-unix/2589,unix/narfxeon:/tmp/.ICE-unix/2589</value>
+    <value type="QString">SHELL=/bin/bash</value>
+    <value type="QString">SHLVL=1</value>
+    <value type="QString">STRIGI_PLUGIN_PATH=/usr/lib64/strigi:</value>
+    <value type="QString">USB_DEVFS_PATH=/dev/bus/usb</value>
+    <value type="QString">USER=zeke</value>
+    <value type="QString">WINDOWPATH=7</value>
+    <value type="QString">XCURSOR_THEME=Oxygen_Blue</value>
+    <value type="QString">XDG_CONFIG_DIRS=/etc/xdg</value>
+    <value type="QString">XDG_DATA_DIRS=/usr/share:/usr/local/share:/usr/share</value>
+    <value type="QString">XDG_MENU_PREFIX=kde-4.4-</value>
+    <value type="QString">XDG_SESSION_COOKIE=6d2ecb740e6ac56c3ce0ea574b96ea19-1268634828.814540-872590835</value>
+    <value type="QString">XDM_MANAGED=method=classic</value>
+    <value type="QString">_=/usr/lib64/kde4/libexec/start_kdeinit_wrapper</value>
+   </valuelist>
+   <value key="abstractProcess.IgnoreReturnValue" type="bool">true</value>
+   <valuelist key="abstractProcess.arguments" type="QVariantList">
+    <value type="QString">clean</value>
+   </valuelist>
+   <value key="abstractProcess.command" type="QString">make</value>
+   <value key="abstractProcess.enabled" type="bool">true</value>
+   <value key="abstractProcess.workingDirectory" type="QString">/home/zeke/Projects/git/aki/build</value>
+   <valuelist key="additionalArguments" type="QVariantList">
+    <value type="QString">clean</value>
+   </valuelist>
+   <value key="cleanConfig" type="bool">true</value>
+  </valuemap>
+ </data>
+ <data>
+  <variable>buildconfigurations</variable>
+  <valuelist type="QVariantList">
+   <value type="QString">all</value>
+  </valuelist>
+ </data>
+ <data>
+  <variable>buildstep0</variable>
+  <valuemap type="QVariantMap">
+   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString"></value>
+  </valuemap>
+ </data>
+ <data>
+  <variable>buildsteps</variable>
+  <valuelist type="QVariantList">
+   <value type="QString">CMakeProjectManager.MakeStep</value>
+  </valuelist>
+ </data>
+ <data>
+  <variable>cleanstep0</variable>
+  <valuemap type="QVariantMap">
+   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString"></value>
+   <value key="clean" type="bool">true</value>
+  </valuemap>
+ </data>
+ <data>
+  <variable>cleansteps</variable>
+  <valuelist type="QVariantList">
+   <value type="QString">CMakeProjectManager.MakeStep</value>
+  </valuelist>
+ </data>
+ <data>
+  <variable>defaultFileEncoding</variable>
+  <value type="QByteArray">UTF-8</value>
+ </data>
+ <data>
+  <variable>project</variable>
+  <valuemap type="QVariantMap"/>
+ </data>
+</qtcreator>
