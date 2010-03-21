@@ -86,6 +86,18 @@
        <property name="alternatingRowColors">
         <bool>true</bool>
        </property>
+       <property name="selectionBehavior">
+        <enum>QAbstractItemView::SelectRows</enum>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>32</width>
+         <height>32</height>
+        </size>
+       </property>
+       <property name="resizeMode">
+        <enum>QListView::Adjust</enum>
+       </property>
        <property name="uniformItemSizes">
         <bool>true</bool>
        </property>

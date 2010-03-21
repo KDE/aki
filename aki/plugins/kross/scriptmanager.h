@@ -36,13 +36,11 @@ public:
     void addScript(const QString &file);
     void removeScript(const QString &name);
 private:
-    Q_PRIVATE_SLOT(d, void user1Clicked())
-    Q_PRIVATE_SLOT(d, void addClicked())
-    Q_PRIVATE_SLOT(d, void removeClicked())
     Q_PRIVATE_SLOT(d, void runClicked())
     Q_PRIVATE_SLOT(d, void stopClicked())
-    Q_PRIVATE_SLOT(d, void scriptViewRowChanged(const QModelIndex &current,
-                                                const QModelIndex &previous))
+    Q_PRIVATE_SLOT(d, void scriptEnabled())
+    Q_PRIVATE_SLOT(d, void scriptDisabled())
+    Q_PRIVATE_SLOT(d, void selectionChanged())
 private:
     friend class ScriptManagerPrivate;
     QScopedPointer<ScriptManagerPrivate> d;

@@ -23,23 +23,31 @@
 #define SCRIPTLISTMODEL_H
 
 #include <QAbstractItemModel>
-#include <QScopedPointer>
+#include <QList>
 
+class Script;
 class ScriptListModelPrivate;
 class ScriptListModel : public QAbstractListModel
 {
     Q_OBJECT
+    typedef QList<Script*> ScriptList;
 public:
     explicit ScriptListModel(QObject *parent = 0);
     ~ScriptListModel();
     virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
     virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    virtual bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
     virtual Qt::ItemFlags flags(const QModelIndex &index) const;
-    bool addScript(const QString &file);
-    bool addScriptDesktopFile(const QString &desktopFile);
-    bool removeScript(const QString &name);
-    virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole);
-    int count() const;
+    bool addScriptFromArchive(const QString &archiveFile);
+    bool addScriptFromDesktopFile(const QString &desktopFile);
+    bool removeScript(const QString &scriptName);
+    int scriptCount() const;
+    bool executeScript(const QModelIndex &index);
+    void stopScript(const QModelIndex &index);
+    Script* scriptAt(const QModelIndex &index);
+Q_SIGNALS:
+    void scriptEnabled();
+    void scriptDisabled();
 private:
     friend class ScriptListModelPrivate;
     QScopedPointer<ScriptListModelPrivate> d;

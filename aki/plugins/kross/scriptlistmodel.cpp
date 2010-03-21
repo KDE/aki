@@ -23,8 +23,7 @@
 #include "script.h"
 #include <KDebug>
 #include <KIO/DeleteJob>
-#include <KLocale>
-#include <KMessageBox>
+#include <KIcon>
 #include <KMimeType>
 #include <KStandardDirs>
 #include <KTar>
@@ -42,8 +41,7 @@ public:
         scriptDirectory = KGlobal::dirs()->saveLocation("data", "aki/scripts");
     }
 
-    QString determineMime(KMimeType::Ptr mime) const
-    {
+    QString determineMimeType(KMimeType::Ptr mime) {
         if (mime->name() == "application/x-bzip" ||
             mime->name() == "application/x-bzip-compressed-tar") {
             return "bzip";
@@ -57,27 +55,25 @@ public:
         } else if (mime->name() == "application/x-lzma-compressed-tar") {
             return "lzma";
         }
+
         return QString();
     }
 
     bool extractArchive(KArchive *archive)
     {
         if (!archive->open(QIODevice::ReadOnly)) {
-            kDebug() << "Unable to open the archive for read";
+            kError() << "Unable to open the archive for reading";
             return false;
         }
 
         const KArchiveDirectory *directory = archive->directory();
         if (!directory) {
-            KMessageBox::error(0, i18n("Invalid archive directory"));
-            return false;
+            kError() << "Invalid archive directory";
         }
 
-        QStringListIterator entriesIter(directory->entries());
         bool status = false;
-        while (entriesIter.hasNext()) {
-            const QString name = entriesIter.next();
-            const KArchiveEntry *entry = directory->entry(name);
+        foreach (const QString &entryName, directory->entries()) {
+            const KArchiveEntry *entry = directory->entry(entryName);
             if (entry && entry->isDirectory()) {
                 status = searchArchiveDirectory(static_cast<const KArchiveDirectory*>(entry));
             }
@@ -88,17 +84,15 @@ public:
 
     bool searchArchiveDirectory(const KArchiveDirectory *directory)
     {
-        QStringListIterator entriesIter(directory->entries());
-        while (entriesIter.hasNext()) {
-            const QString name = entriesIter.next();
-            if (name.endsWith(".desktop", Qt::CaseInsensitive)) {
+        foreach (const QString &entryName, directory->entries()) {
+            if (entryName.toLower().endsWith(".desktop")) {
                 const QString installDir = scriptDirectory + directory->name() + '/';
-                if (QFileInfo(installDir).exists()) {
-                    KMessageBox::error(0, i18n("Script directory already exists"));
+                if (!QFileInfo(installDir).exists()) {
+                    kError() << "Script directory already exists";
                     return false;
                 } else {
-                    directory->copyTo(installDir, true);
-                    if (!installScript(installDir + name)) {
+                    directory->copyTo(installDir);
+                    if (!installScript(installDir + entryName)) {
                         KIO::del(installDir, KIO::HideProgressInfo);
                         return false;
                     }
@@ -106,7 +100,6 @@ public:
                 }
             }
         }
-
         return false;
     }
 
@@ -121,26 +114,21 @@ public:
         }
 
         if (QFileInfo(path).dir().dirName() != script->metaData().name) {
-            kDebug() << "Script directory should be the same name as the name of it in the desktop file";
+            kDebug() << "Script directory should be the same name as the name of the script";
             delete script;
             return false;
         }
 
-        addScript(script);
+        scriptList.append(script);
         return true;
     }
 
-    void addScript(Script *script)
-    {
-        scriptList.append(script);
-    }
-
     ScriptListModel *q;
-    QList<Script*> scriptList;
+    ScriptListModel::ScriptList scriptList;
     QString scriptDirectory;
 }; // End of class ScriptListModelPrivate.
 
-ScriptListModel::ScriptListModel(QObject* parent)
+ScriptListModel::ScriptListModel(QObject *parent)
     : QAbstractListModel(parent)
 {
     d.reset(new ScriptListModelPrivate(this));
@@ -163,17 +151,19 @@ ScriptListModel::data(const QModelIndex &index, int role) const
         return QVariant();
     }
 
+    Script *script = d->scriptList[index.row()];
+
     switch (role) {
     case Qt::DisplayRole: {
-        return d->scriptList.at(index.row())->metaData().name;
+        return script->metaData().name;
         break;
     }
     case Qt::DecorationRole: {
-        return KIcon(d->scriptList.at(index.row())->metaData().icon);
+        return KIcon(script->metaData().icon);
         break;
     }
     case Qt::CheckStateRole: {
-        if (d->scriptList.at(index.row())->isEnabled()) {
+        if (script->isEnabled()) {
             return Qt::Checked;
         } else {
             return Qt::Unchecked;
@@ -189,10 +179,37 @@ ScriptListModel::data(const QModelIndex &index, int role) const
 }
 
 int
-ScriptListModel::rowCount(const QModelIndex &parent) const
+ScriptListModel::rowCount(const QModelIndex &) const
 {
-    Q_UNUSED(parent);
     return d->scriptList.count();
+}
+
+bool
+ScriptListModel::setData(const QModelIndex &index, const QVariant &value, int role)
+{
+    if (!index.isValid()) {
+        return false;
+    }
+
+    Script *script = d->scriptList[index.row()];
+
+    switch (role) {
+    case Qt::CheckStateRole: {
+        if (value.toUInt() == Qt::Checked) {
+            script->setEnabled(true);
+            if (script->execute()) {
+                emit scriptEnabled();
+            }
+        } else if (value.toUInt() == Qt::Unchecked) {
+            script->setEnabled(false);
+            script->stop();
+            emit scriptDisabled();
+        }
+        break;
+    }
+    }
+
+    return QAbstractItemModel::setData(index, value, role);
 }
 
 Qt::ItemFlags
@@ -205,48 +222,41 @@ ScriptListModel::flags(const QModelIndex &index) const
     return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsUserCheckable;
 }
 
-bool
-ScriptListModel::addScript(const QString& file)
+bool ScriptListModel::addScriptFromArchive(const QString& archiveFile)
 {
-    if (!QFileInfo(file).exists()) {
+    if (!QFileInfo(archiveFile).exists()) {
         return false;
     }
 
-    KMimeType::Ptr mime = KMimeType::findByPath(file);
-
+    KMimeType::Ptr mime = KMimeType::findByPath(archiveFile);
     if (mime.isNull()) {
+        kDebug() << "Invalid mime for archive file";
         return false;
     }
 
-    const QString type = d->determineMime(mime);
+    const QString type = d->determineMimeType(mime);
+    int row = (d->scriptList.count() != 0) ? d->scriptList.count() : 0;
 
-    int row = 0;
-    if (row != 0) {
-        row = d->scriptList.count();
-    }
-
-    bool status = false;
     beginInsertRows(QModelIndex(), row, row);
     if (type == "zip") {
-        KZip zip(file);
-        status = d->extractArchive(&zip);
+        KZip zipFile(archiveFile);
+        if (!d->extractArchive(&zipFile)) {
+            return false;
+        }
     } else if (type == "bzip" || "tar" || "lzma" || "gzip") {
-        KTar tar(file);
-        status = d->extractArchive(&tar);
-    } else {
-        kDebug() << "Unknown archive";
-        return false;
+        KTar tarFile(archiveFile);
+        if (!d->extractArchive(&tarFile)) {
+            return false;
+        }
     }
     endInsertRows();
-
-    return status;
+    return true;
 }
 
-bool
-ScriptListModel::addScriptDesktopFile(const QString &desktopFile)
+bool ScriptListModel::addScriptFromDesktopFile(const QString& desktopFile)
 {
     if (!QFileInfo(desktopFile).exists()) {
-        return true;
+        return false;
     }
 
     const int row = (d->scriptList.count() != 0) ? d->scriptList.count() : 0;
@@ -259,17 +269,43 @@ ScriptListModel::addScriptDesktopFile(const QString &desktopFile)
     return status;
 }
 
-bool
-ScriptListModel::removeScript(const QString &name)
+bool ScriptListModel::executeScript(const QModelIndex& index)
 {
+    if (!index.isValid()) {
+        kDebug() << "Invalid script index provided";
+        return false;
+    }
+
+    Script *script = d->scriptList[index.row()];
+
+    if (!script->execute()) {
+        kDebug() << "Script failed to execute";
+        return false;
+    }
+
+    script->setEnabled(true);
+    emit dataChanged(index, index);
+    kDebug() << QString("Script name: %1 was executed successfully").arg(script->metaData().name);
+    return true;
+}
+
+bool ScriptListModel::removeScript(const QString& scriptName)
+{
+    if (scriptName.isNull() || scriptName.isEmpty()) {
+        kDebug() << "Invalid script name was given for removal";
+        return false;
+    }
+
     int index = -1;
+
     foreach (Script *script, d->scriptList) {
-        if (script->metaData().name == name) {
+        if (script->metaData().name == scriptName) {
             index = d->scriptList.indexOf(script);
         }
     }
 
     if (index == -1) {
+        kDebug() << "Script was not found for removal something must be wrong";
         return false;
     }
 
@@ -277,32 +313,42 @@ ScriptListModel::removeScript(const QString &name)
     delete d->scriptList.takeAt(index);
     endRemoveRows();
 
-    KIO::del(d->scriptDirectory + name);
-
-    return true;
+    KIO::del(d->scriptDirectory + scriptName, KIO::HideProgressInfo);
+    return false;
 }
 
-bool
-ScriptListModel::setData(const QModelIndex &index, const QVariant &value, int role)
-{
-    if (!index.isValid()) {
-        return false;
-    }
-
-    switch (role) {
-    case Qt::CheckStateRole: {
-        Script *script = d->scriptList.at(index.row());
-        script->setEnabled(!script->isEnabled());
-        break;
-    }
-    }
-
-    emit dataChanged(index, index);
-    return QAbstractItemModel::setData(index, value, role);
-}
-
-int
-ScriptListModel::count() const
+int ScriptListModel::scriptCount() const
 {
     return d->scriptList.count();
+}
+
+void ScriptListModel::stopScript(const QModelIndex& index)
+{
+    if (!index.isValid()) {
+        kDebug() << "Invalid script index provided";
+        return;
+    }
+
+    Script *script = d->scriptList[index.row()];
+
+    if (!script->isRunning()) {
+        kDebug() << "Script wasn't running";
+        return;
+    }
+
+    script->stop();
+
+    script->setEnabled(false);
+    emit dataChanged(index, index);
+    kDebug() << QString("Script name: %1 was stopped successfully").arg(script->metaData().name);
+}
+
+Script*
+ScriptListModel::scriptAt(const QModelIndex &index)
+{
+    if (!index.isValid()) {
+        return 0;
+    }
+
+    return d->scriptList[index.row()];
 }

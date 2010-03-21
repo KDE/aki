@@ -38,59 +38,59 @@ public:
     {
     }
 
-    void user1Clicked()
+    void runClicked()
     {
-        KNS3::DownloadDialog dlg(q);
-        dlg.exec();
-    }
+        QModelIndex current = q->scriptView->currentIndex();
 
-    void addClicked()
-    {
-        QString file = KFileDialog::getOpenFileName(KUrl("/home/zeke"));
-        model->addScript(file);
-    }
-
-    void removeClicked()
-    {
-        const QString name = q->scriptView->currentIndex().data().toString();
-        model->removeScript(name);
-    }
-
-    void scriptViewRowChanged(const QModelIndex &current, const QModelIndex &previous)
-    {
-        if (!q->scriptView->currentIndex().isValid()) {
-            kDebug() << "Invalid";
-            q->runButton->setDisabled(true);
-            q->stopButton->setDisabled(true);
-        } else {
-            if (q->scriptView->currentIndex().isValid()) {
-                if (q->scriptView->currentIndex().data(Qt::CheckStateRole) == Qt::Checked) {
-                    kDebug() << "Valid && Checked";
-                    q->runButton->setDisabled(true);
-                    q->stopButton->setEnabled(true);
-                    q->editButton->setEnabled(true);
-                } else {
-                    kDebug() << "Valid && Unchecked";
-                    q->runButton->setEnabled(true);
-                    q->stopButton->setDisabled(true);
-                    q->editButton->setDisabled(true);
-                }
+        if (current.isValid()) {
+            if (model->executeScript(current)) {
+                q->runButton->setDisabled(true);
+                q->stopButton->setEnabled(true);
+                q->editButton->setEnabled(true);
             }
         }
     }
 
-    void runClicked()
-    {
-        q->scriptView->model()->setData(q->scriptView->currentIndex(), Qt::Checked, Qt::CheckStateRole);
-        q->runButton->setDisabled(true);
-        q->stopButton->setEnabled(true);
-    }
-
     void stopClicked()
     {
-        q->scriptView->model()->setData(q->scriptView->currentIndex(), Qt::Unchecked, Qt::CheckStateRole);
+        QModelIndex current = q->scriptView->currentIndex();
+
+        if (current.isValid()) {
+            model->stopScript(current);
+            q->runButton->setEnabled(true);
+            q->stopButton->setDisabled(true);
+            q->editButton->setDisabled(true);
+        }
+    }
+
+    void scriptEnabled()
+    {
+        q->runButton->setDisabled(true);
+        q->stopButton->setEnabled(true);
+        q->editButton->setEnabled(true);
+    }
+
+    void scriptDisabled()
+    {
         q->runButton->setEnabled(true);
         q->stopButton->setDisabled(true);
+        q->editButton->setDisabled(true);
+    }
+
+    void selectionChanged()
+    {
+        if (q->scriptView->selectionModel()->selectedIndexes().isEmpty()) {
+            return;
+        }
+
+        QModelIndex current = q->scriptView->selectionModel()->selectedIndexes()[0];
+        Script *script = model->scriptAt(current);
+
+        if (script->isEnabled()) {
+            scriptEnabled();
+        } else {
+            scriptDisabled();
+        }
     }
 
     ScriptManager *q;
@@ -116,23 +116,21 @@ ScriptManager::ScriptManager(QWidget *parent)
     d->model = new ScriptListModel(this);
     scriptView->setModel(d->model);
 
-    connect(this, SIGNAL(user1Clicked()),
-            SLOT(user1Clicked()));
-    connect(addButton, SIGNAL(clicked(bool)),
-            SLOT(addClicked()));
-    connect(removeButton, SIGNAL(clicked(bool)),
-            SLOT(removeClicked()));
     connect(runButton, SIGNAL(clicked(bool)),
             SLOT(runClicked()));
     connect(stopButton, SIGNAL(clicked(bool)),
             SLOT(stopClicked()));
-    connect(scriptView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
-            SLOT(scriptViewRowChanged(QModelIndex,QModelIndex)));
+    connect(d->model, SIGNAL(scriptDisabled()),
+            SLOT(scriptDisabled()));
+    connect(d->model, SIGNAL(scriptEnabled()),
+            SLOT(scriptEnabled()));
+    connect(scriptView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
+            SLOT(selectionChanged()));
 
-    removeButton->setDisabled(true);
     runButton->setDisabled(true);
     stopButton->setDisabled(true);
     editButton->setDisabled(true);
+    removeButton->setDisabled(true);
 }
 
 ScriptManager::~ScriptManager()
@@ -142,9 +140,19 @@ ScriptManager::~ScriptManager()
 void
 ScriptManager::addScript(const QString &file)
 {
-    d->model->addScriptDesktopFile(file);
+    if (file.isEmpty() || file.isNull()) {
+        return;
+    }
 
-    if (d->model->count() != 0 && !removeButton->isEnabled()) {
+    if (!QFileInfo(file).exists()) {
+        return;
+    }
+
+    if (d->model->addScriptFromDesktopFile(file)) {
+        
+    }
+
+    if (d->model->scriptCount() > 0) {
         removeButton->setEnabled(true);
     }
 }
@@ -152,9 +160,15 @@ ScriptManager::addScript(const QString &file)
 void
 ScriptManager::removeScript(const QString &name)
 {
-    d->model->removeScript(name);
+    if (name.isEmpty() || name.isNull()) {
+        return;
+    }
 
-    if (d->model->count() == 0) {
+    if (!d->model->removeScript(scriptView->currentIndex().data().toString())) {
+        return;
+    }
+
+    if (d->model->scriptCount() == 0) {
         removeButton->setDisabled(true);
     }
 }

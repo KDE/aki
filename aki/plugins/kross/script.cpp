@@ -56,6 +56,7 @@ public:
         meta.author = group.readEntry("X-AkiScript-Author");
         // Get the main file of the script.
         file = group.readEntry("X-AkiScript-MainScript");
+        url.setFileName(file);
 
         // If the icon entry is emmpty or missing we return the mime icon of the script.
         if (meta.icon.isNull() || meta.icon.isEmpty()) {
@@ -85,6 +86,7 @@ public:
         /* Check to see if this file exists. If the file does not exist or
         the script has already a valid action exit*/
         if (!QFileInfo(file).exists() || action) {
+            kDebug() << "Script doesn't exist or action already exists";
             return false;
         }
 
@@ -102,9 +104,11 @@ public:
         const QString interpreter = Kross::Manager::self().interpreternameForFile(file);
         /* Check to see if the interpret was not valid for this script or
         if the interpreter is not available for the script.*/
+
         if (interpreter.isNull() || !Kross::Manager::self().interpreters().contains(interpreter)) {
             /* Since the interpreter was invalid or the interpreter is not available for the script
             delete the created action*/
+            kDebug() << "Interpreter is null or not available";
             delete action;
             return false;
         }
@@ -124,7 +128,8 @@ public:
         // Remove the action.
         ac->removeAction(action);
         // Delete the action when it returns control back to the application.
-        action->deleteLater();
+        delete action;
+        action = 0;
     }
 
     Script *q;
