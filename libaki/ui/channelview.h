@@ -23,6 +23,7 @@
 #ifndef CHANNELVIEW_H
 #define CHANNELVIEW_H
 
+#include "libaki_export.h"
 #include <KTabWidget>
 #include <QScopedPointer>
 
@@ -39,7 +40,7 @@ class StatusWindow;
 class IdentityConfig;
 class ChatParser;
 class ChannelViewPrivate;
-class ChannelView : public KTabWidget
+class LIBAKI_EXPORT ChannelView : public KTabWidget
 {
     Q_OBJECT
 public:
@@ -62,6 +63,7 @@ public:
     void addStatus(const QString &name);
     void addQuery(Aki::Irc::User *self, Aki::Irc::User *other, const QString &message, bool toSelf = false);
     void setSplitEnabled(bool enabled);
+    void parserText(const QString &text);
 public Q_SLOTS:
     void checkChannelDrop(Aki::BaseWindow *window);
 Q_SIGNALS:

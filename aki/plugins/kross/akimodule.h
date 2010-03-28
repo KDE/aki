@@ -29,6 +29,10 @@ namespace Aki
 class MainInterface;
 class ServerView;
 class SettingsPageInterface;
+namespace Irc
+{
+class Socket;
+} // End of namespace Irc.
 } // End of namespace Aki.
 
 class QDockWidget;
@@ -39,11 +43,15 @@ class AkiModule : public QObject
 public:
     explicit AkiModule(QObject *parent, Aki::MainInterface *interface);
     virtual ~AkiModule();
-    void addDock(QDockWidget *widget);
-    void removeDock(QDockWidget *widget);
-    void addSettingsPage(Aki::SettingsPageInterface *page);
-    void removeSettingsPage(Aki::SettingsPageInterface *page);
-    QObject* mainView();
+public:
+    Q_INVOKABLE void addDock(QDockWidget *widget);
+    Q_INVOKABLE void removeDock(QDockWidget *widget);
+    Q_INVOKABLE void addSettingsPage(Aki::SettingsPageInterface *page);
+    Q_INVOKABLE void removeSettingsPage(Aki::SettingsPageInterface *page);
+    Q_INVOKABLE QObject* mainView();
+    Q_INVOKABLE void executeCommand(const QString &command);
+    Q_INVOKABLE void printText(const QString &str);
+    Q_INVOKABLE QObject* socket();
 private:
     friend class AkiModulePrivate;
     QScopedPointer<AkiModulePrivate> d;

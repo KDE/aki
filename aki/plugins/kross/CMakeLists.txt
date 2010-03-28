@@ -2,6 +2,7 @@ set(krossplugin_SRCS
     akimodule.cpp
     akiscript.cpp
     script.cpp
+    scriptconsole.cpp
     scriptlistmodel.cpp
     scriptmanager.cpp
 )
@@ -23,6 +24,7 @@ target_link_libraries(
     ${KDE4_KROSSCORE_LIBS}
     ${KDE4_KROSSUI_LIBS}
     ${KDE4_KNEWSTUFF3_LIBS}
+    ${KDE4_KTEXTEDITOR_LIBS}
 )
 
 install(TARGETS akikrossplugin DESTINATION ${PLUGIN_INSTALL_DIR})

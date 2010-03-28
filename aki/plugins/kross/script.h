@@ -25,12 +25,13 @@ public:
     ~Script();
     bool execute() const;
     void stop();
-    bool checkVersion() const;
     Script::MetaData metaData() const;
     bool isRunning() const;
     bool isEnabled() const;
     void setEnabled(bool enable);
     bool loadDesktopFile(const QString &file) const;
+    void setInterpreter(const QString &interpreter);
+    void setCode(const QString &code);
 private:
     friend class ScriptPrivate;
     QScopedPointer<ScriptPrivate> d;

@@ -600,4 +600,10 @@ ChannelView::windows()
     return d->tabList;
 }
 
+void
+ChannelView::parserText(const QString &text)
+{
+    d->parser->parse(text);
+}
+
 #include "channelview.moc"

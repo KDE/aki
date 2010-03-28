@@ -178,13 +178,6 @@ Script::execute() const
         d->action->callFunction("pluginLoad");
     }
 
-    // Check that version is correct with the version of the application.
-    if (!checkVersion()) {
-        // Remove the action from the collection if it is not.
-        d->removeAction();
-        return false;
-    }
-
     // The script is running now.
     d->isRunning = true;
     return true;
@@ -209,28 +202,6 @@ Script::stop()
 
     // The script is not running now.
     d->isRunning = false;
-}
-
-bool
-Script::checkVersion() const
-{
-    // Check that we have a valid script action.
-    if (!d->action) {
-        return false;
-    }
-
-    /* Check to see if script has the function pluginVersion and if it
-    matches the version of this application. If the function is not found
-    the script will not be loaded and deleted.*/
-    if (d->action->functionNames().contains("pluginVersion")) {
-        // Pass the version of the application.
-        QVariantList args;
-        args << AKI_VERSION_STR;
-        // Get the state of if this script is compatible with this application.
-        return d->action->callFunction("pluginVersion", args).toBool();
-    }
-
-    return false;
 }
 
 Script::MetaData

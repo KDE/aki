@@ -103,62 +103,62 @@ public:
     /**
      * Gets the state of if the channel is the current one.
      */
-    virtual bool isCurrent() const;
+    Q_INVOKABLE virtual bool isCurrent() const;
     /**
      * Gets the name of the window.
      */
-    QString name() const;
+    Q_INVOKABLE QString name() const;
     /**
      * Sets the window as the @p current current one.
      * @param current true if this window is current; false otherwise.
      */
-    virtual void setCurrent(bool current);
+    Q_INVOKABLE virtual void setCurrent(bool current);
     /**
      * Sets the window name @p name.
      * @param name Name of the window.
      */
-    void setName(const QString &name);
+    Q_INVOKABLE void setName(const QString &name);
     /**
      * Sets the type @p type of window this is.
      * @param type Window type.
      */
-    void setWindowType(const Aki::BaseWindow::WindowType &type);
+    Q_INVOKABLE void setWindowType(const Aki::BaseWindow::WindowType &type);
     /**
      * Gets the type of window this is.
      * @return Window type.
      */
-    Aki::BaseWindow::WindowType windowType() const;
+    Q_INVOKABLE Aki::BaseWindow::WindowType windowType() const;
     /**
      * Sets the window socket @p socket.
      * @param socket Windows irc socket.
      */
-    void setSocket(Aki::Irc::Socket *socket);
+    Q_INVOKABLE void setSocket(Aki::Irc::Socket *socket);
     /**
      * Gets the window socket.
      * @return Window socket.
      */
-    Aki::Irc::Socket* socket();
+    Q_INVOKABLE Aki::Irc::Socket* socket();
     /**
      * Sets the window chat view @p view. Not every
      * window has one.
      * @param view Windows chatview.
      */
-    void setView(Aki::ChatView *view);
+    Q_INVOKABLE void setView(Aki::ChatView *view);
     /**
      * Gets the window chat view.
      * @return Window's chatview or 0 if there isn't one.
      */
-    Aki::ChatView* view();
+    Q_INVOKABLE Aki::ChatView* view();
 
-    Aki::ChannelView* channelView();
+    Q_INVOKABLE Aki::ChannelView* channelView();
 
     void setNotifications(Aki::Notifications *notification);
     Aki::Notifications* notifications();
-    void setChannelView(Aki::ChannelView *view);
-    void setTabText(const QString &name);
-    virtual bool hasInputFocus() const = 0;
-    Aki::LogFile* logFile();
-    void setTabColor(const Aki::BaseWindow::TabColor &color);
+    Q_INVOKABLE void setChannelView(Aki::ChannelView *view);
+    Q_INVOKABLE void setTabText(const QString &name);
+    Q_INVOKABLE virtual bool hasInputFocus() const = 0;
+    Q_INVOKABLE Aki::LogFile* logFile();
+    Q_INVOKABLE void setTabColor(const Aki::BaseWindow::TabColor &color);
 protected:
     virtual void setLogFile(Aki::LogFile *logFile);
 private:

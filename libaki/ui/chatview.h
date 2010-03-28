@@ -45,7 +45,7 @@ public:
     void addAway(const QString &nick, const QString &message);
     void addBan(const QString &nick, const QString &mask);
     void addBanList(const QString &channel, const QString &mask, const QString &who,
-                    const QString &time);
+                                const QString &time);
     void addChannelCreated(const QString &time);
     void addChannelModes(const QString &modes);
     void addChannelModes(const QString &from, const QString &modes);
@@ -63,7 +63,7 @@ public:
     void addChannelMode(const QString &fromNick, const QChar &mode, const QString &params = QString(),
                         bool self = false);
     void addMode(const QString &from, const QString &toNick, const QChar &mode,
-                 bool toYou = false, bool fromYou = false);
+                             bool toYou = false, bool fromYou = false);
     void addMotd(const QString &message);
     void addNick(const QString &oldNick, const QString &newNick);
     void addNotice(const QString &message);

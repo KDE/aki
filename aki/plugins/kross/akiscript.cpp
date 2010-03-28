@@ -22,6 +22,7 @@
 #include "akiscript.h"
 #include "akimodule.h"
 #include "akiversion.h"
+#include "scriptconsole.h"
 #include "scriptmanager.h"
 #include <KAction>
 #include <KActionCollection>
@@ -41,13 +42,19 @@ public:
     AkiScriptPrivate(AkiScript *qq)
         : q(qq),
         scriptManager(0),
-        scriptManagerAction(0)
+        scriptManagerAction(0),
+        scriptConsoleAction(0)
     {
     }
 
     void scriptManagerTriggered()
     {
         scriptManager->show();
+    }
+
+    void scriptConsoleTriggered()
+    {
+        scriptConsole->show();
     }
 
     void loadScripts()
@@ -82,7 +89,9 @@ public:
 
     AkiScript *q;
     ScriptManager *scriptManager;
+    ScriptConsole *scriptConsole;
     KAction *scriptManagerAction;
+    KAction *scriptConsoleAction;
 }; // End of class AkiScriptPrivate.
 
 AkiScript::AkiScript(QObject *parent, const QVariantList &args)
@@ -108,6 +117,7 @@ void
 AkiScript::unload()
 {
     actionCollection()->removeAction(d->scriptManagerAction);
+    delete d->scriptConsole;
     delete d->scriptManager;
 }
 
@@ -115,6 +125,7 @@ void
 AkiScript::load()
 {
     d->scriptManager = new ScriptManager;
+    d->scriptConsole = new ScriptConsole;
     setXMLFile("akikrosspluginui.rc");
 
     Kross::Manager::self().addQObject(new AkiModule(this, mainInterface()));
@@ -123,6 +134,11 @@ AkiScript::load()
     connect(d->scriptManagerAction, SIGNAL(triggered(bool)),
             SLOT(scriptManagerTriggered()));
     actionCollection()->addAction("scriptmanager", d->scriptManagerAction);
+
+    d->scriptConsoleAction = new KAction(i18n("Script Editor..."), this);
+    connect(d->scriptConsoleAction, SIGNAL(triggered(bool)),
+            SLOT(scriptConsoleTriggered()));
+    actionCollection()->addAction("scriptconsole", d->scriptConsoleAction);
 
     d->loadScripts();
 }

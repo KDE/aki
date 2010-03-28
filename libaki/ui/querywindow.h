@@ -49,8 +49,8 @@ public:
     void setSelfUser(Aki::Irc::User *user);
     void setOtherUser(Aki::Irc::User *user);
     void addWho(const QString &channel, const QString &identName, const QString &address,
-                const QString &server, const QString &nick, const QString &flags,
-                int hops, const QString &realName);
+                            const QString &server, const QString &nick, const QString &flags,
+                            int hops, const QString &realName);
     void addMessage(const QString &from, const QString &message);
     void addNick(const QString &oldNick, const QString &newNick);
     bool hasInputFocus() const;

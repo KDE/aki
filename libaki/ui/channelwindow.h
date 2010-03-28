@@ -93,12 +93,12 @@ public:
      * Gets the list of IRC users in the channel.
      * @return IRC user list.
      */
-    QList<Aki::Irc::User*> users() const;
+    Q_INVOKABLE QList<Aki::Irc::User*> users() const;
     /**
      * Gets the list of IRC users in the channel.
      * @return IRC user list.
      */
-    QList<Aki::Irc::User*> users();
+    Q_INVOKABLE QList<Aki::Irc::User*> users();
     /**
      * Adds a new mode @p mode to the user @p name.
      * @param name User's nickname.

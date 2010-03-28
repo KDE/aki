@@ -22,8 +22,15 @@
 #include "akimodule.h"
 #include "interfaces/maininterface.h"
 #include "interfaces/settingspageinterface.h"
+#include "ui/basewindow.h"
+#include "ui/channelview.h"
+#include "ui/channelwindow.h"
+#include "ui/chatview.h"
+#include "ui/querywindow.h"
+#include "ui/serverwindow.h"
 #include "ui/serverview.h"
 #include <QDockWidget>
+#include <Aki/Irc/Socket>
 
 class AkiModulePrivate
 {
@@ -77,6 +84,53 @@ QObject*
 AkiModule::mainView()
 {
     return d->interface->mainView();
+}
+
+void
+AkiModule::executeCommand(const QString &command)
+{
+    Aki::ServerView *mainView = d->interface->mainView();
+    Aki::ServerWindow *serverWindow = qobject_cast<Aki::ServerWindow*>(mainView->currentWindow());
+
+    foreach (Aki::BaseWindow *window, serverWindow->splitView()->windows()) {
+        if (window->isCurrent() && window->hasInputFocus()) {
+            serverWindow->splitView()->parserText(command);
+            return;
+        }
+    }
+
+    serverWindow->mainView()->parserText(command);
+}
+
+void
+AkiModule::printText(const QString &str)
+{
+    Aki::ServerView *mainView = d->interface->mainView();
+    Aki::ServerWindow *serverWindow = qobject_cast<Aki::ServerWindow*>(mainView->currentWindow());
+
+    if (serverWindow) {
+        Aki::BaseWindow *base = serverWindow->currentFocusedChannel();
+        switch (base->windowType()) {
+        case Aki::BaseWindow::ChannelWindow: {
+            qobject_cast<Aki::ChannelWindow*>(base)->view()->addMessage(str);
+            break;
+        }
+        case Aki::BaseWindow::QueryWindow: {
+            qobject_cast<Aki::QueryWindow*>(base)->view()->addMessage(str);
+            break;
+        }
+        default: {
+            return;
+        }
+        }
+    }
+}
+
+QObject*
+AkiModule::socket()
+{
+    Aki::ServerView *mainView = d->interface->mainView();
+    return qobject_cast<Aki::ServerWindow*>(mainView->currentWindow())->socket();
 }
 
 #include "akimodule.moc"

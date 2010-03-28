@@ -149,7 +149,6 @@ ScriptManager::addScript(const QString &file)
     }
 
     if (d->model->addScriptFromDesktopFile(file)) {
-        
     }
 
     if (d->model->scriptCount() > 0) {

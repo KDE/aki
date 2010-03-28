@@ -19,28 +19,25 @@
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef AKISCRIPT_H
-#define AKISCRIPT_H
+#ifndef SCRIPTCONSOLE_H
+#define SCRIPTCONSOLE_H
 
-#include "plugin/plugin.h"
-#include <QVariant>
+#include <KDialog>
 
-class AkiScriptPrivate;
-class AkiScript : public Aki::Plugin
+class ScriptConsolePrivate;
+class ScriptConsole : public KDialog
 {
     Q_OBJECT
 public:
-    AkiScript(QObject *parent, const QVariantList &args);
-    ~AkiScript();
-    virtual bool checkVersion(const QString& version);
-    virtual void unload();
-    virtual void load();
+    explicit ScriptConsole(QWidget *parent = 0);
+    ~ScriptConsole();
 private:
-    Q_PRIVATE_SLOT(d, void scriptManagerTriggered())
-    Q_PRIVATE_SLOT(d, void scriptConsoleTriggered())
+    Q_PRIVATE_SLOT(d, void interpretersActivated(const QString &interpreter))
+    Q_PRIVATE_SLOT(d, void executeButtonClicked())
+    Q_PRIVATE_SLOT(d, void stopButtonClicked())
 private:
-    friend class AkiScriptPrivate;
-    AkiScriptPrivate* d;
-}; // End of class AkiScript.
+    friend class ScriptConsolePrivate;
+    QScopedPointer<ScriptConsolePrivate> d;
+}; // End of class ScriptConsole.
 
-#endif // AKISCRIPT_H
+#endif // SCRIPTCONSOLE_H
