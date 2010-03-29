@@ -59,6 +59,7 @@ install(FILES aki.notifyrc DESTINATION ${DATA_INSTALL_DIR}/aki)
 
 add_subdirectory(aki)
 add_subdirectory(cmake)
+add_subdirectory(doc)
 add_subdirectory(libaki)
 
 macro_display_feature_log()
