@@ -343,9 +343,10 @@ Documentation Copyright &copy; 2010 &Richard.Johnson; &Richard.Johnson.mail;
 <title>Obtain and build <acronym>IRC</acronym> library</title>
 <variablelist>
 <varlistentry><term>Requirements</term>
-<listitem><para>&kde; 4.3 or newer</para></listitem>
-<listitem><para>PyQt4</para></listitem>
-<listitem><para>PyKDE4</para></listitem>
+<listitem><para>&kde; 4.3 or newer</para>
+<para>PyQt4</para>
+<para>PyKDE4</para>
+</listitem>
 </varlistentry>
 <varlistentry><term>List of changes for &aki; <acronym>IRC</acronym> Library</term>
 <listitem>
@@ -379,10 +380,11 @@ sudo make install
 <variablelist>
 <varlistentry><term>Requirements</term>
 <listitem><para><link linkend="getting-kapp-lib">&aki; <acronym>IRC</acronym>
-Library</link></para></listitem>
-<listitem><para>&kde; 4.3 or newer</para></listitem>
-<listitem><para>PyQt4</para></listitem>
-<listitem><para>PyKDE4</para></listitem>
+Library</link></para>
+<para>&kde; 4.3 or newer</para>
+<para>PyQt4</para>
+<para>PyKDE4</para>
+</listitem>
 </varlistentry>
 <varlistentry><term>List of changes for &aki;</term>
 <listitem>
