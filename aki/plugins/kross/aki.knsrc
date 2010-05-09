@@ -1,5 +1,0 @@
-[KNewStuff3]
-ProvidersUrl=http://www.akiirc.org/providers.xml
-Categories=Aki Python Scripts, Aki Ruby Scripts, Aki Javascript Scripts
-TargetDir=aki
-Uncompress=always

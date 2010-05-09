@@ -1,7 +1,0 @@
-File=settings.kcfg
-ClassName=Settings
-Namespace=Aki
-Singleton=true
-Mutators=true
-Visibility=LIBAKI_EXPORT
-IncludeFiles=libaki_export.h,kuser.h,akiversion.h

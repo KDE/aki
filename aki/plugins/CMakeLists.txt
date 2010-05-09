@@ -1,6 +1,0 @@
-add_subdirectory(browser)
-add_subdirectory(channelmonitordock)
-add_subdirectory(eventmonitordock)
-add_subdirectory(konsoledock)
-add_subdirectory(kross)
-add_subdirectory(mediacontrol)
