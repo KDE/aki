@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ServerDialog</class>
+ <widget class="QWidget" name="ServerDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>425</width>
+    <height>209</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_2">
+   <item row="0" column="0">
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="0">
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Identity:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="Aki::IdentityComboBox" name="identitySelector"/>
+     </item>
+     <item row="0" column="2">
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="1" column="0" colspan="3">
+      <widget class="QGroupBox" name="groupBox">
+       <property name="title">
+        <string>Networks</string>
+       </property>
+       <layout class="QGridLayout" name="gridLayout_4">
+        <item row="0" column="0">
+         <layout class="QGridLayout" name="gridLayout_3">
+          <item row="0" column="0">
+           <widget class="Aki::NetworkList" name="networkList"/>
+          </item>
+          <item row="0" column="1">
+           <layout class="QVBoxLayout" name="verticalLayout">
+            <item>
+             <widget class="KPushButton" name="addNetworkButton">
+              <property name="text">
+               <string>Add Network</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="KPushButton" name="removeNetworkButton">
+              <property name="text">
+               <string>Delete Network</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="KPushButton" name="editNetworkButton">
+              <property name="text">
+               <string>Edit Network</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="KPushButton" name="importNetworksButton">
+              <property name="text">
+               <string>Import Networks...</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="KPushButton" name="exportNetworksButton">
+              <property name="text">
+               <string>Export Networks...</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KPushButton</class>
+   <extends>QPushButton</extends>
+   <header>kpushbutton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>Aki::IdentityComboBox</class>
+   <extends>QComboBox</extends>
+   <header>ui/identitycombobox.hpp</header>
+  </customwidget>
+  <customwidget>
+   <class>Aki::NetworkList</class>
+   <extends>QListView</extends>
+   <header>ui/networklist.hpp</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

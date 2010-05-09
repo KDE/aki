@@ -1,0 +1,20 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui version="1" name="aki">
+<MenuBar>
+    <Menu name="aki">
+        <Text>&amp;Aki</Text>
+        <Action name="akiNetworkList" />
+        <Menu name="akiNew">
+            <Text>&amp;New</Text>
+            <Action name="akiNewServerTab" />
+            <Action name="akiNewChannelTab" />
+        </Menu>
+        <Action name="akiQuickConnection" />
+        <Separator />
+        <Action name="akiReconnect" />
+        <Action name="akiDisconnect" />
+        <Separator />
+        <Action name="akiQuit" />
+    </Menu>
+</MenuBar>
+</kpartgui>

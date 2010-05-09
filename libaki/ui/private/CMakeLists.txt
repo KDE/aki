@@ -1,0 +1,9 @@
+set(akicore_uiprivate_SRCS
+    ui/private/chatview_p.cxx
+    ui/private/dockbar_p.cxx
+    ui/private/dockbutton_p.cxx
+    ui/private/dockwidget_p.cxx
+    ui/private/mainwindow_p.cxx
+    ui/private/view_p.cxx
+    ui/private/viewtabbar_p.cxx
+)

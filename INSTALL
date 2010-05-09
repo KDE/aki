@@ -1,0 +1,23 @@
+Basic Installation
+-------------------
+
+Create a build directory:
+mkdir build
+
+Change directory to build:
+cd build
+
+Run cmake in the build directory:
+cmake ..
+
+If you want to add debug info to Aki:
+cmake .. -DCMAKE_BUILD_TYPE=debugfull
+
+It defaults to /usr/local if you want to change that run this:
+cmake .. -DCMAKE_INSTALL_PREFIX=<directory to install to>
+
+Afterwards run:
+make
+
+And to install run:
+make install

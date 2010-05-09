@@ -1,0 +1,24 @@
+include(utils/private/CMakeLists.txt)
+set(akicore_utils_SRCS
+    utils/database.cxx
+    ${akicore_utilsprivate_SRCS}
+    utils/sqladdress.cxx
+    utils/sqlchannel.cxx
+    utils/sqlidentity.cxx
+    utils/sqlnickname.cxx
+    utils/sqlserver.cxx
+)
+
+install(
+    FILES
+        utils/database.hpp
+        utils/sqladdress.hpp
+        utils/sqlchannel.hpp
+        utils/sqlidentity.hpp
+        utils/sqlnickname.hpp
+        utils/sqlserver.hpp
+    DESTINATION
+        ${INCLUDE_INSTALL_DIR}/aki/utils
+    COMPONENT
+        Devel
+)

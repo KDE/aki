@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="default.xsl"?>
+<cars>
+    <car>
+        <maker>Honda</maker>
+        <model>Integra Type-R</model>
+        <color>Red</color>
+    </car>
+</cars>
