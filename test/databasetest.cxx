@@ -55,14 +55,14 @@ public:
 void
 DatabaseTest::initTestCase()
 {
-    qxtLog->addLoggerEngine(QLatin1String("Xml Engine"), new QxtXmlFileLoggerEngine(QLatin1String("Test.xml")));
+    qxtLog->addLoggerEngine("Xml Engine", new QxtXmlFileLoggerEngine("Test.xml"));
 }
 
 void
 DatabaseTest::createDatabase()
 {
     QBENCHMARK {
-        if (Aki::Database::open(QLatin1String(":memory:"))) {
+        if (Aki::Database::open(":memory:")) {
             QScopedPointer<Aki::Database, DatabaseCleanupDeleter> database(new Aki::Database);
             QVERIFY(database->createDefaultTables());
         }
@@ -73,10 +73,10 @@ void
 DatabaseTest::findIdentity()
 {
     QBENCHMARK {
-        if (Aki::Database::open(QLatin1String(":memory:"))) {
+        if (Aki::Database::open(":memory:")) {
             QScopedPointer<Aki::Database, DatabaseCleanupDeleter> database(new Aki::Database);
             if (database->createDefaultTables()) {
-                QVERIFY(Aki::SqlIdentity::findIdentity(QLatin1String("Default Identity")));
+                QVERIFY(Aki::SqlIdentity::findIdentity("Default Identity"));
             }
         }
     }
@@ -86,10 +86,10 @@ void
 DatabaseTest::findIdentityFailed()
 {
     QBENCHMARK {
-        if (Aki::Database::open(QLatin1String(":memory:"))) {
+        if (Aki::Database::open(":memory:")) {
             QScopedPointer<Aki::Database, DatabaseCleanupDeleter> database(new Aki::Database);
             if (database->createDefaultTables()) {
-                QScopedPointer<Aki::SqlIdentity> identity(Aki::SqlIdentity::findIdentity(QLatin1String("Default Identity ")));
+                QScopedPointer<Aki::SqlIdentity> identity(Aki::SqlIdentity::findIdentity("Default Identity "));
                 QVERIFY(identity.isNull());
             }
         }
@@ -100,14 +100,14 @@ void
 DatabaseTest::checkIdentityUpdate()
 {
     QBENCHMARK {
-        if (Aki::Database::open(QLatin1String(":memory:"))) {
+        if (Aki::Database::open(":memory:")) {
             QScopedPointer<Aki::Database, DatabaseCleanupDeleter> database(new Aki::Database);
             if (database->createDefaultTables()) {
-                QScopedPointer<Aki::SqlIdentity> defaultIdentity(Aki::SqlIdentity::findIdentity(QLatin1String("Default Identity")));
-                defaultIdentity->setAwayMessage(QLatin1String("boo yeah"));
+                QScopedPointer<Aki::SqlIdentity> defaultIdentity(Aki::SqlIdentity::findIdentity("Default Identity"));
+                defaultIdentity->setAwayMessage("boo yeah");
                 defaultIdentity->save();
 
-                QScopedPointer<Aki::SqlIdentity> defaultIdentity2(Aki::SqlIdentity::findIdentity(QLatin1String("Default Identity")));
+                QScopedPointer<Aki::SqlIdentity> defaultIdentity2(Aki::SqlIdentity::findIdentity("Default Identity"));
                 QVERIFY(*defaultIdentity == *defaultIdentity2);
             }
         }
@@ -118,13 +118,13 @@ void
 DatabaseTest::checkIdentityDelete()
 {
     QBENCHMARK {
-        if (Aki::Database::open(QLatin1String(":memory:"))) {
+        if (Aki::Database::open(":memory:")) {
             QScopedPointer<Aki::Database, DatabaseCleanupDeleter> database(new Aki::Database);
             if (database->createDefaultTables()) {
-                QScopedPointer<Aki::SqlIdentity> defaultIdentity(Aki::SqlIdentity::findIdentity(QLatin1String("Default Identity")));
+                QScopedPointer<Aki::SqlIdentity> defaultIdentity(Aki::SqlIdentity::findIdentity("Default Identity"));
                 QVERIFY(defaultIdentity->remove());
 
-                QScopedPointer<Aki::SqlIdentity> defaultIdentity2(Aki::SqlIdentity::findIdentity(QLatin1String("Default Identity")));
+                QScopedPointer<Aki::SqlIdentity> defaultIdentity2(Aki::SqlIdentity::findIdentity("Default Identity"));
                 QVERIFY(defaultIdentity2.isNull());
             }
         }
@@ -135,19 +135,19 @@ void
 DatabaseTest::insertAndFind()
 {
     QBENCHMARK {
-        if (Aki::Database::open(QLatin1String(":memory:"))) {
+        if (Aki::Database::open(":memory:")) {
             QScopedPointer<Aki::Database, DatabaseCleanupDeleter> database(new Aki::Database);
             if (database->createDefaultTables()) {
-                delete Aki::SqlIdentity::newIdentity(QLatin1String("Zeke"));
-                delete Aki::SqlIdentity::newIdentity(QLatin1String("Coma"));
-                delete Aki::SqlIdentity::newIdentity(QLatin1String("White"));
-                delete Aki::SqlIdentity::newIdentity(QLatin1String("Black"));
+                delete Aki::SqlIdentity::newIdentity("Zeke");
+                delete Aki::SqlIdentity::newIdentity("Coma");
+                delete Aki::SqlIdentity::newIdentity("White");
+                delete Aki::SqlIdentity::newIdentity("Black");
 
-                QVERIFY(Aki::SqlIdentity::findIdentity(QLatin1String("Default Identity")));
-                QVERIFY(Aki::SqlIdentity::findIdentity(QLatin1String("Zeke")));
-                QVERIFY(Aki::SqlIdentity::findIdentity(QLatin1String("Black")));
-                QVERIFY(Aki::SqlIdentity::findIdentity(QLatin1String("White")));
-                QVERIFY(Aki::SqlIdentity::findIdentity(QLatin1String("Coma")));
+                QVERIFY(Aki::SqlIdentity::findIdentity("Default Identity"));
+                QVERIFY(Aki::SqlIdentity::findIdentity("Zeke"));
+                QVERIFY(Aki::SqlIdentity::findIdentity("Black"));
+                QVERIFY(Aki::SqlIdentity::findIdentity("White"));
+                QVERIFY(Aki::SqlIdentity::findIdentity("Coma"));
             }
         }
     }
@@ -157,11 +157,11 @@ void
 DatabaseTest::findServer()
 {
     QBENCHMARK {
-        if (Aki::Database::open(QLatin1String(":memory:"))) {
+        if (Aki::Database::open(":memory:")) {
             QScopedPointer<Aki::Database, DatabaseCleanupDeleter> database(new Aki::Database);
             if (database->createDefaultTables()) {
-                QScopedPointer<Aki::SqlIdentity> identity(Aki::SqlIdentity::findIdentity(QLatin1String("Default Identity")));
-                QVERIFY(Aki::SqlServer::findServer(QLatin1String("Freenode"), identity.data()));
+                QScopedPointer<Aki::SqlIdentity> identity(Aki::SqlIdentity::findIdentity("Default Identity"));
+                QVERIFY(Aki::SqlServer::findServer("Freenode", identity.data()));
             }
         }
     }
@@ -171,11 +171,11 @@ void
 DatabaseTest::findServerFailed()
 {
     QBENCHMARK {
-        if (Aki::Database::open(QLatin1String(":memory:"))) {
+        if (Aki::Database::open(":memory:")) {
             QScopedPointer<Aki::Database, DatabaseCleanupDeleter> database(new Aki::Database);
             if (database->createDefaultTables()) {
-                QScopedPointer<Aki::SqlIdentity> identity(Aki::SqlIdentity::findIdentity(QLatin1String("Default Identity")));
-                QScopedPointer<Aki::SqlServer> defaultServer(Aki::SqlServer::findServer(QLatin1String("Freenode "), identity.data()));
+                QScopedPointer<Aki::SqlIdentity> identity(Aki::SqlIdentity::findIdentity("Default Identity"));
+                QScopedPointer<Aki::SqlServer> defaultServer(Aki::SqlServer::findServer("Freenode ", identity.data()));
                 QVERIFY(defaultServer.isNull());
             }
         }
@@ -186,16 +186,16 @@ void
 DatabaseTest::checkServerUpdate()
 {
     QBENCHMARK {
-        if (Aki::Database::open(QLatin1String(":memory:"))) {
+        if (Aki::Database::open(":memory:")) {
             QScopedPointer<Aki::Database, DatabaseCleanupDeleter> database(new Aki::Database);
             if (database->createDefaultTables()) {
-                QScopedPointer<Aki::SqlIdentity> identity(Aki::SqlIdentity::findIdentity(QLatin1String("Default Identity")));
+                QScopedPointer<Aki::SqlIdentity> identity(Aki::SqlIdentity::findIdentity("Default Identity"));
                 
-                QScopedPointer<Aki::SqlServer> defaultServer(Aki::SqlServer::findServer(QLatin1String("Freenode"), identity.data()));
-                defaultServer->setName(QLatin1String("Bouncer"));
+                QScopedPointer<Aki::SqlServer> defaultServer(Aki::SqlServer::findServer("Freenode", identity.data()));
+                defaultServer->setName("Bouncer");
                 defaultServer->save();
 
-                QScopedPointer<Aki::SqlServer> defaultServer2(Aki::SqlServer::findServer(QLatin1String("Bouncer"), identity.data()));
+                QScopedPointer<Aki::SqlServer> defaultServer2(Aki::SqlServer::findServer("Bouncer", identity.data()));
                 QVERIFY(*defaultServer == *defaultServer2);
             }
         }
@@ -206,15 +206,15 @@ void
 DatabaseTest::checkServerDelete()
 {
     QBENCHMARK {
-        if (Aki::Database::open(QLatin1String(":memory:"))) {
+        if (Aki::Database::open(":memory:")) {
             QScopedPointer<Aki::Database, DatabaseCleanupDeleter> database(new Aki::Database);
             if (database->createDefaultTables()) {
-                QScopedPointer<Aki::SqlIdentity> identity(Aki::SqlIdentity::findIdentity(QLatin1String("Default Identity")));
+                QScopedPointer<Aki::SqlIdentity> identity(Aki::SqlIdentity::findIdentity("Default Identity"));
 
-                QScopedPointer<Aki::SqlServer> defaultServer(Aki::SqlServer::findServer(QLatin1String("Freenode"), identity.data()));
+                QScopedPointer<Aki::SqlServer> defaultServer(Aki::SqlServer::findServer("Freenode", identity.data()));
                 defaultServer->remove();
 
-                QScopedPointer<Aki::SqlServer> defaultServer2(Aki::SqlServer::findServer(QLatin1String("Bouncer"), identity.data()));
+                QScopedPointer<Aki::SqlServer> defaultServer2(Aki::SqlServer::findServer("Bouncer", identity.data()));
                 QVERIFY(defaultServer2.isNull());
             }
         }
@@ -225,13 +225,13 @@ void
 DatabaseTest::findChannels()
 {
     QBENCHMARK {
-        if (Aki::Database::open(QLatin1String(":memory:"))) {
+        if (Aki::Database::open(":memory:")) {
             QScopedPointer<Aki::Database, DatabaseCleanupDeleter> database(new Aki::Database);
             if (database->createDefaultTables()) {
-                QScopedPointer<Aki::SqlIdentity> identity(Aki::SqlIdentity::findIdentity(QLatin1String("Default Identity")));
-                QScopedPointer<Aki::SqlServer> defaultServer(Aki::SqlServer::findServer(QLatin1String("Freenode"), identity.data()));
+                QScopedPointer<Aki::SqlIdentity> identity(Aki::SqlIdentity::findIdentity("Default Identity"));
+                QScopedPointer<Aki::SqlServer> defaultServer(Aki::SqlServer::findServer("Freenode", identity.data()));
                 QList<Aki::SqlChannel*> defaultChannels = Aki::SqlChannel::channelListForServer(defaultServer.data());
-                QVERIFY(defaultChannels.at(0)->channel() == QLatin1String("#aki"));
+                QVERIFY(defaultChannels.at(0)->channel() == "#aki");
             }
         }
     }
@@ -241,13 +241,13 @@ void
 DatabaseTest::findChannelsFailed()
 {
     QBENCHMARK {
-        if (Aki::Database::open(QLatin1String(":memory:"))) {
+        if (Aki::Database::open(":memory:")) {
             QScopedPointer<Aki::Database, DatabaseCleanupDeleter> database(new Aki::Database);
             if (database->createDefaultTables()) {
-                QScopedPointer<Aki::SqlIdentity> identity(Aki::SqlIdentity::findIdentity(QLatin1String("Default Identity")));
-                QScopedPointer<Aki::SqlServer> defaultServer(Aki::SqlServer::findServer(QLatin1String("Freenode"), identity.data()));
+                QScopedPointer<Aki::SqlIdentity> identity(Aki::SqlIdentity::findIdentity("Default Identity"));
+                QScopedPointer<Aki::SqlServer> defaultServer(Aki::SqlServer::findServer("Freenode", identity.data()));
                 QList<Aki::SqlChannel*> defaultChannels = Aki::SqlChannel::channelListForServer(defaultServer.data());
-                QVERIFY(defaultChannels.at(0)->channel() != QLatin1String("#aki "));
+                QVERIFY(defaultChannels.at(0)->channel() != "#aki ");
                 qDeleteAll(defaultChannels);
             }
         }
@@ -258,16 +258,16 @@ void
 DatabaseTest::checkChannelUpdate()
 {
     QBENCHMARK {
-        if (Aki::Database::open(QLatin1String(":memory:"))) {
+        if (Aki::Database::open(":memory:")) {
             QScopedPointer<Aki::Database, DatabaseCleanupDeleter> database(new Aki::Database);
             if (database->createDefaultTables()) {
-                QScopedPointer<Aki::SqlIdentity> identity(Aki::SqlIdentity::findIdentity(QLatin1String("Default Identity")));
-                QScopedPointer<Aki::SqlServer> defaultServer(Aki::SqlServer::findServer(QLatin1String("Freenode"), identity.data()));
-                QScopedPointer<Aki::SqlChannel> defaultChannel(Aki::SqlChannel::findChannel(QLatin1String("#aki"), defaultServer.data()));
-                defaultChannel->setPassword(QLatin1String("password"));
+                QScopedPointer<Aki::SqlIdentity> identity(Aki::SqlIdentity::findIdentity("Default Identity"));
+                QScopedPointer<Aki::SqlServer> defaultServer(Aki::SqlServer::findServer("Freenode", identity.data()));
+                QScopedPointer<Aki::SqlChannel> defaultChannel(Aki::SqlChannel::findChannel("#aki", defaultServer.data()));
+                defaultChannel->setPassword("password");
                 defaultChannel->save();
 
-                QScopedPointer<Aki::SqlChannel> defaultChannel2(Aki::SqlChannel::findChannel(QLatin1String("#aki"), defaultServer.data()));
+                QScopedPointer<Aki::SqlChannel> defaultChannel2(Aki::SqlChannel::findChannel("#aki", defaultServer.data()));
                 QVERIFY(*defaultChannel == *defaultChannel2);
             }
         }
@@ -278,15 +278,15 @@ void
 DatabaseTest::checkChannelDelete()
 {
     QBENCHMARK {
-        if (Aki::Database::open(QLatin1String(":memory:"))) {
+        if (Aki::Database::open(":memory:")) {
             QScopedPointer<Aki::Database, DatabaseCleanupDeleter> database(new Aki::Database);
             if (database->createDefaultTables()) {
-                QScopedPointer<Aki::SqlIdentity> identity(Aki::SqlIdentity::findIdentity(QLatin1String("Default Identity")));
-                QScopedPointer<Aki::SqlServer> defaultServer(Aki::SqlServer::findServer(QLatin1String("Freenode"), identity.data()));
-                QScopedPointer<Aki::SqlChannel> defaultChannel(Aki::SqlChannel::findChannel(QLatin1String("#aki"), defaultServer.data()));
+                QScopedPointer<Aki::SqlIdentity> identity(Aki::SqlIdentity::findIdentity("Default Identity"));
+                QScopedPointer<Aki::SqlServer> defaultServer(Aki::SqlServer::findServer("Freenode", identity.data()));
+                QScopedPointer<Aki::SqlChannel> defaultChannel(Aki::SqlChannel::findChannel("#aki", defaultServer.data()));
                 defaultChannel->remove();
 
-                QScopedPointer<Aki::SqlChannel> defaultChannel2(Aki::SqlChannel::findChannel(QLatin1String("#aki"), defaultServer.data()));
+                QScopedPointer<Aki::SqlChannel> defaultChannel2(Aki::SqlChannel::findChannel("#aki", defaultServer.data()));
                 QVERIFY(defaultChannel2.isNull());
             }
         }
@@ -297,12 +297,12 @@ void
 DatabaseTest::findAddress()
 {
     QBENCHMARK {
-        if (Aki::Database::open(QLatin1String(":memory:"))) {
+        if (Aki::Database::open(":memory:")) {
             QScopedPointer<Aki::Database, DatabaseCleanupDeleter> database(new Aki::Database);
             if (database->createDefaultTables()) {
-                QScopedPointer<Aki::SqlIdentity> identity(Aki::SqlIdentity::findIdentity(QLatin1String("Default Identity")));
-                QScopedPointer<Aki::SqlServer> defaultServer(Aki::SqlServer::findServer(QLatin1String("Freenode"), identity.data()));
-                QVERIFY(Aki::SqlAddress::findAddress(QLatin1String("chat.freenode.net"), defaultServer.data()));
+                QScopedPointer<Aki::SqlIdentity> identity(Aki::SqlIdentity::findIdentity("Default Identity"));
+                QScopedPointer<Aki::SqlServer> defaultServer(Aki::SqlServer::findServer("Freenode", identity.data()));
+                QVERIFY(Aki::SqlAddress::findAddress("chat.freenode.net", defaultServer.data()));
             }
         }
     }
@@ -312,12 +312,12 @@ void
 DatabaseTest::findAddressFailed()
 {
     QBENCHMARK {
-        if (Aki::Database::open(QLatin1String(":memory:"))) {
+        if (Aki::Database::open(":memory:")) {
             QScopedPointer<Aki::Database, DatabaseCleanupDeleter> database(new Aki::Database);
             if (database->createDefaultTables()) {
-                QScopedPointer<Aki::SqlIdentity> identity(Aki::SqlIdentity::findIdentity(QLatin1String("Default Identity")));
-                QScopedPointer<Aki::SqlServer> defaultServer(Aki::SqlServer::findServer(QLatin1String("Freenode"), identity.data()));
-                QVERIFY(!Aki::SqlAddress::findAddress(QLatin1String("chat.freenode.net "), defaultServer.data()));
+                QScopedPointer<Aki::SqlIdentity> identity(Aki::SqlIdentity::findIdentity("Default Identity"));
+                QScopedPointer<Aki::SqlServer> defaultServer(Aki::SqlServer::findServer("Freenode", identity.data()));
+                QVERIFY(!Aki::SqlAddress::findAddress("chat.freenode.net ", defaultServer.data()));
             }
         }
     }
@@ -327,17 +327,17 @@ void
 DatabaseTest::checkAddressUpdate()
 {
     QBENCHMARK {
-        if (Aki::Database::open(QLatin1String(":memory:"))) {
+        if (Aki::Database::open(":memory:")) {
             QScopedPointer<Aki::Database, DatabaseCleanupDeleter> database(new Aki::Database);
             if (database->createDefaultTables()) {
-                QScopedPointer<Aki::SqlIdentity> identity(Aki::SqlIdentity::findIdentity(QLatin1String("Default Identity")));
-                QScopedPointer<Aki::SqlServer> defaultServer(Aki::SqlServer::findServer(QLatin1String("Freenode"), identity.data()));
-                QScopedPointer<Aki::SqlAddress> defaultAddress(Aki::SqlAddress::findAddress(QLatin1String("chat.freenode.net"),
+                QScopedPointer<Aki::SqlIdentity> identity(Aki::SqlIdentity::findIdentity("Default Identity"));
+                QScopedPointer<Aki::SqlServer> defaultServer(Aki::SqlServer::findServer("Freenode", identity.data()));
+                QScopedPointer<Aki::SqlAddress> defaultAddress(Aki::SqlAddress::findAddress("chat.freenode.net",
                                                                                             defaultServer.data()));
-                defaultAddress->setAddress(QLatin1String("irc.freenode.net"));
+                defaultAddress->setAddress("irc.freenode.net");
                 defaultAddress->save();
 
-                QScopedPointer<Aki::SqlAddress> defaultAddress2(Aki::SqlAddress::findAddress(QLatin1String("irc.freenode.net"),
+                QScopedPointer<Aki::SqlAddress> defaultAddress2(Aki::SqlAddress::findAddress("irc.freenode.net",
                                                                                              defaultServer.data()));
                 QVERIFY(*defaultAddress == *defaultAddress2);
             }
@@ -349,16 +349,16 @@ void
 DatabaseTest::checkAddressDelete()
 {
     QBENCHMARK {
-        if (Aki::Database::open(QLatin1String(":memory:"))) {
+        if (Aki::Database::open(":memory:")) {
             QScopedPointer<Aki::Database, DatabaseCleanupDeleter> database(new Aki::Database);
             if (database->createDefaultTables()) {
-                QScopedPointer<Aki::SqlIdentity> identity(Aki::SqlIdentity::findIdentity(QLatin1String("Default Identity")));
-                QScopedPointer<Aki::SqlServer> defaultServer(Aki::SqlServer::findServer(QLatin1String("Freenode"), identity.data()));
-                QScopedPointer<Aki::SqlAddress> defaultAddress(Aki::SqlAddress::findAddress(QLatin1String("chat.freenode.net"),
+                QScopedPointer<Aki::SqlIdentity> identity(Aki::SqlIdentity::findIdentity("Default Identity"));
+                QScopedPointer<Aki::SqlServer> defaultServer(Aki::SqlServer::findServer("Freenode", identity.data()));
+                QScopedPointer<Aki::SqlAddress> defaultAddress(Aki::SqlAddress::findAddress("chat.freenode.net",
                                                                                             defaultServer.data()));
                 QVERIFY(defaultAddress->remove());
 
-                QScopedPointer<Aki::SqlAddress> defaultAddress2(Aki::SqlAddress::findAddress(QLatin1String("chat.freenode.net"),
+                QScopedPointer<Aki::SqlAddress> defaultAddress2(Aki::SqlAddress::findAddress("chat.freenode.net",
                                                                                              defaultServer.data()));
                 QVERIFY(defaultAddress2.isNull());
             }
@@ -370,12 +370,12 @@ void
 DatabaseTest::findNickname()
 {
     QBENCHMARK {
-        if (Aki::Database::open(QLatin1String(":memory:"))) {
+        if (Aki::Database::open(":memory:")) {
             QScopedPointer<Aki::Database, DatabaseCleanupDeleter> database(new Aki::Database);
             if (database->createDefaultTables()) {
-                QScopedPointer<Aki::SqlIdentity> identity(Aki::SqlIdentity::findIdentity(QLatin1String("Default Identity")));
-                QScopedPointer<Aki::SqlServer> defaultServer(Aki::SqlServer::findServer(QLatin1String("Freenode"), identity.data()));
-                QVERIFY(Aki::SqlNickname::findNickname(QLatin1String("zeke"), defaultServer.data()));
+                QScopedPointer<Aki::SqlIdentity> identity(Aki::SqlIdentity::findIdentity("Default Identity"));
+                QScopedPointer<Aki::SqlServer> defaultServer(Aki::SqlServer::findServer("Freenode", identity.data()));
+                QVERIFY(Aki::SqlNickname::findNickname("zeke", defaultServer.data()));
             }
         }
     }
@@ -385,12 +385,12 @@ void
 DatabaseTest::findNicknameFailed()
 {
     QBENCHMARK {
-        if (Aki::Database::open(QLatin1String(":memory:"))) {
+        if (Aki::Database::open(":memory:")) {
             QScopedPointer<Aki::Database, DatabaseCleanupDeleter> database(new Aki::Database);
             if (database->createDefaultTables()) {
-                QScopedPointer<Aki::SqlIdentity> identity(Aki::SqlIdentity::findIdentity(QLatin1String("Default Identity")));
-                QScopedPointer<Aki::SqlServer> defaultServer(Aki::SqlServer::findServer(QLatin1String("Freenode"), identity.data()));
-                QScopedPointer<Aki::SqlNickname> defaultNickname(Aki::SqlNickname::findNickname(QLatin1String("zeke "),
+                QScopedPointer<Aki::SqlIdentity> identity(Aki::SqlIdentity::findIdentity("Default Identity"));
+                QScopedPointer<Aki::SqlServer> defaultServer(Aki::SqlServer::findServer("Freenode", identity.data()));
+                QScopedPointer<Aki::SqlNickname> defaultNickname(Aki::SqlNickname::findNickname("zeke ",
                                                                                                 defaultServer.data()));
                 QVERIFY(defaultNickname.isNull());
             }
@@ -402,17 +402,17 @@ void
 DatabaseTest::checkNicknameUpdate()
 {
     QBENCHMARK {
-        if (Aki::Database::open(QLatin1String(":memory:"))) {
+        if (Aki::Database::open(":memory:")) {
             QScopedPointer<Aki::Database, DatabaseCleanupDeleter> database(new Aki::Database);
             if (database->createDefaultTables()) {
-                QScopedPointer<Aki::SqlIdentity> identity(Aki::SqlIdentity::findIdentity(QLatin1String("Default Identity")));
-                QScopedPointer<Aki::SqlServer> defaultServer(Aki::SqlServer::findServer(QLatin1String("Freenode"), identity.data()));
-                QScopedPointer<Aki::SqlNickname> defaultNickname(Aki::SqlNickname::findNickname(QLatin1String("zeke"),
+                QScopedPointer<Aki::SqlIdentity> identity(Aki::SqlIdentity::findIdentity("Default Identity"));
+                QScopedPointer<Aki::SqlServer> defaultServer(Aki::SqlServer::findServer("Freenode", identity.data()));
+                QScopedPointer<Aki::SqlNickname> defaultNickname(Aki::SqlNickname::findNickname("zeke",
                                                                                                 defaultServer.data()));
-                defaultNickname->setNickname(QLatin1String("zeke|away"));
+                defaultNickname->setNickname("zeke|away");
                 defaultNickname->save();
 
-                QScopedPointer<Aki::SqlNickname> defaultNickname2(Aki::SqlNickname::findNickname(QLatin1String("zeke|away"),
+                QScopedPointer<Aki::SqlNickname> defaultNickname2(Aki::SqlNickname::findNickname("zeke|away",
                                                                                                  defaultServer.data()));
                 QVERIFY(*defaultNickname == *defaultNickname2);
             }
@@ -424,16 +424,16 @@ void
 DatabaseTest::checkNicknameDelete()
 {
     QBENCHMARK {
-        if (Aki::Database::open(QLatin1String(":memory:"))) {
+        if (Aki::Database::open(":memory:")) {
             QScopedPointer<Aki::Database, DatabaseCleanupDeleter> database(new Aki::Database);
             if (database->createDefaultTables()) {
-                QScopedPointer<Aki::SqlIdentity> identity(Aki::SqlIdentity::findIdentity(QLatin1String("Default Identity")));
-                QScopedPointer<Aki::SqlServer> defaultServer(Aki::SqlServer::findServer(QLatin1String("Freenode"), identity.data()));
-                QScopedPointer<Aki::SqlNickname> defaultNickname(Aki::SqlNickname::findNickname(QLatin1String("zeke"),
+                QScopedPointer<Aki::SqlIdentity> identity(Aki::SqlIdentity::findIdentity("Default Identity"));
+                QScopedPointer<Aki::SqlServer> defaultServer(Aki::SqlServer::findServer("Freenode", identity.data()));
+                QScopedPointer<Aki::SqlNickname> defaultNickname(Aki::SqlNickname::findNickname("zeke",
                                                                                                 defaultServer.data()));
                 QVERIFY(defaultNickname->remove());
 
-                QScopedPointer<Aki::SqlNickname> defaultNickname2(Aki::SqlNickname::findNickname(QLatin1String("zeke"),
+                QScopedPointer<Aki::SqlNickname> defaultNickname2(Aki::SqlNickname::findNickname("zeke",
                                                                                                  defaultServer.data()));
                 QVERIFY(defaultNickname2.isNull());
             }

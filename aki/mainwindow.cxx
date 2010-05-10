@@ -38,29 +38,29 @@ void
 AkiWindow::createMenus()
 {
     KAction* action = new KAction(i18n("Network List"), this);
-    actionCollection()->addAction(QLatin1String("akiNetworkList"), action);
+    actionCollection()->addAction("akiNetworkList", action);
     connect(action, SIGNAL(triggered(bool)),
             SLOT(serverListTriggered()));
 
     action = new KAction(i18n("Server Tab"), this);
-    actionCollection()->addAction(QLatin1String("akiNewServerTab"), action);
+    actionCollection()->addAction("akiNewServerTab", action);
 
     action = new KAction(i18n("Channel Tab"), this);
-    actionCollection()->addAction(QLatin1String("akiNewChannelTab"), action);
+    actionCollection()->addAction("akiNewChannelTab", action);
 
     action = new KAction(i18n("Quick Connection"), this);
-    actionCollection()->addAction(QLatin1String("akiQuickConnection"), action);
+    actionCollection()->addAction("akiQuickConnection", action);
 
-    action = new KAction(KIcon(QLatin1String("edit-redo")), i18n("Reconnect"), this);
-    actionCollection()->addAction(QLatin1String("akiReconnect"), action);
+    action = new KAction(KIcon("edit-redo"), i18n("Reconnect"), this);
+    actionCollection()->addAction("akiReconnect", action);
 
-    action = new KAction(KIcon(QLatin1String("edit-delete")), i18n("Disconnect"), this);
-    actionCollection()->addAction(QLatin1String("akiDisconnect"), action);
+    action = new KAction(KIcon("edit-delete"), i18n("Disconnect"), this);
+    actionCollection()->addAction("akiDisconnect", action);
 
-    action = new KAction(KIcon(QLatin1String("application-exit")), i18n("Quit"), this);
+    action = new KAction(KIcon("application-exit"), i18n("Quit"), this);
     connect(action, SIGNAL(triggered(bool)),
             SLOT(quitTriggered()));
-    actionCollection()->addAction(QLatin1String("akiQuit"), action);
+    actionCollection()->addAction("akiQuit", action);
     setupGUI(ToolBar | Keys | StatusBar | Create);
 }
 

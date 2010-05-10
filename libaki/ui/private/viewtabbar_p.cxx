@@ -30,15 +30,15 @@ ViewTabBarPrivate::customContextMenuRequested()
 void
 ViewTabBarPrivate::setupContextActions()
 {
-    QAction* action = new QAction(KIcon(QLatin1String("edit-redo")), i18n("Reconnect"), contextMenu);
+    QAction* action = new QAction(KIcon("edit-redo"), i18n("Reconnect"), contextMenu);
     contextMenu->addAction(action);
 
-    action = new QAction(KIcon(QLatin1String("edit-delete")), i18n("Disconnect"), contextMenu);
+    action = new QAction(KIcon("edit-delete"), i18n("Disconnect"), contextMenu);
     contextMenu->addAction(action);
 
     contextMenu->addSeparator();
 
-    action = new QAction(KIcon(QLatin1String("")), i18n("Close Tab"), contextMenu);
+    action = new QAction(KIcon(""), i18n("Close Tab"), contextMenu);
     connect(action, SIGNAL(triggered(bool)),
             SLOT(closeTabTriggered()));
     contextMenu->addAction(action);

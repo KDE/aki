@@ -12,9 +12,7 @@ main(int argc, char** argv)
                          ki18n("Extensive IRC client for KDE4."), KAboutData::License_GPL_V2,
                          ki18n("Copyright (c) 2009-2010 Keith Rusler"),
                          ki18n("IRC: irc.freenode.net - #aki\n"
-                               "Build Data: %1 at %2")
-                                    .subs(QLatin1String(__DATE__))
-                                    .subs(QLatin1String(__TIME__)));
+                               "Build Data: %1 at %2").subs(__DATE__).subs(__TIME__));
     aboutData.addAuthor(ki18n("Keith Rusler"), ki18n("Lead Developer"), "xzekecomax@gmail.com");
     aboutData.addCredit(ki18n("Lee Olson"), ki18n("Aki Icon Author"), "leetolson@gmail.com");
     aboutData.addCredit(ki18n("Andreas Marschke"), ki18n("Bughunter, Testing and Design"), "xxtjaxx@gmail.com");

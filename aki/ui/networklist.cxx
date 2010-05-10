@@ -20,35 +20,35 @@ NetworkList::~NetworkList()
 void
 NetworkList::addIdentity(const QString& identity)
 {
-    qxtLog->info() << QString(QLatin1String("Adding Identity: %1")).arg(identity);
+    qxtLog->info() << QString("Adding Identity: %1").arg(identity);
     _modelList.insert(identity, Aki::NetworkList::List());
     if (_modelList.count() == 1) {
-        qxtLog->info() << QLatin1String("Setting current identity since it's the only one");
+        qxtLog->info() << "Setting current identity since it's the only one";
         setCurrentIdentity(identity);
     }
-    qxtLog->info() << QString(QLatin1String("Current identity count: %1")).arg(_modelList.count());
+    qxtLog->info() << QString("Current identity count: %1").arg(_modelList.count());
 }
 
 void
 NetworkList::addModel(Aki::NetworkListModel* model)
 {
-    qxtLog->info() << QLatin1String("Inserting model");
+    qxtLog->info() << "Inserting model";
     currentIdentity().append(model);
     if (modelCount() == 1) {
-        qxtLog->info() << QLatin1String("Settings current model to 0 since it's the only one");
+        qxtLog->info() << "Settings current model to 0 since it's the only one";
         setCurrentModel(0);
     }
 
-    qxtLog->info() << QString(QLatin1String("Current model count: %1")).arg(modelCount());
+    qxtLog->info() << QString("Current model count: %1").arg(modelCount());
 }
 
 void
 NetworkList::addNetwork(Aki::SqlServer* network)
 {
-    qxtLog->info() << QString(QLatin1String("Adding network: %1")).arg(network->name());
+    qxtLog->info() << QString("Adding network: %1").arg(network->name());
     currentModel()->addNetwork(network);
     setCurrentNetwork(network);
-    qxtLog->info() << QString(QLatin1String("Current network count: %1")).arg(currentModel()->networks().count());
+    qxtLog->info() << QString("Current network count: %1").arg(currentModel()->networks().count());
 }
 
 int
@@ -122,21 +122,21 @@ NetworkList::findItems(const QString& name, Qt::MatchFlags flags) const
 void
 NetworkList::insertModel(int row, NetworkListModel* model)
 {
-    qxtLog->info() << QLatin1String("Inserting model");
+    qxtLog->info() << "Inserting model";
     currentIdentity().insert(row, model);
     if (modelCount() == 1) {
-        qxtLog->info() << QLatin1String("Settings current model to 0 since it's the only one");
+        qxtLog->info() << "Settings current model to 0 since it's the only one";
         setCurrentModel(model);
     }
-    qxtLog->info() << QString(QLatin1String("Current model count: %1")).arg(modelCount());
+    qxtLog->info() << QString("Current model count: %1").arg(modelCount());
 }
 
 void
 NetworkList::insertNetwork(int row, SqlServer* network)
 {
-    qxtLog->info() << QString(QLatin1String("Adding network: %1")).arg(network->name());
+    qxtLog->info() << QString("Adding network: %1").arg(network->name());
     currentModel()->insertNetwork(row, network);
-    qxtLog->info() << QString(QLatin1String("Current network count: %1")).arg(currentModel()->networks().count());
+    qxtLog->info() << QString("Current network count: %1").arg(currentModel()->networks().count());
 }
 
 Aki::NetworkListModel*
@@ -185,14 +185,14 @@ void
 NetworkList::setCurrentIdentity(const QString& identity)
 {
     if (_currentIdentityModel == identity) {
-        qxtLog->info() << QLatin1String("Ignoring set current identity since it's the same"
-                                        " one being requested.");
+        qxtLog->info() << "Ignoring set current identity since it's the same"
+                                        " one being requested.";
         return;
     }
 
     _currentIdentityModel = identity;
     if (modelCount() != 0) {
-        qxtLog->info() << QLatin1String("Changing model to index 0 for new Identity change");
+        qxtLog->info() << "Changing model to index 0 for new Identity change";
         setCurrentModel(0);
     }
 }
@@ -202,7 +202,7 @@ NetworkList::setCurrentModel(int row)
 {
     _modelCurrentRow = row;
     setModel(currentIdentity().at(_modelCurrentRow));
-    qxtLog->info() << QString(QLatin1String("Setting model to index: %1")).arg(_modelCurrentRow);
+    qxtLog->info() << QString("Setting model to index: %1").arg(_modelCurrentRow);
 }
 
 void
@@ -214,13 +214,13 @@ NetworkList::setCurrentModel(Aki::NetworkListModel* model)
 
     _modelCurrentRow = row(model);
     setModel(currentIdentity().at(_modelCurrentRow));
-    qxtLog->info() << QString(QLatin1String("Setting model to index: %1")).arg(_modelCurrentRow);
+    qxtLog->info() << QString("Setting model to index: %1").arg(_modelCurrentRow);
 }
 
 void
 NetworkList::setCurrentNetwork(Aki::SqlServer* network)
 {
-    qxtLog->info() << QString(QLatin1String("Setting current network to: %1")).arg(network->name());
+    qxtLog->info() << QString("Setting current network to: %1").arg(network->name());
     setCurrentNetwork(network, QItemSelectionModel::ClearAndSelect);
 }
 
@@ -234,7 +234,7 @@ NetworkList::setCurrentNetwork(Aki::SqlServer* network, QItemSelectionModel::Sel
 void
 NetworkList::setCurrentRow(int row)
 {
-    qxtLog->info() << QString(QLatin1String("Setting current network row to: %1")).arg(row);
+    qxtLog->info() << QString("Setting current network row to: %1").arg(row);
     setCurrentRow(row, QItemSelectionModel::ClearAndSelect);
 }
 
@@ -264,7 +264,7 @@ NetworkList::identityActivated(Aki::SqlIdentity* identity)
         delete identity;
         return;
     }
-    qxtLog->info() << QString(QLatin1String("Identitying is wanting to changed..."));
+    qxtLog->info() << QString("Identitying is wanting to changed...");
     addIdentity(identity->name());
     setCurrentIdentity(identity->name());
     Aki::SqlServer::List list = Aki::SqlServer::serversForIdentity(identity);

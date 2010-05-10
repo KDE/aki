@@ -16,7 +16,7 @@ void
 SqlNicknamePrivate::checkError(const QSqlError& error)
 {
     if (error.isValid()) {
-        qxtLog->error() << QString(QLatin1String("Driver: %1")).arg(error.driverText());
-        qxtLog->error() << QString(QLatin1String("Database: %1")).arg(error.databaseText());
+        qxtLog->error() << QString("Driver: %1").arg(error.driverText());
+        qxtLog->error() << QString("Database: %1").arg(error.databaseText());
     }
 }

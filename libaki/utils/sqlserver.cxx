@@ -48,7 +48,7 @@ SqlServer::serversForIdentity(const Aki::SqlIdentity* identity)
 {
     SqlServer::List list;
     QSqlQuery query;
-    query.prepare(QLatin1String("SELECT * FROM Server WHERE serverIdentity = ?"));
+    query.prepare("SELECT * FROM Server WHERE serverIdentity = ?");
     query.addBindValue(identity->id());
 
     if (!query.exec()) {
@@ -61,20 +61,20 @@ SqlServer::serversForIdentity(const Aki::SqlIdentity* identity)
     }
 
     QSqlRecord record = query.record();
-    const int id = record.indexOf(QLatin1String("id"));
-    const int encoding = record.indexOf(QLatin1String("encoding"));
-    const int autoIdentify = record.indexOf(QLatin1String("autoIdentify"));
-    const int autoJoinChannels = record.indexOf(QLatin1String("autoJoinChannels"));
-    const int autoReconnect = record.indexOf(QLatin1String("autoReconnect"));
-    const int connectOnStartup = record.indexOf(QLatin1String("connectOnStartup"));
-    const int connectToRandomServer = record.indexOf(QLatin1String("connectToRandomServer"));
-    const int defaultEncoding = record.indexOf(QLatin1String("defaultEncoding"));
-    const int name = record.indexOf(QLatin1String("name"));
-    const int retryAttempts = record.indexOf(QLatin1String("retryAttempts"));
-    const int retryInterval = record.indexOf(QLatin1String("retryInterval"));
-    const int serviceName = record.indexOf(QLatin1String("serviceName"));
-    const int servicePassword = record.indexOf(QLatin1String("servicePassword"));
-    const int serverIdentity = record.indexOf(QLatin1String("serverIdentity"));
+    const int id = record.indexOf("id");
+    const int encoding = record.indexOf("encoding");
+    const int autoIdentify = record.indexOf("autoIdentify");
+    const int autoJoinChannels = record.indexOf("autoJoinChannels");
+    const int autoReconnect = record.indexOf("autoReconnect");
+    const int connectOnStartup = record.indexOf("connectOnStartup");
+    const int connectToRandomServer = record.indexOf("connectToRandomServer");
+    const int defaultEncoding = record.indexOf("defaultEncoding");
+    const int name = record.indexOf("name");
+    const int retryAttempts = record.indexOf("retryAttempts");
+    const int retryInterval = record.indexOf("retryInterval");
+    const int serviceName = record.indexOf("serviceName");
+    const int servicePassword = record.indexOf("servicePassword");
+    const int serverIdentity = record.indexOf("serverIdentity");
 
     while (query.next()) {
         Aki::SqlServer* server = new Aki::SqlServer;
@@ -106,10 +106,10 @@ SqlServer::newServer(const QString& name, const Aki::SqlIdentity* identity)
     }
 
     QSqlQuery query;
-    query.prepare(QLatin1String("INSERT INTO Server (encoding,autoIdentify,autoJoinChannels,autoReconnect,\n\
-                                 connectOnStartup,connectToRandomServer,defaultEncoding,name,retryAttempts,retryInterval,\n\
-                                 serviceName,servicePassword,serverIdentity)\n\
-                                 VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)"));
+    query.prepare("INSERT INTO Server (encoding,autoIdentify,autoJoinChannels,autoReconnect,\n\
+                  connectOnStartup,connectToRandomServer,defaultEncoding,name,retryAttempts,retryInterval,\n\
+                  serviceName,servicePassword,serverIdentity)\n\
+                  VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)");
 
     QScopedPointer<Aki::SqlServer> server(new Aki::SqlServer);
     server->setAutoIdentity(false);
@@ -126,7 +126,7 @@ SqlServer::newServer(const QString& name, const Aki::SqlIdentity* identity)
     server->setServicePassword(QString());
     server->setServerIdentityId(identity->id());
 
-    query.addBindValue(QString(QLatin1String(server->encoding())));
+    query.addBindValue(QString(server->encoding()));
     query.addBindValue(server->isAutoIdentifyEnabled());
     query.addBindValue(server->isAutoJoinChannelsEnabled());
     query.addBindValue(server->isAutoReconnectEnabled());
@@ -164,7 +164,7 @@ SqlServer::findServer(const QString& name, const Aki::SqlIdentity* identity)
     }
 
     QSqlQuery query;
-    query.prepare(QLatin1String("SELECT * FROM Server WHERE name=? AND serverIdentity=? LIMIT 1"));
+    query.prepare("SELECT * FROM Server WHERE name=? AND serverIdentity=? LIMIT 1");
     query.addBindValue(name);
     query.addBindValue(identity->id());
 
@@ -178,20 +178,20 @@ SqlServer::findServer(const QString& name, const Aki::SqlIdentity* identity)
     }
 
     QSqlRecord record = query.record();
-    const int id = record.indexOf(QLatin1String("id"));
-    const int encoding = record.indexOf(QLatin1String("encoding"));
-    const int autoIdentify = record.indexOf(QLatin1String("autoIdentify"));
-    const int autoJoinChannels = record.indexOf(QLatin1String("autoJoinChannels"));
-    const int autoReconnect = record.indexOf(QLatin1String("autoReconnect"));
-    const int connectOnStartup = record.indexOf(QLatin1String("connectOnStartup"));
-    const int connectToRandomServer = record.indexOf(QLatin1String("connectToRandomServer"));
-    const int defaultEncoding = record.indexOf(QLatin1String("defaultEncoding"));
-    const int nameIndex = record.indexOf(QLatin1String("name"));
-    const int retryAttempts = record.indexOf(QLatin1String("retryAttempts"));
-    const int retryInterval = record.indexOf(QLatin1String("retryInterval"));
-    const int serviceName = record.indexOf(QLatin1String("serviceName"));
-    const int servicePassword = record.indexOf(QLatin1String("servicePassword"));
-    const int serverIdentity = record.indexOf(QLatin1String("serverIdentity"));
+    const int id = record.indexOf("id");
+    const int encoding = record.indexOf("encoding");
+    const int autoIdentify = record.indexOf("autoIdentify");
+    const int autoJoinChannels = record.indexOf("autoJoinChannels");
+    const int autoReconnect = record.indexOf("autoReconnect");
+    const int connectOnStartup = record.indexOf("connectOnStartup");
+    const int connectToRandomServer = record.indexOf("connectToRandomServer");
+    const int defaultEncoding = record.indexOf("defaultEncoding");
+    const int nameIndex = record.indexOf("name");
+    const int retryAttempts = record.indexOf("retryAttempts");
+    const int retryInterval = record.indexOf("retryInterval");
+    const int serviceName = record.indexOf("serviceName");
+    const int servicePassword = record.indexOf("servicePassword");
+    const int serverIdentity = record.indexOf("serverIdentity");
 
     Aki::SqlServer* server = new Aki::SqlServer;
     while (query.next()) {
@@ -380,12 +380,12 @@ bool
 SqlServer::save()
 {
     QSqlQuery query;
-    const QString str = QLatin1String("UPDATE Server SET encoding=?, autoIdentify=?, autoJoinChannels=?,"
-                                      " autoReconnect=?, connectOnStartup=?, connectToRandomServer=?, defaultEncoding=?,"
-                                      " name=?, retryAttempts=?, retryInterval=?, serviceName=?, servicePassword=?,"
-                                      " serverIdentity=? WHERE id=?");
+    const QString str("UPDATE Server SET encoding=?, autoIdentify=?, autoJoinChannels=?,"
+                      " autoReconnect=?, connectOnStartup=?, connectToRandomServer=?, defaultEncoding=?,"
+                      " name=?, retryAttempts=?, retryInterval=?, serviceName=?, servicePassword=?,"
+                      " serverIdentity=? WHERE id=?");
     query.prepare(str);
-    query.addBindValue(QLatin1String(encoding()));
+    query.addBindValue(encoding());
     query.addBindValue(isAutoIdentifyEnabled());
     query.addBindValue(isAutoJoinChannelsEnabled());
     query.addBindValue(isAutoReconnectEnabled());
@@ -412,7 +412,7 @@ bool
 SqlServer::remove()
 {
     QSqlQuery query;
-    const QString str = QLatin1String("DELETE FROM Server WHERE name=? AND id=?");
+    const QString str("DELETE FROM Server WHERE name=? AND id=?");
     query.prepare(str);
     query.addBindValue(name());
     query.addBindValue(id());

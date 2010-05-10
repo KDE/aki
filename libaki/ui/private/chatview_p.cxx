@@ -22,37 +22,37 @@ ChatViewPrivate::ChatViewPrivate(ChatView* qq)
     KEmoticons emotes;
     emoTheme = emotes.theme();
     qsrand(std::time(0));
-    doc.reset(new QDomDocument(QLatin1String("html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\""
-        "    \"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\"")));
+    doc.reset(new QDomDocument("html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\""
+                               "    \"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\""));
     createShell();
 }
 
 QString
 ChatViewPrivate::createShell()
 {
-    QDomElement html = doc->createElement(QLatin1String("html"));
-    html.setAttribute(QLatin1String("xmlns"), QLatin1String("http://www.w3.org/1999/xhtml"));
-    html.setAttribute(QLatin1String("lang"), QLatin1String("en"));
-    html.setAttribute(QLatin1String("xml:lang"), QLatin1String("en"));
-    QDomElement head = doc->createElement(QLatin1String("head"));
-    QDomElement title = doc->createElement(QLatin1String("title"));
-    title.appendChild(doc->createTextNode(QLatin1String("Aki IRC Client")));
-    QDomElement metaCT = doc->createElement(QLatin1String("meta"));
-    metaCT.setAttribute(QLatin1String("http-equiv"), QLatin1String("Content-Type"));
-    metaCT.setAttribute(QLatin1String("content"), QLatin1String("application/xhtml+xml; charset=UTF-8"));
-    QDomElement metaAC = doc->createElement(QLatin1String("meta"));
-    metaAC.setAttribute(QLatin1String("http-equiv"), QLatin1String("Accept-Content"));
-    metaAC.setAttribute(QLatin1String("content"), QLatin1String("utf-8"));
+    QDomElement html = doc->createElement("html");
+    html.setAttribute("xmlns", "http://www.w3.org/1999/xhtml");
+    html.setAttribute("lang", "en");
+    html.setAttribute("xml:lang", "en");
+    QDomElement head = doc->createElement("head");
+    QDomElement title = doc->createElement("title");
+    title.appendChild(doc->createTextNode("Aki IRC Client"));
+    QDomElement metaCT = doc->createElement("meta");
+    metaCT.setAttribute("http-equiv", "Content-Type");
+    metaCT.setAttribute("content", "application/xhtml+xml; charset=UTF-8");
+    QDomElement metaAC = doc->createElement("meta");
+    metaAC.setAttribute("http-equiv", "Accept-Content");
+    metaAC.setAttribute("content", "utf-8");
     head.appendChild(title);
     head.appendChild(metaCT);
     head.appendChild(metaAC);
-    QDomElement body = doc->createElement(QLatin1String("body"));
+    QDomElement body = doc->createElement("body");
     body.appendChild(log(messageTime(), QString()));
     html.appendChild(head);
     html.appendChild(body);
 
     doc->appendChild(html);
-    _q->setContent(doc->toByteArray(4), QLatin1String("application/xhtml+xml"));
+    _q->setContent(doc->toByteArray(4), "application/xhtml+xml");
     doc->clear();
     return QString();
 }
@@ -61,9 +61,9 @@ QString
 ChatViewPrivate::unescape(const QString& str)
 {
     QString tmp = str;
-    tmp.replace(QLatin1String("&gt;"), QLatin1String(">"));
-    tmp.replace(QLatin1String("&lt;"), QLatin1String("<"));
-    tmp.replace(QLatin1String("&amp;"), QLatin1String("&"));
+    tmp.replace("&gt;", ">");
+    tmp.replace("&lt;", "<");
+    tmp.replace("&amp;", "&");
     return tmp;
 }
 
@@ -81,7 +81,7 @@ ChatViewPrivate::appendMessage(const QString& message)
 
     userMoved = (maxVert == value) ? true : false;
 
-    QWebElement log = mainFrame()->findFirstElement(QLatin1String("body log"));
+    QWebElement log = mainFrame()->findFirstElement("body log");
     Q_ASSERT(log.isNull());
     log.appendInside(unescape(message));
 }
@@ -113,7 +113,7 @@ QString
 ChatViewPrivate::stripHtml(const QString& message) const
 {
     QString msg = message;
-    msg.replace(QRegExp(QLatin1String("<[^>]*>")), QLatin1String(""));
+    msg.replace(QRegExp("<[^>]*>"), "");
     return msg;
 }
 
@@ -161,7 +161,7 @@ ChatViewPrivate::parseEmoticons(const QString& message, KEmoticonsTheme::ParseMo
         }
     }
 
-    result.replace(QLatin1String("src=\""), QLatin1String("src\"file://"));
+    result.replace("src=\"", "src\"file://");
     return result;
 }
 
@@ -179,10 +179,10 @@ ChatViewPrivate::customContextMenuRequested(const QPoint& pos)
         return;
     }
 
-    if (hit.linkElement().tagName() == QLatin1String("A") &&
-        hit.linkElement().hasAttribute(QLatin1String("href"))) {
+    if (hit.linkElement().tagName() == "A" &&
+        hit.linkElement().hasAttribute("href")) {
         KUrl url(hit.linkUrl());
-        QString href = url.url().remove(QLatin1String("about:blank"));
+        QString href = url.url().remove("about:blank");
 
         if (href[0] == QLatin1Char('#')) {
             emit _q->userUrlClicked(href.remove(QLatin1Char('#')));
@@ -190,13 +190,13 @@ ChatViewPrivate::customContextMenuRequested(const QPoint& pos)
             QMenu* menu = new QMenu(_q);
             menu->setTitle(i18n("Normal"));
 
-            QAction* action = new QAction(KIcon(QLatin1String("edit-copy")),
+            QAction* action = new QAction(KIcon("edit-copy"),
                                           i18n("Copy Link Address"), menu);
             connect(action, SIGNAL(triggered(bool)),
                     SLOT(copyUrlTriggered()));
             menu->addAction(action);
 
-            action = new QAction(KIcon(QLatin1String("document-save-as")),
+            action = new QAction(KIcon("document-save-as"),
                                  i18n("Save Link As..."), menu);
             connect(action, SIGNAL(triggered(bool)),
                     SLOT(saveAsTriggered()));
@@ -206,13 +206,13 @@ ChatViewPrivate::customContextMenuRequested(const QPoint& pos)
     } else {
         QMenu* menu = new QMenu(_q);
 
-        QAction* action = new QAction(KIcon(QLatin1String("edit-copy")),
+        QAction* action = new QAction(KIcon("edit-copy"),
                                             i18n("Copy"), menu);
         connect(action, SIGNAL(triggered(bool)),
                 SLOT(copyTriggered()));
         menu->addAction(action);
 
-        action = new QAction(KIcon(QLatin1String("edit-find")),
+        action = new QAction(KIcon("edit-find"),
                              i18n("Find Text..."), menu);
         connect(action, SIGNAL(triggered(bool)),
                 SLOT(findTextTriggered()));
@@ -275,8 +275,8 @@ ChatViewPrivate::randomString() const
 QString
 ChatViewPrivate::span(const QString& klass, const QString& text)
 {
-    QDomElement element = doc->createElement(QLatin1String("span"));
-    element.setAttribute(QLatin1String("class"), klass);
+    QDomElement element = doc->createElement("span");
+    element.setAttribute("class", klass);
     element.appendChild(doc->createTextNode(text));
     doc->appendChild(element);
     QString str = doc->toString(4);
@@ -287,10 +287,10 @@ ChatViewPrivate::span(const QString& klass, const QString& text)
 QDomElement
 ChatViewPrivate::createEvent(const QString& name)
 {
-    QDomElement element = doc->createElement(QLatin1String("event"));
-    element.setAttribute(QLatin1String("id"), randomString());
-    element.setAttribute(QLatin1String("name"), name);
-    element.setAttribute(QLatin1String("occurred"), messageTime());
+    QDomElement element = doc->createElement("event");
+    element.setAttribute("id", randomString());
+    element.setAttribute("name", name);
+    element.setAttribute("occurred", messageTime());
     return element;
 }
 
@@ -298,7 +298,7 @@ QDomElement
 ChatViewPrivate::awayMessage(const QString& message)
 {
     QDomText text = doc->createTextNode(message);
-    QDomElement element = doc->createElement(QLatin1String("away-message"));
+    QDomElement element = doc->createElement("away-message");
     element.appendChild(text);
     return element;
 }
@@ -307,7 +307,7 @@ QDomElement
 ChatViewPrivate::ban(const QString& mask)
 {
     QDomText text = doc->createTextNode(mask);
-    QDomElement element = doc->createElement(QLatin1String("ban"));
+    QDomElement element = doc->createElement("ban");
     element.appendChild(text);
     return element;
 }
@@ -316,18 +316,18 @@ QDomElement
 ChatViewPrivate::by(const Aki::Irc::NickInfo& sender, const QString& klass, bool self)
 {
     QDomText text = doc->createTextNode(sender.nick());
-    QDomElement element = doc->createElement(QLatin1String("by"));
+    QDomElement element = doc->createElement("by");
 
     if (self) {
-        element.setAttribute(QLatin1String("self"), QLatin1String("yes"));
+        element.setAttribute("self", "yes");
     }
 
     if (!klass.isEmpty() && !klass.isNull()) {
-        element.setAttribute(QLatin1String("class"), klass);
+        element.setAttribute("class", klass);
     }
 
-    element.setAttribute(QLatin1String("hostmask"), sender.hostmask());
-    element.setAttribute(QLatin1String("identifier"), sender.user());
+    element.setAttribute("hostmask", sender.hostmask());
+    element.setAttribute("identifier", sender.user());
     element.appendChild(text);
     return element;
 }
@@ -335,9 +335,9 @@ ChatViewPrivate::by(const Aki::Irc::NickInfo& sender, const QString& klass, bool
 QDomElement
 ChatViewPrivate::envelope(bool ignored)
 {
-    QDomElement element = doc->createElement(QLatin1String("envelop"));
+    QDomElement element = doc->createElement("envelop");
     if (ignored) {
-        element.setAttribute(QLatin1String("ignored"), QLatin1String("yes"));
+        element.setAttribute("ignored", "yes");
     }
     return element;
 }
@@ -345,9 +345,9 @@ ChatViewPrivate::envelope(bool ignored)
 QDomElement
 ChatViewPrivate::log(const QString& begin, const QString& source)
 {
-    QDomElement element = doc->createElement(QLatin1String("log"));
-    element.setAttribute(QLatin1String("begin"), begin);
-    element.setAttribute(QLatin1String("source"), source);
+    QDomElement element = doc->createElement("log");
+    element.setAttribute("begin", begin);
+    element.setAttribute("source", source);
     return element;
 }
 
@@ -355,19 +355,19 @@ QDomElement
 ChatViewPrivate::message(const QString& msg, bool highlight, bool action, bool notice)
 {
     QDomText text = doc->createTextNode(msg);
-    QDomElement element = doc->createElement(QLatin1String("message"));
+    QDomElement element = doc->createElement("message");
 
     if (highlight) {
-        element.setAttribute(QLatin1String("highlight"), QLatin1String("yes"));
+        element.setAttribute("highlight", "yes");
     }
     if (action) {
-        element.setAttribute(QLatin1String("action"), QLatin1String("yes"));
+        element.setAttribute("action", "yes");
     }
     if (notice) {
-        element.setAttribute(QLatin1String("type"), QLatin1String("notice"));
+        element.setAttribute("type", "notice");
     }
-    element.setAttribute(QLatin1String("received"), messageTime());
-    element.setAttribute(QLatin1String("id"), randomString());
+    element.setAttribute("received", messageTime());
+    element.setAttribute("id", randomString());
     element.appendChild(text);
     return element;
 }
@@ -376,7 +376,7 @@ QDomElement
 ChatViewPrivate::old(const QString& oldNick)
 {
     QDomText text = doc->createTextNode(oldNick);
-    QDomElement element = doc->createElement(QLatin1String("old"));
+    QDomElement element = doc->createElement("old");
     element.appendChild(text);
     return element;
 }
@@ -385,7 +385,7 @@ QDomElement
 ChatViewPrivate::reason(const QString& reason)
 {
     QDomText text = doc->createTextNode(reason);
-    QDomElement element = doc->createElement(QLatin1String("reason"));
+    QDomElement element = doc->createElement("reason");
     element.appendChild(text);
     return element;
 }
@@ -396,21 +396,21 @@ ChatViewPrivate::sender(const QString& nickname, const QString& username,
                         const QString& buddy)
 {
     QDomText text = doc->createTextNode(nickname);
-    QDomElement element = doc->createElement(QLatin1String("sender"));
+    QDomElement element = doc->createElement("sender");
     element.appendChild(text);
     if (!buddy.isEmpty() && !buddy.isNull()) {
-        element.setAttribute(QLatin1String("buddy"), buddy);
+        element.setAttribute("buddy", buddy);
     }
 
-    element.setAttribute(QLatin1String("hostmask"), hostmask);
-    element.setAttribute(QLatin1String("identifier"), username);
+    element.setAttribute("hostmask", hostmask);
+    element.setAttribute("identifier", username);
 
     if (self) {
-        element.setAttribute(QLatin1String("self"), QLatin1String("yes"));
+        element.setAttribute("self", "yes");
     }
 
     if (!klass.isEmpty() && !klass.isNull()) {
-        element.setAttribute(QLatin1String("class"), klass);
+        element.setAttribute("class", klass);
     }
 
     return element;
@@ -420,7 +420,7 @@ QDomElement
 ChatViewPrivate::topic(const QString& topic)
 {
     QDomText text = doc->createTextNode(topic);
-    QDomElement element = doc->createElement(QLatin1String("topic"));
+    QDomElement element = doc->createElement("topic");
     element.appendChild(text);
     return element;
 }
@@ -430,17 +430,17 @@ ChatViewPrivate::who(const Aki::Irc::NickInfo& sender, bool self,
                      const QString& klass)
 {
     QDomText text = doc->createTextNode(sender.nick());
-    QDomElement element = doc->createElement(QLatin1String("who"));
+    QDomElement element = doc->createElement("who");
 
     if (!klass.isEmpty() && !klass.isNull()) {
-        element.setAttribute(QLatin1String("class"), klass);
+        element.setAttribute("class", klass);
     }
 
     if (self) {
-        element.setAttribute(QLatin1String("self"), QLatin1String("yes"));
+        element.setAttribute("self", "yes");
     }
 
-    element.setAttribute(QLatin1String("hostmask"), sender.hostmask());
+    element.setAttribute("hostmask", sender.hostmask());
     element.appendChild(text);
     return element;
 }

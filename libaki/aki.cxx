@@ -5,6 +5,6 @@ QString
 Aki::databaseFile()
 {
     KStandardDirs dirs;
-    QString str = dirs.saveLocation("data", QLatin1String("aki"));
-    return str + QLatin1String("akidatabase.db");
+    QString str = dirs.saveLocation("data", "aki");
+    return str + "akidatabase.db";
 }

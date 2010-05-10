@@ -23,7 +23,7 @@ SqlAddress::addressListForServer(const Aki::SqlServer* server)
 {
     QList<Aki::SqlAddress*> list;
     QSqlQuery query;
-    query.prepare(QLatin1String("SELECT * FROM Address WHERE addressServer=?"));
+    query.prepare("SELECT * FROM Address WHERE addressServer=?");
     query.addBindValue(server->id());
 
     if (!query.exec()) {
@@ -36,12 +36,12 @@ SqlAddress::addressListForServer(const Aki::SqlServer* server)
     }
 
     QSqlRecord record = query.record();
-    const int id = record.indexOf(QLatin1String("id"));
-    const int address = record.indexOf(QLatin1String("address"));
-    const int port = record.indexOf(QLatin1String("port"));
-    const int password = record.indexOf(QLatin1String("password"));
-    const int ssl = record.indexOf(QLatin1String("ssl"));
-    const int addressServer = record.indexOf(QLatin1String("addressServer"));
+    const int id = record.indexOf("id");
+    const int address = record.indexOf("address");
+    const int port = record.indexOf("port");
+    const int password = record.indexOf("password");
+    const int ssl = record.indexOf("ssl");
+    const int addressServer = record.indexOf("addressServer");
 
     while (query.next()) {
         Aki::SqlAddress* tmp = new Aki::SqlAddress;
@@ -66,7 +66,7 @@ SqlAddress::findAddress(const QString& address, const Aki::SqlServer* server)
     }
     
     QSqlQuery query;
-    query.prepare(QLatin1String("SELECT * FROM Address WHERE addressServer=? AND address=? LIMIT 1"));
+    query.prepare("SELECT * FROM Address WHERE addressServer=? AND address=? LIMIT 1");
     query.addBindValue(server->id());
     query.addBindValue(address);
 
@@ -80,12 +80,12 @@ SqlAddress::findAddress(const QString& address, const Aki::SqlServer* server)
     }
 
     QSqlRecord record = query.record();
-    const int id = record.indexOf(QLatin1String("id"));
-    const int addressIndex = record.indexOf(QLatin1String("address"));
-    const int port = record.indexOf(QLatin1String("port"));
-    const int password = record.indexOf(QLatin1String("password"));
-    const int ssl = record.indexOf(QLatin1String("ssl"));
-    const int addressServer = record.indexOf(QLatin1String("addressServer"));
+    const int id = record.indexOf("id");
+    const int addressIndex = record.indexOf("address");
+    const int port = record.indexOf("port");
+    const int password = record.indexOf("password");
+    const int ssl = record.indexOf("ssl");
+    const int addressServer = record.indexOf("addressServer");
 
     while (query.next()) {
         tmp->setAddress(query.value(addressIndex).toString());
@@ -104,8 +104,8 @@ Aki::SqlAddress*
 SqlAddress::newAddress(const QString& address, const Aki::SqlServer* server)
 {
     QSqlQuery query;
-    query.prepare(QLatin1String("INSERT INTO Address (address,port,password,ssl,addressServer)"
-                                " VALUES(?,?,?,?,?)"));
+    query.prepare("INSERT INTO Address (address,port,password,ssl,addressServer)"
+                  " VALUES(?,?,?,?,?)");
     QScopedPointer<Aki::SqlAddress> tmp(new Aki::SqlAddress);
     tmp->setAddress(address);
     tmp->setAddressServerId(server->id());
@@ -120,7 +120,7 @@ SqlAddress::newAddress(const QString& address, const Aki::SqlServer* server)
     query.addBindValue(tmp->addressServerId());
 
     if (!query.exec()) {
-        //Aki::SqlChannelPrivate::checkError(query.lastError());
+        Aki::SqlAddressPrivate::checkError(query.lastError());
         return 0;
     }
 
@@ -222,8 +222,8 @@ bool
 SqlAddress::save()
 {
     QSqlQuery query;
-    query.prepare(QLatin1String("UPDATE Address SET address=?, port=?, password=?, ssl=?, addressServer=?"
-                                " WHERE id=?"));
+    query.prepare("UPDATE Address SET address=?, port=?, password=?, ssl=?, addressServer=?"
+                  " WHERE id=?");
     query.addBindValue(address());
     query.addBindValue(port());
     query.addBindValue(password());
@@ -243,7 +243,7 @@ bool
 SqlAddress::remove()
 {
     QSqlQuery query;
-    const QString str = QLatin1String("DELETE FROM Address WHERE address=? AND addressServer=?");
+    const QString str = "DELETE FROM Address WHERE address=? AND addressServer=?";
     query.prepare(str);
     query.addBindValue(address());
     query.addBindValue(addressServerId());

@@ -17,13 +17,13 @@ private Q_SLOTS:
 void ChatViewTest::addTest()
 {
     QScopedPointer<Aki::ChatView> view(new Aki::ChatView);
-    const Aki::Irc::NickInfo self(QLatin1String("zeke!~zeke@unaffiliated/zeke"));
-    const Aki::Irc::NickInfo sender(QLatin1String("comawhite!~coma@unaffiliated/comawhite"));
+    const Aki::Irc::NickInfo self("zeke!~zeke@unaffiliated/zeke");
+    const Aki::Irc::NickInfo sender("comawhite!~coma@unaffiliated/comawhite");
 
-    view->demotedFromFounder(sender, QLatin1String("operator"), self);
-    view->demotedFromHalfOperator(sender, QLatin1String("operator"), self);
+    view->demotedFromFounder(sender, "operator", self);
+    view->demotedFromHalfOperator(sender, "operator", self);
     view->insertAwayRemoved();
-    view->insertAwaySet(tr("I'm now away"));
+    view->insertAwaySet("I'm now away");
 
     qDebug() << view->page()->mainFrame()->toHtml();
 }

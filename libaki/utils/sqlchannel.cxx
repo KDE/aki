@@ -38,7 +38,7 @@ SqlChannel::channelListForServer(const Aki::SqlServer* server)
 {
     Aki::SqlChannel::List list;
     QSqlQuery query;
-    query.prepare(QLatin1String("SELECT * FROM Channel WHERE channelServer=?"));
+    query.prepare("SELECT * FROM Channel WHERE channelServer=?");
     query.addBindValue(server->id());
 
     if (!query.exec()) {
@@ -51,10 +51,10 @@ SqlChannel::channelListForServer(const Aki::SqlServer* server)
     }
 
     QSqlRecord record = query.record();
-    const int id = record.indexOf(QLatin1String("id"));
-    const int channel = record.indexOf(QLatin1String("channel"));
-    const int password = record.indexOf(QLatin1String("password"));
-    const int channelServerId = record.indexOf(QLatin1String("channelServer"));
+    const int id = record.indexOf("id");
+    const int channel = record.indexOf("channel");
+    const int password = record.indexOf("password");
+    const int channelServerId = record.indexOf("channelServer");
 
     while (query.next()) {
         Aki::SqlChannel* tmp = new Aki::SqlChannel;
@@ -73,7 +73,7 @@ SqlChannel::findChannel(const QString& name, const Aki::SqlServer* server)
 {
     QScopedPointer<Aki::SqlChannel> tmp(new Aki::SqlChannel);
     QSqlQuery query;
-    query.prepare(QLatin1String("SELECT * FROM Channel WHERE channelServer=? AND channel=? LIMIT 1"));
+    query.prepare("SELECT * FROM Channel WHERE channelServer=? AND channel=? LIMIT 1");
     query.addBindValue(server->id());
     query.addBindValue(name);
 
@@ -87,10 +87,10 @@ SqlChannel::findChannel(const QString& name, const Aki::SqlServer* server)
     }
 
     QSqlRecord record = query.record();
-    const int id = record.indexOf(QLatin1String("id"));
-    const int channel = record.indexOf(QLatin1String("channel"));
-    const int password = record.indexOf(QLatin1String("password"));
-    const int channelServerId = record.indexOf(QLatin1String("channelServer"));
+    const int id = record.indexOf("id");
+    const int channel = record.indexOf("channel");
+    const int password = record.indexOf("password");
+    const int channelServerId = record.indexOf("channelServer");
 
     while (query.next()) {
         tmp->setId(query.value(id).toInt());
@@ -119,8 +119,8 @@ Aki::SqlChannel*
 SqlChannel::newChannel(const QString& name, const Aki::SqlServer* server)
 {
     QSqlQuery query;
-    query.prepare(QLatin1String("INSERT INTO Channel (channel, password, channelServer)\n"
-                                " VALUES(?,?,?)"));
+    query.prepare("INSERT INTO Channel (channel, password, channelServer)\n"
+                  " VALUES(?,?,?)");
     QScopedPointer<Aki::SqlChannel> channel(new Aki::SqlChannel);
     channel->setChannel(name);
     channel->setPassword(QString());
@@ -180,7 +180,7 @@ bool
 SqlChannel::save()
 {
     QSqlQuery query;
-    const QString str = QLatin1String("UPDATE Channel SET channel=?, password=?, channelServer=? WHERE id=?");
+    const QString str("UPDATE Channel SET channel=?, password=?, channelServer=? WHERE id=?");
     query.prepare(str);
     query.addBindValue(channel());
     query.addBindValue(password());
@@ -199,7 +199,7 @@ bool
 SqlChannel::remove()
 {
     QSqlQuery query;
-    const QString str = QLatin1String("DELETE FROM Channel WHERE channel=? AND id=?");
+    const QString str("DELETE FROM Channel WHERE channel=? AND id=?");
     query.prepare(str);
     query.addBindValue(channel());
     query.addBindValue(id());

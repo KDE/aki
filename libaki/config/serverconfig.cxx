@@ -3,7 +3,7 @@
 using namespace Aki;
 
 ServerConfig::ServerConfig(QObject* parent)
-    : ConfigFile(QLatin1String("akiserversrc"), parent)
+    : ConfigFile("akiserversrc", parent)
 {
 }
 
@@ -14,7 +14,7 @@ ServerConfig::~ServerConfig()
 QStringList
 ServerConfig::addressList()
 {
-    QString tmp = currentGroup().readEntry(QLatin1String("AddressList"), QString());
+    QString tmp = currentGroup().readEntry("AddressList", QString());
     if (tmp.isEmpty() || tmp.isNull()) {
         return QStringList();
     }
@@ -24,7 +24,7 @@ ServerConfig::addressList()
 QStringList
 ServerConfig::channelList()
 {
-    QString tmp = currentGroup().readEntry(QLatin1String("ChannelList"), QString());
+    QString tmp = currentGroup().readEntry("ChannelList", QString());
     if (tmp.isEmpty() || tmp.isNull()) {
         return tmp.split(QLatin1Char(','), QString::SkipEmptyParts);
     }
@@ -41,49 +41,49 @@ ServerConfig::encoding()
         }
     }
 
-    return currentGroup().readEntry(QLatin1String("DefaultEncoding"), codec->name());
+    return currentGroup().readEntry("DefaultEncoding", codec->name());
 }
 
 bool
 ServerConfig::isAutoIdentifyEnabled()
 {
-    return currentGroup().readEntry(QLatin1String("AutoIdentifyEnabled"), false);
+    return currentGroup().readEntry("AutoIdentifyEnabled", false);
 }
 
 bool
 ServerConfig::isAutoJoinChannelsEnabled()
 {
-    return currentGroup().readEntry(QLatin1String("AutoJoinChannelsEnabled"), true);
+    return currentGroup().readEntry("AutoJoinChannelsEnabled", true);
 }
 
 bool
 ServerConfig::isAutoReconnectEnabled()
 {
-    return currentGroup().readEntry(QLatin1String("AutoReconnectEnabled"), true);
+    return currentGroup().readEntry("AutoReconnectEnabled", true);
 }
 
 bool
 ServerConfig::isConnectOnStartupEnabled()
 {
-    return currentGroup().readEntry(QLatin1String("ConnectOnStartupEnabled"), true);
+    return currentGroup().readEntry("ConnectOnStartupEnabled", true);
 }
 
 bool
 ServerConfig::isConnectToRandomServerEnabled()
 {
-    return currentGroup().readEntry(QLatin1String("ConnectToRandomServerEnabled"), false);
+    return currentGroup().readEntry("ConnectToRandomServerEnabled", false);
 }
 
 bool
 ServerConfig::isDefaultEncodingEnabled()
 {
-    return currentGroup().readEntry(QLatin1String("DefaultEncodingEnabled"), true);
+    return currentGroup().readEntry("DefaultEncodingEnabled", true);
 }
 
 bool
 ServerConfig::isSslEnabled()
 {
-    return currentGroup().readEntry(QLatin1String("SslEnabled"), false);
+    return currentGroup().readEntry("SslEnabled", false);
 }
 
 int
@@ -95,103 +95,103 @@ ServerConfig::retryAttemptCount()
 int
 ServerConfig::retryInterval()
 {
-    return currentGroup().readEntry(QLatin1String("RetryInterval"), 10);
+    return currentGroup().readEntry("RetryInterval", 10);
 }
 
 QString
 ServerConfig::serviceName()
 {
-    return currentGroup().readEntry(QLatin1String("ServiceName"));
+    return currentGroup().readEntry("ServiceName");
 }
 
 QString
 ServerConfig::servicePassword()
 {
-    return currentGroup().readEntry(QLatin1String("ServicePassword"));
+    return currentGroup().readEntry("ServicePassword");
 }
 
 void
 ServerConfig::setAddressList(const QStringList& addresses)
 {
-    QString addressList = addresses.join(QLatin1String(","));
-    currentGroup().writeEntry(QLatin1String("AddressList"), addressList);
+    QString addressList = addresses.join(",");
+    currentGroup().writeEntry("AddressList", addressList);
 }
 
 void
 ServerConfig::setAutoIdentify(bool enabled)
 {
-    currentGroup().writeEntry(QLatin1String("AutoIdentifyEnabled"), enabled);
+    currentGroup().writeEntry("AutoIdentifyEnabled", enabled);
 }
 
 void
 ServerConfig::setAutoJoinChannels(bool enabled)
 {
-    currentGroup().writeEntry(QLatin1String("AutoJoinChannelsEnabled"), enabled);
+    currentGroup().writeEntry("AutoJoinChannelsEnabled", enabled);
 }
 
 void
 ServerConfig::setAutoReconnect(bool enabled)
 {
-    currentGroup().writeEntry(QLatin1String("AutoReconnectEnabled"), enabled);
+    currentGroup().writeEntry("AutoReconnectEnabled", enabled);
 }
 
 void
 ServerConfig::setChannelList(const QStringList& channels)
 {
-    QString channelList = channels.join(QLatin1String(","));
-    currentGroup().writeEntry(QLatin1String("ChannelList"), channelList);
+    QString channelList = channels.join(",");
+    currentGroup().writeEntry("ChannelList", channelList);
 }
 
 void
 ServerConfig::setConnectOnStartup(bool enabled)
 {
-    currentGroup().writeEntry(QLatin1String("ConnectOnStartupEnabled"), enabled);
+    currentGroup().writeEntry("ConnectOnStartupEnabled", enabled);
 }
 
 void
 ServerConfig::setConnectToRandomServer(bool enabled)
 {
-    currentGroup().writeEntry(QLatin1String("ConnectToRandomServerEnabled"), enabled);
+    currentGroup().writeEntry("ConnectToRandomServerEnabled", enabled);
 }
 
 void
 ServerConfig::setDefaultEncoding(bool enabled)
 {
-    currentGroup().writeEntry(QLatin1String("DefaultEncodingEnabled"), enabled);
+    currentGroup().writeEntry("DefaultEncodingEnabled", enabled);
 }
 
 void
 ServerConfig::setEncoding(const QByteArray& encoding)
 {
-    currentGroup().writeEntry(QLatin1String("DefaultEncoding"), encoding);
+    currentGroup().writeEntry("DefaultEncoding", encoding);
 }
 
 void
 ServerConfig::setRetryAttempts(int count)
 {
-    currentGroup().writeEntry(QLatin1String("RetryAttemptCount"), count);
+    currentGroup().writeEntry("RetryAttemptCount", count);
 }
 
 void
 ServerConfig::setRetryInterval(int seconds)
 {
-    currentGroup().writeEntry(QLatin1String("RetryInterval"), seconds);
+    currentGroup().writeEntry("RetryInterval", seconds);
 }
 
 void
 ServerConfig::setServiceName(const QString& name)
 {
-    currentGroup().writeEntry(QLatin1String("ServiceName"), name);
+    currentGroup().writeEntry("ServiceName", name);
 }
 
 void
 ServerConfig::setServicePassword(const QString& password)
 {
-    currentGroup().writeEntry(QLatin1String("ServicePassword"), password);
+    currentGroup().writeEntry("ServicePassword", password);
 }
 
 void
 ServerConfig::setSsl(bool enabled)
 {
-    currentGroup().writeEntry(QLatin1String("SslEnabled"), enabled);
+    currentGroup().writeEntry("SslEnabled", enabled);
 }

@@ -63,7 +63,7 @@ SqlIdentity::findIdentity(const QString& name)
     }
 
     QSqlQuery query;
-    query.prepare(QLatin1String("SELECT * FROM Identity WHERE name=? LIMIT 1"));
+    query.prepare("SELECT * FROM Identity WHERE name=? LIMIT 1");
     query.addBindValue(name);
 
     if (!query.exec()) {
@@ -76,17 +76,17 @@ SqlIdentity::findIdentity(const QString& name)
     }
 
     QSqlRecord record = query.record();
-    const int id = record.indexOf(QLatin1String("id"));
-    const int awayMessage = record.indexOf(QLatin1String("awayMessage"));
-    const int awayNickname = record.indexOf(QLatin1String("awayNickname"));
-    const int nameIndex = record.indexOf(QLatin1String("name"));
-    const int kickMessage = record.indexOf(QLatin1String("kickMessage"));
-    const int enableMessages = record.indexOf(QLatin1String("enableMessages"));
-    const int markLastPosition = record.indexOf(QLatin1String("markLastPosition"));
-    const int partMessage = record.indexOf(QLatin1String("partMessage"));
-    const int quitMessage = record.indexOf(QLatin1String("quitMessage"));
-    const int realName = record.indexOf(QLatin1String("realName"));
-    const int returnMessage = record.indexOf(QLatin1String("returnMessage"));
+    const int id = record.indexOf("id");
+    const int awayMessage = record.indexOf("awayMessage");
+    const int awayNickname = record.indexOf("awayNickname");
+    const int nameIndex = record.indexOf("name");
+    const int kickMessage = record.indexOf("kickMessage");
+    const int enableMessages = record.indexOf("enableMessages");
+    const int markLastPosition = record.indexOf("markLastPosition");
+    const int partMessage = record.indexOf("partMessage");
+    const int quitMessage = record.indexOf("quitMessage");
+    const int realName = record.indexOf("realName");
+    const int returnMessage = record.indexOf("returnMessage");
 
     while (query.next()) {
         identity->setAwayMessage(query.value(awayMessage).toString());
@@ -117,7 +117,7 @@ SqlIdentity::identityNames()
 {
     QStringList names;
     QSqlQuery query;
-    query.prepare(QLatin1String("SELECT name FROM Identity"));
+    query.prepare("SELECT name FROM Identity");
 
     if (!query.exec()) {
         Aki::SqlIdentityPrivate::checkError(query.lastError());
@@ -125,7 +125,7 @@ SqlIdentity::identityNames()
     }
 
     QSqlRecord record = query.record();
-    const int index = record.indexOf(QLatin1String("name"));
+    const int index = record.indexOf("name");
 
     while (query.next()) {
         names.append(query.value(index).toString());
@@ -165,27 +165,27 @@ SqlIdentity::newIdentity(const QString& name)
     KUser user(KUser::UseRealUserID);
 
     if (user.property(KUser::FullName).isNull()) {
-        tmp = QLatin1String("Aki");
+        tmp = "Aki";
     } else {
         tmp = user.property(KUser::FullName).toString();
     }
 
     QScopedPointer<Aki::SqlIdentity> identity(new Aki::SqlIdentity);
-    identity->setAwayMessage(QLatin1String("I'm now away"));
-    identity->setAwayNickname(user.loginName() + QLatin1String("|away"));
+    identity->setAwayMessage("I'm now away");
+    identity->setAwayNickname(user.loginName() + "|away");
     identity->setEnableMessages(false);
     identity->setKickMessage(QString());
     identity->setMarkLastPosition(false);
     identity->setName(name);
-    identity->setPartMessage(QLatin1String("Aki IRC Client %v"));
-    identity->setQuitMessage(QLatin1String("Aki IRC Client %v"));
+    identity->setPartMessage("Aki IRC Client %v");
+    identity->setQuitMessage("Aki IRC Client %v");
     identity->setRealName(tmp);
-    identity->setReturnMessage(QLatin1String("I'm now back"));
+    identity->setReturnMessage("I'm now back");
 
     QSqlQuery query;
-    query.prepare(QLatin1String("INSERT INTO Identity (awayMessage,awayNickname,name,kickMessage,enableMessages,\n"
-                                "markLastPosition,partMessage,quitMessage,realName,returnMessage)\n"
-                                "VALUES(?,?,?,?,?,?,?,?,?,?)"));
+    query.prepare("INSERT INTO Identity (awayMessage,awayNickname,name,kickMessage,enableMessages,\n"
+                  "markLastPosition,partMessage,quitMessage,realName,returnMessage)\n"
+                  "VALUES(?,?,?,?,?,?,?,?,?,?)");
     query.addBindValue(Aki::SqlIdentityPrivate::checkString(identity->awayMessage()));
     query.addBindValue(Aki::SqlIdentityPrivate::checkString(identity->awayNickname()));
     query.addBindValue(identity->name());
@@ -295,8 +295,8 @@ bool
 SqlIdentity::save()
 {
     QSqlQuery query;
-    const QString str = QLatin1String("UPDATE Identity SET awayMessage=?, awayNickname=?, name=?, kickMessage=?, enableMessages=?"
-                                      ", markLastPosition=?, partMessage=?, quitMessage=?, realName=?, returnMessage=? WHERE id=?");
+    const QString str("UPDATE Identity SET awayMessage=?, awayNickname=?, name=?, kickMessage=?, enableMessages=?"
+                      ", markLastPosition=?, partMessage=?, quitMessage=?, realName=?, returnMessage=? WHERE id=?");
     query.prepare(str);
     query.addBindValue(Aki::SqlIdentityPrivate::checkString(awayMessage()));
     query.addBindValue(Aki::SqlIdentityPrivate::checkString(awayNickname()));
@@ -328,7 +328,7 @@ bool
 SqlIdentity::remove()
 {
     QSqlQuery query;
-    const QString str = QLatin1String("DELETE FROM Identity WHERE name=? AND id=?");
+    const QString str("DELETE FROM Identity WHERE name=? AND id=?");
     query.prepare(str);
     query.addBindValue(name());
     query.addBindValue(id());

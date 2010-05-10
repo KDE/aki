@@ -44,8 +44,6 @@ macro_log_feature(QXT_FOUND_QXTCORE "qxtcore" "QxtCore library for logging" "htt
 add_definitions(
     ${QT_DEFINITIONS}
     ${KDE4_DEFINITIONS}
-    -DQT_NO_CAST_FROM_ASCII
-    -DQT_NO_CAST_TO_ASCII
     -fno-strict-aliasing
 )
 

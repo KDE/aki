@@ -29,7 +29,7 @@ ChatView::~ChatView()
 void
 ChatView::insertAwaySet(const QString& message)
 {
-    QDomElement event = _d->createEvent(QLatin1String("awaySet"));
+    QDomElement event = _d->createEvent("awaySet");
     event.appendChild(_d->message(i18n("You have set yourself away with \"%1\".", message)));
     event.appendChild(_d->awayMessage(message));
 
@@ -39,7 +39,7 @@ ChatView::insertAwaySet(const QString& message)
 void
 ChatView::insertAwayRemoved()
 {
-    QDomElement event = _d->createEvent(QLatin1String("awayRemoved"));
+    QDomElement event = _d->createEvent("awayRemoved");
     event.appendChild(_d->message(i18n("You have returned from away.")));
 
     _d->appendMessage(event);
@@ -49,7 +49,7 @@ void
 ChatView::insertBanRemoved(const Aki::Irc::NickInfo& sender, const QString& banmask,
                            const QString& senderClass)
 {
-    QDomElement event = _d->createEvent(QLatin1String("banRemoved"));
+    QDomElement event = _d->createEvent("banRemoved");
     event.appendChild(_d->message(i18n("%1 removed the ban on %2.",
                                        _d->span(senderClass, sender.nick()), banmask)));
     event.appendChild(_d->ban(banmask));
@@ -64,7 +64,7 @@ ChatView::demotedFromFounder(const Aki::Irc::NickInfo& sender, const QString& se
 {
     const QString senderSpan = _d->span(senderClass, sender.nick());
 
-    QDomElement event = _d->createEvent(QLatin1String("demotedFromFounder"));
+    QDomElement event = _d->createEvent("demotedFromFounder");
     event.appendChild(_d->message(i18n("You were demoted from founder by %1.", senderSpan)));
     event.appendChild(_d->by(sender, senderClass));
     event.appendChild(_d->who(self, true));
@@ -78,7 +78,7 @@ ChatView::demotedFromHalfOperator(const Aki::Irc::NickInfo& sender, const QStrin
 {
     const QString senderSpan = _d->span(senderClass, sender.nick());
 
-    QDomElement event = _d->createEvent(QLatin1String("demotedFromHalfOperator"));
+    QDomElement event = _d->createEvent("demotedFromHalfOperator");
     event.appendChild(_d->message(i18n("You were demoted from operator by %1.", senderSpan)));
     event.appendChild(_d->by(sender, senderClass));
     event.appendChild(_d->who(self, true));
@@ -92,7 +92,7 @@ ChatView::insertDevoiced(const Aki::Irc::NickInfo& sender, const QString& sender
 {
     const QString senderSpan = _d->span(senderClass, sender.nick());
 
-    QDomElement event = _d->createEvent(QLatin1String("devoiced"));
+    QDomElement event = _d->createEvent("devoiced");
     event.appendChild(_d->message(i18n("You has voice removed by %1.", senderSpan), false));
     event.appendChild(_d->by(sender, senderClass));
     event.appendChild(_d->who(self, true));
@@ -103,7 +103,7 @@ ChatView::insertDevoiced(const Aki::Irc::NickInfo& sender, const QString& sender
 void
 ChatView::insertDisconnected()
 {
-    QDomElement event = _d->createEvent(QLatin1String("disconnected"));
+    QDomElement event = _d->createEvent("disconnected");
     event.appendChild(_d->message(i18n("You left the chat by being disconnected from the server.")));
 
     _d->appendMessage(event);
@@ -113,7 +113,7 @@ void
 ChatView::insertKicked(const Aki::Irc::NickInfo& sender, const QString& senderClass,
                        const QString& reason)
 {
-    QDomElement event = _d->createEvent(QLatin1String("kicked"));
+    QDomElement event = _d->createEvent("kicked");
     event.appendChild(_d->message(i18n("You were kicked from the channel by %1.", sender.nick())));
     event.appendChild(_d->by(sender, senderClass, false));
     event.appendChild(_d->reason(reason));
@@ -125,7 +125,7 @@ void
 ChatView::insertMemberBanned(const Aki::Irc::NickInfo& sender, const QString& senderClass,
                              const QString& banmask)
 {
-    QDomElement event = _d->createEvent(QLatin1String("memberBanned"));
+    QDomElement event = _d->createEvent("memberBanned");
     event.appendChild(_d->message(i18n("%1 set a ban on %2", _d->span(senderClass, sender.nick()),
                            banmask), false));
     event.appendChild(_d->ban(banmask));
@@ -136,7 +136,7 @@ ChatView::insertMemberBanned(const Aki::Irc::NickInfo& sender, const QString& se
 
 void ChatView::insertNewNickname(const QString& newNick, const QString& senderClass)
 {
-    QDomElement event = _d->createEvent(QLatin1String("newNickname"));
+    QDomElement event = _d->createEvent("newNickname");
     event.appendChild(_d->message(i18n("You are now known as %1", _d->span(senderClass, newNick))));
 
     _d->appendMessage(event);
@@ -146,11 +146,11 @@ void ChatView::insertPromotedToFounder(const Aki::Irc::NickInfo& sender, const A
                                        const QString& senderClass)
 {
     bool isSelf = sender.nick() == self.nick();
-    QDomElement event = _d->createEvent(QLatin1String("promotedToFounder"));
+    QDomElement event = _d->createEvent("promotedToFounder");
     event.appendChild(_d->message(i18n("You were promoted to founder by %1",
                                        _d->span(senderClass, sender.nick()))));
     event.appendChild(_d->by(sender, senderClass, isSelf));
-    event.appendChild(_d->who(self, true, QLatin1String("founder")));
+    event.appendChild(_d->who(self, true, "founder"));
 
     _d->appendMessage(event);
 }
@@ -160,11 +160,11 @@ ChatView::insertPromotedToOperator(const Aki::Irc::NickInfo& sender, const Aki::
                                    const QString& senderClass)
 {
     bool isSelf = sender.nick() == self.nick();
-    QDomElement event = _d->createEvent(QLatin1String("promotedToOperator"));
+    QDomElement event = _d->createEvent("promotedToOperator");
     event.appendChild(_d->message(i18n("You were promoted to operator by %1",
                                        _d->span(senderClass, sender.nick()))));
     event.appendChild(_d->by(sender, senderClass, isSelf));
-    event.appendChild(_d->who(self, true, QLatin1String("operator")));
+    event.appendChild(_d->who(self, true, "operator"));
 
     _d->appendMessage(event);
 }
@@ -172,7 +172,7 @@ ChatView::insertPromotedToOperator(const Aki::Irc::NickInfo& sender, const Aki::
 void
 ChatView::insertRejoined()
 {
-    QDomElement event = _d->createEvent(QLatin1String("rejoined"));
+    QDomElement event = _d->createEvent("rejoined");
     event.appendChild(_d->message(i18n("You rejoined the room.")));
 
     _d->appendMessage(event);
@@ -182,7 +182,7 @@ void
 ChatView::insertTopicChanged(const Aki::Irc::NickInfo& sender, const QString& senderClass,
                              const QString& newTopic, bool isSelf)
 {
-    QDomElement event = _d->createEvent(QLatin1String("topicChanged"));
+    QDomElement event = _d->createEvent("topicChanged");
     if (isSelf) {
         event.appendChild(_d->message(i18n("You changed the topic to \"%1\".", newTopic)));
     } else {
@@ -201,10 +201,10 @@ ChatView::insertVoiced(const Aki::Irc::NickInfo& sender, const Aki::Irc::NickInf
 {
     bool isSelf = sender.nick() == self.nick();
 
-    QDomElement event = _d->createEvent(QLatin1String("voiced"));
+    QDomElement event = _d->createEvent("voiced");
     event.appendChild(_d->message(i18n("You were granted voice by %1", _d->span(senderClass, sender.nick()))));
     event.appendChild(_d->by(sender, senderClass, isSelf));
-    event.appendChild(_d->who(self, true, QLatin1String("voice")));
+    event.appendChild(_d->who(self, true, "voice"));
 
     _d->appendMessage(event);
 }
