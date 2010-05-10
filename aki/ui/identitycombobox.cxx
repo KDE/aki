@@ -1,4 +1,5 @@
 #include "identitycombobox.hpp"
+#include "aki.hpp"
 #include "utils/database.hpp"
 #include "utils/sqlidentity.hpp"
 using namespace Aki;
@@ -21,9 +22,5 @@ IdentityComboBox::~IdentityComboBox()
 void
 IdentityComboBox::slotActivated(const QString& identity)
 {
-    if (currentText() == identity) {
-        return;
-    }
-
     emit identityActivated(Aki::SqlIdentity::findIdentity(identity));
 }
