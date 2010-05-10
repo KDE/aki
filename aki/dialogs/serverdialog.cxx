@@ -1,5 +1,6 @@
 #include "serverdialog.hpp"
 #include "aki.hpp"
+#include "ui/networklistmodel.hpp"
 #include "utils/database.hpp"
 #include "utils/sqlidentity.hpp"
 #include "utils/sqlserver.hpp"
@@ -21,7 +22,11 @@ ServerDialog::ServerDialog(QWidget* parent)
 
     QScopedPointer<Aki::SqlIdentity> identity(Aki::SqlIdentity::findIdentity(identitySelector->currentText()));
     Aki::SqlServer::List list = Aki::SqlServer::serversForIdentity(identity.data());
-    qDeleteAll(list);
+    foreach (Aki::SqlServer* server, list) {
+        networkList->addIdentity(identity->name());
+        networkList->addModel(new Aki::NetworkListModel);
+        networkList->addNetwork(server);
+    }
 }
 
 ServerDialog::~ServerDialog()
@@ -47,7 +52,17 @@ ServerDialog::setupDialog()
     enableButton(User1, false);
 
     connect(identitySelector, SIGNAL(identityActivated(Aki::SqlIdentity*)),
-            SLOT(slotIdentityActivated(Aki::SqlIdentity*)));
+            networkList, SLOT(identityActivated(Aki::SqlIdentity*)));
+    connect(addNetworkButton, SIGNAL(clicked(bool)),
+            SLOT(slotAddNetworkClicked()));
+    connect(editNetworkButton, SIGNAL(clicked(bool)),
+            SLOT(slotEditNetworkClicked()));
+    connect(removeNetworkButton, SIGNAL(clicked(bool)),
+            SLOT(slotRemoveNetworkClicked()));
+    connect(importNetworksButton, SIGNAL(clicked(bool)),
+            SLOT(slotImportNetworksClicked()));
+    connect(exportNetworksButton, SIGNAL(clicked(bool)),
+            SLOT(slotExportNetworksClicked()));
 }
 
 void
@@ -56,7 +71,26 @@ ServerDialog::setupIcons()
 }
 
 void
-Aki::ServerDialog::slotIdentityActivated(Aki::SqlIdentity* identity)
+ServerDialog::slotAddNetworkClicked()
 {
-    Q_UNUSED(identity);
+}
+
+void
+ServerDialog::slotEditNetworkClicked()
+{
+}
+
+void
+ServerDialog::slotExportNetworksClicked()
+{
+}
+
+void
+ServerDialog::slotImportNetworksClicked()
+{
+}
+
+void
+ServerDialog::slotRemoveNetworkClicked()
+{
 }

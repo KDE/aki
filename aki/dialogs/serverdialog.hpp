@@ -18,8 +18,11 @@ public:
     void setupDialog();
     void setupIcons();
 private Q_SLOTS:
-    void slotIdentityActivated(Aki::SqlIdentity* identity);
-private:
+    void slotAddNetworkClicked();
+    void slotRemoveNetworkClicked();
+    void slotEditNetworkClicked();
+    void slotImportNetworksClicked();
+    void slotExportNetworksClicked();
 }; // End of class ServerDialog.
 } // End of namespace Aki.
 
