@@ -1,4 +1,5 @@
 #include "networklistmodel.hpp"
+#include "aki.hpp"
 #include "ui/networklist.hpp"
 #include "utils/sqlserver.hpp"
 using namespace Aki;
@@ -33,12 +34,8 @@ NetworkListModel::data(const QModelIndex& index, int role) const
 }
 
 int
-NetworkListModel::rowCount(const QModelIndex& parent) const
+NetworkListModel::rowCount(const QModelIndex&) const
 {
-    if (!parent.isValid()) {
-        return 0;
-    }
-
     return _networkList.count();
 }
 
@@ -57,6 +54,7 @@ NetworkListModel::setData(const QModelIndex& index, const QVariant& value, int r
     switch (role) {
     case Qt::DisplayRole: {
         network->setName(value.toString());
+        break;
     }
     default: {
         return false;
@@ -78,15 +76,28 @@ NetworkListModel::flags(const QModelIndex& index) const
 }
 
 void
-NetworkListModel::insertNetwork(SqlServer* network)
+NetworkListModel::addNetwork(SqlServer* network)
+{
+    insertNetwork(rowCount(), network);
+}
+
+void
+NetworkListModel::insertNetwork(int row, SqlServer* network)
 {
     if (!network) {
         return;
     }
 
-    int row = _networkList.count();
-    if (_networkList.count() == 0) {
-        row = 0;
+    if (row > rowCount()) {
+        beginInsertRows(QModelIndex(), rowCount(), rowCount());
+        _networkList.append(network);
+        endInsertRows();
+        return;
+    } else if (row < 0) {
+        beginInsertRows(QModelIndex(), 0, 0);
+        _networkList.prepend(network);
+        endInsertRows();
+        return;
     }
 
     beginInsertRows(QModelIndex(), row, row);

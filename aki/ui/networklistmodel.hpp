@@ -18,7 +18,8 @@ public:
     virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
     virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole);
     virtual Qt::ItemFlags flags(const QModelIndex& index) const;
-    void insertNetwork(Aki::SqlServer* network);
+    void addNetwork(Aki::SqlServer* network);
+    void insertNetwork(int row, Aki::SqlServer* network);
     void removeNetwork(Aki::SqlServer* network);
     Aki::SqlServer* server(const QModelIndex& index);
     Aki::SqlServer* server(const QModelIndex& index) const;
