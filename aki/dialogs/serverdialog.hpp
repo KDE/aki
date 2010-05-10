@@ -23,6 +23,8 @@ private Q_SLOTS:
     void slotEditNetworkClicked();
     void slotImportNetworksClicked();
     void slotExportNetworksClicked();
+private:
+    void createNewNetwork(const QString& name);
 }; // End of class ServerDialog.
 } // End of namespace Aki.
 
