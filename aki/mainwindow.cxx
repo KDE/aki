@@ -23,7 +23,7 @@ AkiWindow::AkiWindow()
     : Aki::MainWindow()
 {
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-    args->getOption("debug");
+    args->clear();
     setTopRightCorner(new Aki::ViewTabBar(this));
     setView(new Aki::View);
     createMenus();
