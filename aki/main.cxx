@@ -30,6 +30,8 @@ main(int argc, char** argv)
     options.add("ssl", ki18n("Connect using SSL"), "false");
     options.add("noplugins", ki18n("Do not load plugins"), "");
     options.add("noconnect", ki18n("Disables auto-connection"), "");
+    options.add("debug", ki18n("Enable debug mode"));
+    options.add("log", ki18n("Log to file debug info"));
 
     KCmdLineArgs::addCmdLineOptions(options);
 

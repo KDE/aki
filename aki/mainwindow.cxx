@@ -1,4 +1,5 @@
 #include "mainwindow.hpp"
+#include "aki.hpp"
 #include "dialogs/serverdialog.hpp"
 #include "interfaces/ibasewindow.hpp"
 #include "ui/chatview.hpp"
@@ -6,6 +7,7 @@
 #include "ui/viewtabbar.hpp"
 #include <KDE/KAction>
 #include <KDE/KActionCollection>
+#include <KDE/KCmdLineArgs>
 #include <KDE/KDebug>
 #include <KDE/KLocale>
 #include <KDE/KMenuBar>
@@ -20,6 +22,8 @@ using namespace Aki;
 AkiWindow::AkiWindow()
     : Aki::MainWindow()
 {
+    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+    args->getOption("debug");
     setTopRightCorner(new Aki::ViewTabBar(this));
     setView(new Aki::View);
     createMenus();
