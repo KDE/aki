@@ -5,6 +5,7 @@
 
 namespace Aki
 {
+class ServerAddressListModel;
 class ServerAddressList : public QListView
 {
     Q_OBJECT

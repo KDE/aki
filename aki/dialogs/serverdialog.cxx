@@ -16,14 +16,16 @@ ServerDialog::ServerDialog(QWidget* parent)
     Aki::Database::open(Aki::databaseFile());
     Aki::Database* db = new Aki::Database(this);
     Q_UNUSED(db);
-    //db->createDefaultTables();
     setupDialog();
     setupActions();
     setupIcons();
 
+    foreach (int mib, QTextCodec::availableMibs()) {
+        encodingComboBox->addItem(QTextCodec::codecForMib(mib)->name());
+    }
+
     QScopedPointer<Aki::SqlIdentity> identity(Aki::SqlIdentity::findIdentity(identitySelector->currentText()));
     networkList->addIdentity(identity->name());
-    networkList->addModel(new Aki::NetworkListModel);
     Aki::SqlServer::List list = Aki::SqlServer::serversForIdentity(identity.data());
     foreach (Aki::SqlServer* server, list) {
         networkList->addNetwork(server);

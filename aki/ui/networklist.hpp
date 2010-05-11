@@ -30,13 +30,9 @@ class NetworkList : public QListView
     Q_OBJECT
 public:
     /**
-     * Typedef of QList<Aki::NetworkListModel*>.
-     */
-    typedef QList<Aki::NetworkListModel*> List;
-    /**
      * Typedef of QMap<QString,Aki::NetworkList::List>.
      */
-    typedef QMap<QString,Aki::NetworkList::List> Map;
+    typedef QMap<QString,Aki::NetworkListModel*> Map;
     /**
      * Creates a new NetworkList object.
      *
@@ -56,8 +52,6 @@ public:
      * @param identity Identity name to be given.
      */
     void addIdentity(const QString& identity);
-
-    void addModel(Aki::NetworkListModel* model);
     /**
      * Addes a new @p network to the current identity and current model. If the network
      * list when this @p network is added is 0. It will set it as the current network. Else
@@ -103,20 +97,13 @@ public:
      *
      * @return Current identity.
      */
-    Aki::NetworkList::List& currentIdentity();
-    const Aki::NetworkList::List currentIdentity() const;
+    QString currentIdentity() const;
     /**
      * Gets the current network row of the current identity and the current model.
      *
      * @return Current row.
      */
     int currentRow() const;
-    /**
-     * Gets the current model row of the current identity.
-     *
-     * @return Current row.
-     */
-    int currentModelRow() const;
     /**
      * Finds networks matching the @p name with the @p flags.
      *
@@ -127,14 +114,6 @@ public:
      */
     QList<Aki::SqlServer*> findItems(const QString& name, Qt::MatchFlags flags) const;
     /**
-     * Inserts an model in the current identity at the given @p row with the
-     * given @p model. If this @p model is the first one it will set it as the default.
-     *
-     * @param row Row to be inserted at.
-     * @param model Network model.
-     */
-    void insertModel(int row, Aki::NetworkListModel* model);
-    /**
      * Inserts an network in the current identity and the current model at the given
      * @p row with the given @p network. If this @p network is the first one, it will
      * set it as the default.
@@ -144,14 +123,6 @@ public:
      */
     void insertNetwork(int row, Aki::SqlServer* network);
     /**
-     * Gets the model at the given @p row.
-     *
-     * @param row Row to get the network model at.
-     *
-     * @return The network model. If @p row is invalid it will return 0.
-     */
-    Aki::NetworkListModel* modelAt(int row) const;
-    /**
      * Gets the network of the current identity and current model at the given @p row.
      *
      * @param row Row to get the network at.
@@ -159,14 +130,6 @@ public:
      * @return The network. If @p row is invalid it will return 0.
      */
     Aki::SqlServer* network(int row) const;
-    /**
-     * Gets the row number of the given @p model in the current identity.
-     *
-     * @param model Model.
-     *
-     * @return Row of the given model. 
-     */
-    int row(const Aki::NetworkListModel* model) const;
     /**
      * Gets the row number of the given @p network in the current identity and current model.
      *
@@ -189,18 +152,6 @@ public:
      * @param identity Name of the identity.
      */
     void setCurrentIdentity(const QString& identity);
-    /**
-     * Sets the current @p model. It will reset the current network to the first one.
-     *
-     * @param model Model.
-     */
-    void setCurrentModel(Aki::NetworkListModel* model);
-    /**
-     * Sets the current model to the given @p row.
-     *
-     * @param row Row to set as the current.
-     */
-    void setCurrentModel(int row);
     /**
      * Sets the current @p network.
      *
@@ -227,14 +178,8 @@ public:
      * @param command Selection command flags.
      */
     void setCurrentRow(int row, QItemSelectionModel::SelectionFlags command);
-    /**
-     * Takes the network  from the current identity with the given @p row.
-     *
-     * @param row Row to remove from the current identity.
-     *
-     * @return Network mode that was taken from the identity.
-     */
-    Aki::NetworkListModel* takeModel(int row);
+
+    Aki::NetworkListModel* takeIdentity(const QString& identity);
     /**
      * Takes the network from the current identity and the current model with the given
      * @p row.
@@ -250,8 +195,7 @@ public Q_SLOTS:
     void identityActivated(Aki::SqlIdentity* identity);
 private:
     Aki::NetworkList::Map _modelList;
-    QString _currentIdentityModel;
-    int _modelCurrentRow;
+    QString _currentIdentity;
 }; // End of class NetworkList.
 } // End of namespace Aki.
 
