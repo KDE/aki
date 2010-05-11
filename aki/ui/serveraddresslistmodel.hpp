@@ -1,19 +1,19 @@
-#ifndef AKI_ADDRESSLISTMODEL_HPP
-#define AKI_ADDRESSLISTMODEL_HPP
+#ifndef AKI_SERVERADDRESSLISTMODEL_HPP
+#define AKI_SERVERADDRESSLISTMODEL_HPP
 
 #include <QAbstractListModel>
 
 namespace Aki
 {
-class AddressList;
+class ServerAddressList;
 class SqlAddress;
-class AddressListModel : public QAbstractListModel
+class ServerAddressListModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
     typedef QList<Aki::SqlAddress*> List;
-    explicit AddressListModel(Aki::AddressList* parent = 0);
-    ~AddressListModel();
+    explicit ServerAddressListModel(Aki::ServerAddressList* parent = 0);
+    ~ServerAddressListModel();
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
     virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
     virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole);
@@ -23,11 +23,11 @@ public:
     void removeAddress(Aki::SqlAddress* address);
     Aki::SqlAddress* address(const QModelIndex& index);
     Aki::SqlAddress* address(const QModelIndex& index) const;
-    Aki::AddressListModel::List address() const;
+    Aki::ServerAddressListModel::List address() const;
     Aki::SqlAddress* takeAt(int row);
 private:
-    Aki::AddressListModel::List _addressList;
-}; // End of class AddressListModel.
+    Aki::ServerAddressListModel::List _addressList;
+}; // End of class ServerAddressListModel.
 } // End of namespace Aki.
 
-#endif // AKI_ADDRESSLISTMODEL_HPP
+#endif // AKI_SERVERADDRESSLISTMODEL_HPP
