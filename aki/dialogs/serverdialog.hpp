@@ -31,8 +31,12 @@ private Q_SLOTS:
     void slotEncodingActivated(const QString& encoding);
     void slotServiceNameEditingFinished();
     void slotServicePasswordEditingFinished();
+    void slotAddAddressClicked();
+    void slotRemoveAddressClicked();
+    void slotEditAddressClicked();
 private:
     void createNewNetwork(const QString& name);
+    void loadDialog();
 }; // End of class ServerDialog.
 } // End of namespace Aki.
 
