@@ -18,8 +18,6 @@ public Q_SLOTS:
 private:
     void createMenus();
     void createDialogs();
-private:
-    Aki::ServerDialog* _serverDialog;
 }; // End of class AkiWindow.
 } // End of namespace Aki.
 

@@ -67,13 +67,13 @@ AkiWindow::createMenus()
 void
 AkiWindow::createDialogs()
 {
-    _serverDialog = new Aki::ServerDialog(this);
 }
 
 void
 AkiWindow::serverListTriggered()
 {
-    _serverDialog->show();
+    Aki::ServerDialog* serverDialog = new Aki::ServerDialog;
+    serverDialog->show();
 }
 
 void
