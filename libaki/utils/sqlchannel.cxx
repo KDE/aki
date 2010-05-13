@@ -127,7 +127,7 @@ SqlChannel::newChannel(const QString& name, const Aki::SqlServer* server)
     channel->setChannelServerId(server->id());
 
     query.addBindValue(channel->channel());
-    query.addBindValue(QVariant(QVariant::String));
+    query.addBindValue(channel->password());
     query.addBindValue(channel->channelServerId());
 
     if (!query.exec()) {
