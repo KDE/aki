@@ -85,7 +85,7 @@
                 <item row="1" column="1">
                  <widget class="KIntSpinBox" name="retryAttemptsSpinBox">
                   <property name="sizePolicy">
-                   <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                     <horstretch>0</horstretch>
                     <verstretch>0</verstretch>
                    </sizepolicy>
@@ -94,7 +94,7 @@
                    <string>Unlimited</string>
                   </property>
                   <property name="maximum">
-                   <number>100</number>
+                   <number>20</number>
                   </property>
                   <property name="value">
                    <number>0</number>
@@ -137,11 +137,70 @@
         <attribute name="title">
          <string>Servers</string>
         </attribute>
+        <layout class="QGridLayout" name="gridLayout_16">
+         <item row="0" column="0">
+          <layout class="QGridLayout" name="gridLayout_15">
+           <item row="0" column="0">
+            <widget class="Aki::ServerAddressList" name="serverAddressList"/>
+           </item>
+           <item row="0" column="1" rowspan="2">
+            <layout class="QVBoxLayout" name="verticalLayout_3">
+             <item>
+              <widget class="KPushButton" name="addAddressButton">
+               <property name="text">
+                <string>Add Address...</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="KPushButton" name="removeAddressButton">
+               <property name="text">
+                <string>Remove Address</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="KPushButton" name="editAddressButton">
+               <property name="text">
+                <string>Edit Address...</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="verticalSpacer_3">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>20</width>
+                 <height>40</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </item>
+           <item row="1" column="0">
+            <widget class="QCheckBox" name="connectToRandomServerCheckBox">
+             <property name="text">
+              <string>Connect to random servers</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
        </widget>
        <widget class="QWidget" name="tab_3">
         <attribute name="title">
          <string>Channels</string>
         </attribute>
+        <layout class="QGridLayout" name="gridLayout_18">
+         <item row="0" column="0">
+          <layout class="QGridLayout" name="gridLayout_17"/>
+         </item>
+        </layout>
        </widget>
        <widget class="QWidget" name="tab_4">
         <attribute name="title">
@@ -365,6 +424,11 @@
    <class>Aki::NetworkList</class>
    <extends>QListView</extends>
    <header>ui/networklist.hpp</header>
+  </customwidget>
+  <customwidget>
+   <class>Aki::ServerAddressList</class>
+   <extends>QListView</extends>
+   <header>ui/serveraddresslist.hpp</header>
   </customwidget>
  </customwidgets>
  <resources/>
