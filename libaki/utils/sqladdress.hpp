@@ -12,6 +12,7 @@ class LIBAKI_EXPORT SqlAddress : public QObject
 {
     Q_OBJECT
 public:
+    typedef QList<Aki::SqlAddress*> List;
     virtual ~SqlAddress();
     bool operator==(const Aki::SqlAddress& rhs) const;
     bool operator!=(const Aki::SqlAddress& rhs) const;
