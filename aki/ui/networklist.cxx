@@ -14,6 +14,9 @@ NetworkList::NetworkList(QWidget* parent)
 
 NetworkList::~NetworkList()
 {
+    foreach (const QString& identity, _modelList.keys()) {
+        delete takeIdentity(identity);
+    }
 }
 
 void
@@ -148,8 +151,8 @@ NetworkList::setCurrentNetwork(Aki::SqlServer* network)
 void
 NetworkList::setCurrentNetwork(Aki::SqlServer* network, QItemSelectionModel::SelectionFlags command)
 {
-    const int row = this->row(network);
-    setCurrentRow(row, command);
+    const int r = row(network);
+    setCurrentRow(r, command);
 }
 
 void
@@ -168,7 +171,7 @@ NetworkList::setCurrentRow(int row, QItemSelectionModel::SelectionFlags command)
 Aki::NetworkListModel*
 NetworkList::takeIdentity(const QString& identity)
 {
-    Q_ASSERT(identity.isEmpty() || identity.isNull());
+    qxtLog->info() << "Removing Identity....: " << identity;
     return _modelList.take(identity);
 }
 

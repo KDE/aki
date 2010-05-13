@@ -32,7 +32,7 @@ public:
     /**
      * Typedef of QMap<QString,Aki::NetworkList::List>.
      */
-    typedef QMap<QString,Aki::NetworkListModel*> Map;
+    typedef QHash<QString,Aki::NetworkListModel*> Map;
     /**
      * Creates a new NetworkList object.
      *
@@ -66,12 +66,6 @@ public:
      * @return Current network count.
      */
     int count() const;
-    /**
-     * Gets the current count of models the current identity contains.
-     *
-     * @return Current model count.
-     */
-    int modelCount() const;
     /**
      * Gets the current network for the current identity and current model.
      * @note You should not delete the pointer this returns to delete the network
