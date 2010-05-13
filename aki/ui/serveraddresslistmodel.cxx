@@ -58,7 +58,7 @@ ServerAddressListModel::data(const QModelIndex& index, int role) const
 
     switch (role) {
     case Qt::DisplayRole: {
-        return addy->address();
+        return QString("%1:%2").arg(addy->address(), QString::number(addy->port()));
     }
     case Qt::DecorationRole: {
         if (addy->isSslEnabled()) {
