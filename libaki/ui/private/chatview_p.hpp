@@ -56,7 +56,6 @@ public:
      * @endcode
      *
      * @param name Name of the event.
-     * @param time Time the event happened.
      *
      * @return Event element.
      */
@@ -92,9 +91,7 @@ public:
      * <by identifier="username" class="klass" hostmask="hostmask" self="self">nickname</by>
      * @endcode
      *
-     * @param hostmask User's hostmask
-     * @param username User's username.
-     * @param nickname User's nickname.
+     * @param sender Person who did the event.
      * @param klass User's mode. Can be administrator, founder, half operator, operator, server operator or voice.
      * @param self true if the user who started the event was you; false otherwise.
      *
@@ -107,7 +104,7 @@ public:
      * @code
      * <envelop ignored="ignored"></envelop>
      * @endcode
-     * 
+     *
      * @param ignored true if the user is on your ignore list; false otherwise.
      *
      * @return Envelope element.
@@ -169,7 +166,7 @@ public:
      */
     QDomElement reason(const QString& reason = QString());
     /**
-     * 
+     *
      */
     QDomElement sender(const QString& nickname, const QString& identifier, const QString& hostmask,
                        const QString& klass = QString(), bool self = false, const QString& buddy = QString());

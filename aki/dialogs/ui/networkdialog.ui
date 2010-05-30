@@ -1,319 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>ServerDialog</class>
- <widget class="QWidget" name="ServerDialog">
+ <class>NetworkDialog</class>
+ <widget class="QWidget" name="NetworkDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>425</width>
-    <height>442</height>
+    <width>412</width>
+    <height>436</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string>Network Dialog</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
    <item row="0" column="0">
-    <layout class="QGridLayout" name="gridLayout">
+    <layout class="QFormLayout" name="formLayout">
+     <property name="fieldGrowthPolicy">
+      <enum>QFormLayout::ExpandingFieldsGrow</enum>
+     </property>
      <item row="0" column="0">
       <widget class="QLabel" name="label">
        <property name="text">
         <string>Identity:</string>
        </property>
-       <property name="buddy">
-        <cstring>identitySelector</cstring>
-       </property>
       </widget>
      </item>
-     <item row="0" column="1">
-      <widget class="Aki::IdentityComboBox" name="identitySelector"/>
-     </item>
-     <item row="2" column="0" colspan="3">
-      <widget class="KTabWidget" name="ktabwidget">
-       <property name="currentIndex">
-        <number>0</number>
-       </property>
-       <widget class="QWidget" name="tab">
-        <attribute name="title">
-         <string>Connection</string>
-        </attribute>
-        <layout class="QGridLayout" name="gridLayout_6">
-         <item row="0" column="0">
-          <layout class="QGridLayout" name="gridLayout_5">
-           <item row="0" column="1">
-            <widget class="QGroupBox" name="groupBox_2">
-             <property name="title">
-              <string>Auto Reconnect</string>
-             </property>
-             <property name="checkable">
-              <bool>true</bool>
-             </property>
-             <layout class="QGridLayout" name="gridLayout_7">
-              <item row="0" column="0">
-               <layout class="QFormLayout" name="formLayout">
-                <item row="0" column="0">
-                 <widget class="QLabel" name="label_2">
-                  <property name="text">
-                   <string>Retry interval (seconds):</string>
-                  </property>
-                  <property name="buddy">
-                   <cstring>retryIntervalSpinBox</cstring>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="0">
-                 <widget class="QLabel" name="label_3">
-                  <property name="text">
-                   <string>Retry attempts:</string>
-                  </property>
-                  <property name="buddy">
-                   <cstring>retryAttemptsSpinBox</cstring>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="1">
-                 <widget class="KIntSpinBox" name="retryIntervalSpinBox">
-                  <property name="minimum">
-                   <number>5</number>
-                  </property>
-                  <property name="maximum">
-                   <number>60</number>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="1">
-                 <widget class="KIntSpinBox" name="retryAttemptsSpinBox">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="specialValueText">
-                   <string>Unlimited</string>
-                  </property>
-                  <property name="maximum">
-                   <number>20</number>
-                  </property>
-                  <property name="value">
-                   <number>0</number>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-             </layout>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="QGroupBox" name="groupBox_3">
-             <property name="title">
-              <string>Connection Options</string>
-             </property>
-             <layout class="QGridLayout" name="gridLayout_8">
-              <item row="0" column="0">
-               <layout class="QFormLayout" name="formLayout_2">
-                <property name="fieldGrowthPolicy">
-                 <enum>QFormLayout::ExpandingFieldsGrow</enum>
-                </property>
-                <item row="0" column="0">
-                 <widget class="QCheckBox" name="connectOnStartupCheckBox">
-                  <property name="text">
-                   <string>Connect on startup</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-             </layout>
-            </widget>
-           </item>
-          </layout>
-         </item>
-        </layout>
-       </widget>
-       <widget class="QWidget" name="tab_2">
-        <attribute name="title">
-         <string>Servers</string>
-        </attribute>
-        <layout class="QGridLayout" name="gridLayout_16">
-         <item row="0" column="0">
-          <layout class="QGridLayout" name="gridLayout_15">
-           <item row="0" column="0">
-            <widget class="Aki::ServerAddressList" name="serverAddressList"/>
-           </item>
-           <item row="0" column="1" rowspan="2">
-            <layout class="QVBoxLayout" name="verticalLayout_3">
-             <item>
-              <widget class="KPushButton" name="addAddressButton">
-               <property name="text">
-                <string>Add Address...</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="KPushButton" name="removeAddressButton">
-               <property name="text">
-                <string>Remove Address</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="KPushButton" name="editAddressButton">
-               <property name="text">
-                <string>Edit Address...</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <spacer name="verticalSpacer_3">
-               <property name="orientation">
-                <enum>Qt::Vertical</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>20</width>
-                 <height>40</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-            </layout>
-           </item>
-           <item row="1" column="0">
-            <widget class="QCheckBox" name="connectToRandomServerCheckBox">
-             <property name="text">
-              <string>Connect to random servers</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-        </layout>
-       </widget>
-       <widget class="QWidget" name="tab_3">
-        <attribute name="title">
-         <string>Channels</string>
-        </attribute>
-        <layout class="QGridLayout" name="gridLayout_18">
-         <item row="0" column="0">
-          <layout class="QGridLayout" name="gridLayout_17"/>
-         </item>
-        </layout>
-       </widget>
-       <widget class="QWidget" name="tab_4">
-        <attribute name="title">
-         <string>Encoding</string>
-        </attribute>
-        <layout class="QGridLayout" name="gridLayout_13">
-         <item row="0" column="0">
-          <layout class="QGridLayout" name="gridLayout_12">
-           <item row="0" column="0">
-            <widget class="QGroupBox" name="customEncodingGroupBox">
-             <property name="title">
-              <string>Custom Encoding</string>
-             </property>
-             <property name="checkable">
-              <bool>true</bool>
-             </property>
-             <property name="checked">
-              <bool>false</bool>
-             </property>
-             <layout class="QGridLayout" name="gridLayout_14">
-              <item row="0" column="0">
-               <layout class="QFormLayout" name="formLayout_4">
-                <item row="0" column="0">
-                 <widget class="QLabel" name="label_6">
-                  <property name="text">
-                   <string>Encoding:</string>
-                  </property>
-                  <property name="buddy">
-                   <cstring>encodingComboBox</cstring>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="1">
-                 <widget class="KComboBox" name="encodingComboBox"/>
-                </item>
-               </layout>
-              </item>
-             </layout>
-            </widget>
-           </item>
-          </layout>
-         </item>
-        </layout>
-       </widget>
-       <widget class="QWidget" name="tab_5">
-        <attribute name="title">
-         <string>Identity</string>
-        </attribute>
-        <layout class="QGridLayout" name="gridLayout_10">
-         <item row="0" column="0">
-          <layout class="QGridLayout" name="gridLayout_9">
-           <item row="0" column="0">
-            <widget class="QGroupBox" name="autoIdentifyGroupBox">
-             <property name="title">
-              <string>Auto Identify</string>
-             </property>
-             <property name="checkable">
-              <bool>true</bool>
-             </property>
-             <property name="checked">
-              <bool>false</bool>
-             </property>
-             <layout class="QGridLayout" name="gridLayout_11">
-              <item row="0" column="0">
-               <layout class="QFormLayout" name="formLayout_3">
-                <item row="0" column="0">
-                 <widget class="QLabel" name="label_4">
-                  <property name="text">
-                   <string>ServiceName:</string>
-                  </property>
-                  <property name="buddy">
-                   <cstring>serviceNameLineEdit</cstring>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="0">
-                 <widget class="QLabel" name="label_5">
-                  <property name="text">
-                   <string>Service Password:</string>
-                  </property>
-                  <property name="buddy">
-                   <cstring>servicePasswordLineEdit</cstring>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="1">
-                 <widget class="KLineEdit" name="serviceNameLineEdit"/>
-                </item>
-                <item row="1" column="1">
-                 <widget class="KLineEdit" name="servicePasswordLineEdit"/>
-                </item>
-               </layout>
-              </item>
-             </layout>
-            </widget>
-           </item>
-          </layout>
-         </item>
-        </layout>
-       </widget>
-      </widget>
-     </item>
-     <item row="1" column="0" colspan="3">
+     <item row="1" column="0" colspan="2">
       <widget class="QGroupBox" name="groupBox">
        <property name="title">
-        <string>Networks</string>
+        <string>GroupBox</string>
        </property>
-       <layout class="QGridLayout" name="gridLayout_4">
+       <layout class="QGridLayout" name="gridLayout">
         <item row="0" column="0">
-         <layout class="QGridLayout" name="gridLayout_3">
-          <item row="0" column="0">
-           <widget class="Aki::NetworkList" name="networkList"/>
-          </item>
+         <layout class="QGridLayout" name="formLayout_2">
           <item row="0" column="1">
            <layout class="QVBoxLayout" name="verticalLayout">
             <item>
@@ -366,23 +86,336 @@
             </item>
            </layout>
           </item>
+          <item row="0" column="0">
+           <widget class="Aki::NetworkList" name="networkList"/>
+          </item>
          </layout>
         </item>
        </layout>
       </widget>
      </item>
-     <item row="0" column="2">
-      <spacer name="horizontalSpacer">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
+     <item row="2" column="0" colspan="2">
+      <widget class="KTabWidget" name="networkOptionsTabWidget">
+       <property name="currentIndex">
+        <number>0</number>
        </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
+       <widget class="QWidget" name="tab">
+        <attribute name="title">
+         <string>Connection</string>
+        </attribute>
+        <layout class="QGridLayout" name="gridLayout_3">
+         <item row="0" column="0">
+          <layout class="QGridLayout" name="gridLayout_4">
+           <item row="0" column="0">
+            <widget class="QGroupBox" name="autoReconnectGroupBox">
+             <property name="title">
+              <string>Auto Reconnect</string>
+             </property>
+             <property name="checkable">
+              <bool>true</bool>
+             </property>
+             <property name="checked">
+              <bool>false</bool>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_5">
+              <item row="0" column="0">
+               <layout class="QFormLayout" name="formLayout_3">
+                <item row="0" column="0">
+                 <widget class="QLabel" name="label_2">
+                  <property name="text">
+                   <string>Retry Interval (seconds):</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="KIntSpinBox" name="retryIntervalSpinBox">
+                  <property name="accelerated">
+                   <bool>true</bool>
+                  </property>
+                  <property name="minimum">
+                   <number>5</number>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QLabel" name="label_3">
+                  <property name="text">
+                   <string>Retry attempts:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="KIntSpinBox" name="retryAttemptsSpinBox">
+                  <property name="specialValueText">
+                   <string>Unlimited</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QGroupBox" name="groupBox_3">
+             <property name="title">
+              <string>Connection Options</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_6">
+              <item row="0" column="0">
+               <layout class="QFormLayout" name="formLayout_4">
+                <item row="0" column="0" colspan="2">
+                 <widget class="QCheckBox" name="connectOnStartupCheckBox">
+                  <property name="text">
+                   <string>Connect on startup</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="tab_2">
+        <attribute name="title">
+         <string>Servers</string>
+        </attribute>
+        <layout class="QGridLayout" name="gridLayout_8">
+         <item row="0" column="0">
+          <layout class="QGridLayout" name="gridLayout_7">
+           <item row="0" column="1" rowspan="2">
+            <layout class="QVBoxLayout" name="verticalLayout_2">
+             <item>
+              <widget class="KPushButton" name="addAddressButton">
+               <property name="text">
+                <string>Add Address...</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="KPushButton" name="removeAddressButton">
+               <property name="text">
+                <string>Remove Address</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="KPushButton" name="editAddressButton">
+               <property name="text">
+                <string>Edit Address...</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="verticalSpacer_2">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>20</width>
+                 <height>40</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </item>
+           <item row="0" column="0">
+            <widget class="Aki::NetworkAddressList" name="networkAddressList"/>
+           </item>
+           <item row="1" column="0">
+            <widget class="QCheckBox" name="connectToRandomServerCheckBox">
+             <property name="text">
+              <string>Connect to random servers</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="tab_3">
+        <attribute name="title">
+         <string>Channels</string>
+        </attribute>
+        <layout class="QGridLayout" name="gridLayout_10">
+         <item row="0" column="0">
+          <layout class="QGridLayout" name="gridLayout_9">
+           <item row="0" column="1" rowspan="2">
+            <layout class="QVBoxLayout" name="verticalLayout_3">
+             <item>
+              <widget class="KPushButton" name="addChannelButton">
+               <property name="text">
+                <string>Add Channel...</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="KPushButton" name="removeChannelButton">
+               <property name="text">
+                <string>Remove Channel</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="KPushButton" name="editChannelButton">
+               <property name="text">
+                <string>Edit Channel...</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="verticalSpacer_3">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>20</width>
+                 <height>40</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </item>
+           <item row="0" column="0">
+            <widget class="Aki::NetworkChannelList" name="networkChannelList"/>
+           </item>
+           <item row="1" column="0">
+            <widget class="QCheckBox" name="autoJoinChannelsCheckBox">
+             <property name="text">
+              <string>Automatically join channels</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="tab_4">
+        <attribute name="title">
+         <string>Encoding</string>
+        </attribute>
+        <layout class="QGridLayout" name="gridLayout_12">
+         <item row="0" column="0">
+          <layout class="QGridLayout" name="gridLayout_11">
+           <item row="0" column="0">
+            <widget class="QGroupBox" name="customEncodingGroupBox">
+             <property name="title">
+              <string>Custom Encoding</string>
+             </property>
+             <property name="checkable">
+              <bool>true</bool>
+             </property>
+             <property name="checked">
+              <bool>false</bool>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_13">
+              <item row="0" column="0">
+               <layout class="QFormLayout" name="formLayout_5">
+                <item row="0" column="0">
+                 <widget class="QLabel" name="label_4">
+                  <property name="text">
+                   <string>Encoding:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="KComboBox" name="encodingComboBox"/>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="tab_5">
+        <attribute name="title">
+         <string>Authentication</string>
+        </attribute>
+        <layout class="QGridLayout" name="gridLayout_15">
+         <item row="0" column="0">
+          <layout class="QGridLayout" name="gridLayout_14">
+           <item row="0" column="0">
+            <widget class="QGroupBox" name="autoIdentifyGroupBox">
+             <property name="title">
+              <string>Auto Identify</string>
+             </property>
+             <property name="checkable">
+              <bool>true</bool>
+             </property>
+             <property name="checked">
+              <bool>false</bool>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_16">
+              <item row="0" column="0">
+               <layout class="QFormLayout" name="formLayout_6">
+                <item row="0" column="0">
+                 <widget class="QLabel" name="label_5">
+                  <property name="text">
+                   <string>Service Name:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QLabel" name="label_6">
+                  <property name="text">
+                   <string>Service Password:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="KLineEdit" name="serviceNameLineEdit">
+                  <property name="maxLength">
+                   <number>100</number>
+                  </property>
+                  <property name="showClearButton" stdset="0">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="KLineEdit" name="servicePasswordLineEdit">
+                  <property name="maxLength">
+                   <number>100</number>
+                  </property>
+                  <property name="urlDropsEnabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="showClearButton" stdset="0">
+                   <bool>true</bool>
+                  </property>
+                  <property name="passwordMode">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="Aki::IdentityComboBox" name="identitySelector">
+       <property name="sizeAdjustPolicy">
+        <enum>QComboBox::AdjustToContents</enum>
        </property>
-      </spacer>
+      </widget>
      </item>
     </layout>
    </item>
@@ -426,9 +459,14 @@
    <header>ui/networklist.hpp</header>
   </customwidget>
   <customwidget>
-   <class>Aki::ServerAddressList</class>
+   <class>Aki::NetworkChannelList</class>
    <extends>QListView</extends>
-   <header>ui/serveraddresslist.hpp</header>
+   <header>ui/networkchannellist.hpp</header>
+  </customwidget>
+  <customwidget>
+   <class>Aki::NetworkAddressList</class>
+   <extends>QListView</extends>
+   <header>ui/networkaddresslist.hpp</header>
   </customwidget>
  </customwidgets>
  <resources/>

@@ -5,191 +5,215 @@
 
 namespace Aki
 {
-class NetworkListModel;
+class NetworkModel;
 class SqlIdentity;
-class SqlServer;
+class SqlNetwork;
 /**
- * Creates a network list that managed a map of identities (Aki::SqlIdentity) with their list
- * of networks. An identity (Aki::SqlIdentity) is a name that represents a user in the application.
- * Aki can have multiple identities (Aki::SqlIdentity) that will holds multiple networks (Aki::SqlServer)
- * in it. A network (Aki::SqlServer) represents exactly 1 IRC server that they will connect to.
- *
- * @code
- * +------------+
- * |  Identity  |------
- * +------------+     |
- *       |            |
- *       |       +---------+
- *  +---------+  | Network |
- *  | Network |  +---------+
- *  +---------+
- * @endcode
+ * Network list for the Identity that is set.
  */
 class NetworkList : public QListView
 {
     Q_OBJECT
 public:
     /**
-     * Typedef of QMap<QString,Aki::NetworkList::List>.
+     * typedef for QList<Aki::SqlServer*>
      */
-    typedef QHash<QString,Aki::NetworkListModel*> Map;
+    typedef QList<Aki::SqlNetwork*> List;
     /**
-     * Creates a new NetworkList object.
+     * Creates a NetworkList object.
      *
      * @param parent Parent of the object.
      */
-    NetworkList(QWidget* parent = 0);
+    explicit NetworkList(QWidget* parent = 0);
     /**
      * Destroys the object.
      */
     ~NetworkList();
     /**
-     * Adds an identity at the given @p row with the given @p identity name.
-     * If the @p identity is the first one to added it will set it as the current one and sets
-     * the current model to the first slot.
-     *
-     * @param row Row to be inserted at.
-     * @param identity Identity name to be given.
-     */
-    void addIdentity(const QString& identity);
-    /**
-     * Addes a new @p network to the current identity and current model. If the network
-     * list when this @p network is added is 0. It will set it as the current network. Else
-     * it will just append and keep the existing network as the current.
+     * Adds a new @p network to the list.
      *
      * @param network IRC Network.
      */
-    void addNetwork(Aki::SqlServer* network);
+    void addNetwork(Aki::SqlNetwork* network);
     /**
-     * Gets the current count of networks for the current identity and current model.
+     * Gets the current network count.
      *
-     * @return Current network count.
+     * @return Network count.
      */
     int count() const;
     /**
-     * Gets the current network for the current identity and current model.
-     * @note You should not delete the pointer this returns to delete the network
-     * Please use takeNetwork for deletion.
+     * Gets the current Network.
      *
-     * @return Current network.
-     */
-    Aki::SqlServer* currentNetwork();
-    Aki::SqlServer* currentNetwork() const;
-    /**
-     * Gets the current model for the current identity.
-     * @note You should not delete the pointer this returns to delete the model
-     * Please use takeModel for deletion.
+     * @return Current Network.
      *
-     * @return Current network.
+     * @sa NetworkList::currentRow()
      */
-    Aki::NetworkListModel* currentModel();
-    Aki::NetworkListModel* currentModel() const;
+    Aki::SqlNetwork* currentNetwork();
     /**
-     * Gets the current identity.
-     * @note You should not delete the pointer this returns to delete the identity
-     * Please use takeIdentity.
-     *
-     * @return Current identity.
-     */
-    QString currentIdentity() const;
-    /**
-     * Gets the current network row of the current identity and the current model.
+     * Gets the current Network row.
      *
      * @return Current row.
+     *
+     * @sa NetworkList::currentNetwork()
      */
     int currentRow() const;
     /**
-     * Finds networks matching the @p name with the @p flags.
+     * Search for Networks the match the @p name and search @p flags.
      *
      * @param name Name to search for.
      * @param flags Search flags.
-     * 
-     * @return Networks matching the @p flags.
+     *
+     * @return List of Networks that was found, empty list if nothing was found.
      */
-    QList<Aki::SqlServer*> findItems(const QString& name, Qt::MatchFlags flags) const;
+    Aki::NetworkList::List findNetworks(const QString& name, Qt::MatchFlags flags) const;
     /**
-     * Inserts an network in the current identity and the current model at the given
-     * @p row with the given @p network. If this @p network is the first one, it will
-     * set it as the default.
+     * Inserts a @p network at the given @p row.
      *
      * @param row Row to be inserted at.
-     * @param network IRC network.
+     * @param network Network to be inserted.
      */
-    void insertNetwork(int row, Aki::SqlServer* network);
+    void insertNetwork(int row, Aki::SqlNetwork* network);
     /**
-     * Gets the network of the current identity and current model at the given @p row.
+     * Get the Network at the given @p row.
      *
-     * @param row Row to get the network at.
+     * @param row Network row.
      *
-     * @return The network. If @p row is invalid it will return 0.
+     * @return Network for row, null pointer if an invalid row was specified.
      */
-    Aki::SqlServer* network(int row) const;
+    Aki::SqlNetwork* item(int row) const;
     /**
-     * Gets the row number of the given @p network in the current identity and current model.
+     * Gets the row of the given @p network.
      *
-     * @param network IRC network.
+     * @param network Network.
      *
-     * @return Row of the given network.
+     * @return Row of the given network. -1 if not found.
      */
-    int row(const Aki::SqlServer* network) const;
+    int row(Aki::SqlNetwork* network) const;
     /**
-     * Gets the selected networks of the current identity and current model.
+     * Gets the list of all selected networks.
      *
-     * @return List of networks that are current selected. If there is none,
-     * it will return an empty list.
+     * @return Network list of the current selected networks. Empty list of nothing is selected.
      */
-    QList<Aki::SqlServer*> selectedItems() const;
-    /**
-     * Sets the current @p identity. Since the identity is the main one.
-     * It will set the network model to the first one in the list.
-     *
-     * @param identity Name of the identity.
-     */
-    void setCurrentIdentity(const QString& identity);
+    Aki::NetworkList::List selectedNetworks() const;
     /**
      * Sets the current @p network.
      *
-     * @param network IRC network.
+     * @param network Network.
      */
-    void setCurrentNetwork(Aki::SqlServer* network);
+    void setCurrentNetwork(Aki::SqlNetwork* network);
     /**
-     * Sets the current @p network with selection @p command flags.
+     * Sets the current @p network with @p command flags.
      *
-     * @param network IRC network.
-     * @param command Selection command flags.
+     * @param network Network.
+     * @param command Selection flags.
      */
-    void setCurrentNetwork(Aki::SqlServer* network, QItemSelectionModel::SelectionFlags command);
+    void setCurrentNetwork(Aki::SqlNetwork* network, QItemSelectionModel::SelectionFlags command);
     /**
-     * Sets the current @p row for the network.
+     * Sets the current @p row.
      *
-     * @param row Row of the IRC network.
+     * @param row Network row.
      */
     void setCurrentRow(int row);
     /**
-     * Sets the current @p row for the network with selection @p command flags.
+     * Sets the current @p row with @p command flags.
      *
-     * @param row Row of the IRC network.
-     * @param command Selection command flags.
+     * @param row Network row.
+     * @param command Selection flags.
      */
     void setCurrentRow(int row, QItemSelectionModel::SelectionFlags command);
-
-    Aki::NetworkListModel* takeIdentity(const QString& identity);
     /**
-     * Takes the network from the current identity and the current model with the given
-     * @p row.
+     * Removes the current Network at the given @p row.
+     * @note You are responsible for deletion of this Network.
      *
-     * @param row Row to remove from the current identity and current network.
+     * @param row Network row.
      *
-     * @return Network that was taken from the model.
+     * @return Network at the given row, null pointer if row is invalid.
      */
-    Aki::SqlServer* takeNetwork(int row);
-Q_SIGNALS:
-    void modelChanged(Aki::NetworkListModel* model);
+    Aki::SqlNetwork* takeNetwork(int row);
 public Q_SLOTS:
-    void identityActivated(Aki::SqlIdentity* identity);
+    /**
+     * Repopulates the NetworkList with the servers for the given @p identity.
+     * It deletes all the Networks current in the list then queries the identity
+     * for the servers it holds and populates the list.
+     *
+     * @param identity Network Identity.
+     */
+    void repopulateNetwork(Aki::SqlIdentity* identity);
+Q_SIGNALS:
+    /**
+     * This signal is emitted when the network has changed.
+     *
+     * @param current Current Network selected.
+     * @param previous Previous Network selected.
+     */
+    void currentNetworkChanged(Aki::SqlNetwork* current, Aki::SqlNetwork* previous);
+    /**
+     * This signal is emitted when the @p network is activated. The @p network is activated
+     * when the user clickes or double clicks on it, depending on the system configuration.
+     * It is also activated when the user presses the activation key (on Windows and X11 this is
+     * the Return key, on Mac OS X it is Ctrl+0).
+     *
+     * @param network Network that was activated.
+     */
+    void networkActivated(Aki::SqlNetwork* network);
+    /**
+     * This signal is emitted whenever the data of @p network has changed.
+     *
+     * @param network Network that was changed.
+     */
+    void networkChanged(Aki::SqlNetwork* network);
+    /**
+     * This signal is emitted with the specified @p network when a mouse button
+     * is clicked on an item in the widget.
+     *
+     * @param network Network that was clicked on.
+     */
+    void networkClicked(Aki::SqlNetwork* network);
+    /**
+     * This signal is emitted whenever the current item changes.
+     *
+     * @param row Row of the current item. If there is no current item, the @p row is -1.
+     */
+    void networkCurrentRowChanged(int row);
+    /**
+     * This signal is emitted with the specified @p network when a mouse button is double clicked
+     * on an item in the widget.
+     *
+     * @param network Network that was double clicked on.
+     */
+    void networkDoubleClicked(Aki::SqlNetwork* network);
+    /**
+     * This signal is emitted when the mouse cursor enters an item. The @p network is the item entered.
+     * This signal is only emitted when mouseTracking is turned on, or when a mouse button is pressed while
+     * moving in to an item.
+     *
+     * @param network Network that was entered.
+     */
+    void networkEntered(Aki::SqlNetwork* network);
+    /**
+     * This signal is emitted with the specified @p network when a mouse button is pressed on an network
+     * in the widget.
+     *
+     * @param network Network that was pressed with the mouse.
+     */
+    void networkPressed(Aki::SqlNetwork* network);
+    /**
+     * Yhis signal is emitted whenever the selection changes.
+     */
+    void networkSelectionChanged();
+protected:
+    QModelIndex indexFromNetwork(Aki::SqlNetwork* network);
+    Aki::SqlNetwork* networkFromIndex(const QModelIndex& index) const;
+private Q_SLOTS:
+    void slotItemActivated(const QModelIndex& index);
+    void slotItemClicked(const QModelIndex& index);
+    void slotItemChanged(const QModelIndex& index);
+    void slotItemDoubleClicked(const QModelIndex& index);
+    void slotItemCurrentChanged(const QModelIndex& current, const QModelIndex& previous);
+    void slotItemEntered(const QModelIndex& index);
+    void slotItemPressed(const QModelIndex& index);
 private:
-    Aki::NetworkList::Map _modelList;
-    QString _currentIdentity;
+    Aki::NetworkModel* _model;
 }; // End of class NetworkList.
 } // End of namespace Aki.
 

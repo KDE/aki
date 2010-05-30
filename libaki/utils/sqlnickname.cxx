@@ -1,7 +1,7 @@
 #include "sqlnickname.hpp"
 #include "aki.hpp"
+#include "utils/sqlidentity.hpp"
 #include "private/sqlnickname_p.hpp"
-#include "utils/sqlserver.hpp"
 #include <QtCore/QVariant>
 #include <QtSql/QSqlError>
 #include <QtSql/QSqlQuery>
@@ -31,7 +31,7 @@ SqlNickname::operator==(const Aki::SqlNickname& rhs) const
 }
 
 Aki::SqlNickname*
-SqlNickname::findNickname(const QString& nickname, const Aki::SqlServer* server)
+SqlNickname::findNickname(const QString& nickname, const Aki::SqlIdentity* identity)
 {
     QScopedPointer<Aki::SqlNickname> tmp(new Aki::SqlNickname);
     if (nickname.isEmpty() || nickname.isNull()) {
@@ -39,9 +39,9 @@ SqlNickname::findNickname(const QString& nickname, const Aki::SqlServer* server)
     }
 
     QSqlQuery query;
-    query.prepare("SELECT * FROM Nickname WHERE nickname=? AND nicknameServer=? LIMIT 1");
+    query.prepare("SELECT * FROM Nickname WHERE nickname=? AND nicknameIdentity=? LIMIT 1");
     query.addBindValue(nickname);
-    query.addBindValue(server->id());
+    query.addBindValue(identity->id());
 
     if (!query.exec()) {
         Aki::SqlNicknamePrivate::checkError(query.lastError());
@@ -55,11 +55,11 @@ SqlNickname::findNickname(const QString& nickname, const Aki::SqlServer* server)
     QSqlRecord record = query.record();
     const int id = record.indexOf("id");
     const int nicknameIndex = record.indexOf("nickname");
-    const int nicknameServer = record.indexOf("nicknameServer");
+    const int nicknameIdentity = record.indexOf("nicknameIdentity");
 
     while (query.next()) {
         tmp->setNickname(query.value(nicknameIndex).toString());
-        tmp->setNicknameServerId(query.value(nicknameServer).toInt());
+        tmp->setNicknameIdentityId(query.value(nicknameIdentity).toInt());
         tmp->setId(query.value(id).toInt());
         return tmp.take();
     }
@@ -74,22 +74,22 @@ SqlNickname::id() const
 }
 
 Aki::SqlNickname*
-SqlNickname::newNickname(const QString& nickname, const Aki::SqlServer* server)
+SqlNickname::newNickname(const QString& nickname, const Aki::SqlIdentity* identity)
 {
     if (nickname.isEmpty() || nickname.isNull()) {
         return 0;
     }
 
     QSqlQuery query;
-    query.prepare("INSERT INTO Nickname (nickname,nicknameServer)"
+    query.prepare("INSERT INTO Nickname (nickname,nicknameIdentity)"
                   " VALUES(?,?)");
 
     QScopedPointer<Aki::SqlNickname> tmp(new Aki::SqlNickname);
     tmp->setNickname(nickname);
-    tmp->setNicknameServerId(server->id());
+    tmp->setNicknameIdentityId(identity->id());
 
     query.addBindValue(tmp->nickname());
-    query.addBindValue(tmp->nicknameServerId());
+    query.addBindValue(tmp->nicknameIdentityId());
 
     if (!query.exec()) {
         Aki::SqlNicknamePrivate::checkError(query.lastError());
@@ -107,18 +107,18 @@ SqlNickname::nickname() const
 }
 
 int
-SqlNickname::nicknameServerId() const
+SqlNickname::nicknameIdentityId() const
 {
     return _d->serverId;
 }
 
 Aki::SqlNickname::List
-SqlNickname::nicknamesForServer(const Aki::SqlServer* server)
+SqlNickname::nicknamesForIdentity(const Aki::SqlIdentity* identity)
 {
     Aki::SqlNickname::List list;
     QSqlQuery query;
-    query.prepare("SELECT * FROM Server WHERE serverIdentity = ?");
-    query.addBindValue(server->id());
+    query.prepare("SELECT * FROM Nickname WHERE nicknameIdentity = ?");
+    query.addBindValue(identity->id());
 
     if (!query.exec()) {
         Aki::SqlNicknamePrivate::checkError(query.lastError());
@@ -132,13 +132,13 @@ SqlNickname::nicknamesForServer(const Aki::SqlServer* server)
     QSqlRecord record = query.record();
     const int id = record.indexOf("id");
     const int nicknameIndex = record.indexOf("nickname");
-    const int nicknameServer = record.indexOf("nicknameServer");
+    const int nicknameServer = record.indexOf("nicknameIdentity");
 
     while (query.next()) {
         Aki::SqlNickname* nickname = new Aki::SqlNickname;
         nickname->setId(query.value(id).toInt());
         nickname->setNickname(query.value(nicknameIndex).toString());
-        nickname->setNicknameServerId(query.value(nicknameServer).toInt());
+        nickname->setNicknameIdentityId(query.value(nicknameServer).toInt());
         list.append(nickname);
     }
 
@@ -158,7 +158,7 @@ SqlNickname::setNickname(const QString& name)
 }
 
 void
-SqlNickname::setNicknameServerId(int id)
+SqlNickname::setNicknameIdentityId(int id)
 {
     _d->serverId = id;
 }
@@ -167,10 +167,10 @@ bool
 SqlNickname::save()
 {
     QSqlQuery query;
-    const QString str("UPDATE Nickname SET nickname=?, nicknameServer=? WHERE id=?");
+    const QString str("UPDATE Nickname SET nickname=?, nicknameIdentity=? WHERE id=?");
     query.prepare(str);
     query.addBindValue(nickname());
-    query.addBindValue(nicknameServerId());
+    query.addBindValue(nicknameIdentityId());
     query.addBindValue(id());
 
     if (!query.exec()) {
@@ -188,7 +188,7 @@ SqlNickname::remove()
     const QString str("DELETE FROM Nickname WHERE nickname=? AND id=?");
     query.prepare(str);
     query.addBindValue(nickname());
-    query.addBindValue(nicknameServerId());
+    query.addBindValue(id());
 
     if (!query.exec()) {
         Aki::SqlNicknamePrivate::checkError(query.lastError());

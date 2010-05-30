@@ -1,128 +1,113 @@
 #include "jsonparser_p.hpp"
 #include "serverlist/jsonparser.hpp"
+#include "utils/sqladdress.hpp"
+#include "utils/sqlchannel.hpp"
+#include "utils/sqlidentity.hpp"
+#include "utils/sqlnetwork.hpp"
+#include "utils/sqlnickname.hpp"
+#include "utils/sqlserver.hpp"
+#include <qjson/parser.h>
 using namespace Aki;
 
 JsonParserPrivate::JsonParserPrivate(JsonParser* qq)
     : QObject(),
-    parser(0),
     _q(qq)
 {
-    serverList.clear();
 }
 
-void
-JsonParserPrivate::writeNetworkName(const Aki::Server::Ptr& server, QVariantMap* map)
+QVariantMap
+JsonParserPrivate::writeAddresses(SqlNetwork* network)
 {
-    map->insert(QLatin1String("name"), server->name());
+    QVariantMap addressMap;
+
+    Aki::SqlAddress::List addressList = Aki::SqlAddress::addressListForServer(network);
+    foreach (Aki::SqlAddress* address, addressList) {
+        QVariantMap addy;
+        addy["address"] = address->address();
+        addy["password"] = address->password();
+        addy["port"] = address->port();
+        addy["ssl"] = address->isSslEnabled();
+        addressMap.insertMulti("address", addy);
+    }
+    qDeleteAll(addressList);
+
+    return addressMap;
 }
 
-void
-JsonParserPrivate::writeReconnection(const Aki::Server::Ptr& server, QVariantMap* map)
+QVariantMap
+JsonParserPrivate::writeAuthentication(SqlNetwork* network)
 {
-    QVariantMap enableMap;
-    enableMap.insert(QLatin1String("enabled"), server->isAutoReconnectionEnabled());
-    map->insert(QLatin1String("reconnection"), enableMap);
+    QVariantMap authenticationMap;
+    authenticationMap["enable"] = network->isAutoIdentifyEnabled();
+    authenticationMap["serviceName"] = network->serviceName();
+    authenticationMap["servicePassword"] = network->servicePassword();
+    return authenticationMap;
 }
 
-void
-JsonParserPrivate::writeRetryInterval(const Aki::Server::Ptr& server, QVariantMap* map)
+QVariantMap
+JsonParserPrivate::writeChannels(SqlNetwork* network)
 {
-    map->insert(QLatin1String("retryInterval"), server->retryInterval());
+    QVariantMap channelMap;
+
+    Aki::SqlChannel::List channelList = Aki::SqlChannel::channelListForServer(network);
+    foreach (Aki::SqlChannel* channel, channelList) {
+        QVariantMap channy;
+        channy["channel"] = channel->channel();
+        channy["password"] = channel->password();
+        channelMap.insertMulti("channel", channy);
+    }
+    qDeleteAll(channelList);
+
+    return channelMap;
 }
 
-void
-JsonParserPrivate::writeRetryAttempts(const Aki::Server::Ptr& server, QVariantMap* map)
+QVariantMap
+JsonParserPrivate::writeConnectionOptions(SqlNetwork* network)
 {
-    map->insert(QLatin1String("retryAttempts"), server->retryAttemptCount());
+    QVariantMap connectionOptions;
+    connectionOptions["connectOnStartup"] = network->isConnectOnStartupEnabled();
+    return connectionOptions;
 }
 
-void
-JsonParserPrivate::writeConnectionOptions(const Aki::Server::Ptr& server, QVariantMap* map)
-{
-    QVariantMap connectionMap;
-    connectionMap.insert(QLatin1String("connectOnStartup"), server->isConnectOnStartupEnabled());
-    connectionMap.insert(QLatin1String("ssl"), server->isSslEnabled());
-    map->insert(QLatin1String("connectionOptions"), connectionMap);
-}
-
-void
-JsonParserPrivate::writeServers(const Aki::Server::Ptr& server, QVariantMap* map)
-{
-//     QVariantMap serversMap;
-//     serversMap.insert(QLatin1String("connectToRandomServer"), server->isConnectToRandomServerEnabled());
-// 
-//     QVariantMap serverMap;
-//     QStringListIterator serverIter(server->addressList());
-//     int i = 0;
-//     while (serverIter.hasNext()) {
-//         QVariantMap server;
-//         const QStringList split = serverIter.next().split(QLatin1Char('/'));
-//         server.insert(QLatin1String("address"), split.at(0));
-//         server.insert(QLatin1String("port"), split.at(1));
-//         serverMap.insert(QString(QLatin1String("server%1")).arg(i), server);
-//         ++i;
-//     }
-// 
-//     serversMap.insert(QLatin1String("server"), serverMap);
-//     map->insert(QLatin1String("servers"), serversMap);
-}
-
-void
-JsonParserPrivate::writeChannels(const Aki::Server::Ptr& server, QVariantMap* map)
-{
-//     QVariantMap channelsMap;
-//     channelsMap.insert(QLatin1String("autoJoinChannels"), server->isConnectToRandomServerEnabled());
-// 
-//     QVariantMap channelMap;
-//     QStringListIterator serverIter(server->channelList());
-//     int i = 0;
-//     while (serverIter.hasNext()) {
-//         QVariantMap channel;
-//         channel.insert(QLatin1String("channel"), serverIter.next());
-//         channelMap.insert(QString(QLatin1String("channel%1")).arg(i), channel);
-//         ++i;
-//     }
-// 
-//     channelsMap.insert(QLatin1String("channel"), channelMap);
-//     map->insert(QLatin1String("channels"), channelsMap);
-}
-
-void
-JsonParserPrivate::writeEncoding(const Aki::Server::Ptr& server, QVariantMap* map)
+QVariantMap
+JsonParserPrivate::writeEncoding(SqlNetwork* network)
 {
     QVariantMap encodingMap;
-    encodingMap.insert(QLatin1String("enable"), server->isDefaultEncodingEnabled());
-    encodingMap.insert(QLatin1String("defaultEncoding"), server->encoding());
-    map->insert(QLatin1String("encoding"), encodingMap);
+    encodingMap["enable"] = !network->isDefaultEncodingEnabled();
+    encodingMap["encoding"] = network->encoding();
+    return encodingMap;
+}
+
+QVariantMap
+JsonParserPrivate::writeReconnection(SqlNetwork* network)
+{
+    QVariantMap reconnection;
+    reconnection["enable"] = network->isAutoReconnectEnabled();
+    reconnection["retryInterval"] = network->retryInterval();
+    reconnection["retryAttempts"] = network->retryAttemptCount();
+    return reconnection;
 }
 
 void
-JsonParserPrivate::writeIdentity(const Aki::Server::Ptr& server, QVariantMap* map)
+JsonParserPrivate::writeServer(QVariantMap* map)
 {
-    QVariantMap identityMap;
-    identityMap.insert(QLatin1String("enable"), server->isAutoIdentifyEnabled());
-    QVariantMap identity;
-    identity.insert(QLatin1String("serviceName"), server->serviceName());
-    identity.insert(QLatin1String("servicePassword"), server->servicePassword());
-    identityMap.insert(QLatin1String("identity"), identity);
-    map->insert(QLatin1String("identity"), identityMap);
-}
-
-void
-JsonParserPrivate::readNetwork(QVariantMap serverMap)
-{
-    const int count = serverMap.count();
-
-    for (int i = 0; i < count; ++i) {
-        Aki::Server::Ptr ptr(new Aki::Server);
-
-        QVariantMap server = serverMap[QString(QLatin1String("server%1")).arg(i)].toMap();
-        readNetworkName(ptr, server);
+    Aki::SqlNetwork::List networkList = Aki::SqlNetwork::networksForIdentity(identity);
+    if (networkList.isEmpty()) {
+        return;
     }
-}
 
-void
-JsonParserPrivate::readNetworkName(Server::Ptr& server, QVariantMap serverMap)
-{
-    server->setName(serverMap[QLatin1String("name")].toString());
+    foreach (Aki::SqlNetwork* network, networkList) {
+        QVariantMap networkMap;
+        networkMap["name"] = network->name();
+        networkMap["reconnection"] = writeReconnection(network);
+        networkMap["connectionOptions"] = writeConnectionOptions(network);
+        networkMap["networkAddresses"] = writeAddresses(network);
+        networkMap["connectToRandomServer"] = network->isConnectToRandomServerEnabled();
+        networkMap["networkChannels"] = writeChannels(network);
+        networkMap["autoJoinChannels"] = network->isAutoJoinChannelsEnabled();
+        networkMap["encoding"] = writeEncoding(network);
+        networkMap["authentication"] = writeAuthentication(network);
+        map->insertMulti("network", networkMap);
+    }
+    qDeleteAll(networkList);
 }

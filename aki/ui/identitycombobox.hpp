@@ -5,37 +5,34 @@
 
 namespace Aki
 {
+class IdentityModel;
 class SqlIdentity;
-/**
- * Creates a simple wrapper around SqlIdentity.
- */
 class IdentityComboBox : public KComboBox
 {
     Q_OBJECT
 public:
-    /**
-     * Creates an IdentityComboBox.
-     *
-     * @param parent Parent of the object.
-     */
+    typedef QList<Aki::SqlIdentity*> List;
     explicit IdentityComboBox(QWidget* parent = 0);
-    /**
-     * Destroys the object.
-     */
     ~IdentityComboBox();
+    void addIdentity(Aki::SqlIdentity* identity);
+    Aki::SqlIdentity* currentIdentity() const;
+    Aki::IdentityComboBox::List findIdentities(const QString& name, Qt::MatchFlags flags);
+    void insertIdentity(int row, Aki::SqlIdentity* identity);
+    Aki::SqlIdentity* identity(int index) const;
+    int row(Aki::SqlIdentity* identity) const;
+    void setCurrentIdentity(Aki::SqlIdentity* identity);
+    Aki::SqlIdentity* takeIdentity(int index);
 Q_SIGNALS:
-    /**
-     * This is emitted when the user changes the @p identity.
-     * @note You are responsible of deleting the pointer.
-     *
-     * @param identity New current identity.
-     */
     void identityActivated(Aki::SqlIdentity* identity);
+    void currentIndexChanged(Aki::SqlIdentity* identity);
+protected:
+    QModelIndex indexFromIdentity(Aki::SqlIdentity* identity) const;
+    Aki::SqlIdentity* identityFromIndex(const QModelIndex& index) const;
 private Q_SLOTS:
-    /**
-     * Catch when the new index is selected.
-     */
-    void slotActivated(const QString& identity);
+    void slotActivated(int index);
+    void slotCurrentIndexChanged(int index);
+private:
+    Aki::IdentityModel* _model;
 }; // End of class IdentityComboBox.
 } // End of namespace Aki.
 

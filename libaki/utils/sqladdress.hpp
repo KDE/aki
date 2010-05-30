@@ -6,7 +6,7 @@
 
 namespace Aki
 {
-class SqlServer;
+class SqlNetwork;
 class SqlAddressPrivate;
 class LIBAKI_EXPORT SqlAddress : public QObject
 {
@@ -16,9 +16,9 @@ public:
     virtual ~SqlAddress();
     bool operator==(const Aki::SqlAddress& rhs) const;
     bool operator!=(const Aki::SqlAddress& rhs) const;
-    static Aki::SqlAddress* newAddress(const QString& address, const Aki::SqlServer* server);
-    static QList<Aki::SqlAddress*> addressListForServer(const Aki::SqlServer* server);
-    static Aki::SqlAddress* findAddress(const QString& address, const Aki::SqlServer* server);
+    static Aki::SqlAddress* newAddress(const QString& address, const Aki::SqlNetwork* server);
+    static QList<Aki::SqlAddress*> addressListForServer(const Aki::SqlNetwork* server);
+    static Aki::SqlAddress* findAddress(const QString& address, const Aki::SqlNetwork* server);
     void setAddress(const QString& address);
     QString address() const;
     void setPort(quint16 port);

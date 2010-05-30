@@ -13,6 +13,7 @@ public:
     AkiWindow();
     ~AkiWindow();
 public Q_SLOTS:
+    void identityListTriggered();
     void serverListTriggered();
     void quitTriggered();
 private:

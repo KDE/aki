@@ -1,22 +1,14 @@
 #include "mainwindow.hpp"
 #include "aki.hpp"
-#include "dialogs/serverdialog.hpp"
-#include "interfaces/ibasewindow.hpp"
+#include "dialogs/identitydialog.hpp"
+#include "dialogs/networkdialog.hpp"
 #include "ui/chatview.hpp"
 #include "ui/view.hpp"
 #include "ui/viewtabbar.hpp"
 #include <KDE/KAction>
 #include <KDE/KActionCollection>
 #include <KDE/KCmdLineArgs>
-#include <KDE/KDebug>
-#include <KDE/KLocale>
-#include <KDE/KMenuBar>
-#include <KDE/KMessageBox>
 #include <KDE/KTabBar>
-#include <QtGui/QVBoxLayout>
-#include <QWebFrame>
-#include <QWebElement>
-#include <QNetworkRequest>
 using namespace Aki;
 
 AkiWindow::AkiWindow()
@@ -58,9 +50,14 @@ AkiWindow::createMenus()
     actionCollection()->addAction("akiDisconnect", action);
 
     action = new KAction(KIcon("application-exit"), i18n("Quit"), this);
+    actionCollection()->addAction("akiQuit", action);
     connect(action, SIGNAL(triggered(bool)),
             SLOT(quitTriggered()));
-    actionCollection()->addAction("akiQuit", action);
+
+    action = new KAction(i18n("Identities..."), this);
+    actionCollection()->addAction("settingsIdentityList", action);
+    connect(action, SIGNAL(triggered(bool)),
+            SLOT(identityListTriggered()));
     setupGUI(ToolBar | Keys | StatusBar | Create);
 }
 
@@ -70,10 +67,17 @@ AkiWindow::createDialogs()
 }
 
 void
+AkiWindow::identityListTriggered()
+{
+    Aki::IdentityDialog* identityDialog = new Aki::IdentityDialog;
+    identityDialog->show();
+}
+
+void
 AkiWindow::serverListTriggered()
 {
-    Aki::ServerDialog* serverDialog = new Aki::ServerDialog;
-    serverDialog->show();
+    Aki::NetworkDialog* networkDialog = new Aki::NetworkDialog;
+    networkDialog->show();
 }
 
 void

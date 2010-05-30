@@ -9,7 +9,6 @@ class KLineEdit;
 
 namespace Aki
 {
-class SqlAddress;
 class AddressDialog : public KDialog
 {
     Q_OBJECT

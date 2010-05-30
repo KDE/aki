@@ -1,9 +1,9 @@
-#include "sqlserver_p.hpp"
+#include "sqlnetwork_p.hpp"
 #include "aki.hpp"
 #include "utils/sqlserver.hpp"
 using namespace Aki;
 
-SqlServerPrivate::SqlServerPrivate(SqlServer* qq)
+SqlNetworkPrivate::SqlNetworkPrivate(SqlNetwork* qq)
     : QObject(),
     server(0),
     id(-1),
@@ -13,7 +13,7 @@ SqlServerPrivate::SqlServerPrivate(SqlServer* qq)
 }
 
 void
-SqlServerPrivate::checkError(const QSqlError& error)
+SqlNetworkPrivate::checkError(const QSqlError& error)
 {
     if (error.isValid()) {
         qxtLog->error() << QString("Driver: %1").arg(error.driverText());
@@ -22,7 +22,7 @@ SqlServerPrivate::checkError(const QSqlError& error)
 }
 
 QVariant
-SqlServerPrivate::checkString(const QString& str)
+SqlNetworkPrivate::checkString(const QString& str)
 {
     if (str.isEmpty() || str.isNull()) {
         return QVariant(QVariant::String);

@@ -3,32 +3,31 @@
 
 #include "server.hpp"
 #include <qjson/parser.h>
+#include <qjson/serializer.h>
 #include <QtCore/QObject>
-#include <QtCore/QSharedPointer>
 #include <QtCore/QVariant>
 
 namespace Aki
 {
 class JsonParser;
+class SqlIdentity;
+class SqlNetwork;
 class JsonParserPrivate : public QObject
 {
     Q_OBJECT
 public:
     JsonParserPrivate(Aki::JsonParser* qq);
-    void writeNetworkName(const Aki::Server::Ptr& server, QVariantMap* map);
-    void writeReconnection(const Aki::Server::Ptr& server, QVariantMap* map);
-    void writeRetryInterval(const Aki::Server::Ptr& server, QVariantMap* map);
-    void writeRetryAttempts(const Aki::Server::Ptr& server, QVariantMap* map);
-    void writeConnectionOptions(const Aki::Server::Ptr& server, QVariantMap* map);
-    void writeServers(const Aki::Server::Ptr& server, QVariantMap* map);
-    void writeChannels(const Aki::Server::Ptr& server, QVariantMap* map);
-    void writeEncoding(const Aki::Server::Ptr& server, QVariantMap* map);
-    void writeIdentity(const Aki::Server::Ptr& server, QVariantMap* map);
-    void readNetwork(QVariantMap serverMap);
-    void readNetworkName(Aki::Server::Ptr& server, QVariantMap serverMap);
+    QVariantMap writeAddresses(Aki::SqlNetwork* network);
+    QVariantMap writeAuthentication(Aki::SqlNetwork* network);
+    QVariantMap writeChannels(Aki::SqlNetwork* network);
+    QVariantMap writeConnectionOptions(Aki::SqlNetwork* network);
+    QVariantMap writeEncoding(Aki::SqlNetwork* network);
+    QVariantMap writeReconnection(Aki::SqlNetwork* network);
+    void writeServer(QVariantMap* map);
 public:
-    QSharedPointer<QJson::Parser> parser;
-    Aki::Server::List serverList;
+    QJson::Parser parser;
+    QJson::Serializer serializer;
+    Aki::SqlIdentity* identity;
 private:
     Aki::JsonParser* _q;
 }; // End of class JsonParserPrivate.

@@ -1,6 +1,7 @@
 add_subdirectory(icons)
 include(dialogs/CMakeLists.txt)
 include(ui/CMakeLists.txt)
+include(utils/CMakeLists.txt)
 
 include(MacroOptionalAddSubdirectory)
 
@@ -17,6 +18,7 @@ link_directories (
 set (aki_SRCS
     ${aki_dialogs_SRCS}
     ${aki_ui_SRCS}
+    ${aki_utils_SRCS}
     dbus.cxx
     main.cxx
     mainwindow.cxx

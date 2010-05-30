@@ -6,7 +6,7 @@
 
 namespace Aki
 {
-class SqlServer;
+class SqlNetwork;
 class SqlChannelPrivate;
 class LIBAKI_EXPORT SqlChannel : public QObject
 {
@@ -16,9 +16,9 @@ public:
     virtual ~SqlChannel();
     bool operator==(const Aki::SqlChannel& rhs) const;
     bool operator!=(const Aki::SqlChannel& rhs) const;
-    static Aki::SqlChannel* newChannel(const QString& name, const Aki::SqlServer* server);
-    static Aki::SqlChannel::List channelListForServer(const Aki::SqlServer* server);
-    static Aki::SqlChannel* findChannel(const QString& name, const Aki::SqlServer* server);
+    static Aki::SqlChannel* newChannel(const QString& name, const Aki::SqlNetwork* server);
+    static Aki::SqlChannel::List channelListForServer(const Aki::SqlNetwork* server);
+    static Aki::SqlChannel* findChannel(const QString& name, const Aki::SqlNetwork* server);
     void setChannel(const QString& channel);
     QString channel() const;
     void setPassword(const QString& password);

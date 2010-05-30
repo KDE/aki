@@ -75,7 +75,7 @@ Identity::partMessage() const
 QString
 Identity::quitMessage() const
 {
-    return _d-> partMessage;
+    return _d->quitMessage;
 }
 
 QString

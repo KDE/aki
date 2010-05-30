@@ -12,7 +12,6 @@ using namespace Aki;
 AddressDialog::AddressDialog(QWidget* parent)
     : KDialog(parent)
 {
-    setAttribute(Qt::WA_DeleteOnClose, false);
     setButtons(KDialog::Ok | KDialog::Cancel);
     QWidget* widget = new QWidget(this);
 

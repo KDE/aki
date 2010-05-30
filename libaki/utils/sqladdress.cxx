@@ -1,7 +1,7 @@
 #include "sqladdress.hpp"
 #include "aki.hpp"
 #include "private/sqladdress_p.hpp"
-#include "utils/sqlserver.hpp"
+#include "utils/sqlnetwork.hpp"
 #include <QtCore/QVariant>
 #include <QtSql/QSqlError>
 #include <QtSql/QSqlQuery>
@@ -19,7 +19,7 @@ SqlAddress::~SqlAddress()
 }
 
 QList<Aki::SqlAddress*>
-SqlAddress::addressListForServer(const Aki::SqlServer* server)
+SqlAddress::addressListForServer(const Aki::SqlNetwork* server)
 {
     QList<Aki::SqlAddress*> list;
     QSqlQuery query;
@@ -58,13 +58,13 @@ SqlAddress::addressListForServer(const Aki::SqlServer* server)
 }
 
 Aki::SqlAddress*
-SqlAddress::findAddress(const QString& address, const Aki::SqlServer* server)
+SqlAddress::findAddress(const QString& address, const Aki::SqlNetwork* server)
 {
     QScopedPointer<Aki::SqlAddress> tmp(new Aki::SqlAddress);
     if (address.isEmpty() || address.isNull()) {
         return 0;
     }
-    
+
     QSqlQuery query;
     query.prepare("SELECT * FROM Address WHERE addressServer=? AND address=? LIMIT 1");
     query.addBindValue(server->id());
@@ -101,7 +101,7 @@ SqlAddress::findAddress(const QString& address, const Aki::SqlServer* server)
 }
 
 Aki::SqlAddress*
-SqlAddress::newAddress(const QString& address, const Aki::SqlServer* server)
+SqlAddress::newAddress(const QString& address, const Aki::SqlNetwork* server)
 {
     QSqlQuery query;
     query.prepare("INSERT INTO Address (address,port,password,ssl,addressServer)"

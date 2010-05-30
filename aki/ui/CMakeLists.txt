@@ -1,8 +1,12 @@
 set(aki_ui_SRCS
+    ui/addressmodel.cxx
+    ui/channelmodel.cxx
     ui/identitycombobox.cxx
-    ui/serveraddresslistmodel.cxx
-    ui/serveraddresslist.cxx
+    ui/identitymodel.cxx
     ui/networklist.cxx
-    ui/networklistmodel.cxx
-    ui/serverview.cxx
+    ui/networkaddresslist.cxx
+    ui/networkchannellist.cxx
+    ui/networkmodel.cxx
+    ui/nicknamelist.cxx
+    ui/nicknamemodel.cxx
 )

@@ -3,8 +3,8 @@
 #include "utils/sqladdress.hpp"
 #include "utils/sqlchannel.hpp"
 #include "utils/sqlidentity.hpp"
+#include "utils/sqlnetwork.hpp"
 #include "utils/sqlnickname.hpp"
-#include "utils/sqlserver.hpp"
 #include "private/database_p.hpp"
 #include <KDE/KUser>
 #include <QtSql/QSqlDatabase>
@@ -122,12 +122,12 @@ Database::createDefaultTables()
         return false;
     }
     addressQuery.finish();
-                                    
+
     tables = "CREATE TABLE IF NOT EXISTS Nickname (\n"
              "    id INTEGER PRIMARY KEY AUTOINCREMENT,\n"
              "    nickname TEXT NOT NULL,\n"
-             "    nicknameServer INTEGER NOT NULL,\n"
-             "    FOREIGN KEY(nicknameServer) REFERENCES Server(id) ON DELETE CASCADE\n"
+             "    nicknameIdentity INTEGER NOT NULL,\n"
+             "    FOREIGN KEY(nicknameIdentity) REFERENCES Identity(id) ON DELETE CASCADE\n"
              ");";
     if (!addressQuery.exec(tables)) {
         Aki::DatabasePrivate::checkError(addressQuery.lastError());
@@ -140,7 +140,7 @@ Database::createDefaultTables()
         return false;
     }
 
-    QScopedPointer<Aki::SqlServer> defaultServer(Aki::SqlServer::newServer("Freenode", defaultIdentity.data()));
+    QScopedPointer<Aki::SqlNetwork> defaultServer(Aki::SqlNetwork::newNetwork("Freenode", defaultIdentity.data()));
     if (defaultServer.isNull()) {
         return false;
     }
@@ -157,9 +157,9 @@ Database::createDefaultTables()
     }
 
     KUser user(KUser::UseRealUserID);
-    delete Aki::SqlNickname::newNickname(user.loginName(), defaultServer.data());
-    delete Aki::SqlNickname::newNickname(user.loginName() + '_', defaultServer.data());
-    delete Aki::SqlNickname::newNickname(user.loginName() + "__", defaultServer.data());
+    delete Aki::SqlNickname::newNickname(user.loginName(), defaultIdentity.data());
+    delete Aki::SqlNickname::newNickname(user.loginName() + '_', defaultIdentity.data());
+    delete Aki::SqlNickname::newNickname(user.loginName() + "__", defaultIdentity.data());
 
     return true;
 }

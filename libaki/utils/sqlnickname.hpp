@@ -6,7 +6,7 @@
 
 namespace Aki
 {
-class SqlServer;
+class SqlIdentity;
 class SqlNicknamePrivate;
 /**
  * Represents the Nickname table in the configuration database.
@@ -40,34 +40,34 @@ public:
      */
     bool operator!=(const Aki::SqlNickname& rhs) const;
     /**
-     * Retrives all the nicknames that are connected to the @p server.
+     * Retrives all the nicknames that are connected to the @p identity.
      * @note You are responsible for the deletion of the pointers in the list.
      *
-     * @param server Sql Server.
+     * @param identity Sql Identity.
      *
      * @return List of SqlNickname items if any are found. Empty list otherwise.
      */
-    static Aki::SqlNickname::List nicknamesForServer(const Aki::SqlServer* server);
+    static Aki::SqlNickname::List nicknamesForIdentity(const Aki::SqlIdentity* identity);
     /**
-     * Gets the nickname that has the @p nickname and the @p server.
+     * Gets the nickname that has the @p nickname and the @p identity.
      * @note You are responsible for the deletion of the pointer returned.
      *
      * @param nickname Name of the nickname to look for.
-     * @param server Server the nickname will look for in.
+     * @param identity Identity the nickname will look for in.
      *
      * @return Nickname that was found; 0 if the nickname was not found.
      */
-    static Aki::SqlNickname* findNickname(const QString& nickname, const Aki::SqlServer* server);
+    static Aki::SqlNickname* findNickname(const QString& nickname, const Aki::SqlIdentity* identity);
     /**
-     * Gets the newly created nickname with @p nickname and assigns it the @p server table id.
+     * Gets the newly created nickname with @p nickname and assigns it the @p identity table id.
      * @note You are responsible for the deletion of the pointer returned.
      *
      * @param nickname Name of the new SqlNickname.
-     * @param server Server the new SqlNickname will be connected to.
+     * @param identity Identity the new SqlNickname will be connected to.
      *
      * @return New create nickname.
      */
-    static Aki::SqlNickname* newNickname(const QString& nickname, const Aki::SqlServer* server);
+    static Aki::SqlNickname* newNickname(const QString& nickname, const Aki::SqlIdentity* identity);
     /**
      * Sets the @p name
      *
@@ -87,17 +87,17 @@ public:
      */
     int id() const;
     /**
-     * Sets the @p id of the server this nickname is connected with.
+     * Sets the @p id of the identity this nickname is connected with.
      *
-     * @param id ID of the Server this nickname will belong to.
+     * @param id ID of the Identity this nickname will belong to.
      */
-    void setNicknameServerId(int id);
+    void setNicknameIdentityId(int id);
     /**
-     * Gets the id of the server this nickname is connected with.
+     * Gets the id of the identity this nickname is connected with.
      *
-     * @return ID of the Server this server belongs to.
+     * @return ID of the Identity this nickname belongs to.
      */
-    int nicknameServerId() const;
+    int nicknameIdentityId() const;
     /**
      * Saves any changes the user has made to the SQL database.
      *
@@ -105,9 +105,9 @@ public:
      */
     bool save();
     /**
-     * Removes the nickname from the current server from the list.
+     * Removes the nickname from the current identity from the list.
      *
-     * @return true if the server was remvoed; false otherwise.
+     * @return true if the identity was removed; false otherwise.
      */
     bool remove();
 protected:

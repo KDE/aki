@@ -5,8 +5,8 @@ set(akicore_utils_SRCS
     utils/sqladdress.cxx
     utils/sqlchannel.cxx
     utils/sqlidentity.cxx
+    utils/sqlnetwork.cxx
     utils/sqlnickname.cxx
-    utils/sqlserver.cxx
 )
 
 install(
@@ -15,8 +15,8 @@ install(
         utils/sqladdress.hpp
         utils/sqlchannel.hpp
         utils/sqlidentity.hpp
+        utils/sqlnetwork.hpp
         utils/sqlnickname.hpp
-        utils/sqlserver.hpp
     DESTINATION
         ${INCLUDE_INSTALL_DIR}/aki/utils
     COMPONENT

@@ -1,207 +1,235 @@
 #include "networklist.hpp"
 #include "aki.hpp"
-#include "ui/networklistmodel.hpp"
+#include "ui/networkmodel.hpp"
 #include "utils/sqlidentity.hpp"
-#include "utils/sqlserver.hpp"
+#include "utils/sqlnetwork.hpp"
+#include <QtCore/QEvent>
 using namespace Aki;
 
 NetworkList::NetworkList(QWidget* parent)
-    : QListView(parent),
-    _currentIdentity(QString())
+    : QListView(parent)
 {
-    _modelList.clear();
+    _model = new Aki::NetworkModel(this);
+    setModel(_model);
+    connect(this, SIGNAL(pressed(QModelIndex)),
+            SLOT(slotItemPressed(QModelIndex)));
+    connect(this, SIGNAL(clicked(QModelIndex)),
+            SLOT(slotItemClicked(QModelIndex)));
+    connect(this, SIGNAL(doubleClicked(QModelIndex)),
+            SLOT(slotItemDoubleClicked(QModelIndex)));
+    connect(this, SIGNAL(activated(QModelIndex)),
+            SLOT(slotItemActivated(QModelIndex)));
+    connect(this, SIGNAL(entered(QModelIndex)),
+            SLOT(slotItemEntered(QModelIndex)));
+    connect(_model, SIGNAL(dataChanged(QModelIndex,QModelIndex)),
+            SLOT(slotItemChanged(QModelIndex)));
+    connect(selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
+            SLOT(slotItemCurrentChanged(QModelIndex,QModelIndex)));
+    connect(selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
+            SIGNAL(networkSelectionChanged()));
+//     connect(_model, SIGNAL(dataChanged(QModelIndex,QModelIndex)),
+//             SIGNAL(dataChanged(QModelIndex,QModelIndex)));
 }
 
 NetworkList::~NetworkList()
 {
-    foreach (const QString& identity, _modelList.keys()) {
-        delete takeIdentity(identity);
-    }
 }
 
 void
-NetworkList::addIdentity(const QString& identity)
+NetworkList::addNetwork(Aki::SqlNetwork* network)
 {
-    qxtLog->info() << QString("Adding Identity: %1").arg(identity);
-    _modelList.insert(identity, new Aki::NetworkListModel);
-    if (_modelList.count() == 1) {
-        qxtLog->info() << "Setting current identity since it's the only one";
-        setCurrentIdentity(identity);
-    }
-    qxtLog->info() << QString("Current identity count: %1").arg(_modelList.count());
-}
-
-void
-NetworkList::addNetwork(Aki::SqlServer* network)
-{
-    qxtLog->info() << QString("Adding network: %1").arg(network->name());
-    currentModel()->addNetwork(network);
-    setCurrentNetwork(network);
-    qxtLog->info() << QString("Current network count: %1").arg(currentModel()->networks().count());
+    insertNetwork(count(), network);
 }
 
 int
 NetworkList::count() const
 {
-    return currentModel()->rowCount();
+    return _model->rowCount();
 }
 
-Aki::NetworkListModel*
-NetworkList::currentModel() const
-{
-    return _modelList[currentIdentity()];
-}
-
-Aki::NetworkListModel* NetworkList::currentModel()
-{
-    return _modelList[currentIdentity()];
-}
-
-QString
-NetworkList::currentIdentity() const
-{
-    return _currentIdentity;
-}
-
-Aki::SqlServer*
+Aki::SqlNetwork*
 NetworkList::currentNetwork()
 {
-    return currentModel()->server(selectionModel()->currentIndex());
-}
+    QModelIndex index = selectionModel()->currentIndex();
+    if (!index.isValid()) {
+        return 0;
+    }
 
-Aki::SqlServer*
-NetworkList::currentNetwork() const
-{
-    return currentModel()->server(selectionModel()->currentIndex());
+    return networkFromIndex(index);
 }
 
 int
 NetworkList::currentRow() const
 {
-    return selectionModel()->currentIndex().row();
+    QModelIndex index = selectionModel()->currentIndex();
+    if (!index.isValid()) {
+        return -1;
+    }
+
+    return index.row();
 }
 
-QList<Aki::SqlServer*>
-NetworkList::findItems(const QString& name, Qt::MatchFlags flags) const
+Aki::NetworkList::List
+NetworkList::findNetworks(const QString& name, Qt::MatchFlags flags) const
 {
-    Aki::NetworkListModel::List list;
-    Aki::NetworkListModel* model = currentModel();
+    Aki::NetworkList::List list;
 
-    QModelIndexList indexes = model->match(model->index(0), Qt::DisplayRole, name, -1, flags);
+    QModelIndexList indexes = _model->match(_model->index(0), Qt::DisplayRole, name, -1, flags);
     for (int i = 0; i < indexes.size(); ++i) {
-        list.append(model->server(indexes.at(i)));
+        list.append(networkFromIndex(indexes.at(i)));
     }
 
     return list;
 }
 
-void
-NetworkList::insertNetwork(int row, SqlServer* network)
+QModelIndex
+NetworkList::indexFromNetwork(Aki::SqlNetwork* network)
 {
-    qxtLog->info() << QString("Adding network: %1").arg(network->name());
-    currentModel()->insertNetwork(row, network);
-    qxtLog->info() << QString("Current network count: %1").arg(currentModel()->networks().count());
-}
-
-Aki::SqlServer*
-NetworkList::network(int row) const
-{
-    return currentModel()->networks().value(row, 0);
-}
-
-int
-NetworkList::row(const Aki::SqlServer* network) const
-{
-    return currentModel()->networks().indexOf(const_cast<Aki::SqlServer*>(network));
-}
-
-Aki::NetworkListModel::List
-NetworkList::selectedItems() const
-{
-    Aki::NetworkListModel::List list;
-    QModelIndexList indexList = selectionModel()->selectedRows();
-    foreach (const QModelIndex& index, indexList) {
-        list.append(currentModel()->server(index));
-    }
-
-    return list;
+    return _model->index(_model->networks().indexOf(network));
 }
 
 void
-NetworkList::setCurrentIdentity(const QString& identity)
+NetworkList::insertNetwork(int row, Aki::SqlNetwork* network)
 {
-    if (_currentIdentity == identity) {
-        qxtLog->info() << "Ignoring set current identity since it's the same"
-                                        " one being requested.";
+    Q_ASSERT(network);
+
+    if (_model->networks().contains(network)) {
         return;
     }
 
-    _currentIdentity = identity;
-    setModel(currentModel());
-    qxtLog->info() << QString("Settings model to %1").arg(_currentIdentity);
+    _model->insertNetwork(row, network);
+}
+
+Aki::SqlNetwork*
+NetworkList::item(int row) const
+{
+    return networkFromIndex(_model->index(row));
+}
+
+Aki::SqlNetwork*
+NetworkList::networkFromIndex(const QModelIndex& index) const
+{
+    if (!index.isValid()) {
+        return 0;
+    }
+
+    return _model->networks().value(index.row());
 }
 
 void
-NetworkList::setCurrentNetwork(Aki::SqlServer* network)
+NetworkList::repopulateNetwork(Aki::SqlIdentity* identity)
 {
-    qxtLog->info() << QString("Setting current network to: %1").arg(network->name());
+    foreach(Aki::SqlNetwork* network, _model->networks()) {
+        qxtLog->info() << QString("Removing Network: %1").arg(network->name());
+        _model->removeNetwork(network);
+    }
+
+    Aki::SqlNetwork::List list = Aki::SqlNetwork::networksForIdentity(identity);
+    if (list.isEmpty()) {
+        qxtLog->info() << QString("List is empty for Identity: %1").arg(identity->name());
+        return;
+    }
+
+    foreach (Aki::SqlNetwork* network, list) {
+        qxtLog->info() << QString("Adding new Network: %1").arg(network->name());
+        addNetwork(network);
+    }
+
+    if (count()) {
+        setCurrentRow(0);
+    }
+}
+
+int
+NetworkList::row(Aki::SqlNetwork* network) const
+{
+    return _model->networks().indexOf(network);
+}
+
+Aki::NetworkList::List
+NetworkList::selectedNetworks() const
+{
+    Aki::NetworkList::List list;
+    QModelIndexList indexes = selectionModel()->selectedRows();
+    foreach (const QModelIndex& index, indexes) {
+        list.append(networkFromIndex(index));
+    }
+
+    return list;
+}
+
+void
+NetworkList::setCurrentNetwork(Aki::SqlNetwork* network)
+{
     setCurrentNetwork(network, QItemSelectionModel::ClearAndSelect);
 }
 
 void
-NetworkList::setCurrentNetwork(Aki::SqlServer* network, QItemSelectionModel::SelectionFlags command)
+NetworkList::setCurrentNetwork(Aki::SqlNetwork* network, QItemSelectionModel::SelectionFlags command)
 {
-    const int r = row(network);
-    setCurrentRow(r, command);
+    selectionModel()->setCurrentIndex(indexFromNetwork(network), command);
 }
 
 void
 NetworkList::setCurrentRow(int row)
 {
-    qxtLog->info() << QString("Setting current network row to: %1").arg(row);
     setCurrentRow(row, QItemSelectionModel::ClearAndSelect);
 }
 
 void
 NetworkList::setCurrentRow(int row, QItemSelectionModel::SelectionFlags command)
 {
-    selectionModel()->setCurrentIndex(currentModel()->index(row), command);
+    selectionModel()->setCurrentIndex(_model->index(row), command);
 }
 
-Aki::NetworkListModel*
-NetworkList::takeIdentity(const QString& identity)
-{
-    qxtLog->info() << "Removing Identity....: " << identity;
-    return _modelList.take(identity);
-}
-
-Aki::SqlServer*
+Aki::SqlNetwork*
 NetworkList::takeNetwork(int row)
 {
-    return currentModel()->takeAt(row);
+    return _model->takeNetwork(row);
 }
 
 void
-NetworkList::identityActivated(Aki::SqlIdentity* identity)
+NetworkList::slotItemActivated(const QModelIndex& index)
 {
-    if (_modelList.contains(identity->name())) {
-        setCurrentIdentity(identity->name());
-        if (currentModel()->rowCount() > 0) {
-            setCurrentNetwork(network(0));
-        }
-        delete identity;
-        return;
-    }
-    qxtLog->info() << QString("Identitying is wanting to changed...");
-    addIdentity(identity->name());
-    setCurrentIdentity(identity->name());
-    Aki::SqlServer::List list = Aki::SqlServer::serversForIdentity(identity);
-    foreach (Aki::SqlServer* server, list) {
-        addNetwork(server);
-    }
-    if (currentModel()->rowCount() > 0) {
-        setCurrentNetwork(network(0));
-    }
+    emit networkActivated(networkFromIndex(index));
+}
 
-    delete identity;
+void
+NetworkList::slotItemChanged(const QModelIndex& index)
+{
+    emit networkChanged(networkFromIndex(index));
+}
+
+void
+NetworkList::slotItemClicked(const QModelIndex& index)
+{
+    emit networkClicked(networkFromIndex(index));
+}
+
+void
+NetworkList::slotItemCurrentChanged(const QModelIndex& current, const QModelIndex& previous)
+{
+    QPersistentModelIndex persistentCurrent = current;
+    Aki::SqlNetwork* currentNetwork = item(persistentCurrent.row());
+    Q_UNUSED(currentNetwork);
+    emit currentNetworkChanged(currentNetwork, item(previous.row()));
+    emit networkCurrentRowChanged(persistentCurrent.row());
+}
+
+void
+NetworkList::slotItemDoubleClicked(const QModelIndex& index)
+{
+    emit networkDoubleClicked(networkFromIndex(index));
+}
+
+void
+NetworkList::slotItemEntered(const QModelIndex& index)
+{
+    emit networkEntered(networkFromIndex(index));
+}
+
+void
+NetworkList::slotItemPressed(const QModelIndex& index)
+{
+    emit networkPressed(networkFromIndex(index));
 }

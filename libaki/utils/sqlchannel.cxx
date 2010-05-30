@@ -1,7 +1,7 @@
 #include "sqlchannel.hpp"
 #include "aki.hpp"
-#include "utils/sqlserver.hpp"
 #include "private/sqlchannel_p.hpp"
+#include "utils/sqlnetwork.hpp"
 #include <QtCore/QVariant>
 #include <QtSql/QSqlError>
 #include <QtSql/QSqlQuery>
@@ -34,7 +34,7 @@ SqlChannel::operator==(const Aki::SqlChannel& rhs) const
 }
 
 Aki::SqlChannel::List
-SqlChannel::channelListForServer(const Aki::SqlServer* server)
+SqlChannel::channelListForServer(const Aki::SqlNetwork* server)
 {
     Aki::SqlChannel::List list;
     QSqlQuery query;
@@ -64,12 +64,12 @@ SqlChannel::channelListForServer(const Aki::SqlServer* server)
         tmp->setChannelServerId(query.value(channelServerId).toInt());
         list.append(tmp);
     }
-    
+
     return list;
 }
 
 Aki::SqlChannel*
-SqlChannel::findChannel(const QString& name, const Aki::SqlServer* server)
+SqlChannel::findChannel(const QString& name, const Aki::SqlNetwork* server)
 {
     QScopedPointer<Aki::SqlChannel> tmp(new Aki::SqlChannel);
     QSqlQuery query;
@@ -116,7 +116,7 @@ SqlChannel::id() const
 }
 
 Aki::SqlChannel*
-SqlChannel::newChannel(const QString& name, const Aki::SqlServer* server)
+SqlChannel::newChannel(const QString& name, const Aki::SqlNetwork* server)
 {
     QSqlQuery query;
     query.prepare("INSERT INTO Channel (channel, password, channelServer)\n"

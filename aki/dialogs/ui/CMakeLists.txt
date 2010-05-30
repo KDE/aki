@@ -1,3 +1,4 @@
 set (aki_dialogui_FILES
-    dialogs/ui/serverdialog.ui
+    dialogs/ui/identitydialog.ui
+    dialogs/ui/networkdialog.ui
 )

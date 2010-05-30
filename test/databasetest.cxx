@@ -3,8 +3,8 @@
 #include "utils/sqladdress.hpp"
 #include "utils/sqlchannel.hpp"
 #include "utils/sqlidentity.hpp"
+#include "utils/sqlnetwork.hpp"
 #include "utils/sqlnickname.hpp"
-#include "utils/sqlserver.hpp"
 #include <QtTest>
 #include <QxtCore/QxtXMLFileLoggerEngine>
 
@@ -24,8 +24,8 @@ private Q_SLOTS:
     void checkIdentityUpdate();
     void checkIdentityDelete();
     void insertAndFind();
-    void findServer();
-    void findServerFailed();
+    void findNetwork();
+    void findNetworkFailed();
     void checkServerUpdate();
     void checkServerDelete();
     void findChannels();
@@ -154,28 +154,28 @@ DatabaseTest::insertAndFind()
 }
 
 void
-DatabaseTest::findServer()
+DatabaseTest::findNetwork()
 {
     QBENCHMARK {
         if (Aki::Database::open(":memory:")) {
             QScopedPointer<Aki::Database, DatabaseCleanupDeleter> database(new Aki::Database);
             if (database->createDefaultTables()) {
                 QScopedPointer<Aki::SqlIdentity> identity(Aki::SqlIdentity::findIdentity("Default Identity"));
-                QVERIFY(Aki::SqlServer::findServer("Freenode", identity.data()));
+                QVERIFY(Aki::SqlNetwork::findNetwork("Freenode", identity.data()));
             }
         }
     }
 }
 
 void
-DatabaseTest::findServerFailed()
+DatabaseTest::findNetworkFailed()
 {
     QBENCHMARK {
         if (Aki::Database::open(":memory:")) {
             QScopedPointer<Aki::Database, DatabaseCleanupDeleter> database(new Aki::Database);
             if (database->createDefaultTables()) {
                 QScopedPointer<Aki::SqlIdentity> identity(Aki::SqlIdentity::findIdentity("Default Identity"));
-                QScopedPointer<Aki::SqlServer> defaultServer(Aki::SqlServer::findServer("Freenode ", identity.data()));
+                QScopedPointer<Aki::SqlNetwork> defaultServer(Aki::SqlNetwork::findNetwork("Freenode ", identity.data()));
                 QVERIFY(defaultServer.isNull());
             }
         }
@@ -190,12 +190,12 @@ DatabaseTest::checkServerUpdate()
             QScopedPointer<Aki::Database, DatabaseCleanupDeleter> database(new Aki::Database);
             if (database->createDefaultTables()) {
                 QScopedPointer<Aki::SqlIdentity> identity(Aki::SqlIdentity::findIdentity("Default Identity"));
-                
-                QScopedPointer<Aki::SqlServer> defaultServer(Aki::SqlServer::findServer("Freenode", identity.data()));
+
+                QScopedPointer<Aki::SqlNetwork> defaultServer(Aki::SqlNetwork::findNetwork("Freenode", identity.data()));
                 defaultServer->setName("Bouncer");
                 defaultServer->save();
 
-                QScopedPointer<Aki::SqlServer> defaultServer2(Aki::SqlServer::findServer("Bouncer", identity.data()));
+                QScopedPointer<Aki::SqlNetwork> defaultServer2(Aki::SqlNetwork::findNetwork("Bouncer", identity.data()));
                 QVERIFY(*defaultServer == *defaultServer2);
             }
         }
@@ -211,10 +211,10 @@ DatabaseTest::checkServerDelete()
             if (database->createDefaultTables()) {
                 QScopedPointer<Aki::SqlIdentity> identity(Aki::SqlIdentity::findIdentity("Default Identity"));
 
-                QScopedPointer<Aki::SqlServer> defaultServer(Aki::SqlServer::findServer("Freenode", identity.data()));
+                QScopedPointer<Aki::SqlNetwork> defaultServer(Aki::SqlNetwork::findNetwork("Freenode", identity.data()));
                 defaultServer->remove();
 
-                QScopedPointer<Aki::SqlServer> defaultServer2(Aki::SqlServer::findServer("Bouncer", identity.data()));
+                QScopedPointer<Aki::SqlNetwork> defaultServer2(Aki::SqlNetwork::findNetwork("Bouncer", identity.data()));
                 QVERIFY(defaultServer2.isNull());
             }
         }
@@ -229,7 +229,7 @@ DatabaseTest::findChannels()
             QScopedPointer<Aki::Database, DatabaseCleanupDeleter> database(new Aki::Database);
             if (database->createDefaultTables()) {
                 QScopedPointer<Aki::SqlIdentity> identity(Aki::SqlIdentity::findIdentity("Default Identity"));
-                QScopedPointer<Aki::SqlServer> defaultServer(Aki::SqlServer::findServer("Freenode", identity.data()));
+                QScopedPointer<Aki::SqlNetwork> defaultServer(Aki::SqlNetwork::findNetwork("Freenode", identity.data()));
                 QList<Aki::SqlChannel*> defaultChannels = Aki::SqlChannel::channelListForServer(defaultServer.data());
                 QVERIFY(defaultChannels.at(0)->channel() == "#aki");
             }
@@ -245,7 +245,7 @@ DatabaseTest::findChannelsFailed()
             QScopedPointer<Aki::Database, DatabaseCleanupDeleter> database(new Aki::Database);
             if (database->createDefaultTables()) {
                 QScopedPointer<Aki::SqlIdentity> identity(Aki::SqlIdentity::findIdentity("Default Identity"));
-                QScopedPointer<Aki::SqlServer> defaultServer(Aki::SqlServer::findServer("Freenode", identity.data()));
+                QScopedPointer<Aki::SqlNetwork> defaultServer(Aki::SqlNetwork::findNetwork("Freenode", identity.data()));
                 QList<Aki::SqlChannel*> defaultChannels = Aki::SqlChannel::channelListForServer(defaultServer.data());
                 QVERIFY(defaultChannels.at(0)->channel() != "#aki ");
                 qDeleteAll(defaultChannels);
@@ -262,7 +262,7 @@ DatabaseTest::checkChannelUpdate()
             QScopedPointer<Aki::Database, DatabaseCleanupDeleter> database(new Aki::Database);
             if (database->createDefaultTables()) {
                 QScopedPointer<Aki::SqlIdentity> identity(Aki::SqlIdentity::findIdentity("Default Identity"));
-                QScopedPointer<Aki::SqlServer> defaultServer(Aki::SqlServer::findServer("Freenode", identity.data()));
+                QScopedPointer<Aki::SqlNetwork> defaultServer(Aki::SqlNetwork::findNetwork("Freenode", identity.data()));
                 QScopedPointer<Aki::SqlChannel> defaultChannel(Aki::SqlChannel::findChannel("#aki", defaultServer.data()));
                 defaultChannel->setPassword("password");
                 defaultChannel->save();
@@ -282,7 +282,7 @@ DatabaseTest::checkChannelDelete()
             QScopedPointer<Aki::Database, DatabaseCleanupDeleter> database(new Aki::Database);
             if (database->createDefaultTables()) {
                 QScopedPointer<Aki::SqlIdentity> identity(Aki::SqlIdentity::findIdentity("Default Identity"));
-                QScopedPointer<Aki::SqlServer> defaultServer(Aki::SqlServer::findServer("Freenode", identity.data()));
+                QScopedPointer<Aki::SqlNetwork> defaultServer(Aki::SqlNetwork::findNetwork("Freenode", identity.data()));
                 QScopedPointer<Aki::SqlChannel> defaultChannel(Aki::SqlChannel::findChannel("#aki", defaultServer.data()));
                 defaultChannel->remove();
 
@@ -301,7 +301,7 @@ DatabaseTest::findAddress()
             QScopedPointer<Aki::Database, DatabaseCleanupDeleter> database(new Aki::Database);
             if (database->createDefaultTables()) {
                 QScopedPointer<Aki::SqlIdentity> identity(Aki::SqlIdentity::findIdentity("Default Identity"));
-                QScopedPointer<Aki::SqlServer> defaultServer(Aki::SqlServer::findServer("Freenode", identity.data()));
+                QScopedPointer<Aki::SqlNetwork> defaultServer(Aki::SqlNetwork::findNetwork("Freenode", identity.data()));
                 QVERIFY(Aki::SqlAddress::findAddress("chat.freenode.net", defaultServer.data()));
             }
         }
@@ -316,7 +316,7 @@ DatabaseTest::findAddressFailed()
             QScopedPointer<Aki::Database, DatabaseCleanupDeleter> database(new Aki::Database);
             if (database->createDefaultTables()) {
                 QScopedPointer<Aki::SqlIdentity> identity(Aki::SqlIdentity::findIdentity("Default Identity"));
-                QScopedPointer<Aki::SqlServer> defaultServer(Aki::SqlServer::findServer("Freenode", identity.data()));
+                QScopedPointer<Aki::SqlNetwork> defaultServer(Aki::SqlNetwork::findNetwork("Freenode", identity.data()));
                 QVERIFY(!Aki::SqlAddress::findAddress("chat.freenode.net ", defaultServer.data()));
             }
         }
@@ -331,7 +331,7 @@ DatabaseTest::checkAddressUpdate()
             QScopedPointer<Aki::Database, DatabaseCleanupDeleter> database(new Aki::Database);
             if (database->createDefaultTables()) {
                 QScopedPointer<Aki::SqlIdentity> identity(Aki::SqlIdentity::findIdentity("Default Identity"));
-                QScopedPointer<Aki::SqlServer> defaultServer(Aki::SqlServer::findServer("Freenode", identity.data()));
+                QScopedPointer<Aki::SqlNetwork> defaultServer(Aki::SqlNetwork::findNetwork("Freenode", identity.data()));
                 QScopedPointer<Aki::SqlAddress> defaultAddress(Aki::SqlAddress::findAddress("chat.freenode.net",
                                                                                             defaultServer.data()));
                 defaultAddress->setAddress("irc.freenode.net");
@@ -353,7 +353,7 @@ DatabaseTest::checkAddressDelete()
             QScopedPointer<Aki::Database, DatabaseCleanupDeleter> database(new Aki::Database);
             if (database->createDefaultTables()) {
                 QScopedPointer<Aki::SqlIdentity> identity(Aki::SqlIdentity::findIdentity("Default Identity"));
-                QScopedPointer<Aki::SqlServer> defaultServer(Aki::SqlServer::findServer("Freenode", identity.data()));
+                QScopedPointer<Aki::SqlNetwork> defaultServer(Aki::SqlNetwork::findNetwork("Freenode", identity.data()));
                 QScopedPointer<Aki::SqlAddress> defaultAddress(Aki::SqlAddress::findAddress("chat.freenode.net",
                                                                                             defaultServer.data()));
                 QVERIFY(defaultAddress->remove());
@@ -374,8 +374,7 @@ DatabaseTest::findNickname()
             QScopedPointer<Aki::Database, DatabaseCleanupDeleter> database(new Aki::Database);
             if (database->createDefaultTables()) {
                 QScopedPointer<Aki::SqlIdentity> identity(Aki::SqlIdentity::findIdentity("Default Identity"));
-                QScopedPointer<Aki::SqlServer> defaultServer(Aki::SqlServer::findServer("Freenode", identity.data()));
-                QVERIFY(Aki::SqlNickname::findNickname("zeke", defaultServer.data()));
+                QVERIFY(Aki::SqlNickname::findNickname("zeke", identity.data()));
             }
         }
     }
@@ -389,9 +388,7 @@ DatabaseTest::findNicknameFailed()
             QScopedPointer<Aki::Database, DatabaseCleanupDeleter> database(new Aki::Database);
             if (database->createDefaultTables()) {
                 QScopedPointer<Aki::SqlIdentity> identity(Aki::SqlIdentity::findIdentity("Default Identity"));
-                QScopedPointer<Aki::SqlServer> defaultServer(Aki::SqlServer::findServer("Freenode", identity.data()));
-                QScopedPointer<Aki::SqlNickname> defaultNickname(Aki::SqlNickname::findNickname("zeke ",
-                                                                                                defaultServer.data()));
+                QScopedPointer<Aki::SqlNickname> defaultNickname(Aki::SqlNickname::findNickname("zeke ", identity.data()));
                 QVERIFY(defaultNickname.isNull());
             }
         }
@@ -406,14 +403,11 @@ DatabaseTest::checkNicknameUpdate()
             QScopedPointer<Aki::Database, DatabaseCleanupDeleter> database(new Aki::Database);
             if (database->createDefaultTables()) {
                 QScopedPointer<Aki::SqlIdentity> identity(Aki::SqlIdentity::findIdentity("Default Identity"));
-                QScopedPointer<Aki::SqlServer> defaultServer(Aki::SqlServer::findServer("Freenode", identity.data()));
-                QScopedPointer<Aki::SqlNickname> defaultNickname(Aki::SqlNickname::findNickname("zeke",
-                                                                                                defaultServer.data()));
+                QScopedPointer<Aki::SqlNickname> defaultNickname(Aki::SqlNickname::findNickname("zeke", identity.data()));
                 defaultNickname->setNickname("zeke|away");
                 defaultNickname->save();
 
-                QScopedPointer<Aki::SqlNickname> defaultNickname2(Aki::SqlNickname::findNickname("zeke|away",
-                                                                                                 defaultServer.data()));
+                QScopedPointer<Aki::SqlNickname> defaultNickname2(Aki::SqlNickname::findNickname("zeke|away", identity.data()));
                 QVERIFY(*defaultNickname == *defaultNickname2);
             }
         }
@@ -428,13 +422,10 @@ DatabaseTest::checkNicknameDelete()
             QScopedPointer<Aki::Database, DatabaseCleanupDeleter> database(new Aki::Database);
             if (database->createDefaultTables()) {
                 QScopedPointer<Aki::SqlIdentity> identity(Aki::SqlIdentity::findIdentity("Default Identity"));
-                QScopedPointer<Aki::SqlServer> defaultServer(Aki::SqlServer::findServer("Freenode", identity.data()));
-                QScopedPointer<Aki::SqlNickname> defaultNickname(Aki::SqlNickname::findNickname("zeke",
-                                                                                                defaultServer.data()));
+                QScopedPointer<Aki::SqlNickname> defaultNickname(Aki::SqlNickname::findNickname("zeke", identity.data()));
                 QVERIFY(defaultNickname->remove());
 
-                QScopedPointer<Aki::SqlNickname> defaultNickname2(Aki::SqlNickname::findNickname("zeke",
-                                                                                                 defaultServer.data()));
+                QScopedPointer<Aki::SqlNickname> defaultNickname2(Aki::SqlNickname::findNickname("zeke", identity.data()));
                 QVERIFY(defaultNickname2.isNull());
             }
         }

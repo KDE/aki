@@ -297,6 +297,7 @@ SqlIdentity::save()
     QSqlQuery query;
     const QString str("UPDATE Identity SET awayMessage=?, awayNickname=?, name=?, kickMessage=?, enableMessages=?"
                       ", markLastPosition=?, partMessage=?, quitMessage=?, realName=?, returnMessage=? WHERE id=?");
+
     query.prepare(str);
     query.addBindValue(Aki::SqlIdentityPrivate::checkString(awayMessage()));
     query.addBindValue(Aki::SqlIdentityPrivate::checkString(awayNickname()));
