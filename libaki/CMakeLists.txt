@@ -11,6 +11,7 @@ set(akicore_SRCS
     ${akicore_config_SRCS}
     ${akicore_dialogs_SRCS}
     ${akicore_interfaces_SRCS}
+    ${akicore_plugin_SRCS}
     ${akicore_private_SRCS}
     ${akicore_serverlist_SRCS}
     ${akicore_ui_SRCS}
@@ -20,6 +21,8 @@ set(akicore_SRCS
     identity.cxx
     server.cxx
 )
+
+MESSAGE(STATUS "${akicore_plugin_SRCS}")
 
 set(akicore_UIS
 )

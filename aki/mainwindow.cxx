@@ -2,13 +2,15 @@
 #include "aki.hpp"
 #include "dialogs/identitydialog.hpp"
 #include "dialogs/networkdialog.hpp"
-#include "ui/chatview.hpp"
+#include "interfaces/isettingspage.hpp"
+#include "plugin/plugin.hpp"
 #include "ui/view.hpp"
 #include "ui/viewtabbar.hpp"
 #include <KDE/KAction>
 #include <KDE/KActionCollection>
 #include <KDE/KCmdLineArgs>
 #include <KDE/KTabBar>
+#include <KDE/KXMLGUIFactory>
 using namespace Aki;
 
 AkiWindow::AkiWindow()
@@ -24,6 +26,19 @@ AkiWindow::AkiWindow()
 
 AkiWindow::~AkiWindow()
 {
+}
+
+void
+AkiWindow::addGui(Aki::Plugin* plugin)
+{
+    guiFactory()->addClient(plugin);
+}
+
+void
+AkiWindow::addSettingsPage(Aki::ISettingsPage* page)
+{
+    Q_UNUSED(page);
+#warning Implement addSettingsPage
 }
 
 void
@@ -71,6 +86,19 @@ AkiWindow::identityListTriggered()
 {
     Aki::IdentityDialog* identityDialog = new Aki::IdentityDialog;
     identityDialog->show();
+}
+
+void
+AkiWindow::removeGui(Aki::Plugin* plugin)
+{
+    guiFactory()->removeClient(plugin);
+}
+
+void
+AkiWindow::removeSettingsPage(Aki::ISettingsPage* page)
+{
+    Q_UNUSED(page);
+#warning Implement removeSettingsPage
 }
 
 void
