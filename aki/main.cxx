@@ -1,4 +1,4 @@
-#include "akiversion.h"
+#include "akiversion.hpp"
 #include "mainwindow.hpp"
 #include <KDE/KAboutData>
 #include <KDE/KApplication>

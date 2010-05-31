@@ -1,10 +1,11 @@
 #include "configurationdialog.hpp"
 #include "aki.hpp"
+#include "settings.h"
 #include "interfaces/isettingspage.hpp"
 using namespace Aki;
 
 ConfigurationDialog::ConfigurationDialog(QWidget* parent)
-    : KConfigDialog(parent, i18n("settings"), 0)
+    : KConfigDialog(parent, "settings", Aki::Settings::self())
 {
     setButtons(KConfigDialog::Help | KConfigDialog::Ok |
                KConfigDialog::Cancel | KConfigDialog::Apply);

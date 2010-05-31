@@ -2,7 +2,7 @@
 #define AKI_HPP
 
 #include "libaki_export.hpp"
-#include "akiversion.h"
+#include "akiversion.hpp"
 #include <KDE/KDebug>
 #include <KDE/KLocale>
 #include <QxtCore/QxtLogger>

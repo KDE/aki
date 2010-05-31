@@ -8,6 +8,10 @@ include(ui/CMakeLists.txt)
 include(utils/CMakeLists.txt)
 
 set(akicore_SRCS
+    aki.cxx
+    chatparser.cxx
+    identity.cxx
+    server.cxx
     ${akicore_config_SRCS}
     ${akicore_dialogs_SRCS}
     ${akicore_interfaces_SRCS}
@@ -16,10 +20,6 @@ set(akicore_SRCS
     ${akicore_serverlist_SRCS}
     ${akicore_ui_SRCS}
     ${akicore_utils_SRCS}
-    aki.cxx
-    chatparser.cxx
-    identity.cxx
-    server.cxx
 )
 
 set(akicore_UIS

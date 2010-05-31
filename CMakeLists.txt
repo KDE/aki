@@ -83,7 +83,7 @@ endif(KDE4_USE_COMMON_CMAKE_PACKAGE_CONFIG_DIR)
 
 install(
     FILES
-        "${aki_BINARY_DIR}/akiversion.h"
+        "${aki_BINARY_DIR}/akiversion.hpp"
     DESTINATION
         "${INCLUDE_NSTALL_DIR}/aki"
 )
