@@ -59,7 +59,7 @@ include_directories(
 
 macro_write_basic_cmake_version_file(
     AkiConfigVersion.cmake
-    ${AKI_VERSION_MAJOR} 
+    ${AKI_VERSION_MAJOR}
     ${AKI_VERSION_MINOR}
     ${AKI_VERSION_PATCH}
 )
@@ -70,8 +70,8 @@ configure_file(
     @ONLY
 )
 configure_file(
-    "${aki_SOURCE_DIR}/akiversion.h.cmake"
-    "${aki_BINARY_DIR}/akiversion.h"
+    "${aki_SOURCE_DIR}/akiversion.hpp.cmake"
+    "${aki_BINARY_DIR}/akiversion.hpp"
     @ONLY
 )
 

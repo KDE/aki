@@ -1,5 +1,6 @@
 #include "mainwindow.hpp"
 #include "aki.hpp"
+#include "dialogs/configurationdialog.hpp"
 #include "dialogs/identitydialog.hpp"
 #include "dialogs/networkdialog.hpp"
 #include "interfaces/isettingspage.hpp"
@@ -47,7 +48,7 @@ AkiWindow::createMenus()
     KAction* action = new KAction(i18n("Network List"), this);
     actionCollection()->addAction("akiNetworkList", action);
     connect(action, SIGNAL(triggered(bool)),
-            SLOT(serverListTriggered()));
+            SLOT(slotNetworkListTriggered()));
 
     action = new KAction(i18n("Server Tab"), this);
     actionCollection()->addAction("akiNewServerTab", action);
@@ -67,25 +68,21 @@ AkiWindow::createMenus()
     action = new KAction(KIcon("application-exit"), i18n("Quit"), this);
     actionCollection()->addAction("akiQuit", action);
     connect(action, SIGNAL(triggered(bool)),
-            SLOT(quitTriggered()));
+            SLOT(slotQuitTriggered()));
 
     action = new KAction(i18n("Identities..."), this);
     actionCollection()->addAction("settingsIdentityList", action);
     connect(action, SIGNAL(triggered(bool)),
-            SLOT(identityListTriggered()));
+            SLOT(slotIdentityListTriggered()));
+
+    KStandardAction::preferences(this, SLOT(slotPreferencesTriggered()), actionCollection());
     setupGUI(ToolBar | Keys | StatusBar | Create);
 }
 
 void
 AkiWindow::createDialogs()
 {
-}
-
-void
-AkiWindow::identityListTriggered()
-{
-    Aki::IdentityDialog* identityDialog = new Aki::IdentityDialog;
-    identityDialog->show();
+    _configDialog = new Aki::ConfigurationDialog(this);
 }
 
 void
@@ -102,13 +99,26 @@ AkiWindow::removeSettingsPage(Aki::ISettingsPage* page)
 }
 
 void
-AkiWindow::serverListTriggered()
+AkiWindow::slotIdentityListTriggered()
+{
+    Aki::IdentityDialog* identityDialog = new Aki::IdentityDialog;
+    identityDialog->show();
+}
+
+void
+AkiWindow::slotNetworkListTriggered()
 {
     Aki::NetworkDialog* networkDialog = new Aki::NetworkDialog;
     networkDialog->show();
 }
 
 void
-AkiWindow::quitTriggered()
+AkiWindow::slotQuitTriggered()
 {
+}
+
+void
+AkiWindow::slotPreferencesTriggered()
+{
+    _configDialog->exec();
 }

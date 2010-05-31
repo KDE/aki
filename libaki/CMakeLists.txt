@@ -22,8 +22,6 @@ set(akicore_SRCS
     server.cxx
 )
 
-MESSAGE(STATUS "${akicore_plugin_SRCS}")
-
 set(akicore_UIS
 )
 
@@ -43,12 +41,24 @@ set(akicore_LIBS
     akiirc
 )
 
-#kde4_add_kcfg_files(akicore_SRCS settings.kcfgc)
+kde4_add_kcfg_files(akicore_SRCS settings.kcfgc)
 #kde4_add_ui_files(akicore_SRCS ${akicore_UIS})
 kde4_add_library(akicore SHARED ${akicore_SRCS})
 target_link_libraries(akicore ${akicore_LIBS})
 set_target_properties(akicore PROPERTIES VERSION ${AKI_VERSION} SOVERSION ${AKI_SOVERSION})
-install(TARGETS akicore ${INSTALL_TARGETS_DEFAULT_ARGS})
+
+install(
+    TARGETS
+        akicore
+    ${INSTALL_TARGETS_DEFAULT_ARGS}
+)
+
+install(
+    FILES
+        settings.kcfg
+    DESTINATION
+        ${KCFG_INSTALL_DIR}
+)
 
 install(
     FILES

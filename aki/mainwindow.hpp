@@ -6,6 +6,7 @@
 
 namespace Aki
 {
+class ConfigurationDialog;
 class ISettingsPage;
 class Plugin;
 class ServerDialog;
@@ -21,12 +22,15 @@ public:
     virtual void removeGui(Aki::Plugin* plugin);
     virtual void removeSettingsPage(Aki::ISettingsPage* page);
 public Q_SLOTS:
-    void identityListTriggered();
-    void serverListTriggered();
-    void quitTriggered();
+    void slotIdentityListTriggered();
+    void slotNetworkListTriggered();
+    void slotPreferencesTriggered();
+    void slotQuitTriggered();
 private:
     void createMenus();
     void createDialogs();
+private:
+    Aki::ConfigurationDialog* _configDialog;
 }; // End of class AkiWindow.
 } // End of namespace Aki.
 
