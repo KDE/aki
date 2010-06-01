@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Form</class>
- <widget class="QWidget" name="Form">
+ <class>ChatWindowPage</class>
+ <widget class="QWidget" name="ChatWindowPage">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>436</width>
-    <height>323</height>
+    <height>352</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string/>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
    <item row="0" column="0">

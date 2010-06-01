@@ -1,6 +1,8 @@
 #include "configurationdialog.hpp"
 #include "aki.hpp"
 #include "settings.h"
+#include "configdialogpages/chatwindowpage.hpp"
+#include "configdialogpages/generalpage.hpp"
 #include "interfaces/isettingspage.hpp"
 using namespace Aki;
 
@@ -10,6 +12,10 @@ ConfigurationDialog::ConfigurationDialog(QWidget* parent)
     setButtons(KConfigDialog::Help | KConfigDialog::Ok |
                KConfigDialog::Cancel | KConfigDialog::Apply);
     setSizeGripEnabled(true);
+
+    addPage(new Aki::GeneralPage);
+    addPage(new Aki::ChatWindowPage);
+    resize(QSize(800, 600));
 }
 
 ConfigurationDialog::~ConfigurationDialog()

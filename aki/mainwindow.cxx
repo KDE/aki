@@ -45,18 +45,12 @@ AkiWindow::addSettingsPage(Aki::ISettingsPage* page)
 void
 AkiWindow::createMenus()
 {
-    KAction* action = new KAction(i18n("Network List"), this);
+    KAction* action = new KAction(KIcon("network-workgroup"), i18n("Network List"), this);
     actionCollection()->addAction("akiNetworkList", action);
     connect(action, SIGNAL(triggered(bool)),
             SLOT(slotNetworkListTriggered()));
 
-    action = new KAction(i18n("Server Tab"), this);
-    actionCollection()->addAction("akiNewServerTab", action);
-
-    action = new KAction(i18n("Channel Tab"), this);
-    actionCollection()->addAction("akiNewChannelTab", action);
-
-    action = new KAction(i18n("Quick Connection"), this);
+    action = new KAction(KIcon("network-connect"), i18n("Quick Connection"), this);
     actionCollection()->addAction("akiQuickConnection", action);
 
     action = new KAction(KIcon("edit-redo"), i18n("Reconnect"), this);
@@ -70,7 +64,7 @@ AkiWindow::createMenus()
     connect(action, SIGNAL(triggered(bool)),
             SLOT(slotQuitTriggered()));
 
-    action = new KAction(i18n("Identities..."), this);
+    action = new KAction(KIcon("user-properties"), i18n("Identities..."), this);
     actionCollection()->addAction("settingsIdentityList", action);
     connect(action, SIGNAL(triggered(bool)),
             SLOT(slotIdentityListTriggered()));
