@@ -6,13 +6,13 @@
 #include "dialogs/quickconnectiondialog.hpp"
 #include "interfaces/isettingspage.hpp"
 #include "plugin/plugin.hpp"
+#include "ui/systemtray.hpp"
 #include "ui/view.hpp"
 #include "ui/viewtabbar.hpp"
 #include "utils/pluginmanager.hpp"
 #include <KDE/KAction>
 #include <KDE/KActionCollection>
 #include <KDE/KCmdLineArgs>
-#include <KDE/KTabBar>
 #include <KDE/KXMLGUIFactory>
 using namespace Aki;
 
@@ -21,8 +21,14 @@ AkiWindow::AkiWindow()
 {
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
     args->clear();
+
+    _systemTray = new Aki::SystemTray(this);
+
+    _view = new Aki::View(this);
+
     setTopRightCorner(new Aki::ViewTabBar(this));
-    setView(new Aki::View);
+    setView(_view);
+
     createMenus();
     createDialogs();
 
@@ -41,9 +47,10 @@ AkiWindow::addGui(Aki::Plugin* plugin)
 }
 
 void
-AkiWindow::addSettingsPage(Aki::ISettingsPage*)
+AkiWindow::addSettingsPage(Aki::ISettingsPage* page)
 {
-#warning Implement addSettingsPage
+    Q_ASSERT(page);
+    _configDialog->addPage(page);
 }
 
 void
@@ -92,9 +99,10 @@ AkiWindow::removeGui(Aki::Plugin* plugin)
 }
 
 void
-AkiWindow::removeSettingsPage(Aki::ISettingsPage*)
+AkiWindow::removeSettingsPage(Aki::ISettingsPage* page)
 {
-#warning Implement removeSettingsPage
+    Q_ASSERT(page);
+    _configDialog->removePage(page);
 }
 
 void

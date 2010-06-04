@@ -110,7 +110,8 @@ MainWindow::setView(Aki::View* view)
             _d->view, SLOT(viewCurrentChanged(int)));
 }
 
-Aki::View* MainWindow::view()
+Aki::View*
+MainWindow::view()
 {
     return _d->view;
 }

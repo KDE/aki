@@ -10,6 +10,8 @@ class ConfigurationDialog;
 class ISettingsPage;
 class Plugin;
 class ServerDialog;
+class SystemTray;
+class View;
 class AkiWindow : public Aki::MainWindow,
                   public Aki::IMainController
 {
@@ -32,6 +34,8 @@ private:
     void createDialogs();
 private:
     Aki::ConfigurationDialog* _configDialog;
+    Aki::View* _view;
+    Aki::SystemTray* _systemTray;
 }; // End of class AkiWindow.
 } // End of namespace Aki.
 
