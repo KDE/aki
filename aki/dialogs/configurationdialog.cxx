@@ -3,6 +3,7 @@
 #include "settings.h"
 #include "configdialogpages/chatwindowpage.hpp"
 #include "configdialogpages/generalpage.hpp"
+#include "configdialogpages/pluginpage.hpp"
 #include "interfaces/isettingspage.hpp"
 using namespace Aki;
 
@@ -15,6 +16,7 @@ ConfigurationDialog::ConfigurationDialog(QWidget* parent)
 
     addPage(new Aki::GeneralPage);
     addPage(new Aki::ChatWindowPage);
+    addPage(new Aki::PluginPage);
     resize(QSize(800, 600));
 }
 

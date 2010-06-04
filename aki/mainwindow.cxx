@@ -7,6 +7,7 @@
 #include "plugin/plugin.hpp"
 #include "ui/view.hpp"
 #include "ui/viewtabbar.hpp"
+#include "utils/pluginmanager.hpp"
 #include <KDE/KAction>
 #include <KDE/KActionCollection>
 #include <KDE/KCmdLineArgs>
@@ -23,6 +24,8 @@ AkiWindow::AkiWindow()
     setView(new Aki::View);
     createMenus();
     createDialogs();
+
+    Aki::PluginManager::self()->initialize(this);
 }
 
 AkiWindow::~AkiWindow()
