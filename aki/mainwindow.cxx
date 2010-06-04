@@ -23,7 +23,6 @@ AkiWindow::AkiWindow()
     args->clear();
 
     _systemTray = new Aki::SystemTray(this);
-
     _view = new Aki::View(this);
 
     setTopRightCorner(new Aki::ViewTabBar(this));

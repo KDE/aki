@@ -13,8 +13,7 @@ class LIBAKI_EXPORT IBaseWindow : public QWidget
     Q_OBJECT
 public:
     enum WindowType {
-        StatusWindow = 0,
-        ChannelWindow,
+        ChannelWindow = 0,
         QueryWindow,
         DccChatWindow,
         ServerWindow,
