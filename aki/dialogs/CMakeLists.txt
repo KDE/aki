@@ -7,5 +7,6 @@ set (aki_dialogs_SRCS
     dialogs/configurationdialog.cxx
     dialogs/identitydialog.cxx
     dialogs/networkdialog.cxx
+    dialogs/quickconnectiondialog.cxx
     ${aki_dialogs_configdialogpages_SRCS}
 )

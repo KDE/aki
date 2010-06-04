@@ -3,6 +3,7 @@
 #include "dialogs/configurationdialog.hpp"
 #include "dialogs/identitydialog.hpp"
 #include "dialogs/networkdialog.hpp"
+#include "dialogs/quickconnectiondialog.hpp"
 #include "interfaces/isettingspage.hpp"
 #include "plugin/plugin.hpp"
 #include "ui/view.hpp"
@@ -26,6 +27,7 @@ AkiWindow::AkiWindow()
     createDialogs();
 
     Aki::PluginManager::self()->initialize(this);
+    Aki::PluginManager::self()->loadPlugins();
 }
 
 AkiWindow::~AkiWindow()
@@ -39,9 +41,8 @@ AkiWindow::addGui(Aki::Plugin* plugin)
 }
 
 void
-AkiWindow::addSettingsPage(Aki::ISettingsPage* page)
+AkiWindow::addSettingsPage(Aki::ISettingsPage*)
 {
-    Q_UNUSED(page);
 #warning Implement addSettingsPage
 }
 
@@ -54,6 +55,8 @@ AkiWindow::createMenus()
             SLOT(slotNetworkListTriggered()));
 
     action = new KAction(KIcon("network-connect"), i18n("Quick Connection"), this);
+    connect(action, SIGNAL(triggered(bool)),
+            SLOT(slotQuickConnectionTriggered()));
     actionCollection()->addAction("akiQuickConnection", action);
 
     action = new KAction(KIcon("edit-redo"), i18n("Reconnect"), this);
@@ -89,9 +92,8 @@ AkiWindow::removeGui(Aki::Plugin* plugin)
 }
 
 void
-AkiWindow::removeSettingsPage(Aki::ISettingsPage* page)
+AkiWindow::removeSettingsPage(Aki::ISettingsPage*)
 {
-    Q_UNUSED(page);
 #warning Implement removeSettingsPage
 }
 
@@ -107,6 +109,13 @@ AkiWindow::slotNetworkListTriggered()
 {
     Aki::NetworkDialog* networkDialog = new Aki::NetworkDialog;
     networkDialog->show();
+}
+
+void
+AkiWindow::slotQuickConnectionTriggered()
+{
+    Aki::QuickConnectionDialog* quickConnectionDialog = new Aki::QuickConnectionDialog;
+    quickConnectionDialog->show();
 }
 
 void

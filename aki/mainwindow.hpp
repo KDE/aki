@@ -25,6 +25,7 @@ public Q_SLOTS:
     void slotIdentityListTriggered();
     void slotNetworkListTriggered();
     void slotPreferencesTriggered();
+    void slotQuickConnectionTriggered();
     void slotQuitTriggered();
 private:
     void createMenus();
