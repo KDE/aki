@@ -2,24 +2,30 @@ include(ui/private/CMakeLists.txt)
 
 set(akicore_ui_SRCS
     ${akicore_uiprivate_SRCS}
+    ui/channelcontainer.cxx
+    ui/channelview.cxx
+    ui/channelwidget.cxx
     ui/chatview.cxx
+    ui/colourbutton.cxx
     ui/dockbar.cxx
     ui/dockbutton.cxx
     ui/dockwidget.cxx
     ui/mainwindow.cxx
+    ui/tabbar.cxx
     ui/view.cxx
-    ui/viewtabbar.cxx
+    ui/serverviewtab.cxx
+    ui/useritem.cxx
 )
 
 install(
     FILES
+        ui/channelcontainer.hpp
+        ui/channelview.hpp
         ui/chatview.hpp
-        ui/dockbar.hpp
-        ui/dockbutton.hpp
-        ui/dockwidget.hpp
         ui/mainwindow.hpp
+        ui/tabbar.hpp
         ui/view.hpp
-        ui/viewtabbar.hpp
+        ui/serverviewtab.hpp
     DESTINATION
         ${INCLUDE_INSTALL_DIR}/aki/ui
     COMPONENT

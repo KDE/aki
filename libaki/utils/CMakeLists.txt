@@ -22,3 +22,17 @@ install(
     COMPONENT
         Devel
 )
+
+install(
+    FILES
+        utils/Database
+        utils/SqlAddress
+        utils/SqlChannel
+        utils/SqlIdentity
+        utils/SqlNetwork
+        utils/SqlNickname
+    DESTINATION
+        ${INCLUDE_INSTALL_DIR}/Aki/Utils
+    COMPONENT
+        Devel
+)

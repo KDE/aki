@@ -1,9 +1,10 @@
+#include "aki.hpp"
 #include "akiversion.hpp"
+#include "application.hpp"
 #include "mainwindow.hpp"
 #include <KDE/KAboutData>
 #include <KDE/KApplication>
 #include <KDE/KCmdLineArgs>
-#include <KDE/KLocale>
 
 int
 main(int argc, char** argv)
@@ -32,10 +33,12 @@ main(int argc, char** argv)
     options.add("log", ki18n("Log to file debug info"));
 
     KCmdLineArgs::addCmdLineOptions(options);
+    Aki::Application::addCmdLineOptions();
 
-    KApplication app;
-    Aki::AkiWindow *win = new Aki::AkiWindow;
-    win->show();
+    if (!Aki::Application::start()) {
+        exit(0);
+    }
 
-    return KApplication::exec();
+    new Aki::Application();
+    return Aki::Application::exec();
 }

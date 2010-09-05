@@ -6,7 +6,7 @@
 #include "utils/sqlnetwork.hpp"
 #include "utils/sqlnickname.hpp"
 #include <QtTest>
-#include <QxtCore/QxtXMLFileLoggerEngine>
+#include <QxtCore/QxtXmlFileLoggerEngine>
 
 #if 1
 #undef QBENCHMARK

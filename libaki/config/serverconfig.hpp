@@ -1,7 +1,7 @@
 #ifndef AKI_SERVERCONFIG_HPP
 #define AKI_SERVERCONFIG_HPP
 
-#include "libaki_export.hpp"
+#include "aki.hpp"
 #include "configfile.hpp"
 
 namespace Aki

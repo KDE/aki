@@ -10,24 +10,19 @@ class DockBar;
 class DockWidget;
 class MainWindow;
 class View;
-class ViewTabBar;
 class MainWindowPrivate : public QObject
 {
     Q_OBJECT
 public:
     explicit MainWindowPrivate(Aki::MainWindow* mainWindow);
-    void setTopRightCorner(Aki::ViewTabBar* widget);
     void addDockBar(Qt::ToolBarArea area);
-    Qt::ToolBarArea toToolBarArea(Qt::DockWidgetArea area);
-    void dockLocationChanged(Qt::DockWidgetArea area);
-public Q_SLOTS:
-    void dockAdded(Aki::DockWidget* dock);
-    void dockRemoved(Aki::DockWidget* dock);
-    void dockShow(Aki::DockWidget* dock);
-    void dockHide(Aki::DockWidget* dock);
-    void dockAutoHideStateChanged(Aki::DockWidget* dock, bool checked);
+    void dockAdded(Aki::DockWidget* dockWidget);
+    void dockAutoHideStateChanged(Aki::DockWidget* dockWidget, bool checked);
+    void dockRemoved(Aki::DockWidget* dockWidget);
+    void dockHide(Aki::DockWidget* dockWidget);
+    void dockShow(Aki::DockWidget* dockWidget);
 public:
-    Aki::ViewTabBar* cornerWidget;
+    QList<Aki::DockBar*> dockBars;
     Aki::View* view;
 private:
     Aki::MainWindow* _q;

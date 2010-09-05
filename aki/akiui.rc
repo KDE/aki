@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="3" name="aki">
+<kpartgui version="4" name="aki">
 <MenuBar>
     <Menu name="aki">
         <Text>&amp;Aki</Text>
@@ -14,5 +14,12 @@
     <Menu name="settings">
         <Action name="settingsIdentityList" />
     </Menu>
+    <Action name="bookmarks" />
 </MenuBar>
+<!--<ToolBar>
+    <Text>Aki ToolBar</Text>
+    <Action name="toolBarStyleSelector">
+        <Text>Styles</Text>
+    </Action>
+</ToolBar>-->
 </kpartgui>

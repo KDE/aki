@@ -1,26 +1,26 @@
 #include "dockbar.hpp"
 #include "ui/dockbutton.hpp"
 #include "ui/dockwidget.hpp"
-#include "private/dockbar_p.hpp"
-#include <QtGui/QAction>
+#include "ui/private/dockbar_p.hpp"
 #include <QtCore/QSignalMapper>
+#include <QtGui/QAction>
 using namespace Aki;
 
 DockBar::DockBar(QWidget* parent)
-    : KToolBar(parent)
+    : QToolBar(parent)
 {
     _d.reset(new Aki::DockBarPrivate(this));
-    _d->showDockMapper = new QSignalMapper(this);
     _d->hideDockMapper = new QSignalMapper(this);
+    _d->showDockMapper = new QSignalMapper(this);
 
-     connect(_d->showDockMapper, SIGNAL(mapped(QWidget*)),
-             _d.data(), SLOT(dockShow(QWidget*)));
-     connect(_d->hideDockMapper, SIGNAL(mapped(QWidget*)),
-             _d.data(), SLOT(dockHide(QWidget*)));
+    connect(_d->hideDockMapper, SIGNAL(mapped(QWidget*)),
+            SLOT(dockHide(QWidget*)));
+    connect(_d->showDockMapper, SIGNAL(mapped(QWidget*)),
+            SLOT(dockShow(QWidget*)));
 
     setContextMenuPolicy(Qt::NoContextMenu);
-    setToolBarsEditable(false);
-    setToolBarsLocked(true);
+    //setToolBarsEditable(false);
+    //setToolBarsLocked(true);
     setFloatable(false);
     setMovable(false);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -31,42 +31,40 @@ DockBar::~DockBar()
 }
 
 void
-DockBar::addDock(Aki::DockWidget* dock)
+DockBar::addDockWidget(Aki::DockWidget* dock)
 {
     if (!dock) {
         return;
     }
 
-    Aki::DockButton* button = new Aki::DockButton(this);
-    button->setDock(dock);
-    button->setAutoHide(true);
+    Aki::DockButton* dockButton = new Aki::DockButton(this);
+    dockButton->setAutoHide(true);
+    dockButton->setDockWidget(dock);
+
     dock->setDockBar(this);
     dock->hide();
-    _d->createAction(button);
 
-    connect(button, SIGNAL(triggered(QAction*)),
-            _d.data(), SLOT(buttonTriggered(QAction*)));
-    connect(button, SIGNAL(mouseLeave()),
+    _d->createAction(dockButton);
+
+    connect(dockButton, SIGNAL(triggered(QAction*)),
+            SLOT(buttonTriggered(QAction*)));
+    connect(dockButton, SIGNAL(mouseEnter()),
+            _d->showDockMapper, SLOT(map()));
+    connect(dockButton, SIGNAL(mouseLeave()),
             _d->hideDockMapper, SLOT(map()));
-    connect(dock, SIGNAL(dockAutoHideStateChanged(bool)),
-            _d.data(), SLOT(dockAutoHideStateChanged(bool)));
+    connect(dock, SIGNAL(autoHideStateChanged(Aki::DockWidget*,bool)),
+            SLOT(dockAutoHideStateChanged(Aki::DockWidget*,bool)));
 
-    _d->showDockMapper->setMapping(button, dock);
-    _d->hideDockMapper->setMapping(button, dock);
+    _d->hideDockMapper->setMapping(dockButton, dock);
+    _d->showDockMapper->setMapping(dockButton, dock);
 
     if (area() == Qt::LeftToolBarArea || area() == Qt::RightToolBarArea) {
-        button->setOrientation(Qt::Vertical);
+        dockButton->setOrientation(Qt::Vertical);
     } else {
-        button->setOrientation(Qt::Horizontal);
+        dockButton->setOrientation(Qt::Horizontal);
     }
 
-    emit dockAdded(button->dock());
-}
-
-Qt::ToolBarAreas
-DockBar::area() const
-{
-    return allowedAreas();
+    emit dockAdded(dockButton->dockWidget());
 }
 
 Aki::DockButton*
@@ -76,13 +74,13 @@ DockBar::buttonForAction(QAction* action)
 }
 
 Aki::DockButton*
-DockBar::buttonForDock(Aki::DockWidget* dock)
+DockBar::buttonForDockWidget(Aki::DockWidget* dock)
 {
-    QList<QAction*> al = actions();
-    foreach (QAction* action, al) {
-        Aki::DockButton* button = buttonForAction(action);
-        if (button && button->dock() == dock) {
-            return button;
+    QList<QAction*> actionList = actions();
+    foreach (QAction* action, actionList) {
+        Aki::DockButton* dockButton = buttonForAction(action);
+        if (dockButton && dockButton->dockWidget() == dock) {
+            return dockButton;
         }
     }
 
@@ -90,13 +88,38 @@ DockBar::buttonForDock(Aki::DockWidget* dock)
 }
 
 void
-DockBar::removeDock(Aki::DockWidget* dock)
+DockBar::setArea(Qt::ToolBarArea area)
 {
-    Q_UNUSED(dock);
-}
+    _d->area = area;
+    switch (area) {
+    case Qt::TopToolBarArea: {
+        setObjectName("TopToolBarArea");
+        break;
+    }
+    case Qt::LeftToolBarArea: {
+        setObjectName("LeftToolBarArea");
+        break;
+    }
+    case Qt::RightToolBarArea: {
+        setObjectName("RightToolBarArea");
+        break;
+    }
+    case Qt::BottomToolBarArea: {
+        setObjectName("BottomToolBarArea");
+        break;
+    }
+    default: {
+        break;
+    }
+    }
 
-void
-DockBar::setDockArea(Qt::ToolBarArea area)
-{
     setAllowedAreas(area);
 }
+
+Qt::ToolBarArea
+DockBar::area() const
+{
+    return _d->area;
+}
+
+#include "ui/dockbar.moc"

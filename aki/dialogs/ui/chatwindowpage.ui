@@ -39,15 +39,60 @@
                 <property name="fieldGrowthPolicy">
                  <enum>QFormLayout::ExpandingFieldsGrow</enum>
                 </property>
-                <item row="1" column="0" colspan="2">
+                <item row="1" column="0">
+                 <widget class="QLabel" name="label">
+                  <property name="text">
+                   <string>Style variant:</string>
+                  </property>
+                  <property name="buddy">
+                   <cstring>kcfg_styleVariantComboBox</cstring>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="KComboBox" name="kcfg_styleVariantComboBox"/>
+                </item>
+                <item row="2" column="0">
+                 <widget class="QLabel" name="label_2">
+                  <property name="text">
+                   <string>Emoticons:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="1">
+                 <widget class="KComboBox" name="kcfg_emoticonsComboBox"/>
+                </item>
+                <item row="3" column="0" colspan="2">
+                 <layout class="QHBoxLayout" name="horizontalLayout">
+                  <item>
+                   <widget class="KPushButton" name="getNewThemeButton">
+                    <property name="text">
+                     <string>Get new theme...</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="KPushButton" name="installButton">
+                    <property name="text">
+                     <string>Install....</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="KPushButton" name="removeButton">
+                    <property name="text">
+                     <string>Remove theme...</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+                <item row="0" column="0" colspan="2">
                  <widget class="QSplitter" name="splitter">
                   <property name="orientation">
                    <enum>Qt::Horizontal</enum>
                   </property>
-                  <property name="childrenCollapsible">
-                   <bool>false</bool>
-                  </property>
-                  <widget class="QListView" name="listView"/>
+                  <widget class="KListWidget" name="themeListWidget"/>
                   <widget class="QWebView" name="webView">
                    <property name="url">
                     <url>
@@ -56,54 +101,6 @@
                    </property>
                   </widget>
                  </widget>
-                </item>
-                <item row="2" column="0">
-                 <widget class="QLabel" name="label">
-                  <property name="text">
-                   <string>Style variant:</string>
-                  </property>
-                  <property name="buddy">
-                   <cstring>kcombobox</cstring>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="1">
-                 <widget class="KComboBox" name="kcombobox"/>
-                </item>
-                <item row="3" column="0">
-                 <widget class="QLabel" name="label_2">
-                  <property name="text">
-                   <string>Emoticons:</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="3" column="1">
-                 <widget class="KComboBox" name="kcombobox_2"/>
-                </item>
-                <item row="4" column="0" colspan="2">
-                 <layout class="QHBoxLayout" name="horizontalLayout">
-                  <item>
-                   <widget class="KPushButton" name="kpushbutton_4">
-                    <property name="text">
-                     <string>Get new theme...</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="KPushButton" name="kpushbutton_5">
-                    <property name="text">
-                     <string>Install....</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="KPushButton" name="kpushbutton_6">
-                    <property name="text">
-                     <string>Remove theme...</string>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
                 </item>
                </layout>
               </item>
@@ -119,21 +116,21 @@
               <item row="0" column="0">
                <layout class="QFormLayout" name="formLayout_2">
                 <item row="0" column="0" colspan="2">
-                 <widget class="QCheckBox" name="checkBox">
+                 <widget class="QCheckBox" name="showChannelTopicCheckBox">
                   <property name="text">
                    <string>Show channel topic</string>
                   </property>
                  </widget>
                 </item>
                 <item row="1" column="0" colspan="2">
-                 <widget class="QCheckBox" name="checkBox_2">
+                 <widget class="QCheckBox" name="showChannelModeButton">
                   <property name="text">
                    <string>Show channel mode buttons</string>
                   </property>
                  </widget>
                 </item>
                 <item row="2" column="0" colspan="2">
-                 <widget class="QCheckBox" name="checkBox_3">
+                 <widget class="QCheckBox" name="showNickList">
                   <property name="text">
                    <string>Show nick list</string>
                   </property>
@@ -259,7 +256,7 @@
                    </widget>
                   </item>
                   <item row="0" column="1">
-                   <widget class="KColorButton" name="kcolorbutton">
+                   <widget class="KColorButton" name="mircColor0Button">
                     <property name="color">
                      <color>
                       <red>255</red>
@@ -277,7 +274,7 @@
                    </widget>
                   </item>
                   <item row="1" column="1">
-                   <widget class="KColorButton" name="kcolorbutton_2">
+                   <widget class="KColorButton" name="mircColor1Button">
                     <property name="color">
                      <color>
                       <red>0</red>
@@ -288,7 +285,7 @@
                    </widget>
                   </item>
                   <item row="2" column="1">
-                   <widget class="KColorButton" name="kcolorbutton_3">
+                   <widget class="KColorButton" name="mircColor2Button">
                     <property name="color">
                      <color>
                       <red>0</red>
@@ -306,7 +303,7 @@
                    </widget>
                   </item>
                   <item row="3" column="1">
-                   <widget class="KColorButton" name="kcolorbutton_4">
+                   <widget class="KColorButton" name="mircColor3Button">
                     <property name="color">
                      <color>
                       <red>0</red>
@@ -356,7 +353,7 @@
                    </widget>
                   </item>
                   <item row="0" column="1">
-                   <widget class="KColorButton" name="kcolorbutton_5">
+                   <widget class="KColorButton" name="mircColor4Button">
                     <property name="color">
                      <color>
                       <red>255</red>
@@ -374,7 +371,7 @@
                    </widget>
                   </item>
                   <item row="1" column="1">
-                   <widget class="KColorButton" name="kcolorbutton_6">
+                   <widget class="KColorButton" name="mircColor5Button">
                     <property name="color">
                      <color>
                       <red>165</red>
@@ -392,7 +389,7 @@
                    </widget>
                   </item>
                   <item row="2" column="1">
-                   <widget class="KColorButton" name="kcolorbutton_7">
+                   <widget class="KColorButton" name="mircColor6Button">
                     <property name="color">
                      <color>
                       <red>128</red>
@@ -410,7 +407,7 @@
                    </widget>
                   </item>
                   <item row="3" column="1">
-                   <widget class="KColorButton" name="kcolorbutton_8">
+                   <widget class="KColorButton" name="mircColor7Button">
                     <property name="color">
                      <color>
                       <red>255</red>
@@ -460,7 +457,7 @@
                    </widget>
                   </item>
                   <item row="0" column="1">
-                   <widget class="KColorButton" name="kcolorbutton_9">
+                   <widget class="KColorButton" name="mircColor8Button">
                     <property name="color">
                      <color>
                       <red>128</red>
@@ -478,7 +475,7 @@
                    </widget>
                   </item>
                   <item row="1" column="1">
-                   <widget class="KColorButton" name="kcolorbutton_10">
+                   <widget class="KColorButton" name="mircColor9Button">
                     <property name="color">
                      <color>
                       <red>0</red>
@@ -496,7 +493,7 @@
                    </widget>
                   </item>
                   <item row="2" column="1">
-                   <widget class="KColorButton" name="kcolorbutton_11">
+                   <widget class="KColorButton" name="mircColor10Button">
                     <property name="color">
                      <color>
                       <red>0</red>
@@ -514,7 +511,7 @@
                    </widget>
                   </item>
                   <item row="3" column="1">
-                   <widget class="KColorButton" name="kcolorbutton_12">
+                   <widget class="KColorButton" name="mircColor11Button">
                     <property name="color">
                      <color>
                       <red>0</red>
@@ -564,7 +561,7 @@
                    </widget>
                   </item>
                   <item row="0" column="1">
-                   <widget class="KColorButton" name="kcolorbutton_13">
+                   <widget class="KColorButton" name="mircColor12Button">
                     <property name="color">
                      <color>
                       <red>0</red>
@@ -582,7 +579,7 @@
                    </widget>
                   </item>
                   <item row="1" column="1">
-                   <widget class="KColorButton" name="kcolorbutton_14">
+                   <widget class="KColorButton" name="mircColor13Button">
                     <property name="color">
                      <color>
                       <red>255</red>
@@ -600,7 +597,7 @@
                    </widget>
                   </item>
                   <item row="2" column="1">
-                   <widget class="KColorButton" name="kcolorbutton_15">
+                   <widget class="KColorButton" name="mircColor14Button">
                     <property name="color">
                      <color>
                       <red>160</red>
@@ -618,7 +615,7 @@
                    </widget>
                   </item>
                   <item row="3" column="1">
-                   <widget class="KColorButton" name="kcolorbutton_16">
+                   <widget class="KColorButton" name="mircColor15Button">
                     <property name="color">
                      <color>
                       <red>192</red>
@@ -675,6 +672,11 @@
    <class>KFontRequester</class>
    <extends>QWidget</extends>
    <header>kfontrequester.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KListWidget</class>
+   <extends>QListWidget</extends>
+   <header>klistwidget.h</header>
   </customwidget>
   <customwidget>
    <class>KPushButton</class>

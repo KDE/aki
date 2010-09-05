@@ -2,13 +2,14 @@
 #include "ui/dockbar.hpp"
 #include "ui/dockbutton.hpp"
 #include "ui/dockwidget.hpp"
+#include <KDE/KIcon>
+#include <QtCore/QSignalMapper>
 #include <QtGui/QAction>
 using namespace Aki;
 
-DockBarPrivate::DockBarPrivate(Aki::DockBar* qq)
-    : QObject(),
+DockBarPrivate::DockBarPrivate(DockBar* qq)
+    : hideDockMapper(0),
     showDockMapper(0),
-    hideDockMapper(0),
     _q(qq)
 {
 }
@@ -17,11 +18,11 @@ void
 DockBarPrivate::buttonTriggered(QAction* action)
 {
     Aki::DockButton* button = _q->buttonForAction(action);
-    if (button && button->dock()->isVisible()) {
+    if (button && button->dockWidget()->isVisible()) {
         return;
     }
 
-    emit _q->dockShow(button->dock());
+    emit _q->dockShow(button->dockWidget());
 }
 
 void
@@ -29,28 +30,21 @@ DockBarPrivate::createAction(Aki::DockButton* button)
 {
     QAction* action = _q->addWidget(button);
     button->setDefaultAction(action);
-    action->setText(button->dock()->title());
-    action->setIcon(button->dock()->icon());
+    action->setText(button->dockWidget()->title());
+    action->setIcon(button->dockWidget()->icon());
 }
 
 void
-DockBarPrivate::dockAutoHideStateChanged(bool checked)
+DockBarPrivate::dockAutoHideStateChanged(Aki::DockWidget* dock, bool checked)
 {
-    Aki::DockWidget* dock = qobject_cast<Aki::DockWidget*>(_q->sender());
-    if (!dock) {
-        return;
-    }
-
-    QList<QAction*> al = _q->actions();
-    // Loop through all the actions and fine the action for this dock.
-    foreach (QAction* action, al) {
-        // Now that we got the action get the widget that is assocated with the action.
-        Aki::DockButton* button = _q->buttonForAction(action);
-        // Check that the button is valid.
-        if (button && button->dock() == dock) {
+    kDebug() << "heheheeh";
+    QList<QAction*> actionList = _q->actions();
+    foreach (QAction* action, actionList) {
+        Aki::DockButton* dockButton = _q->buttonForAction(action);
+        if (dockButton && dockButton->dockWidget() == dock) {
             action->setVisible(checked);
-            button->setAutoHide(checked);
-            // Emit the signal so the main window knows of this too.
+            dockButton->setAutoHide(checked);
+
             emit _q->dockAutoHideStateChanged(dock, checked);
             return;
         }
@@ -60,14 +54,17 @@ DockBarPrivate::dockAutoHideStateChanged(bool checked)
 void
 DockBarPrivate::dockHide(QWidget* dock)
 {
-    Aki::DockWidget* widget = qobject_cast<Aki::DockWidget*>(dock);
-    emit _q->dockHide(widget);
+    Aki::DockWidget* dockWidget = qobject_cast<Aki::DockWidget*>(dock);
+    if (dockWidget) {
+        emit _q->dockHide(dockWidget);
+    }
 }
 
 void
 DockBarPrivate::dockShow(QWidget* dock)
 {
-    // Cast this to a DockWidget.
-    Aki::DockWidget* widget = qobject_cast<Aki::DockWidget*>(dock);
-    emit _q->dockShow(widget);
+    Aki::DockWidget* dockWidget = qobject_cast<Aki::DockWidget*>(dock);
+    if (dockWidget) {
+        emit _q->dockShow(dockWidget);
+    }
 }

@@ -1,7 +1,7 @@
 #ifndef AKI_SQLNETWORK_HPP
 #define AKI_SQLNETWORK_HPP
 
-#include "libaki_export.hpp"
+#include "aki.hpp"
 #include <QtCore/QMetaType>
 #include <QtCore/QObject>
 
@@ -269,8 +269,7 @@ protected:
      */
     void setId(int id);
 private:
-    friend class SqlNetworkPrivate;
-    QScopedPointer<SqlNetworkPrivate> _d;
+    AKI_DECLARE_PRIVATE(SqlNetwork)
 }; // End of class SqlNetwork.
 } // End of namespace Aki.
 

@@ -1,7 +1,7 @@
 #ifndef AKI_SERVER_HPP
 #define AKI_SERVER_HPP
 
-#include "libaki_export.hpp"
+#include "aki.hpp"
 #include <QtCore/QMap>
 #include <QtCore/QMetaType>
 #include <QtCore/QSharedPointer>
@@ -56,8 +56,7 @@ public:
     void setServicePassword(const QString& password);
     void setSsl(bool enable);
 private:
-    friend class ServerPrivate;
-    QScopedPointer<ServerPrivate> _d;
+    AKI_DECLARE_PRIVATE(Server)
 }; // End of class Server.
 } // End of namespace Aki.
 

@@ -1,7 +1,7 @@
 #ifndef AKI_CONFIGFILE_HPP
 #define AKI_CONFIGFILE_HPP
 
-#include "../libaki_export.hpp"
+#include "aki.hpp"
 #include <KDE/KConfigGroup>
 #include <QtCore/QObject>
 
@@ -65,8 +65,7 @@ public:
      */
     virtual void setCurrentGroup(const QString& name);
 protected:
-    friend class ConfigFilePrivate;
-    QScopedPointer<ConfigFilePrivate> _d;
+    AKI_DECLARE_PRIVATE(ConfigFile)
 }; // End of class ConfigFile.
 } // End of namespace Aki.
 

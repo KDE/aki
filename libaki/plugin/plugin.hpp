@@ -1,9 +1,13 @@
 #ifndef AKI_PLUGIN_HPP
 #define AKI_PLUGIN_HPP
 
-#include "libaki_export.hpp"
+#include "aki.hpp"
 #include <KDE/KXMLGUIClient>
 #include <QtCore/QObject>
+
+#define AKI_REGISTER_PLUGIN(factoryName, name) \
+    K_PLUGIN_FACTORY(factoryName##Factory, registerPlugin<factoryName##Plugin>();) \
+    K_EXPORT_PLUGIN(factoryName##Factory(#name))
 
 namespace Aki
 {

@@ -10,3 +10,12 @@ install(
     COMPONENT
         Devel
 )
+
+install(
+    FILES
+        plugin/Plugin
+    DESTINATION
+        ${INCLUDE_INSTALL_DIR}/Aki/Plugin
+    COMPONENT
+        Devel
+)

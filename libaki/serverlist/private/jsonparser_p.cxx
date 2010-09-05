@@ -5,7 +5,6 @@
 #include "utils/sqlidentity.hpp"
 #include "utils/sqlnetwork.hpp"
 #include "utils/sqlnickname.hpp"
-#include "utils/sqlserver.hpp"
 #include <qjson/parser.h>
 using namespace Aki;
 

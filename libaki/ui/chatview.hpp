@@ -1,7 +1,7 @@
 #ifndef AKI_CHATVIEW_HPP
 #define AKI_CHATVIEW_HPP
 
-#include "libaki_export.hpp"
+#include "aki.hpp"
 #include <KDE/KWebView>
 
 namespace Aki
@@ -46,8 +46,7 @@ Q_SIGNALS:
     void userUrlClicked(const QString& nickname);
     void findTextTriggered();
 private:
-    friend class ChatViewPrivate;
-    QScopedPointer<ChatViewPrivate> _d;
+    AKI_DECLARE_PRIVATE(ChatView)
 }; // End of class ChatView.
 } // End of namespace Aki.
 

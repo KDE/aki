@@ -3,11 +3,11 @@
 #include "ui/dockwidget.hpp"
 using namespace Aki;
 
-DockButtonPrivate::DockButtonPrivate(DockButton* qq)
-    : QObject(),
-    dock(0),
+DockButtonPrivate::DockButtonPrivate(Aki::DockButton* qq)
+    : dockWidget(0),
     orientation(Qt::Horizontal),
-    hideable(false),
+    isAutoHide(false),
+    isButtonClicked(false),
     _q(qq)
 {
 }

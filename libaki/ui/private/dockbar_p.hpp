@@ -1,32 +1,32 @@
-#ifndef DOCKBAR_P_HPP
-#define DOCKBAR_P_HPP
+#ifndef AKI_DOCKBAR_P_HPP
+#define AKI_DOCKBAR_P_HPP
 
-#include <QtCore/QObject>
+#include <QtGui/QWidget>
 
 class QAction;
 class QSignalMapper;
+
 namespace Aki
 {
 class DockBar;
 class DockButton;
 class DockWidget;
-class DockBarPrivate : public QObject
+class DockBarPrivate
 {
-    Q_OBJECT
 public:
-    DockBarPrivate(Aki::DockBar* qq);
-    void createAction(Aki::DockButton* button);
-public Q_SLOTS:
+    explicit DockBarPrivate(Aki::DockBar* qq);
     void buttonTriggered(QAction* action);
-    void dockAutoHideStateChanged(bool checked);
-    void dockShow(QWidget* dock);
+    void createAction(Aki::DockButton* button);
+    void dockAutoHideStateChanged(Aki::DockWidget* dock, bool checked);
     void dockHide(QWidget* dock);
+    void dockShow(QWidget* dock);
 public:
-    QSignalMapper* showDockMapper;
     QSignalMapper* hideDockMapper;
+    QSignalMapper* showDockMapper;
+    Qt::ToolBarArea area;
 private:
     Aki::DockBar* _q;
 }; // End of class DockBarPrivate.
-} // End of namespace DockBarPrivate.
+} // End of namespace Aki.
 
-#endif // DOCKBAR_P_HPP
+#endif // AKI_DOCKBAR_P_HPP

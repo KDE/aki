@@ -85,7 +85,7 @@ install(
     FILES
         "${aki_BINARY_DIR}/akiversion.hpp"
     DESTINATION
-        "${INCLUDE_NSTALL_DIR}/aki"
+        "${INCLUDE_INSTALL_DIR}/aki"
 )
 
 install(

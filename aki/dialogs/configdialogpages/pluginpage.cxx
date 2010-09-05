@@ -21,6 +21,11 @@ PluginPage::PluginPage(QWidget* parent)
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->addWidget(_pluginSelector);
     setLayout(layout);
+
+    _pluginSelector->addPlugins(Aki::PluginManager::self()->pluginInfos(),
+                                KPluginSelector::IgnoreConfigFile, i18n("Plugins"),
+                                "Plugins");
+    _pluginSelector->updatePluginsState();
 }
 
 PluginPage::~PluginPage()

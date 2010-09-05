@@ -1,5 +1,6 @@
 add_subdirectory(icons)
 include(dialogs/CMakeLists.txt)
+include(docks/CMakeLists.txt)
 include(ui/CMakeLists.txt)
 include(utils/CMakeLists.txt)
 
@@ -17,8 +18,10 @@ link_directories (
 
 set (aki_SRCS
     ${aki_dialogs_SRCS}
+    ${aki_docks_SRCS}
     ${aki_ui_SRCS}
     ${aki_utils_SRCS}
+    application.cxx
     dbus.cxx
     main.cxx
     mainwindow.cxx
@@ -48,6 +51,13 @@ install (
     ${INSTALL_TARGETS_DEFAULT_ARGS}
 )
 
+install(
+    FILES
+        akiplugin.desktop
+    DESTINATION
+        ${SERVICETYPES_INSTALL_DIR}
+)
+
 install (
     FILES
         akiui.rc
@@ -61,3 +71,5 @@ install (
     DESTINATION
         ${XDG_APPS_INSTALL_DIR}
 )
+
+add_subdirectory(plugins)

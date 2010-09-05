@@ -12,11 +12,12 @@ class ConfigurationDialog : public KConfigDialog
 public:
     explicit ConfigurationDialog(QWidget* parent);
     ~ConfigurationDialog();
-    void addPage(Aki::ISettingsPage* page);
+    void addPage(Aki::ISettingsPage* page, bool managed = true);
     void removePage(Aki::ISettingsPage* page);
 protected Q_SLOTS:
     void updateButtons();
     void updateSettings();
+    
     void updateWidgets();
 private:
     bool hasChanged();

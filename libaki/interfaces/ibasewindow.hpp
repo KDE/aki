@@ -1,7 +1,7 @@
 #ifndef AKI_IBASEWINDOW_HPP
 #define AKI_IBASEWINDOW_HPP
 
-#include "libaki_export.hpp"
+#include "aki.hpp"
 #include <KDE/KIcon>
 #include <QtGui/QWidget>
 
@@ -43,8 +43,7 @@ public:
     Aki::IBaseWindow::WindowType type() const;
     virtual QWidget* widget() = 0;
 private:
-    friend class IBaseWindowPrivate;
-    QScopedPointer<IBaseWindowPrivate> _d;
+    AKI_DECLARE_PRIVATE(IBaseWindow)
 }; // End of class IBaseWindow.
 } // End of namespace Aki.
 

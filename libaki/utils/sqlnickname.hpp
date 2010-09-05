@@ -1,7 +1,7 @@
 #ifndef AKI_SQLNICKNAME_HPP
 #define AKI_SQLNICKNAME_HPP
 
-#include "libaki_export.hpp"
+#include "aki.hpp"
 #include <QtCore/QObject>
 
 namespace Aki
@@ -123,8 +123,7 @@ protected:
      */
     void setId(int id);
 private:
-    friend class SqlNicknamePrivate;
-    QScopedPointer<SqlNicknamePrivate> _d;
+    AKI_DECLARE_PRIVATE(SqlNickname)
 }; // End of class SqlNickname.
 } // End of namespace Aki.
 

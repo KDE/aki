@@ -1,24 +1,24 @@
-#ifndef DOCKBUTTON_P_HPP
-#define DOCKBUTTON_P_HPP
+#ifndef AKI_DOCKBUTTON_P_HPP
+#define AKI_DOCKBUTTON_P_HPP
 
-#include <QtCore/QObject>
+#include <QtCore/QString>
 
 namespace Aki
 {
 class DockButton;
 class DockWidget;
-class DockButtonPrivate : public QObject
+class DockButtonPrivate
 {
-    Q_OBJECT
 public:
     explicit DockButtonPrivate(Aki::DockButton* qq);
 public:
-    Aki::DockWidget* dock;
+    Aki::DockWidget* dockWidget;
     Qt::Orientation orientation;
-    bool hideable;
+    bool isAutoHide;
+    bool isButtonClicked;
 private:
     Aki::DockButton* _q;
 }; // End of class DockButtonPrivate.
 } // End of namespace Aki.
 
-#endif // DOCKBUTTON_P_HPP
+#endif // AKI_DOCKBUTTON_P_HPP

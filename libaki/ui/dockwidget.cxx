@@ -1,35 +1,41 @@
 #include "dockwidget.hpp"
 #include "ui/dockbar.hpp"
 #include "ui/dockbutton.hpp"
-#include "private/dockwidget_p.hpp"
+#include "ui/private/dockwidget_p.hpp"
+#include <KDE/KIcon>
+#include <QtCore/QEvent>
 using namespace Aki;
 
 DockWidget::DockWidget(QWidget* parent)
     : QDockWidget(parent)
 {
     _d.reset(new Aki::DockWidgetPrivate(this));
-    _d->setupActions();
-    setContextMenuPolicy(Qt::CustomContextMenu);
+    _d->initialise();
+    setIcon(KIcon("aki")),
+    setTitle(QString());
+}
+
+DockWidget::DockWidget(const QString& title, QWidget* parent)
+    : QDockWidget(title, parent)
+{
+    _d.reset(new Aki::DockWidgetPrivate(this));
+    _d->initialise();
+    setIcon(KIcon("aki"));
+    setTitle(title);
 }
 
 DockWidget::DockWidget(const QString& title, const KIcon& icon, QWidget* parent)
     : QDockWidget(title, parent)
 {
     _d.reset(new Aki::DockWidgetPrivate(this));
-    _d->setupActions();
+    _d->initialise();
     setIcon(icon);
     setTitle(title);
-    setContextMenuPolicy(Qt::CustomContextMenu);
 }
 
 DockWidget::~DockWidget()
 {
-}
 
-Aki::DockBar*
-DockWidget::dockBar()
-{
-    return _d->dockBar;
 }
 
 Aki::DockBar*
@@ -45,19 +51,27 @@ DockWidget::icon() const
 }
 
 void
-DockWidget::setDockBar(Aki::DockBar* dock)
+DockWidget::leaveEvent(QEvent*)
 {
-    Q_ASSERT(dock);
-    _d->dockBar = dock;
+    if (!_d->dockButton) {
+        _d->dockButton = _d->dockBar->buttonForDockWidget(this);
+    }
+
+    if (_d->dockButton && _d->dockButton->isAutoHide()) {
+        emit mouseLeave();
+    }
+}
+
+void
+DockWidget::setDockBar(DockBar* dockBar)
+{
+    Q_ASSERT(dockBar);
+    _d->dockBar = dockBar;
 }
 
 void
 DockWidget::setIcon(const KIcon& icon)
 {
-    if (icon.isNull()) {
-        return;
-    }
-
     _d->icon = icon;
 }
 
@@ -73,13 +87,4 @@ DockWidget::title() const
     return objectName();
 }
 
-void DockWidget::leaveEvent(QEvent*)
-{
-    if (!_d->dockButton) {
-        _d->dockButton = _d->dockBar->buttonForDock(this);
-    }
-
-    if (_d->dockButton && _d->dockButton->isAutoHide()) {
-        emit mouseLeave();
-    }
-}
+#include "ui/dockwidget.moc"

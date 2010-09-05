@@ -1,7 +1,7 @@
 #ifndef AKI_ISETTINGSPAGE_HPP
 #define AKI_ISETTINGSPAGE_HPP
 
-#include "libaki_export.hpp"
+#include "aki.hpp"
 #include <QtGui/QWidget>
 
 class KConfigSkeleton;
@@ -25,8 +25,7 @@ public:
 Q_SIGNALS:
     void widgetsModified();
 private:
-    friend class ISettingsPagePrivate;
-    QScopedPointer<ISettingsPagePrivate> _d;
+    AKI_DECLARE_PRIVATE(ISettingsPage)
 }; // End of class ISettingsPage.
 } // End of namespace Aki.
 

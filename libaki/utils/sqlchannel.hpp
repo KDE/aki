@@ -1,7 +1,7 @@
 #ifndef AKI_SQLCHANNEL_HPP
 #define AKI_SQLCHANNEL_HPP
 
-#include "libaki_export.hpp"
+#include "aki.hpp"
 #include <QtCore/QObject>
 
 namespace Aki
@@ -32,8 +32,7 @@ protected:
     explicit SqlChannel(QObject* parent = 0);
     void setId(int id);
 private:
-    friend class SqlChannelPrivate;
-    QScopedPointer<SqlChannelPrivate> _d;
+    AKI_DECLARE_PRIVATE(SqlChannel)
 }; // End of class SqlChannel.
 } // End of namespace Aki.
 

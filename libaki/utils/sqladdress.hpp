@@ -1,7 +1,7 @@
 #ifndef AKI_SQLADDRESS_HPP
 #define AKI_SQLADDRESS_HPP
 
-#include "libaki_export.hpp"
+#include "aki.hpp"
 #include <QtCore/QObject>
 
 namespace Aki
@@ -36,8 +36,7 @@ protected:
     explicit SqlAddress(QObject* parent = 0);
     void setId(int id);
 private:
-    friend class SqlAddressPrivate;
-    QScopedPointer<SqlAddressPrivate> _d;
+    AKI_DECLARE_PRIVATE(SqlAddress)
 }; // End of class SqlAddress.
 } // End of namespace Aki.
 

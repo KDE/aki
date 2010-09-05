@@ -1,0 +1,18 @@
+[Desktop Entry]
+Name=Kross Scripting
+Name[x-test]=xxKross Scriptingxx
+Comment=Kross scripting plugin for Aki
+Comment[x-test]=xxKross scripting plugin for Akixx
+Type=Service
+Icon=aki
+ServiceTypes=Aki/Plugin
+X-KDE-Library=akiscriptingplugin
+X-KDE-PluginInfo-Author=Keith Rusler
+X-KDE-PluginInfo-Email=koma@live.de
+X-KDE-PluginInfo-Name=akiscriptingplugin
+X-KDE-PluginInfo-Version=0.1.0
+X-KDE-PluginInfo-Website=http://www.akiirc.org/
+X-KDE-PluginInfo-Category=Plugins
+X-KDE-PluginInfo-Depends=
+X-KDE-PluginInfo-License=GPL
+X-KDE-PluginInfo-EnabledByDefault=true

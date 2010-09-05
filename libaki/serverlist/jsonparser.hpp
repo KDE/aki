@@ -1,7 +1,7 @@
 #ifndef AKI_JSONPARSER_HPP
 #define AKI_JSONPARSER_HPP
 
-#include "libaki_export.hpp"
+#include "aki.hpp"
 #include <QtCore/QIODevice>
 #include <QtCore/QObject>
 
@@ -18,8 +18,7 @@ public:
     bool read(QIODevice* device, Aki::SqlIdentity* identity, bool url=false);
     bool write(QIODevice* device, Aki::SqlIdentity* identity);
 private:
-    friend class JsonParserPrivate;
-    QScopedPointer<JsonParserPrivate> _d;
+    AKI_DECLARE_PRIVATE(JsonParser)
 }; // End of class JsonParser.
 } // End of namespace Aki.
 

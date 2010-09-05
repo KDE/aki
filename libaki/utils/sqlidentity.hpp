@@ -1,7 +1,7 @@
 #ifndef AKI_SQLIDENTITY_HPP
 #define AKI_SQLIDENTITY_HPP
 
-#include "libaki_export.hpp"
+#include "aki.hpp"
 #include <QtCore/QObject>
 #include <QtCore/QStringList>
 
@@ -45,8 +45,7 @@ protected:
     explicit SqlIdentity(QObject* parent = 0);
     void setId(int id);
 private:
-    friend class SqlIdentityPrivate;
-    QScopedPointer<SqlIdentityPrivate> _d;
+    AKI_DECLARE_PRIVATE(SqlIdentity)
 }; // End of class SqlIdentity.
 } // End of namespace Aki.
 

@@ -1,7 +1,7 @@
 #ifndef AKI_DATABASE_HPP
 #define AKI_DATABASE_HPP
 
-#include "libaki_export.hpp"
+#include "aki.hpp"
 #include "identity.hpp"
 #include "server.hpp"
 #include <QtCore/QObject>
@@ -20,8 +20,7 @@ public:
     static void close();
     bool createDefaultTables();
 private:
-    friend class DatabasePrivate;
-    QScopedPointer<DatabasePrivate> _d;
+    AKI_DECLARE_PRIVATE(Database)
 }; // End of class ISql.
 } // End of namespace Aki.
 

@@ -1,7 +1,7 @@
 #ifndef AKI_IDENTITY_HPP
 #define AKI_IDENTITY_HPP
 
-#include "libaki_export.hpp"
+#include "aki.hpp"
 #include <QtCore/QMetaType>
 #include <QtCore/QSharedPointer>
 #include <QtCore/QStringList>
@@ -42,8 +42,7 @@ public:
     void setReturnMessage(const QString& message);
     void setUseAwayMessages(bool enabled);
 private:
-    friend class IdentityPrivate;
-    QScopedPointer<IdentityPrivate> _d;
+    AKI_DECLARE_PRIVATE(Identity)
 }; // End of class Identity.
 } // End of namespace Aki.
 

@@ -4,4 +4,127 @@
       xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
           http://www.kde.org/standards/kcfg/1.0/kcfg.xsd">
     <kcfgfile name="akirc" />
+    <signal name="themeChanged" />
+    <signal name="mircColor0ButtonChanged" />
+    <signal name="mircColor1ButtonChanged" />
+    <signal name="mircColor2ButtonChanged" />
+    <signal name="mircColor3ButtonChanged" />
+    <signal name="mircColor4ButtonChanged" />
+    <signal name="mircColor5ButtonChanged" />
+    <signal name="mircColor6ButtonChanged" />
+    <signal name="mircColor7ButtonChanged" />
+    <signal name="mircColor8ButtonChanged" />
+    <signal name="mircColor9ButtonChanged" />
+    <signal name="mircColor10ButtonChanged" />
+    <signal name="mircColor11ButtonChanged" />
+    <signal name="mircColor12ButtonChanged" />
+    <signal name="mircColor13ButtonChanged" />
+    <signal name="mircColor14ButtonChanged" />
+    <signal name="mircColor15ButtonChanged" />
+    <group name="ChatWindowsSettings">
+        <entry key="themeListWidget" type="String">
+            <default>GoneDark</default>
+            <emit signal="themeChanged" />
+        </entry>
+        <entry key="styleVariantComboBox" type="Int" />
+        <entry key="emoticonsComboBox" type="Int">
+            <default>-1</default>
+        </entry>
+        <entry key="mircColor0Button" type="Color">
+            <default code="true">
+                QColor(255, 255, 255)
+            </default>
+            <emit signal="mircColor0ButtonChanged" />
+        </entry>
+        <entry key="mircColor1Button" type="Color">
+            <default code="true">
+                QColor(0, 0, 0)
+            </default>
+            <emit signal="mircColor1ButtonChanged" />
+        </entry>
+        <entry key="mircColor2Button" type="Color">
+            <default code="true">
+                QColor(0, 0, 128)
+            </default>
+            <emit signal="mircColor2ButtonChanged" />
+        </entry>
+        <entry key="mircColor3Button" type="Color">
+            <default code="true">
+                QColor(0, 128, 0)
+            </default>
+            <emit signal="mircColor3ButtonChanged" />
+        </entry>
+        <entry key="mircColor4Button" type="Color">
+            <default code="true">
+                QColor(255, 0, 0)
+            </default>
+            <emit signal="mircColor4ButtonChanged" />
+        </entry>
+        <entry key="mircColor5Button" type="Color">
+            <default code="true">
+                QColor(165, 42, 42)
+            </default>
+            <emit signal="mircColor5ButtonChanged" />
+        </entry>
+        <entry key="mircColor6Button" type="Color">
+            <default code="true">
+                QColor(128, 0, 128)
+            </default>
+            <emit signal="mircColor6ButtonChanged" />
+        </entry>
+        <entry key="mircColor7Button" type="Color">
+            <default code="true">
+                QColor(255, 128, 0)
+            </default>
+            <emit signal="mircColor7ButtonChanged" />
+        </entry>
+        <entry key="mircColor8Button" type="Color">
+            <default code="true">
+                QColor(128, 128, 0)
+            </default>
+            <emit signal="mircColor8ButtonChanged" />
+        </entry>
+        <entry key="mircColor9Button" type="Color">
+            <default code="true">
+                QColor(0, 255, 0)
+            </default>
+            <emit signal="mircColor9ButtonChanged" />
+        </entry>
+        <entry key="mircColor10Button" type="Color">
+            <default code="true">
+                QColor(0, 128, 128)
+            </default>
+            <emit signal="mircColor10ButtonChanged" />
+        </entry>
+        <entry key="mircColor11Button" type="Color">
+            <default code="true">
+                QColor(0, 255, 255)
+            </default>
+            <emit signal="mircColor11ButtonChanged" />
+        </entry>
+        <entry key="mircColor12Button" type="Color">
+            <default code="true">
+                QColor(0, 0, 255)
+            </default>
+            <emit signal="mircColor12ButtonChanged" />
+        </entry>
+        <entry key="mircColor13Button" type="Color">
+            <default code="true">
+                QColor(255, 192, 203)
+            </default>
+            <emit signal="mircColor13ButtonChanged" />
+        </entry>
+        <entry key="mircColor14Button" type="Color">
+            <default code="true">
+                QColor(160, 160, 160)
+            </default>
+            <emit signal="mircColor14ButtonChanged" />
+        </entry>
+        <entry key="mircColor15Button" type="Color">
+            <default code="true">
+                QColor(192, 192, 192)
+            </default>
+            <emit signal="mircColor15ButtonChanged" />
+        </entry>
+    </group>
 </kcfg>

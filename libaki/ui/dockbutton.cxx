@@ -1,11 +1,12 @@
 #include "dockbutton.hpp"
 #include "ui/dockwidget.hpp"
-#include "private/dockbutton_p.hpp"
+#include "ui/private/dockbutton_p.hpp"
+#include <QtGui/QPainter>
 #include <QtGui/QPaintEvent>
+#include <QtGui/QStyle>
 #include <QtGui/QStyleOptionToolButton>
 #include <QtGui/QStylePainter>
 using namespace Aki;
-
 
 DockButton::DockButton(QWidget* parent)
     : QToolButton(parent)
@@ -18,30 +19,30 @@ DockButton::~DockButton()
 {
 }
 
-Aki::DockWidget* DockButton::dock()
+Aki::DockWidget*
+DockButton::dockWidget() const
 {
-    return _d->dock;
+    return _d->dockWidget;
 }
 
-Aki::DockWidget* DockButton::dock() const
+
+bool
+DockButton::isAutoHide() const
 {
-    return _d->dock;
+    return _d->isAutoHide;
 }
 
-bool DockButton::isAutoHide() const
-{
-    return _d->hideable;
-}
-
-Qt::Orientation DockButton::orientation() const
+Qt::Orientation
+DockButton::orientation() const
 {
     return _d->orientation;
 }
 
-void DockButton::paintEvent(QPaintEvent* e)
+void
+DockButton::paintEvent(QPaintEvent* event)
 {
     if (orientation() == Qt::Horizontal) {
-        QToolButton::paintEvent(e);
+        QToolButton::paintEvent(event);
         return;
     }
 
@@ -79,27 +80,30 @@ void DockButton::paintEvent(QPaintEvent* e)
     p.drawPixmap(0, 0, pix);
 }
 
-void DockButton::setAutoHide(bool hideable)
+void
+DockButton::setAutoHide(bool hideable)
 {
-    _d->hideable = hideable;
+    _d->isAutoHide = hideable;
 }
 
-void DockButton::setDock(Aki::DockWidget* dock)
+void
+DockButton::setDockWidget(Aki::DockWidget* dock)
 {
-    _d->dock = dock;
-    Q_ASSERT(_d->dock);
+    _d->dockWidget = dock;
     connect(dock, SIGNAL(mouseLeave()),
             SIGNAL(mouseLeave()));
-    setIcon(_d->dock->icon());
-    setText(_d->dock->title());
+    setIcon(dock->icon());
+    setText(dock->title());
 }
 
-void DockButton::setOrientation(Qt::Orientation orientation)
+void
+DockButton::setOrientation(Qt::Orientation orientation)
 {
     _d->orientation = orientation;
 }
 
-QSize DockButton::sizeHint() const
+QSize
+DockButton::sizeHint() const
 {
     ensurePolished();
 

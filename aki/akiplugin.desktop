@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=ServiceType
+X-KDE-ServiceType=Aki/Plugin
+X-KDE-Derived=KPluginInfo
+Comment=Aki Plugin
+Comment[pt]='Plugin' do Aki
+Comment[pt_BR]='Plugin' do Aki
+Comment[sv]=Insticksprogram för Aki
+Comment[uk]=Додаток до Aki
+Comment[x-test]=xxAki Pluginxx

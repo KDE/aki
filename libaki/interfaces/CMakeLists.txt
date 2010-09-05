@@ -10,8 +10,20 @@ install(
     FILES
         interfaces/ibasewindow.hpp
         interfaces/imaincontroller.hpp
+        interfaces/isettingspage.hpp
     DESTINATION
         ${INCLUDE_INSTALL_DIR}/aki/interfaces
+    COMPONENT
+        Devel
+)
+
+install(
+    FILES
+        interfaces/IBaseWindow
+        interfaces/IMainController
+        interfaces/ISettingsPage
+    DESTINATION
+        ${INCLUDE_INSTALL_DIR}/Aki/Interfaces
     COMPONENT
         Devel
 )

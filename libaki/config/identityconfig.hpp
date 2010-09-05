@@ -1,7 +1,7 @@
 #ifndef AKI_IDENTITYCONFIG_HPP
 #define AKI_IDENTITYCONFIG_HPP
 
-#include "libaki_export.hpp"
+#include "aki.hpp"
 #include "configfile.hpp"
 
 namespace Aki

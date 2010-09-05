@@ -15,7 +15,7 @@ ConfigurationDialog::ConfigurationDialog(QWidget* parent)
     setSizeGripEnabled(true);
 
     addPage(new Aki::GeneralPage);
-    addPage(new Aki::ChatWindowPage);
+    addPage(new Aki::ChatWindowPage, false);
     addPage(new Aki::PluginPage);
     resize(QSize(800, 600));
 }
@@ -25,13 +25,17 @@ ConfigurationDialog::~ConfigurationDialog()
 }
 
 void
-ConfigurationDialog::addPage(Aki::ISettingsPage* page)
+ConfigurationDialog::addPage(Aki::ISettingsPage* page, bool manage)
 {
     connect(page, SIGNAL(widgetsModified()),
             SLOT(updateButtons()));
-    KPageWidgetItem* item = KConfigDialog::addPage(page, page->config(),
-                                                   page->name(), page->icon(),
-                                                   page->header());
+
+    KPageWidgetItem* item;
+    if (manage) {
+        item = KConfigDialog::addPage(page, page->config(), page->name(), page->icon(), page->header());
+    } else {
+        item = KConfigDialog::addPage(page, page->name(), page->icon(), page->header(), manage);
+    }
     _pageList[page] = item;
 }
 

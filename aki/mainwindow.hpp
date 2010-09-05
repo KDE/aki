@@ -7,6 +7,7 @@
 namespace Aki
 {
 class ConfigurationDialog;
+class DockWidget;
 class ISettingsPage;
 class Plugin;
 class ServerDialog;
@@ -19,16 +20,20 @@ class AkiWindow : public Aki::MainWindow,
 public:
     AkiWindow();
     ~AkiWindow();
+    virtual void addDock(Aki::DockWidget* dockWidget, Qt::DockWidgetArea area);
     virtual void addGui(Aki::Plugin* plugin);
     virtual void addSettingsPage(Aki::ISettingsPage* page);
+    virtual void removeDock(Aki::DockWidget* dockWidget);
     virtual void removeGui(Aki::Plugin* plugin);
     virtual void removeSettingsPage(Aki::ISettingsPage* page);
 public Q_SLOTS:
+    void slotConfigureNotifications();
     void slotIdentityListTriggered();
     void slotNetworkListTriggered();
     void slotPreferencesTriggered();
     void slotQuickConnectionTriggered();
     void slotQuitTriggered();
+    void slotShowMenubar();
 private:
     void createMenus();
     void createDialogs();

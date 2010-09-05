@@ -1,9 +1,13 @@
 set(akicore_uiprivate_SRCS
+    ui/private/channelcontainer_p.cxx
+    ui/private/channelview_p.cxx
+    ui/private/channelwidget_p.cxx
     ui/private/chatview_p.cxx
+    ui/private/colourbutton_p.cxx
     ui/private/dockbar_p.cxx
     ui/private/dockbutton_p.cxx
     ui/private/dockwidget_p.cxx
     ui/private/mainwindow_p.cxx
+    ui/private/serverviewtab_p.cxx
     ui/private/view_p.cxx
-    ui/private/viewtabbar_p.cxx
 )

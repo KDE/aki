@@ -1,6 +1,7 @@
 #ifndef AKI_CHATPARSER_HPP
 #define AKI_CHATPARSER_HPP
 
+#include "aki.hpp"
 #include <QtCore/QObject>
 #include <boost/function.hpp>
 
@@ -17,8 +18,7 @@ public:
     void addHelp(const boost::function<bool (const QString&)>& help);
     void addCommand(const boost::function<bool (const QString&)>& command);
 private:
-    friend class ChatParserPrivate;
-    QScopedPointer<ChatParserPrivate> _d;
+    AKI_DECLARE_PRIVATE(ChatParser)
 }; // End of class ChatParser.
 } // End of namespace Aki.
 
