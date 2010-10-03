@@ -1,5 +1,25 @@
+/*
+ * Copyright 2009-2010  Keith Rusler <xzekecomax@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of
+ * the License or (at your option) version 3 or any later version
+ * accepted by the membership of KDE e.V. (or its successor approved
+ * by the membership of KDE e.V.), which shall act as a proxy
+ * defined in Section 14 of version 3 of the license.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>
+ */
+
 #include "pluginmanager.hpp"
-#include "aki.hpp"
+#include "debughelper.hpp"
 #include "interfaces/imaincontroller.hpp"
 #include "plugin/plugin.hpp"
 #include <KDE/KGlobal>
@@ -32,18 +52,18 @@ PluginManager::~PluginManager()
 void
 PluginManager::initialize(Aki::IMainController* controller)
 {
-    Q_ASSERT(controller);
+    DEBUG_FUNC_NAME
     _mainController = controller;
 
     // Search for all services matching Aki/Plugin.
     setPlugins(KPluginInfo::fromServices(KServiceTypeTrader::self()->query("Aki/Plugin")));
 
     if (_plugins.isEmpty()) {
-        kDebug() << "No plugins found";
+        DEBUG_TEXT("No plugins found")
         return;
     }
 
-    kDebug() << _plugins.count() << " plugins found";
+    DEBUG_TEXT2("%1 plugins found", _plugins.count())
 
     KPluginInfo::List::Iterator begin = _plugins.begin();
     KPluginInfo::List::Iterator end = _plugins.end();
@@ -61,6 +81,7 @@ PluginManager::initialize(Aki::IMainController* controller)
 void
 PluginManager::loadPlugin(const KPluginInfo& info)
 {
+    DEBUG_FUNC_NAME
     // Get the service by the plugin info.
     KService::Ptr ptr = info.service();
 
@@ -71,7 +92,7 @@ PluginManager::loadPlugin(const KPluginInfo& info)
     }
 
     if (!plugin->checkVersion(AKI_VERSION_STR)) {
-        kError() << QString("Plugin %1's version does not match Aki's version.").arg(ptr->name());
+        DEBUG_TEXT2("Plugin %1's version does not match Aki's version.", ptr->name())
         delete plugin;
     } else {
         // Pass the main interface to the plugin.

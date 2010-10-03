@@ -1,6 +1,27 @@
+/*
+ * Copyright 2009-2010  Keith Rusler <xzekecomax@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of
+ * the License or (at your option) version 3 or any later version
+ * accepted by the membership of KDE e.V. (or its successor approved
+ * by the membership of KDE e.V.), which shall act as a proxy
+ * defined in Section 14 of version 3 of the license.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>
+ */
+
 #include "channelwidget.hpp"
 #include "private/channelwidget_p.hpp"
 #include "ui/colourbutton.hpp"
+#include "ui/basechatview.hpp"
 #include <KDE/KComboBox>
 #include <KDE/KLineEdit>
 #include <KDE/KPushButton>
@@ -20,7 +41,7 @@ ChannelWidget::ChannelWidget(QWidget* parent)
 {
     _d.reset(new Aki::ChannelWidgetPrivate(this));
 
-    _d->chatView = new QWebView;
+    _d->chatView = new Aki::BaseChatView;
     _d->chatView->setUrl(QUrl("about:config"));
 
     _d->userList = new QTreeView;
@@ -64,7 +85,6 @@ ChannelWidget::ChannelWidget(QWidget* parent)
     formatToolBar->addWidget(underlineButton);
     formatToolBar->addSeparator();
     formatToolBar->addWidget(smiliesButton);
-    formatToolBar->addWidget(new Aki::ColourButton);
 
     _d->topicBar = new KLineEdit;
     _d->topicBar->setClearButtonShown(true);
@@ -74,13 +94,9 @@ ChannelWidget::ChannelWidget(QWidget* parent)
     _d->channelInput = new KLineEdit;
     _d->channelInput->setClearButtonShown(true);
 
-    _d->sendButton = new KPushButton(i18n("Send"));
-    _d->sendButton->setDisabled(true);
-
     QHBoxLayout* inputLayout = new QHBoxLayout;
     inputLayout->addWidget(_d->nickSelector);
     inputLayout->addWidget(_d->channelInput);
-    inputLayout->addWidget(_d->sendButton);
 
     QVBoxLayout* chatLayout = new QVBoxLayout;
     chatLayout->addWidget(_d->topicBar);

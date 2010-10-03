@@ -18,24 +18,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-#include "sqlchannel_p.hpp"
+#ifndef AKI_MESSAGEQUEUE_HPP
+#define AKI_MESSAGEQUEUE_HPP
+
 #include "aki.hpp"
-#include "utils/sqlchannel.hpp"
-using namespace Aki;
+#include <QtCore/QObject>
+#include <QtCore/QQueue>
 
-SqlChannelPrivate::SqlChannelPrivate(SqlChannel* qq)
-    : QObject(),
-    id(-1),
-    serverId(-1),
-    _q(qq)
+namespace Aki
 {
-}
+class MessageQueuePrivate;
+class MessageQueue : public QObject
+{
+    Q_OBJECT
+public:
+    explicit MessageQueue(QObject* parent = 0);
+    ~MessageQueue();
+private:
+    AKI_DECLARE_PRIVATE(MessageQueue)
+}; // End of class MessageQueue.
+} // End of namespace Aki.
 
-void
-SqlChannelPrivate::checkError(const QSqlError& error)
-{
-    if (error.isValid()) {
-        qxtLog->error() << QString("Driver: %1").arg(error.driverText());
-        qxtLog->error() << QString("Database: %1").arg(error.databaseText());
-    }
-}
+#endif // AKI_MESSAGEQUEUE_HPP

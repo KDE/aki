@@ -1,4 +1,5 @@
 set(akicore_uiprivate_SRCS
+    ui/private/basechatview_p.cxx
     ui/private/channelcontainer_p.cxx
     ui/private/channelview_p.cxx
     ui/private/channelwidget_p.cxx

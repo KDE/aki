@@ -5,8 +5,6 @@ set(CMAKE_MODULE_PATH
     ${aki_SOURCE_DIR}/cmake/modules
 )
 
-message(STATUS "${CMAKE_MODULE_PATH}")
-
 set(AKI_VERSION_MAJOR 0)
 set(AKI_VERSION_MINOR 0)
 set(AKI_VERSION_PATCH 3)

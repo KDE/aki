@@ -10,8 +10,11 @@ include(utils/CMakeLists.txt)
 set(akicore_SRCS
     aki.cxx
     chatparser.cxx
+    debughelper.cxx
     identity.cxx
+    message.cxx
     server.cxx
+    socket.cxx
     ${akicore_config_SRCS}
     ${akicore_dialogs_SRCS}
     ${akicore_interfaces_SRCS}

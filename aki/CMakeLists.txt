@@ -25,6 +25,7 @@ set (aki_SRCS
     dbus.cxx
     main.cxx
     mainwindow.cxx
+   
 )
 
 set (aki_LIBS

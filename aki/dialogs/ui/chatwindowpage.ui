@@ -93,13 +93,7 @@
                    <enum>Qt::Horizontal</enum>
                   </property>
                   <widget class="KListWidget" name="themeListWidget"/>
-                  <widget class="QWebView" name="webView">
-                   <property name="url">
-                    <url>
-                     <string>about:blank</string>
-                    </url>
-                   </property>
-                  </widget>
+                  <widget class="Aki::ChatView" name="webView" native="true"/>
                  </widget>
                 </item>
                </layout>
@@ -664,11 +658,6 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>QWebView</class>
-   <extends>QWidget</extends>
-   <header>QtWebKit/QWebView</header>
-  </customwidget>
-  <customwidget>
    <class>KFontRequester</class>
    <extends>QWidget</extends>
    <header>kfontrequester.h</header>
@@ -697,6 +686,12 @@
    <class>KTabWidget</class>
    <extends>QTabWidget</extends>
    <header>ktabwidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>Aki::ChatView</class>
+   <extends>QWidget</extends>
+   <header>ui/chatview.hpp</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

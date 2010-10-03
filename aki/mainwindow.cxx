@@ -1,3 +1,23 @@
+/*
+ * Copyright 2009-2010  Keith Rusler <xzekecomax@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of
+ * the License or (at your option) version 3 or any later version
+ * accepted by the membership of KDE e.V. (or its successor approved
+ * by the membership of KDE e.V.), which shall act as a proxy
+ * defined in Section 14 of version 3 of the license.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>
+ */
+
 #include "mainwindow.hpp"
 #include "dialogs/configurationdialog.hpp"
 #include "dialogs/identitydialog.hpp"
@@ -6,6 +26,11 @@
 #include "docks/privatemessages/privatemessagedock.hpp"
 #include "interfaces/isettingspage.hpp"
 #include "plugin/plugin.hpp"
+
+#ifdef Q_WS_X11
+#include "ui/blureffect.hpp"
+#endif // Q_WS_X11
+
 #include "ui/dockbar.hpp"
 #include "ui/dockbutton.hpp"
 #include "ui/dockwidget.hpp"
@@ -14,6 +39,7 @@
 #include "ui/view.hpp"
 #include "utils/bookmarkhandler.hpp"
 #include "utils/pluginmanager.hpp"
+#include "utils/themestylemanager.hpp"
 #include <KDE/KAction>
 #include <KDE/KActionCollection>
 #include <KDE/KActionMenu>
@@ -32,15 +58,23 @@ AkiWindow::AkiWindow()
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
     args->clear();
 
-    setWindowTitle(i18n("Aki IRC Client"));
+    setCaption(i18n("Aki IRC Client"));
+
+    Aki::ThemeStyleManager::self();
 
     _systemTray = new Aki::SystemTray(this);
     _view = new Aki::View(this);
     setCentralWidget(_view);
 
+#ifdef Q_OS_WIN
+    if (Aki::BlurEffect::isCompositionEnabled()) {
+        Aki::BlurEffect::extendFrameIntoClientArea(this);
+    }
+#endif // Q_OS_WIN
+
 #ifdef Q_OS_MAC
     setUnifiedTitleAndToolBarOnMac(true);
-#endif
+#endif // Q_OS_MAC
 
     Aki::ServerViewTab* tab = new Aki::ServerViewTab("Freenode", 0);
     tab->setIcon(KIcon("kde"));

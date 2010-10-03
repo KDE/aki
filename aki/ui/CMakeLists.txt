@@ -1,6 +1,7 @@
 set(aki_ui_SRCS
     ui/addressmodel.cxx
     ui/channelmodel.cxx
+    ui/chatview.cxx
     ui/identitycombobox.cxx
     ui/identitymodel.cxx
     ui/networklist.cxx
@@ -11,3 +12,11 @@ set(aki_ui_SRCS
     ui/nicknamemodel.cxx
     ui/systemtray.cxx
 )
+
+if(WIN32)
+set(aki_ui_SRCS
+    ${aki_ui_SRCS}
+    ui/blureffect.cxx
+    ui/windownotifier.cxx
+)
+endif(WIN32)

@@ -2,6 +2,7 @@ include(ui/private/CMakeLists.txt)
 
 set(akicore_ui_SRCS
     ${akicore_uiprivate_SRCS}
+    ui/basechatview.cxx
     ui/channelcontainer.cxx
     ui/channelview.cxx
     ui/channelwidget.cxx
@@ -19,6 +20,7 @@ set(akicore_ui_SRCS
 
 install(
     FILES
+        ui/basechatview.hpp
         ui/channelcontainer.hpp
         ui/channelview.hpp
         ui/chatview.hpp

@@ -1,6 +1,7 @@
 include(utils/private/CMakeLists.txt)
 set(akicore_utils_SRCS
     utils/database.cxx
+    utils/messagehandle.cxx
     ${akicore_utilsprivate_SRCS}
     utils/sqladdress.cxx
     utils/sqlchannel.cxx
@@ -12,6 +13,7 @@ set(akicore_utils_SRCS
 install(
     FILES
         utils/database.hpp
+        utils/messagequeue.hpp
         utils/sqladdress.hpp
         utils/sqlchannel.hpp
         utils/sqlidentity.hpp
