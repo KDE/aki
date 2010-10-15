@@ -21,6 +21,7 @@
 #ifndef AKI_PLUGINMANAGER_HPP
 #define AKI_PLUGINMANAGER_HPP
 
+#include "singleton.hpp"
 #include <KDE/KPluginInfo>
 #include <QtCore/QHash>
 #include <QtCore/QObject>
@@ -30,7 +31,7 @@ namespace Aki
 class IMainController;
 class Plugin;
 class PluginManagerPrivate;
-class PluginManager : public QObject
+class PluginManager : public Aki::Singleton<PluginManager>
 {
     Q_OBJECT
 public:
@@ -38,16 +39,15 @@ public:
     void loadPlugins();
     KPluginInfo pluginInfo(const Aki::Plugin* plugin) const;
     KPluginInfo::List pluginInfos() const;
-    static Aki::PluginManager* self();
     void unloadPlugins();
 private:
+    friend class Aki::Singleton<PluginManager>;
     PluginManager();
     ~PluginManager();
     void loadPlugin(const KPluginInfo& info);
     void setPlugins(const KPluginInfo::List& info);
     void unloadPlugin(const KPluginInfo& info);
 private:
-    friend class PluginManagerPrivate;
     typedef QHash<KPluginInfo, Aki::Plugin*> PluginHash;
     KPluginInfo::List _plugins;
     Aki::PluginManager::PluginHash _loadedPlugins;

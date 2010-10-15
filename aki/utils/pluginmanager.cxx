@@ -27,16 +27,7 @@
 #include <QtCore/QMutableHashIterator>
 using namespace Aki;
 
-namespace Aki
-{
-class PluginManagerPrivate
-{
-public:
-    Aki::PluginManager instance;
-}; // End of class PluginManagerPrivate.
-} // End of namespace Aki.
-
-K_GLOBAL_STATIC(Aki::PluginManagerPrivate, pluginManager)
+template<> Aki::PluginManager* Aki::Singleton<Aki::PluginManager>::_instance = 0;
 
 PluginManager::PluginManager()
     : _mainController(0)
@@ -151,12 +142,6 @@ KPluginInfo::List
 PluginManager::pluginInfos() const
 {
     return _plugins;
-}
-
-Aki::PluginManager*
-PluginManager::self()
-{
-    return &pluginManager->instance;
 }
 
 void
