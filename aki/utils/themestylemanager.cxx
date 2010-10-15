@@ -33,19 +33,10 @@
 using namespace Aki;
 
 const QDir::Filters DIR_FILTERS = QDir::AllDirs | QDir::NoDotAndDotDot;
-
-namespace Aki
-{
-class ThemeStyleManagerPrivate
-{
-public:
-    Aki::ThemeStyleManager instance;
-}; // End of class ThemeStyleManagerPrivate.
-} // End of namespace Aki.
-K_GLOBAL_STATIC(Aki::ThemeStyleManagerPrivate, themeStyleManager)
+template<> ThemeStyleManager* Aki::Singleton<ThemeStyleManager>::_instance = 0;
 
 ThemeStyleManager::ThemeStyleManager()
-    : QObject()
+    : Aki::Singleton<Aki::ThemeStyleManager>()
 {
     DEBUG_FUNC_NAME
     // Search for the themes directory, if it is not found create it.
@@ -68,7 +59,6 @@ ThemeStyleManager::ThemeStyleManager()
 
 ThemeStyleManager::~ThemeStyleManager()
 {
-    qRemovePostRoutine(themeStyleManager.destroy);
 }
 
 Aki::ThemeStyleManager::Result
@@ -142,12 +132,6 @@ ThemeStyleManager::removeTheme(const QString& theme)
     }
 
     return state;
-}
-
-Aki::ThemeStyleManager*
-ThemeStyleManager::self()
-{
-    return &themeStyleManager->instance;
 }
 
 void

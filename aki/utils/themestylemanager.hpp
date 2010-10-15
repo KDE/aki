@@ -22,6 +22,7 @@
 #define AKI_THEMESTYLEMANAGER_HPP
 
 #include "aki.hpp"
+#include "singleton.hpp"
 #include <KDE/KFileItemList>
 #include <KDE/KUrl>
 #include <QtCore/QHash>
@@ -34,7 +35,7 @@ namespace Aki
 {
 class ThemeStyle;
 class ThemeStyleManagerPrivate;
-class ThemeStyleManager : public QObject
+class ThemeStyleManager : public Aki::Singleton<ThemeStyleManager>
 {
     Q_OBJECT
 public:
@@ -67,7 +68,6 @@ public:
          */
         NoThemesFound
     }; // End of enum Result.
-    static ThemeStyleManager* self();
     Aki::ThemeStyleManager::Result installTheme(const QString& themePath);
     bool removeTheme(const QString& theme);
     Aki::ThemeStyle* themeForName(const QString& themeName) const;
@@ -79,6 +79,8 @@ private Q_SLOTS:
     void slotCompleted();
     void slotItemsAdded(const KFileItemList& items);
 private:
+    friend class Aki::Singleton<ThemeStyleManager>;
+
     ThemeStyleManager();
     ~ThemeStyleManager();
     bool isValidArchive(const KArchiveDirectory* rootDirectory) const;
@@ -87,7 +89,6 @@ private:
 private:
     KDirLister* _watcher;
     QHash<QString, Aki::ThemeStyle*> _themeHash;
-    AKI_DECLARE_PRIVATE(ThemeStyleManager);
 }; // End of class ThemeStyleManager.
 } // End of namespace Aki.
 
