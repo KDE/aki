@@ -26,6 +26,7 @@
 
 namespace Aki
 {
+class ThemeStyle;
 class ChatViewPrivate;
 class LIBAKI_EXPORT ChatView : public Aki::BaseChatView
 {
@@ -37,7 +38,7 @@ private:
     Q_PRIVATE_SLOT(_d, void contentsSizeChanged(const QSize& size))
     Q_PRIVATE_SLOT(_d, void themeChanged())
 private:
-    AKI_DECLARE_PRIVATE(ChatView);
+    AKI_DECLARE_PRIVATE(ChatView)
 }; // End of class ChatView.
 } // End of namespace Aki.
 

@@ -37,7 +37,7 @@ private:
     Q_PRIVATE_SLOT(_d, void colourMenuTriggered(QAction* action))
     Q_PRIVATE_SLOT(_d, void invalidateColours())
 private:
-    AKI_DECLARE_PRIVATE(ColourButton);
+    AKI_DECLARE_PRIVATE(ColourButton)
 }; // End of class ColourButton.
 } // End of namespace Aki.
 

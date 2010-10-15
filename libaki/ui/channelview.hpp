@@ -37,7 +37,7 @@ public:
     explicit ChannelView(QWidget* parent = 0);
     ~ChannelView();
 private:
-    AKI_DECLARE_PRIVATE(ChannelView);
+    AKI_DECLARE_PRIVATE(ChannelView)
 }; // End of class ChannelView.
 } // End of namespace Aki.
 

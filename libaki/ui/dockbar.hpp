@@ -54,7 +54,7 @@ private:
     Q_PRIVATE_SLOT(_d, void dockShow(QWidget* dock))
     Q_PRIVATE_SLOT(_d, void dockAutoHideStateChanged(Aki::DockWidget* dockWidget, bool checked))
 private:
-    AKI_DECLARE_PRIVATE(DockBar);
+    AKI_DECLARE_PRIVATE(DockBar)
 }; // End of class DockBar.
 } // End of namespace Aki.
 

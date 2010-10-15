@@ -55,7 +55,7 @@ private:
     Q_PRIVATE_SLOT(_d, void moveTab(int oldIndex, int newIndex))
     Q_PRIVATE_SLOT(_d, void wheelDelta(int delta))
 private:
-    AKI_DECLARE_PRIVATE(View);
+    AKI_DECLARE_PRIVATE(View)
 }; // End of class View.
 } // End of namespace Aki.
 

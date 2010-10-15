@@ -48,7 +48,7 @@ Q_SIGNALS:
 protected:
     virtual void paintEvent(QPaintEvent* event);
 private:
-    AKI_DECLARE_PRIVATE(DockButton);
+    AKI_DECLARE_PRIVATE(DockButton)
 }; // End of class DockButton.
 } // End of namespace Aki.
 
