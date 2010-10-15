@@ -21,6 +21,8 @@
 #include "mainwindow.hpp"
 #include "private/mainwindow_p.hpp"
 #include "ui/dockbar.hpp"
+#include "ui/dockbutton.hpp"
+#include "ui/dockwidget.hpp"
 #include <KDE/KDebug>
 #include <KDE/KToolBar>
 #include <QtGui/QTabWidget>
@@ -48,10 +50,60 @@ MainWindow::createPopupMenu()
     return 0;
 }
 
+void
+MainWindow::addDock(DockWidget* dock, Qt::DockWidgetArea area)
+{
+    QList<Aki::DockBar*> tbl = dockToolBars();
+    foreach (Aki::DockBar* bar, tbl) {
+        if (bar->area() == static_cast<Qt::ToolBarArea>(area)) {
+            qobject_cast<Aki::DockBar*>(bar)->addDockWidget(dock);
+            break;
+        }
+    }
+}
+
+Aki::DockBar*
+MainWindow::findDockBar(Aki::DockWidget* dock)
+{
+    QList<Aki::DockBar*> dockBarList = _d->dockBars;
+    foreach (Aki::DockBar* dockBar, dockBarList) {
+        if (dockBar) {
+            QList<QAction*> actionList = dockBar->actions();
+            foreach (QAction* action, actionList) {
+                Aki::DockButton* dockButton = qobject_cast<Aki::DockButton*>(dockBar->widgetForAction(action));
+                if (dockButton && dockButton->dockWidget() == dock) {
+                    return dockBar;
+                }
+            }
+        }
+    }
+
+    return 0;
+}
+
 QList<Aki::DockBar*>
 MainWindow::dockToolBars() const
 {
     return _d->dockBars;
+}
+
+void
+MainWindow::removeDock(Aki::DockWidget* dock)
+{
+    QList<Aki::DockBar*> tbl = dockToolBars();
+    foreach (Aki::DockBar* dockBar, tbl) {
+        if (dockBar) {
+            QList<QAction*> al = dockBar->actions();
+            foreach (QAction* action, al) {
+                Aki::DockButton* bar =
+                    qobject_cast<Aki::DockButton*>(dockBar->widgetForAction(action));
+                if (bar && bar->dockWidget() == dock) {
+                    dockBar->removeAction(action);
+                    return;
+                }
+            }
+        }
+    }
 }
 
 #include "ui/mainwindow.moc"

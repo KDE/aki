@@ -60,8 +60,6 @@ AkiWindow::AkiWindow()
 
     setCaption(i18n("Aki IRC Client"));
 
-    Aki::ThemeStyleManager::self();
-
     _systemTray = new Aki::SystemTray(this);
     _view = new Aki::View(this);
     setCentralWidget(_view);
@@ -87,8 +85,6 @@ AkiWindow::AkiWindow()
     _view->addWindow(tab3);
 
     Aki::PrivateMessageDock* dock = new Aki::PrivateMessageDock(this);
-    dock->appendMessage(KDateTime::currentLocalDateTime(), i18n("Test"), i18n("Boner"), i18n("Freenode"));
-    dock->appendMessage(KDateTime::currentLocalDateTime(), i18n("Test"), i18n("Boner"), i18n("Freenode"));
     addDock(dock, Qt::BottomDockWidgetArea);
 
     createMenus();
@@ -97,18 +93,6 @@ AkiWindow::AkiWindow()
 
 AkiWindow::~AkiWindow()
 {
-}
-
-void
-AkiWindow::addDock(Aki::DockWidget* dockWidget, Qt::DockWidgetArea area)
-{
-    QList<Aki::DockBar*> tbl = dockToolBars();
-    foreach (Aki::DockBar* bar, tbl) {
-        if (bar->area() == static_cast<Qt::ToolBarArea>(area)) {
-            qobject_cast<Aki::DockBar*>(bar)->addDockWidget(dockWidget);
-            break;
-        }
-    }
 }
 
 void
@@ -125,37 +109,28 @@ AkiWindow::addSettingsPage(Aki::ISettingsPage* page)
 }
 
 void
+AkiWindow::createAction(const QString& actionName, const QString& description, const char* slot,
+                        const KIcon& icon)
+{
+    KAction* action = new KAction(icon, description, this);
+    actionCollection()->addAction(actionName, action);
+    connect(action, SIGNAL(triggered(bool)), slot);
+}
+
+void
 AkiWindow::createMenus()
 {
-    KAction* action = new KAction(KIcon("network-workgroup"), i18n("Network List"), this);
-    actionCollection()->addAction("akiNetworkList", action);
-    connect(action, SIGNAL(triggered(bool)),
-            SLOT(slotNetworkListTriggered()));
-
-    action = new KAction(KIcon("network-connect"), i18n("Quick Connection"), this);
-    connect(action, SIGNAL(triggered(bool)),
-            SLOT(slotQuickConnectionTriggered()));
-    actionCollection()->addAction("akiQuickConnection", action);
-
-    action = new KAction(KIcon("edit-redo"), i18n("Reconnect"), this);
-    actionCollection()->addAction("akiReconnect", action);
-
-    action = new KAction(KIcon("edit-delete"), i18n("Disconnect"), this);
-    actionCollection()->addAction("akiDisconnect", action);
-
-    action = new KAction(KIcon("application-exit"), i18n("Quit"), this);
-    actionCollection()->addAction("akiQuit", action);
-    connect(action, SIGNAL(triggered(bool)),
-            SLOT(slotQuitTriggered()));
+    createAction("akiNetworkList", i18n("Network List"), SLOT(slotNetworkListTriggered()), KIcon("network-workgroup"));
+    createAction("akiQuickConnection", i18n("Quick Connection"), SLOT(slotQuickConnectionTriggered()),
+                 KIcon("network-connect"));
+    createAction("akiReconnect", i18n("Reconnect"), 0, KIcon("edit-redo"));
+    createAction("akiDisconnect", i18n("Disconnect"), 0, KIcon("edit-delete"));
+    createAction("akiQuit", i18n("Quit"), SLOT(slotQuitTriggered()), KIcon("application-exit"));
+    createAction("settingsIdentityList", i18n("Identities..."), SLOT(slotIdentityListTriggered()), KIcon("user-properties"));
 
     KActionMenu* bookmarkMenu = new KActionMenu(i18n("Bookmarks"), this);
     actionCollection()->addAction("bookmarks", bookmarkMenu);
     new Aki::BookmarkHandler(bookmarkMenu->menu(), actionCollection(), this);
-
-    action = new KAction(KIcon("user-properties"), i18n("Identities..."), this);
-    actionCollection()->addAction("settingsIdentityList", action);
-    connect(action, SIGNAL(triggered(bool)),
-            SLOT(slotIdentityListTriggered()));
 
     KStandardAction::showMenubar(this, SLOT(slotShowMenubar()), actionCollection());
     KStandardAction::configureNotifications(this, SLOT(slotConfigureNotifications()), actionCollection());
@@ -172,27 +147,9 @@ AkiWindow::createDialogs()
 }
 
 void
-AkiWindow::removeDock(Aki::DockWidget* dockWidget)
-{
-    QList<Aki::DockBar*> tbl = dockToolBars();
-    foreach (Aki::DockBar* dockBar, tbl) {
-        if (dockBar) {
-            QList<QAction*> al = dockBar->actions();
-            foreach (QAction* action, al) {
-                Aki::DockButton* bar =
-                    qobject_cast<Aki::DockButton*>(dockBar->widgetForAction(action));
-                if (bar && bar->dockWidget() == dockWidget) {
-                    dockBar->removeAction(action);
-                    return;
-                }
-            }
-        }
-    }
-}
-
-void
 AkiWindow::removeGui(Aki::Plugin* plugin)
 {
+    Q_ASSERT(plugin);
     guiFactory()->removeClient(plugin);
 }
 

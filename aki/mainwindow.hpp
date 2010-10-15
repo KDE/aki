@@ -21,7 +21,6 @@
 #ifndef MAINWINDOW_HPP
 #define MAINWINDOW_HPP
 
-#include "interfaces/imaincontroller.hpp"
 #include "ui/mainwindow.hpp"
 
 namespace Aki
@@ -33,17 +32,14 @@ class Plugin;
 class ServerDialog;
 class SystemTray;
 class View;
-class AkiWindow : public Aki::MainWindow,
-                  public Aki::IMainController
+class AkiWindow : public Aki::MainWindow
 {
     Q_OBJECT
 public:
     AkiWindow();
     ~AkiWindow();
-    virtual void addDock(Aki::DockWidget* dockWidget, Qt::DockWidgetArea area);
     virtual void addGui(Aki::Plugin* plugin);
     virtual void addSettingsPage(Aki::ISettingsPage* page);
-    virtual void removeDock(Aki::DockWidget* dockWidget);
     virtual void removeGui(Aki::Plugin* plugin);
     virtual void removeSettingsPage(Aki::ISettingsPage* page);
 public Q_SLOTS:
@@ -55,6 +51,7 @@ public Q_SLOTS:
     void slotQuitTriggered();
     void slotShowMenubar();
 private:
+    void createAction(const QString& actionName, const QString& description, const char* slot, const KIcon& icon = KIcon());
     void createMenus();
     void createDialogs();
 private:

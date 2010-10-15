@@ -22,6 +22,7 @@
 #define AKI_MAINWINDOW_HPP
 
 #include "aki.hpp"
+#include "interfaces/imaincontroller.hpp"
 #include <KDE/KParts/MainWindow>
 
 class KTabBar;
@@ -39,7 +40,8 @@ class MainWindowPrivate;
  * Inherits KParts::MainWindow for easy implementation of plugins
  * to merge menus and/or ToolBars of the plugins in to the MainWindow.
  */
-class LIBAKI_EXPORT MainWindow : public KParts::MainWindow
+class LIBAKI_EXPORT MainWindow : public KParts::MainWindow,
+                                 public Aki::IMainController
 {
     Q_OBJECT
 public:
@@ -53,18 +55,19 @@ public:
     virtual ~MainWindow();
     /**
      * Adds a @p dock to a specific @p area in the MainWindow.
-     *
+     * @param dockWidget DockWidget to be added.
      * @param area Location to place the dock.
-     * @param dock DockWidget to be added.
      */
-    void addDock(Qt::ToolBarArea area, Aki::DockWidget* dock);
+    virtual void addDock(Aki::DockWidget* dockWidget, Qt::DockWidgetArea area);
+
+    Aki::DockBar* findDockBar(Aki::DockWidget* dock);
     /**
      * Removes a @p dock from the MainWindow.
      * @note You are responsible for deleting the dock.
      *
-     * @param dock DockWidget to be removes.
+     * @param dockWidget DockWidget to be removes.
      */
-    void removeDock(Aki::DockWidget* dock);
+    virtual void removeDock(Aki::DockWidget* dockWidget);
     QList<Aki::DockBar*> dockToolBars() const;
 protected:
     virtual QMenu* createPopupMenu();
