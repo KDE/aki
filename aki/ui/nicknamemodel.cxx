@@ -20,6 +20,7 @@
 
 #include "nicknamemodel.hpp"
 #include "aki.hpp"
+#include "debughelper.hpp"
 #include "utils/sqlnickname.hpp"
 using namespace Aki;
 
@@ -45,14 +46,15 @@ NicknameModel::addNickname(Aki::SqlNickname* nickname)
 QVariant
 NicknameModel::data(const QModelIndex& index, int role) const
 {
+    DEBUG_FUNC_NAME;
     if (!index.isValid()) {
-        qxtLog->warning() << "Index is invalid so ignoring data call";
+        DEBUG_TEXT("Index is invalid so ignoring data call");
         return QVariant();
     }
 
     Aki::SqlNickname* nickname = _nicknameList.at(index.row());
     if (!nickname) {
-        qxtLog->warning() << "Uh oh invalid nickname for row";
+        DEBUG_TEXT("Uh oh invalid nickname for row")
         return QVariant();
     }
 

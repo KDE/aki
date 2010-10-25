@@ -20,6 +20,7 @@
 
 #include "networkchannellist.hpp"
 #include "aki.hpp"
+#include "debughelper.hpp"
 #include "ui/channelmodel.hpp"
 #include "utils/sqlchannel.hpp"
 #include "utils/sqlnetwork.hpp"
@@ -139,8 +140,9 @@ NetworkChannelList::networkChannelFromIndex(const QModelIndex& index) const
 void
 NetworkChannelList::repopulateNetworkChannels(Aki::SqlNetwork* network)
 {
+    DEBUG_FUNC_NAME;
     foreach (Aki::SqlChannel* channel, _model->channels()) {
-        qxtLog->info() << QString("Removing Channel: %1").arg(channel->channel());
+        DEBUG_TEXT2("Removing Channel: %1", channel->channel());
         _model->removeChannel(channel);
     }
 
@@ -150,12 +152,12 @@ NetworkChannelList::repopulateNetworkChannels(Aki::SqlNetwork* network)
 
     Aki::SqlChannel::List list = Aki::SqlChannel::channelListForServer(network);
     if (list.isEmpty()) {
-        qxtLog->info() << QString("List is empty for Network: %1").arg(network->name());
+        DEBUG_TEXT2("List is empty for Network: %1", network->name());
         return;
     }
 
     foreach (Aki::SqlChannel* channel, list) {
-        qxtLog->info() << QString("Adding new Channel: %1").arg(channel->channel());
+        DEBUG_TEXT2("Adding new Channel: %1", channel->channel());
         addNetworkChannel(channel);
     }
 }

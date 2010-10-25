@@ -20,6 +20,7 @@
 
 #include "addressmodel.hpp"
 #include "aki.hpp"
+#include "debughelper.hpp"
 #include "utils/sqladdress.hpp"
 #include <KDE/KIcon>
 using namespace Aki;
@@ -32,7 +33,6 @@ AddressModel::AddressModel(QObject* parent)
 
 AddressModel::~AddressModel()
 {
-    kDebug() << _addressList.count();
     qDeleteAll(_addressList);
 }
 
@@ -53,14 +53,15 @@ AddressModel::addresses() const
 QVariant
 AddressModel::data(const QModelIndex& index, int role) const
 {
+    DEBUG_FUNC_NAME;
     if (!index.isValid()) {
-        qxtLog->warning() << "Index is invalid so ignoring data call";
+        DEBUG_TEXT("Index is invalid so ignoring data call");
         return QVariant();
     }
 
     Aki::SqlAddress* address = _addressList.at(index.row());
     if (!address) {
-        qxtLog->warning() << "Uh oh invalid address for row";
+        DEBUG_TEXT("Uh oh invalid address for row");
         return QVariant();
     }
 

@@ -20,6 +20,7 @@
 
 #include "networklist.hpp"
 #include "aki.hpp"
+#include "debughelper.hpp"
 #include "ui/networkmodel.hpp"
 #include "utils/sqlidentity.hpp"
 #include "utils/sqlnetwork.hpp"
@@ -139,19 +140,21 @@ NetworkList::networkFromIndex(const QModelIndex& index) const
 void
 NetworkList::repopulateNetwork(Aki::SqlIdentity* identity)
 {
+    DEBUG_FUNC_NAME;
+
     foreach(Aki::SqlNetwork* network, _model->networks()) {
-        qxtLog->info() << QString("Removing Network: %1").arg(network->name());
+        DEBUG_TEXT2("Removing Network: %1", network->name());
         _model->removeNetwork(network);
     }
 
     Aki::SqlNetwork::List list = Aki::SqlNetwork::networksForIdentity(identity);
     if (list.isEmpty()) {
-        qxtLog->info() << QString("List is empty for Identity: %1").arg(identity->name());
+        DEBUG_TEXT2("List is empty for Identity: %1", identity->name());
         return;
     }
 
     foreach (Aki::SqlNetwork* network, list) {
-        qxtLog->info() << QString("Adding new Network: %1").arg(network->name());
+        DEBUG_TEXT2("Adding new Network: %1", network->name());
         addNetwork(network);
     }
 

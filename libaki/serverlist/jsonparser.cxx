@@ -20,6 +20,7 @@
 
 #include "jsonparser.hpp"
 #include "aki.hpp"
+#include "debughelper.hpp"
 #include "private/jsonparser_p.hpp"
 #include <KDE/KDebug>
 #include <qjson/serializer.h>
@@ -39,10 +40,11 @@ JsonParser::~JsonParser()
 bool
 JsonParser::read(QIODevice* device, SqlIdentity* identity, bool url)
 {
+    DEBUG_FUNC_NAME;
     Q_UNUSED(url);
     Q_UNUSED(identity);
     if (!device) {
-        qxtLog->error() << "Device not valid for Json";
+        DEBUG_TEXT("Device not valid for Json");
         return false;
     }
 
@@ -58,8 +60,9 @@ JsonParser::read(QIODevice* device, SqlIdentity* identity, bool url)
 bool
 JsonParser::write(QIODevice* device, Aki::SqlIdentity* identity)
 {
+    DEBUG_FUNC_NAME;
     if (!device) {
-        qxtLog->error() << "Device not valid for Json";
+        DEBUG_TEXT("Device not valid for Json");
         return false;
     }
 

@@ -20,6 +20,7 @@
 
 #include "networkaddresslist.hpp"
 #include "aki.hpp"
+#include "debughelper.hpp"
 #include "ui/addressmodel.hpp"
 #include "utils/sqladdress.hpp"
 #include "utils/sqlnetwork.hpp"
@@ -138,8 +139,9 @@ NetworkAddressList::networkAddressFromIndex(const QModelIndex& index) const
 void
 NetworkAddressList::repopulateNetworkAddresses(Aki::SqlNetwork* network)
 {
+    DEBUG_FUNC_NAME;
     foreach(Aki::SqlAddress* address, _model->addresses()) {
-        qxtLog->info() << QString("Removing Address: %1").arg(address->address());
+        DEBUG_TEXT2("Removing Address: %1", address->address());
         _model->removeAddress(address);
     }
 
@@ -149,12 +151,12 @@ NetworkAddressList::repopulateNetworkAddresses(Aki::SqlNetwork* network)
 
     Aki::SqlAddress::List list = Aki::SqlAddress::addressListForServer(network);
     if (list.isEmpty()) {
-        qxtLog->info() << QString("List is empty for Network: %1").arg(network->name());
+        DEBUG_TEXT2("List is empty for Network: %1", network->name());
         return;
     }
 
     foreach (Aki::SqlAddress* address, list) {
-        qxtLog->info() << QString("Adding new Address: %1").arg(address->address());
+        DEBUG_TEXT2("Adding new Address: %1", address->address());
         addNetworkAddress(address);
     }
 

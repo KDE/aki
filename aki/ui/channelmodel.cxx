@@ -20,6 +20,7 @@
 
 #include "channelmodel.hpp"
 #include "aki.hpp"
+#include "debughelper.hpp"
 #include "utils/sqlchannel.hpp"
 #include <KDE/KIcon>
 using namespace Aki;
@@ -50,14 +51,15 @@ ChannelModel::channels() const
 QVariant
 ChannelModel::data(const QModelIndex& index, int role) const
 {
+    DEBUG_FUNC_NAME;
     if (!index.isValid()) {
-        qxtLog->warning() << "Index is invalid so ignoring data call";
+        DEBUG_TEXT("Index is invalid so ignoring data call");
         return QVariant();
     }
 
     Aki::SqlChannel* channel = _channelList.at(index.row());
     if (!channel) {
-        qxtLog->warning() << "Uh oh invalid server for row";
+        DEBUG_TEXT("Uh oh invalid server for row");
         return QVariant();
     }
 

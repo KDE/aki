@@ -20,6 +20,7 @@
 
 #include "networkmodel.hpp"
 #include "aki.hpp"
+#include "debughelper.hpp"
 #include "utils/sqlnetwork.hpp"
 using namespace Aki;
 
@@ -44,14 +45,15 @@ NetworkModel::addNetwork(Aki::SqlNetwork* network)
 QVariant
 NetworkModel::data(const QModelIndex& index, int role) const
 {
+    DEBUG_FUNC_NAME;
     if (!index.isValid()) {
-        qxtLog->warning() << "Index is invalid so ignoring data call";
+        DEBUG_TEXT("Index is invalid so ignoring data call");
         return QVariant();
     }
 
     Aki::SqlNetwork* server = _networkList.at(index.row());
     if (!server) {
-        qxtLog->warning() << "Uh oh invalid server for row";
+        DEBUG_TEXT("Uh oh invalid server for row");
         return QVariant();
     }
 
