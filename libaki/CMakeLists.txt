@@ -40,9 +40,11 @@ set(akicore_LIBS
     ${QT_QTNETWORK_LIBRARY}
     ${QT_QTSQL_LIBRARY}
     ${QT_QTWEBKIT_LIBRARY}
-    ${QXT_LIBRARIES}
+    ${INDICATEQT_LIBRARIES}
     akiirc
 )
+
+
 
 kde4_add_kcfg_files(akicore_SRCS GENERATE_MOC settings.kcfgc)
 #kde4_add_ui_files(akicore_SRCS ${akicore_UIS})
