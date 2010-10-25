@@ -19,6 +19,7 @@
  */
 
 #include "mainwindow.hpp"
+#include "dbus.hpp"
 #include "dialogs/configurationdialog.hpp"
 #include "dialogs/identitydialog.hpp"
 #include "dialogs/networkdialog.hpp"
@@ -27,9 +28,9 @@
 #include "interfaces/isettingspage.hpp"
 #include "plugin/plugin.hpp"
 
-#ifdef Q_WS_X11
+#ifdef Q_OS_WIN
 #include "ui/blureffect.hpp"
-#endif // Q_WS_X11
+#endif // Q_OS_WIN
 
 #include "ui/dockbar.hpp"
 #include "ui/dockbutton.hpp"
@@ -38,8 +39,10 @@
 #include "ui/systemtray.hpp"
 #include "ui/view.hpp"
 #include "utils/bookmarkhandler.hpp"
+#include "utils/indicationsystem.hpp"
 #include "utils/pluginmanager.hpp"
 #include "utils/themestylemanager.hpp"
+#include <Aki/Irc/NickInfo>
 #include <KDE/KAction>
 #include <KDE/KActionCollection>
 #include <KDE/KActionMenu>
@@ -59,6 +62,7 @@ AkiWindow::AkiWindow()
     args->clear();
 
     setCaption(i18n("Aki IRC Client"));
+    new Aki::DBus(this);
 
     _systemTray = new Aki::SystemTray(this);
     _view = new Aki::View(this);
@@ -89,6 +93,10 @@ AkiWindow::AkiWindow()
 
     createMenus();
     createDialogs();
+
+    Aki::IndicationSystem::self()->setMainWindow(this);
+    Aki::IndicationSystem::self()->addChannelMessage("#Test", "Hello");
+    Aki::IndicationSystem::self()->addPrivateMessage(new Aki::Irc::NickInfo(""), "hello");
 }
 
 AkiWindow::~AkiWindow()
