@@ -30,7 +30,8 @@ using namespace Aki;
 template<> Aki::PluginManager* Aki::Singleton<Aki::PluginManager>::_instance = 0;
 
 PluginManager::PluginManager()
-    : _mainController(0)
+    : Aki::Singleton<Aki::PluginManager>(),
+    _mainController(0)
 {
     _loadedPlugins.clear();
     _plugins.clear();
