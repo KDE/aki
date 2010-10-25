@@ -20,6 +20,7 @@
 
 #include "application.hpp"
 #include "mainwindow.hpp"
+#include "utils/indicationsystem.hpp"
 #include <KDE/KCmdLineArgs>
 #include <KDE/KGlobal>
 #include <KDE/KStandardDirs>
@@ -48,6 +49,7 @@ int Application::newInstance()
 
         _mainWindow = new Aki::AkiWindow;
         _mainWindow->show();
+        Aki::IndicationSystem::self();
     }
 
     KWindowSystem::forceActiveWindow(_mainWindow->winId());
