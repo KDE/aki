@@ -19,10 +19,11 @@
  */
 
 #include "chatview.hpp"
+#include "debughelper.hpp"
 #include "message.hpp"
 #include "settings.h"
+#include "socket.hpp"
 #include "utils/themestylemanager.hpp"
-#include <Aki/Irc/Socket>
 #include <QtWebKit/QWebFrame>
 using namespace Aki;
 
@@ -34,11 +35,11 @@ ChatView::ChatView(QWidget* parent)
     connect(mainFrame(), SIGNAL(contentsSizeChanged(QSize)),
             SLOT(slotContentsSizeChanged(QSize)));
 
-    //setStyle(Aki::Settings::self()->themeListWidget());
-    //createTemplate();
+    setTheme(Aki::Settings::self()->themeListWidget());
+    createTemplate();
 }
 
-ChatView::ChatView(Aki::Irc::Socket* socket, QWidget* parent)
+ChatView::ChatView(Aki::Socket* socket, QWidget* parent)
     : Aki::BaseChatView(parent),
     _socket(socket),
     _isUserMoved(false)
@@ -48,7 +49,7 @@ ChatView::ChatView(Aki::Irc::Socket* socket, QWidget* parent)
     connect(mainFrame(), SIGNAL(contentsSizeChanged(QSize)),
             SLOT(slotContentsSizeChanged(QSize)));
 
-    setStyle(Aki::Settings::self()->themeListWidget());
+    setTheme(Aki::Settings::self()->themeListWidget());
     createTemplate();
 }
 
@@ -63,8 +64,26 @@ ChatView::appendMessage(const Aki::Message& message)
 }
 
 void
+ChatView::changeTheme()
+{
+    createTemplate();
+
+    foreach (const Aki::Message& message, _messages) {
+        appendMessage(message);
+    }
+}
+
+void
 ChatView::createTemplate()
 {
+    DEBUG_FUNC_NAME
+    if (!_currentTheme) {
+        return;
+    }
+
+    setContent(QByteArray(), "application/xhtml+xml");
+    DEBUG_TEXT("Cleared html");
+
     QString baseTemplate = 
         QString("<!DOCTYPE html PUBLIC &quot;-//W3C//DTD XHTML 1.0 Strict//EN&quot;"
         "&quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd&quot;>"
@@ -91,7 +110,7 @@ ChatView::createTemplate()
         .arg(_currentTheme->headerHtml())
         ,arg(_currentTheme->footerHtml());
     setContent(baseTemplate.toUtf8(), "application/xhtml+xml");
-    qDebug() << baseTemplate;
+    DEBUG_TEXT2("Html contents\n%1", baseTemplate)
 }
 
 QString
@@ -117,13 +136,17 @@ ChatView::mainFrame()
 }
 
 void
-ChatView::setStyle(const QString& style)
+ChatView::setTheme(const QString& style)
 {
-    Aki::ThemeStyle* tmp = Aki::ThemeStyleManager::self()->themeForName(style);
-    kDebug() << tmp;
-    if (tmp) {
-        _currentTheme = tmp;
-    }
+    setTheme(Aki::ThemeStyleManager::self()->themeForName(style));
+}
+
+void
+ChatView::setTheme(Aki::ThemeStyle* style)
+{
+    _currentTheme = style;
+
+    changeTheme();
 }
 
 void
@@ -137,5 +160,5 @@ ChatView::slotContentsSizeChanged(const QSize& size)
 void
 ChatView::slotThemeChanged()
 {
-    setStyle(Aki::Settings::self()->themeListWidget());
+    setTheme(Aki::Settings::self()->themeListWidget());
 }

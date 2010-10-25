@@ -28,19 +28,18 @@
 class QWebFrame;
 namespace Aki
 {
-namespace Irc
-{
 class Socket;
-} // End of namespace Irc.
 class ChatView : public Aki::BaseChatView
 {
     Q_OBJECT
 public:
     explicit ChatView(QWidget* parent = 0);
-    explicit ChatView(Aki::Irc::Socket* socket, QWidget* parent = 0);
+    explicit ChatView(Aki::Socket* socket, QWidget* parent = 0);
     ~ChatView();
-    void setStyle(const QString& style);
     void appendMessage(const Aki::Message& message);
+    void changeTheme();
+    void setTheme(const QString& style);
+    void setTheme(Aki::ThemeStyle* style);
 private:
     QWebFrame* mainFrame();
     void createTemplate();
@@ -52,7 +51,7 @@ private Q_SLOTS:
 private:
     QList<Aki::Message> _messages;
     Aki::ThemeStyle* _currentTheme;
-    Aki::Irc::Socket* _socket;
+    Aki::Socket* _socket;
     bool _isUserMoved;
 }; // End of class ChatView.
 } // End of namespace Aki.
