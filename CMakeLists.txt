@@ -15,29 +15,32 @@ set(QT_MIN_VERSION "4.6.0")
 set(KDE_MIN_VERSION "4.4.0")
 
 find_package(KDE4 4.4.0 REQUIRED)
+macro_log_feature(KDE4_FOUND "kdelibs" "The toolkit Aki uses for gui" "http://www.kde.org" TRUE ${KDE_MIN_VERSION} "")
+macro_log_feature(QT_QTWEBKIT_FOUND "qtwebkit" "Qt Webkit Library for Aki" "http://qt.nokia.org" TRUE ${QT_MIN_VERSION} "")
+macro_log_feature(QT_QTSQL_FOUND "qtsql" "Qt Sql module for settings" "http://qt.nokia.com" ${QT_MIN_VERSION} "")
 include(KDE4Defaults)
 include(MacroLogFeature)
 include(MacroWriteBasicCMakeVersionFile)
 
 find_package(AkiIrc REQUIRED)
+macro_log_feature(AKIIRC_FOUND "akiirc" "IRC Library for Aki" "http://www.akiirc.org" TRUE "0.0.3" "")
+
 find_package(QJSON REQUIRED)
+macro_log_feature(QJSON_FOUND "qjson" "Network list importer/exporter for Aki" "http://qjson.sourceforge.net/" TRUE "0.7.1" "")
 
 set(Boost_USE_STATIC OFF)
 set(Boost_USE_MULTITHREADED ON)
 find_package(Boost 1.40.0 REQUIRED)
-
-SET(QXT_USE_QXTCORE TRUE)
-find_package(QCA2 REQUIRED)
-find_package(Qxt REQUIRED)
-
-macro_log_feature(KDE4_FOUND "kdelibs" "The toolkit Aki uses for gui" "http://www.kde.org" TRUE ${KDE_MIN_VERSION} "")
-macro_log_feature(AKIIRC_FOUND "akiirc" "IRC Library for Aki" "http://www.akiirc.org" TRUE "0.0.3" "")
-macro_log_feature(QT_QTWEBKIT_FOUND "qtwebkit" "Qt Webkit Library for Aki" "http://qt.nokia.org" TRUE ${QT_MIN_VERSION} "")
-macro_log_feature(QT_QTSQL_FOUND "qtsql" "Qt Sql module for settings" "http://qt.nokia.com" ${QT_MIN_VERSION} "")
-macro_log_feature(QJSON_FOUND "qjson" "Network list importer/exporter for Aki" "http://qjson.sourceforge.net/" TRUE "0.7.1" "")
-macro_log_feature(QCA2_FOUND "qca2" "Encryption library" "http://delta.affinix.com/" TRUE "2.0" "")
 macro_log_feature(Boost_FOUND "boost" "Boost library for compatibility" "http://www.boost.org" TRUE "1.40.0" "")
-macro_log_feature(QXT_FOUND_QXTCORE "qxtcore" "QxtCore library for logging" "http://www.libqxt.org" TRUE "0.6.0" "")
+
+macro_optional_find_package(QCA2)
+macro_bool_to_01(QCA2_FOUND HAVE_QCA2)
+macro_log_feature(QCA2_FOUND "qca2" "Encryption library" "http://delta.affinix.com/" TRUE "2.0" "")
+
+find_package(PkgConfig)
+pkg_check_modules(INDICATEQT indicate-qt)
+macro_bool_to_01(INDICATEQT_FOUND HAVE_LIBINDICATE)
+macro_log_feature(INDICATEQT_FOUND "libindicate-qt" "DBus notifier for GNOME and KDE" FALSE "" "")
 
 add_definitions(
     ${QT_DEFINITIONS}
@@ -52,7 +55,7 @@ include_directories(
     ${QCA2_INCLUDE_DIR}
     ${CMAKE_BINARY_DIR}
     ${CMAKE_SOURCE_DIR}
-    ${QXT_INCLUDE_DIRS}
+    ${INDICATEQT_INCLUDE_DIRS}
 )
 
 macro_write_basic_cmake_version_file(
@@ -60,6 +63,11 @@ macro_write_basic_cmake_version_file(
     ${AKI_VERSION_MAJOR}
     ${AKI_VERSION_MINOR}
     ${AKI_VERSION_PATCH}
+)
+
+configure_file(
+    "${aki_SOURCE_DIR}/config.hpp.cmake"
+    "${aki_BINARY_DIR}/config.hpp"
 )
 
 configure_file(
