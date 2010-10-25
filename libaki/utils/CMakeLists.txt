@@ -1,6 +1,8 @@
 include(utils/private/CMakeLists.txt)
 set(akicore_utils_SRCS
     utils/database.cxx
+    utils/indicationsystem.cxx
+    utils/knotifications.cxx
     utils/messagehandle.cxx
     ${akicore_utilsprivate_SRCS}
     utils/sqladdress.cxx
@@ -10,9 +12,17 @@ set(akicore_utils_SRCS
     utils/sqlnickname.cxx
 )
 
+if(INDICATEQT_FOUND)
+    set(akicore_utils_SRCS
+        ${akicore_utils_SRCS}
+        utils/indicatenotification.cxx
+    )
+endif(INDICATEQT_FOUND)
+
 install(
     FILES
         utils/database.hpp
+        utils/indicatenotification.hpp
         utils/messagequeue.hpp
         utils/sqladdress.hpp
         utils/sqlchannel.hpp
