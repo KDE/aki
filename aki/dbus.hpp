@@ -23,6 +23,8 @@
 
 #include <QtCore/QObject>
 
+namespace Aki
+{
 class DBus : public QObject
 {
     Q_OBJECT
@@ -30,5 +32,6 @@ public:
     DBus(QObject* parent = 0);
     ~DBus();
 }; // End of class DBus.
+} // End of namespace Aki.
 
 #endif // DBUS_HPP

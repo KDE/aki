@@ -20,15 +20,18 @@
 
 #include "dbus.hpp"
 #include "aki.hpp"
+#include "debughelper.hpp"
 #include <KDE/KDebug>
 #include <QtDBus/QDBusConnection>
+using namespace Aki;
 
 DBus::DBus(QObject* parent)
     : QObject(parent)
 {
+    DEBUG_FUNC_NAME;
     QDBusConnection connection = QDBusConnection::sessionBus();
     bool status = connection.registerObject("/main", this, QDBusConnection::ExportAllContents);
-    qxtLog->info() << QString("DBus startup: %1").arg(status);
+    DEBUG_TEXT2("DBus startup: %1", status);
 }
 
 DBus::~DBus()
