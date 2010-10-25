@@ -1,5 +1,6 @@
 #include "serverlist/jsonparser.hpp"
 #include "aki.hpp"
+#include "debughelper.hpp"
 #include "utils/database.hpp"
 #include "utils/sqlidentity.hpp"
 #include <QtTest>
@@ -14,6 +15,7 @@ private Q_SLOTS:
 void
 JsonTest::testJson()
 {
+    DEBUG_FUNC_NAME;
     if (Aki::Database::open(Aki::databaseFile())) {
         QScopedPointer<Aki::JsonParser> parser(new Aki::JsonParser);
         if (!parser.isNull()) {
@@ -26,7 +28,7 @@ JsonTest::testJson()
                     parser->write(stream.device(), identity.data());
                     file.close();
                 } else {
-                    qxtLog->error() << "Failed to write file";
+                    DEBUG_TEXT("Failed to write file");
                 }
             }
         }

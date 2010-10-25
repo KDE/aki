@@ -20,6 +20,7 @@
 
 #include "sqlnickname_p.hpp"
 #include "aki.hpp"
+#include "debughelper.hpp"
 #include "utils/sqlnickname.hpp"
 using namespace Aki;
 
@@ -35,8 +36,9 @@ SqlNicknamePrivate::SqlNicknamePrivate(Aki::SqlNickname* qq)
 void
 SqlNicknamePrivate::checkError(const QSqlError& error)
 {
+    DEBUG_FUNC_NAME;
     if (error.isValid()) {
-        qxtLog->error() << QString("Driver: %1").arg(error.driverText());
-        qxtLog->error() << QString("Database: %1").arg(error.databaseText());
+        DEBUG_TEXT2("Driver: %1", error.driverText());
+        DEBUG_TEXT2("Database: %1", error.databaseText());
     }
 }

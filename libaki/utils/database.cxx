@@ -20,6 +20,7 @@
 
 #include "database.hpp"
 #include "aki.hpp"
+#include "debughelper.hpp"
 #include "utils/sqladdress.hpp"
 #include "utils/sqlchannel.hpp"
 #include "utils/sqlidentity.hpp"
@@ -44,18 +45,19 @@ Database::~Database()
 bool
 Database::open(const QString& path)
 {
+    DEBUG_FUNC_NAME;
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE3");
     db.setDatabaseName(path);
 
     if (!db.open()) {
-        qxtLog->error() << "Unable to open database file.";
+        DEBUG_TEXT("Unable to open database file.");
         return false;
     }
 
     QSqlQuery query("PRAGMA foreign_keys=ON");
     if (!query.exec()) {
         Aki::DatabasePrivate::checkError(query.lastError());
-        qxtLog->error() << "Foreign keys not enabled";
+        DEBUG_TEXT("Foreign keys not enabled");
     }
 
     return query.exec();
