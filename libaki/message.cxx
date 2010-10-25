@@ -20,12 +20,14 @@
 
 #include "message.hpp"
 #include "private/message_p.hpp"
+#include <Aki/Irc/RfcCommands>
 using namespace Aki;
 
 Message::Message(const QString& line)
     : Aki::Irc::Message(line)
 {
     _d.reset(new Aki::MessagePrivate(this));
+    Aki::Message message = Aki::Irc::RfcCommands::admin();
 }
 
 Message::Message(const Aki::Message& message)
@@ -33,6 +35,11 @@ Message::Message(const Aki::Message& message)
 {
     setDirection(message.direction());
     setTimeStamp(message.timeStamp());
+}
+
+Message::Message(const Aki::Irc::Message& message)
+    : Aki::Irc::Message(message)
+{
 }
 
 Message::~Message()
@@ -83,3 +90,5 @@ Message::timeStamp() const
 {
     return _d->timeStamp;
 }
+
+//Aki::Message message = Aki::Irc::RfcCommands::nick("Foo");

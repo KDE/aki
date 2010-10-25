@@ -28,22 +28,97 @@
 namespace Aki
 {
 class MessagePrivate;
+/**
+ * Encapsulates each message that is passed through Aki. It represents
+ * a message that is received from the IRC server or is passed to the IRC
+ * server from the client.
+ *
+ * You are required to create a Message in order to send them.
+ *
+ * \code
+ * Aki::Message message = Aki::RfcCommands::nick("FooNick");
+ * message.createTimestamp();
+ * message.setDirection(Aki::Message::Outgoing);
+ * \endcode
+ */
 class LIBAKI_EXPORT Message : public Aki::Irc::Message
 {
 public:
+    /**
+     * Message Direction.
+     */
     enum Direction {
+        /**
+         * Message is leaving.
+         */
         Outgoing,
+        /**
+         * Message is incoming.
+         */
         Incoming
-    };
+    }; // End of enum Direction.
+
+    /**
+     * Create a Message object which parses the messsage.
+     *
+     * @param line Message that will be parsed.
+     */
     explicit Message(const QString& line);
+    /**
+     * Copy constructor.
+     *
+     * @param message Message to copy.
+     */
     Message(const Aki::Message& message);
+
+    Message(const Aki::Irc::Message& message);
+    /**
+     * Destroys the message.
+     */
     ~Message();
+    /**
+     * Copies the Message object.
+     *
+     * @param rhs Message to copy.
+     * @return New message object.
+     */
     Aki::Message& operator=(const Aki::Message& rhs);
+    /**
+     * Creates a timestamp for the message. The timestamp
+     * is the current time for when this is called.
+     */
     void createTimestamp();
+    /**
+     * Direction of this message.
+     *
+     * @return Message direction.
+     */
     Aki::Message::Direction direction() const;
+    /**
+     * Determines if this message is right to left.
+     *
+     * @return true if this message is rtl; false otherwise.
+     */
     bool isRightToLeft() const;
+    /**
+     * Sets the Message direction.
+     *
+     * @param direction Direction of this message.
+     */
     void setDirection(Aki::Message::Direction direction);
+    /**
+     * Sets the timestamp for this message. This allows for
+     * a custom timestamp.
+     *
+     * @param timeStamp Message timestamp.
+     */
     void setTimeStamp(const KDateTime& timeStamp);
+    /**
+     * Gets the timestamp for this message for when this
+     * message was received or created.
+     *
+     * @return Message timestamp.
+     */
     KDateTime timeStamp() const;
 private:
     AKI_DECLARE_PRIVATE(Message)
