@@ -36,7 +36,7 @@ public:
     explicit Socket(QObject* parent = 0);
     explicit Socket(const QString& name, QObject* parent = 0);
     virtual ~Socket();
-    void sendMessage(Aki::Message& message);
+    void sendMessage(const Aki::Message& message);
 Q_SIGNALS:
     void sendingMessage(Aki::Message& message);
 private:

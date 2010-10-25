@@ -39,8 +39,9 @@ Socket::~Socket()
 }
 
 void
-Socket::sendMessage(Aki::Message& message)
+Socket::sendMessage(const Aki::Message& message)
 {
-    emit sendingMessage(message);
-    Aki::Irc::Socket::sendMessage(message);
+    Aki::Message msg = message;
+    emit sendingMessage(msg);
+    Aki::Irc::Socket::sendMessage(msg);
 }
