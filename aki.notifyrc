@@ -1,26 +1,32 @@
 [Global]
 IconName=aki
 Comment=Aki
+Comment[pt]=Aki
 Comment[uk]=Aki
 Comment[x-test]=xxAkixx
 Name=Aki
+Name[pt]=Aki
 Name[uk]=Aki
 Name[x-test]=xxAkixx
 
 [Event/highlight]
 Name=Highlight
+Name[pt]=Realce
 Name[uk]=Підсвічування
 Name[x-test]=xxHighlightxx
 Comment=Someone triggered a highlight
+Comment[pt]=Alguém despoletou um realce
 Comment[uk]=Хтось увімкнув підсвічування
 Comment[x-test]=xxSomeone triggered a highlightxx
 Action=none
 
 [Event/private]
 Name=Private Message
+Name[pt]=Mensagem Privada
 Name[uk]=Особисте повідомлення
 Name[x-test]=xxPrivate Messagexx
 Comment=You received a private message
+Comment[pt]=Você recebeu uma mensagem privada
 Comment[uk]=Вам надійшло особисте повідомлення
 Comment[x-test]=xxYou received a private messagexx
 Action=none

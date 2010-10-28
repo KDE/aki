@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=Kross Scripting
+Name[pt]=Programação em Kross
 Name[uk]=Скрипти Kross
 Name[x-test]=xxKross Scriptingxx
 Comment=Kross scripting plugin for Aki
+Comment[pt]='Plugin' programado em Kross para o Aki
 Comment[uk]=Додаток до Aki для роботи зі скриптами Kross
 Comment[x-test]=xxKross scripting plugin for Akixx
 Type=Service
