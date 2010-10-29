@@ -3,6 +3,7 @@ Type=ServiceType
 X-KDE-ServiceType=Aki/Plugin
 X-KDE-Derived=KPluginInfo
 Comment=Aki Plugin
+Comment[nds]=Aki-Moduul
 Comment[pt]='Plugin' do Aki
 Comment[uk]=Додаток до Aki
 Comment[x-test]=xxAki Pluginxx
