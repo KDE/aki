@@ -452,7 +452,7 @@ NetworkDialog::slotRemoveAddressClicked()
 
     int result = KMessageBox::warningYesNo(this, i18n("You are about to remove %1. This cannot be undone.",
                                                       currentAddress->address()),
-                                           i18n("Comfirm Server Address Deletion"));
+                                           i18n("Confirm Server Address Deletion"));
     switch (result) {
     case KMessageBox::Yes: {
         // Remove the address from the server.
@@ -483,7 +483,7 @@ NetworkDialog::slotRemoveNetworkClicked()
 
     int result = KMessageBox::warningYesNo(this, i18n("You are about to remove %1. This cannot be undone.",
                                                       currentNetwork->name()),
-                                           i18n("Comfirm Network Deletion"));
+                                           i18n("Confirm Network Deletion"));
     switch (result) {
     case KMessageBox::Yes: {
         // Remove the network from the server.
