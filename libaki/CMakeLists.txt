@@ -1,6 +1,7 @@
 include(config/CMakeLists.txt)
 include(dialogs/CMakeLists.txt)
 include(interfaces/CMakeLists.txt)
+include(irc/CMakeLists.txt)
 include(plugin/CMakeLists.txt)
 include(private/CMakeLists.txt)
 include(serverlist/CMakeLists.txt)
@@ -18,6 +19,7 @@ set(akicore_SRCS
     ${akicore_config_SRCS}
     ${akicore_dialogs_SRCS}
     ${akicore_interfaces_SRCS}
+    ${akicore_irc_SRCS}
     ${akicore_plugin_SRCS}
     ${akicore_private_SRCS}
     ${akicore_serverlist_SRCS}

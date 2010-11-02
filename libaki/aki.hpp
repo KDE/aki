@@ -25,7 +25,6 @@
 #include "akiversion.hpp"
 #include <KDE/KDebug>
 #include <KDE/KLocale>
-#include <QxtCore/QxtLogger>
 
 #define AKI_DECLARE_PRIVATE(klass) \
 private: \
