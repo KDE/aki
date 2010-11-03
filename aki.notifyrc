@@ -1,11 +1,13 @@
 [Global]
 IconName=aki
 Comment=Aki
+Comment[cs]=Aki
 Comment[nds]=Aki
 Comment[pt]=Aki
 Comment[uk]=Aki
 Comment[x-test]=xxAkixx
 Name=Aki
+Name[cs]=Aki
 Name[nds]=Aki
 Name[nl]=Aki
 Name[pt]=Aki
@@ -15,6 +17,7 @@ Name[x-test]=xxAkixx
 
 [Event/highlight]
 Name=Highlight
+Name[cs]=Zvýraznění
 Name[nds]=Rutheven
 Name[nl]=Accentueren
 Name[pt]=Realce
