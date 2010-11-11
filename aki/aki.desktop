@@ -18,6 +18,7 @@ GenericName[de]=IRC-Programm
 GenericName[nds]=Klöönsnackprogramm
 GenericName[nl]=IRC-client
 GenericName[pt]=Cliente de IRC
+GenericName[pt_BR]=Cliente IRC
 GenericName[uk]=Клієнт IRC
 GenericName[x-test]=xxIRC Clientxx
 Categories=Qt;KDE;Network;
