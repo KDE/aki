@@ -21,10 +21,7 @@
 #ifndef AKI_IRC_MESSAGE_P_HPP
 #define AKI_IRC_MESSAGE_P_HPP
 
-#include "irc/nickinfo.hpp"
-#include "irc/replycodes.hpp"
-#include <QtCore/QString>
-#include <QtCore/QStringList>
+#include "irc/message.hpp"
 
 namespace Aki
 {
@@ -55,11 +52,12 @@ public:
     QString removeStringToFirstWhitespace(QString* line, int start, int stop);
 public:
     Aki::Irc::NickInfo sender;
-    QString command;
+    Aki::Irc::NickInfo target;
+    Aki::Irc::Message::Direction direction;
+    Aki::Irc::Message::State state;
+    Aki::Irc::Message::Type type;
+    KDateTime timeStamp;
     QString message;
-    QStringList params;
-    Aki::Irc::ReplyCodes numeric;
-    bool isNumeric;
 private:
     Aki::Irc::Message* _q;
 }; // End of class MessagePrivate.

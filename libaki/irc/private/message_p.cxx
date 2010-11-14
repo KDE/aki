@@ -30,6 +30,8 @@ MessagePrivate::MessagePrivate(Aki::Irc::Message* qq)
     message(QString()),
     params(QString()),
     numeric(Aki::Irc::RPL_NULL),
+    direction(Aki::Irc::Message::Outgoing),
+    timeStamp(KDateTime()),
     isNumeric(false),
     _q(qq)
 {
