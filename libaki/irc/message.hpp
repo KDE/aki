@@ -152,6 +152,7 @@ public:
      * Destroys the message.
      */
     ~Message();
+    Aki::Irc::Message& operator=(const Aki::Irc::Message& rhs) const;
     /**
      * Clears the message.
      */

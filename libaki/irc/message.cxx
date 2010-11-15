@@ -39,6 +39,20 @@ Message::~Message()
 {
 }
 
+Aki::Irc::Message& Message::operator=(const Aki::Irc::Message& rhs) const
+{
+    _d.reset(new Aki::Irc::MessagePrivate);
+    _d->direction = rhs._d->direction;
+    _d->message = rhs._d->message;
+    _d->sender = rhs._d->sender;
+    _d->state = rhs._d->state;
+    _d->target = rhs._d->target;
+    _d->timeStamp = rhs._d->timeStamp;
+    _d->type = rhs._d->type;
+
+    return *this;
+}
+
 void Message::clear()
 {
     if (_d->message.isEmpty()) {
