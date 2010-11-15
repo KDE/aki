@@ -23,7 +23,7 @@
 
 #include "aki.hpp"
 #include "message.hpp"
-#include <Aki/Irc/Socket>
+#include "irc/socket.hpp"
 
 namespace Aki
 {
