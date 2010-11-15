@@ -1,11 +1,16 @@
 [Global]
 IconName=aki
 Comment=Aki
+Comment[cs]=Aki
+Comment[de]=Aki
 Comment[nds]=Aki
 Comment[pt]=Aki
+Comment[pt_BR]=Aki
 Comment[uk]=Aki
 Comment[x-test]=xxAkixx
 Name=Aki
+Name[cs]=Aki
+Name[de]=Aki
 Name[nds]=Aki
 Name[nl]=Aki
 Name[pt]=Aki
@@ -15,30 +20,39 @@ Name[x-test]=xxAkixx
 
 [Event/highlight]
 Name=Highlight
+Name[cs]=Zvýraznění
+Name[de]=Hervorhebung
 Name[nds]=Rutheven
 Name[nl]=Accentueren
 Name[pt]=Realce
+Name[pt_BR]=Realce
 Name[uk]=Підсвічування
 Name[x-test]=xxHighlightxx
 Comment=Someone triggered a highlight
+Comment[de]=Jemand hat eine Hervorhebung ausgelöst
 Comment[nds]=Een hett en Rutheven utlööst
 Comment[nl]=Iemand heeft een oplichting aangezet
 Comment[pt]=Alguém despoletou um realce
+Comment[pt_BR]=Alguém acionou um realce
 Comment[uk]=Хтось увімкнув підсвічування
 Comment[x-test]=xxSomeone triggered a highlightxx
 Action=none
 
 [Event/private]
 Name=Private Message
+Name[de]=Private Nachricht
 Name[nds]=Privaatnaricht
 Name[nl]=Privébericht
 Name[pt]=Mensagem Privada
+Name[pt_BR]=Mensagem privada
 Name[uk]=Особисте повідомлення
 Name[x-test]=xxPrivate Messagexx
 Comment=You received a private message
+Comment[de]=Sie haben eine private Nachricht erhalten
 Comment[nds]=Du hest en Privaatnaricht kregen
 Comment[nl]=U ontving een privaat bericht
 Comment[pt]=Você recebeu uma mensagem privada
+Comment[pt_BR]=Você recebeu uma mensagem privada
 Comment[uk]=Вам надійшло особисте повідомлення
 Comment[x-test]=xxYou received a private messagexx
 Action=none

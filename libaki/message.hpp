@@ -22,7 +22,7 @@
 #define AKI_MESSAGE_HPP
 
 #include "aki.hpp"
-#include <Aki/Irc/Message>
+#include "irc/message.hpp"
 #include <KDE/KDateTime>
 
 namespace Aki
