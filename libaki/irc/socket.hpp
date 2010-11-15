@@ -32,7 +32,7 @@ namespace Aki
 namespace Irc
 {
 class SocketPrivate;
-class LIBAKIIRC_EXPORT Socket : public Aki::Irc::BaseSocket
+class LIBAKI_EXPORT Socket : public Aki::Irc::BaseSocket
 {
     Q_OBJECT
 public:
