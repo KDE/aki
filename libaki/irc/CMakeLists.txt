@@ -4,5 +4,6 @@ set(akicore_irc_SRCS
     irc/basesocket.cxx
     irc/message.cxx
     irc/nickinfo.cxx
+    irc/rfc2812.cxx
     ${akicore_ircprivate_SRCS}
 )
