@@ -17,6 +17,21 @@ class BaseSocketPrivate;
 class LIBAKIIRC_EXPORT BaseSocket : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(QStringList addressList READ addressList WRITE setAddressList)
+    Q_PROPERTY(QString currentAddress READ currentAddress)
+    Q_PROPERTY(quint16 currentPort READ currentPort)
+    Q_PROPERTY(QString currentNick READ currentNick)
+    Q_PROPERTY(QString identName READ identName WRITE setIdentName)
+    Q_PROPERTY(bool isAutoIdentifyEnabled READ isAutoIdentifyEnabled WRITE setAutoIdentify)
+    Q_PROPERTY(bool isAutoReconnect READ isAutoReconnect WRITE setAutoReconnect)
+    Q_PROPERTY(QString name READ name WRITE setName)
+    Q_PROPERTY(QString realName READ realName WRITE setRealName)
+    Q_PROPERTY(int retryAttemptCount READ retryAttemptCount WRITE setRetryAttemptCount)
+    Q_PROPERTY(int retryInterval READ retryInterval WRITE setRetryInterval)
+    Q_PROPERTY(QString serviceName READ serviceName WRITE setServiceName)
+    Q_PROPERTY(QString servicePassword READ servicePassword WRITE setServicePassword)
+    Q_PROPERTY(QString serverPassword READ serverPassword WRITE setServerPassword)
+    Q_PROPERTY(bool isSslEnabled READ isSslEnabled WRITE setSsl)
 public:
     enum SocketState {
         UnconnectState = 0,
