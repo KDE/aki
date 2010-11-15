@@ -34,7 +34,7 @@ namespace Aki
 namespace Irc
 {
 class BaseSocketPrivate;
-class LIBAKIIRC_EXPORT BaseSocket : public QObject
+class LIBAKI_EXPORT BaseSocket : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QStringList addressList READ addressList WRITE setAddressList)
