@@ -17,3 +17,33 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
+
+#ifndef AKI_IRC_SOCKET_P_HPP
+#define AKI_IRC_SOCKET_P_HPP
+
+#include "irc/replycodes.hpp"
+#include "irc/socket.hpp"
+
+namespace Aki
+{
+namespace Irc
+{
+class Message;
+class SocketPrivate
+{
+public:
+    explicit SocketPrivate(Aki::Irc::Socket* qq);
+    void error(Aki::Irc::BaseSocket::SocketError error);
+    void rawMessageReceived(const Aki::Irc::Message& message);
+    void sslErrors(const QList<Aki::Irc::BaseSocket::SslError>& errors);
+    void stateChanged(Aki::Irc::BaseSocket::SocketState state);
+private:
+    void commandReceived(const Aki::Irc::Message& message);
+    void messageReceived(const Aki::Irc::Message& message);
+private:
+    Aki::Irc::Socket* _q;
+}; // End of class SocketPrivate.
+} // End of namespace Irc.
+} // End of namespace Aki.
+
+#endif // AKI_IRC_SOCKET_P_HPP
