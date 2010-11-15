@@ -48,4 +48,6 @@ private:
 } // End of namespace Irc.
 } // End of namespace Aki.
 
+QDebug operator<<(QDebug dbg, const Aki::Irc::NickInfo& nickInfo);
+
 #endif // AKI_IRC_NICKINFO_HPP

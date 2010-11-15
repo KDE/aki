@@ -83,3 +83,12 @@ NickInfo::user() const
 {
     return _d->user();
 }
+
+QDebug operator<<(QDebug dbg, const Aki::Irc::NickInfo& nickInfo)
+{
+    dbg << "Hostmask: " << nickInfo.hostmask() << '\n'
+        << "Host: " << nickInfo.host() << '\n'
+        << "Nick: " << nickInfo.nick() << '\n'
+        << "User: " << nickInfo.user();
+    return dbg;
+}
