@@ -33,9 +33,8 @@ class Socket;
 } // End of namespace Irc.
 class ChannelContainer;
 class ServerViewTab;
-class ServerViewTabPrivate : public QObject
+class ServerViewTabPrivate
 {
-    Q_OBJECT
 public:
     explicit ServerViewTabPrivate(Aki::ServerViewTab* qq);
 public:

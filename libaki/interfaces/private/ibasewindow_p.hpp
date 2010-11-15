@@ -8,9 +8,8 @@
 namespace Aki
 {
 class IBaseWindow;
-class IBaseWindowPrivate : public QObject
+class IBaseWindowPrivate
 {
-    Q_OBJECT
 public:
     IBaseWindowPrivate(Aki::IBaseWindow* qq);
 public:

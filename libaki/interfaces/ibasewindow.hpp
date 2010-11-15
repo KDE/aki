@@ -28,7 +28,8 @@
 namespace Aki
 {
 class IBaseWindowPrivate;
-class LIBAKI_EXPORT IBaseWindow : public QWidget
+class LIBAKI_EXPORT IBaseWindow
+    : public QWidget
 {
     Q_OBJECT
 public:

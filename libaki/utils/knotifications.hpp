@@ -32,7 +32,8 @@ namespace Irc
 class NickInfo;
 } // End of namespace Irc.
 class KNotificationsPrivate;
-class KNotifications : public QObject
+class KNotifications
+    : public QObject
 {
 public:
     explicit KNotifications(QObject* parent = 0);

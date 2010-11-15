@@ -31,7 +31,8 @@ namespace Aki
 class DockButton;
 class DockBarPrivate;
 class DockWidget;
-class LIBAKI_EXPORT DockBar : public QToolBar
+class LIBAKI_EXPORT DockBar
+    : public QToolBar
 {
     Q_OBJECT
 public:

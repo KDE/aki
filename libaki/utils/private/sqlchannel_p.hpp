@@ -28,9 +28,8 @@
 namespace Aki
 {
 class SqlChannel;
-class SqlChannelPrivate : public QObject
+class SqlChannelPrivate
 {
-    Q_OBJECT
 public:
     explicit SqlChannelPrivate(Aki::SqlChannel* qq);
     static void checkError(const QSqlError& error);

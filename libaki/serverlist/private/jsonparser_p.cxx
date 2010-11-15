@@ -29,8 +29,7 @@
 using namespace Aki;
 
 JsonParserPrivate::JsonParserPrivate(JsonParser* qq)
-    : QObject(),
-    _q(qq)
+    : _q(qq)
 {
 }
 

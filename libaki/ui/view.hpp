@@ -31,7 +31,8 @@ namespace Aki
 class IBaseWindow;
 class MainWindow;
 class ViewPrivate;
-class LIBAKI_EXPORT View : public QWidget
+class LIBAKI_EXPORT View
+    : public QWidget
 {
     Q_OBJECT
 public:

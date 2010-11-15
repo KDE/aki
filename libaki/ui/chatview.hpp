@@ -28,7 +28,8 @@ namespace Aki
 {
 class ThemeStyle;
 class ChatViewPrivate;
-class LIBAKI_EXPORT ChatView : public Aki::BaseChatView
+class LIBAKI_EXPORT ChatView
+    : public Aki::BaseChatView
 {
     Q_OBJECT
 public:

@@ -32,9 +32,8 @@ class IBaseWindow;
 class MainWindow;
 class TabBar;
 class View;
-class ViewPrivate : public QObject
+class ViewPrivate
 {
-    Q_OBJECT
 public:
     explicit ViewPrivate(Aki::View* qq);
 public:

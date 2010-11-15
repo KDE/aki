@@ -28,7 +28,8 @@ namespace Aki
 {
 class SqlNetwork;
 class SqlChannelPrivate;
-class LIBAKI_EXPORT SqlChannel : public QObject
+class LIBAKI_EXPORT SqlChannel
+    : public QObject
 {
     Q_OBJECT
 public:

@@ -27,9 +27,8 @@
 
 namespace Aki {
 class ChatParser;
-class ChatParserPrivate : public QObject
+class ChatParserPrivate
 {
-    Q_OBJECT
 public:
     typedef boost::function<bool (const QString&)> CommandHook;
     typedef CommandHook HelpHook;

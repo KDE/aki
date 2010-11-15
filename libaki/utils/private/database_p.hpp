@@ -27,9 +27,8 @@
 namespace Aki
 {
 class Database;
-class DatabasePrivate : public QObject
+class DatabasePrivate
 {
-    Q_OBJECT
 public:
     explicit DatabasePrivate(Aki::Database* qq);
     static void checkError(const QSqlError& error);

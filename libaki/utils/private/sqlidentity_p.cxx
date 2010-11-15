@@ -24,8 +24,7 @@
 using namespace Aki;
 
 SqlIdentityPrivate::SqlIdentityPrivate(Aki::SqlIdentity* qq)
-    : QObject(),
-    identity(0),
+    : identity(0),
     id(-1),
     _q(qq)
 {

@@ -41,7 +41,8 @@ class MessagePrivate;
  * message.setDirection(Aki::Message::Outgoing);
  * \endcode
  */
-class LIBAKI_EXPORT Message : public Aki::Irc::Message
+class LIBAKI_EXPORT Message
+    : public Aki::Irc::Message
 {
 public:
     /**

@@ -8,9 +8,8 @@
 namespace Aki
 {
 class ConfigFile;
-class ConfigFilePrivate : public QObject
+class ConfigFilePrivate
 {
-    Q_OBJECT
 public:
     explicit ConfigFilePrivate(Aki::ConfigFile* qq);
 public:

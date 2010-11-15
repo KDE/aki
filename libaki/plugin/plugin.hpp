@@ -33,8 +33,9 @@ namespace Aki
 {
 class IMainController;
 class PluginManager;
-class LIBAKI_EXPORT Plugin : public QObject,
-                             public KXMLGUIClient
+class LIBAKI_EXPORT Plugin
+    : public QObject,
+      public KXMLGUIClient
 {
     Q_OBJECT
 public:

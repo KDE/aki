@@ -40,8 +40,9 @@ class MainWindowPrivate;
  * Inherits KParts::MainWindow for easy implementation of plugins
  * to merge menus and/or ToolBars of the plugins in to the MainWindow.
  */
-class LIBAKI_EXPORT MainWindow : public KParts::MainWindow,
-                                 public Aki::IMainController
+class LIBAKI_EXPORT MainWindow
+    : public KParts::MainWindow,
+      public Aki::IMainController
 {
     Q_OBJECT
 public:

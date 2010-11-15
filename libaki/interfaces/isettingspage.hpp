@@ -28,7 +28,8 @@ class KConfigSkeleton;
 namespace Aki
 {
 class ISettingsPagePrivate;
-class LIBAKI_EXPORT ISettingsPage : public QWidget
+class LIBAKI_EXPORT ISettingsPage
+    : public QWidget
 {
     Q_OBJECT
 public:

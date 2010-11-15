@@ -31,7 +31,8 @@ class SqlNicknamePrivate;
 /**
  * Represents the Nickname table in the configuration database.
  */
-class LIBAKI_EXPORT SqlNickname : public QObject
+class LIBAKI_EXPORT SqlNickname
+    : public QObject
 {
     Q_OBJECT
 public:

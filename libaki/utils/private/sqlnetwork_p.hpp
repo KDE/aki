@@ -28,9 +28,8 @@
 namespace Aki
 {
 class SqlNetwork;
-class SqlNetworkPrivate : public QObject
+class SqlNetworkPrivate
 {
-    Q_OBJECT
 public:
     explicit SqlNetworkPrivate(Aki::SqlNetwork* qq);
     static void checkError(const QSqlError& error);

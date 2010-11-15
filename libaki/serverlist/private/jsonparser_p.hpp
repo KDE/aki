@@ -32,9 +32,8 @@ namespace Aki
 class JsonParser;
 class SqlIdentity;
 class SqlNetwork;
-class JsonParserPrivate : public QObject
+class JsonParserPrivate
 {
-    Q_OBJECT
 public:
     JsonParserPrivate(Aki::JsonParser* qq);
     QVariantMap writeAddresses(Aki::SqlNetwork* network);

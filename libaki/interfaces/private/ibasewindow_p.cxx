@@ -3,8 +3,7 @@
 using namespace Aki;
 
 IBaseWindowPrivate::IBaseWindowPrivate(IBaseWindow* qq)
-    : QObject(),
-    icon(KIcon()),
+    : icon(KIcon()),
     title(QString()),
     tabColor(Aki::IBaseWindow::Default),
     type(Aki::IBaseWindow::OtherWindow),

@@ -28,7 +28,8 @@
 namespace Aki
 {
 class SqlIdentityPrivate;
-class LIBAKI_EXPORT SqlIdentity : public QObject
+class LIBAKI_EXPORT SqlIdentity
+    : public QObject
 {
     Q_OBJECT
 public:

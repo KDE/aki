@@ -25,8 +25,7 @@
 using namespace Aki;
 
 ServerViewTabPrivate::ServerViewTabPrivate(Aki::ServerViewTab* qq)
-    : QObject(),
-    socket(0),
+    : socket(0),
     channelContainer(0),
     verticalSplitter(0),
     _q(qq)

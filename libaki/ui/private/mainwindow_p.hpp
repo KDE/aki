@@ -30,9 +30,8 @@ class DockBar;
 class DockWidget;
 class MainWindow;
 class View;
-class MainWindowPrivate : public QObject
+class MainWindowPrivate
 {
-    Q_OBJECT
 public:
     explicit MainWindowPrivate(Aki::MainWindow* mainWindow);
     void addDockBar(Qt::ToolBarArea area);

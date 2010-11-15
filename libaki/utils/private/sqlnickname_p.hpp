@@ -27,9 +27,8 @@
 namespace Aki
 {
 class SqlNickname;
-class SqlNicknamePrivate : public QObject
+class SqlNicknamePrivate
 {
-    Q_OBJECT
 public:
     explicit SqlNicknamePrivate(Aki::SqlNickname* qq);
     static void checkError(const QSqlError& error);

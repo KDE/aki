@@ -29,7 +29,8 @@ namespace Aki
 {
 class IBaseWindow;
 class ChannelViewPrivate;
-class ChannelView : public KTabWidget
+class ChannelView
+    : public KTabWidget
 {
     Q_OBJECT
 public:

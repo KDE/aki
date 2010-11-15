@@ -24,8 +24,7 @@
 using namespace Aki;
 
 ChannelViewPrivate::ChannelViewPrivate(Aki::ChannelView* qq)
-    : QObject(),
-    isSplitEnabled(false),
+    : isSplitEnabled(false),
     _q(qq)
 {
     channelList.clear();

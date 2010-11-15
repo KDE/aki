@@ -28,8 +28,7 @@
 using namespace Aki;
 
 MainWindowPrivate::MainWindowPrivate(Aki::MainWindow* q)
-    : QObject(),
-    _q(q)
+    : _q(q)
 {
 }
 

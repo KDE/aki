@@ -28,9 +28,8 @@
 namespace Aki
 {
 class SqlAddress;
-class SqlAddressPrivate : public QObject
+class SqlAddressPrivate
 {
-    Q_OBJECT
 public:
     explicit SqlAddressPrivate(Aki::SqlAddress* qq);
     static void checkError(const QSqlError& error);

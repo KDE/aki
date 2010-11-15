@@ -28,7 +28,8 @@
 namespace Aki
 {
 class SocketPrivate;
-class LIBAKI_EXPORT Socket : public Aki::Irc::Socket
+class LIBAKI_EXPORT Socket
+    : public Aki::Irc::Socket
 {
     using Aki::Irc::Socket::sendMessage;
     Q_OBJECT

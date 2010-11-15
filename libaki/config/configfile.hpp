@@ -31,7 +31,8 @@ class ConfigFilePrivate;
 /**
  * Reads and writes to a configuration file.
  */
-class LIBAKI_EXPORT ConfigFile : public QObject
+class LIBAKI_EXPORT ConfigFile
+    : public QObject
 {
     Q_OBJECT
 public:

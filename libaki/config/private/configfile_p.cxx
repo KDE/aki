@@ -3,8 +3,7 @@
 using namespace Aki;
 
 ConfigFilePrivate::ConfigFilePrivate(Aki::ConfigFile* qq)
-    : QObject(),
-    config(0),
+    : config(0),
     _q(qq)
 {
 }

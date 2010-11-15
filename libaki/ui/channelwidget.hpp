@@ -27,7 +27,8 @@
 namespace Aki
 {
 class ChannelWidgetPrivate;
-class LIBAKI_EXPORT ChannelWidget : public QWidget
+class LIBAKI_EXPORT ChannelWidget
+    : public QWidget
 {
     Q_OBJECT
 public:

@@ -32,9 +32,8 @@ class QWebView;
 namespace Aki
 {
 class ChannelWidget;
-class ChannelWidgetPrivate : public QObject
+class ChannelWidgetPrivate
 {
-    Q_OBJECT
 public:
     ChannelWidgetPrivate(Aki::ChannelWidget* qq);
 public:

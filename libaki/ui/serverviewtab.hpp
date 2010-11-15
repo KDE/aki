@@ -33,7 +33,8 @@ class Socket;
 
 class IBaseWindow;
 class ServerViewTabPrivate;
-class LIBAKI_EXPORT ServerViewTab : public Aki::IBaseWindow
+class LIBAKI_EXPORT ServerViewTab
+    : public Aki::IBaseWindow
 {
     Q_OBJECT
 public:

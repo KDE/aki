@@ -38,7 +38,8 @@ class NickInfo;
 } // End of namespace Irc.
 class IndicateNotificationPrivate;
 class MainWindow;
-class LIBAKI_EXPORT IndicateNotification : public QObject
+class LIBAKI_EXPORT IndicateNotification
+    : public QObject
 {
     Q_OBJECT
 public:

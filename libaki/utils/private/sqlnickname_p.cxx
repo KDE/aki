@@ -25,8 +25,7 @@
 using namespace Aki;
 
 SqlNicknamePrivate::SqlNicknamePrivate(Aki::SqlNickname* qq)
-    : QObject(),
-    nickname(QString()),
+    : nickname(QString()),
     id(-1),
     serverId(-1),
     _q(qq)

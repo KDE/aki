@@ -23,9 +23,8 @@
 #include "debughelper.hpp"
 using namespace Aki;
 
-SqlNetworkPrivate::SqlNetworkPrivate(SqlNetwork* qq)
-    : QObject(),
-    server(0),
+SqlNetworkPrivate::SqlNetworkPrivate(Aki::SqlNetwork* qq)
+    : server(0),
     id(-1),
     serverId(-1),
     _q(qq)

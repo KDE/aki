@@ -27,7 +27,8 @@
 namespace Aki
 {
 class MessageHandlePrivate;
-class MessageHandle : public KAction
+class MessageHandle
+    : public KAction
 {
     Q_OBJECT
 public:

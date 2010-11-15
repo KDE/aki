@@ -32,7 +32,8 @@ class SqlNetworkPrivate;
 /**
  * Encapsulates the Server table in the configuration database.
  */
-class LIBAKI_EXPORT SqlNetwork : public QObject
+class LIBAKI_EXPORT SqlNetwork
+    : public QObject
 {
     Q_OBJECT
 public:

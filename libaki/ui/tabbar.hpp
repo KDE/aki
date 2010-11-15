@@ -29,7 +29,8 @@ class QWheelEvent;
 
 namespace Aki
 {
-class TabBar : public KTabBar
+class TabBar
+    : public KTabBar
 {
     Q_OBJECT
 public:

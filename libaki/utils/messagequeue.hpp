@@ -28,7 +28,8 @@
 namespace Aki
 {
 class MessageQueuePrivate;
-class MessageQueue : public QObject
+class MessageQueue
+    : public QObject
 {
     Q_OBJECT
 public:

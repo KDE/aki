@@ -32,7 +32,8 @@ class User;
 }
 
 class UserItemPrivate;
-class UserItem : public QTreeWidgetItem
+class UserItem
+    : public QTreeWidgetItem
 {
 public:
     enum Roles {

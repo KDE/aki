@@ -28,9 +28,8 @@ namespace Aki
 {
 class IBaseWindow;
 class ChannelView;
-class ChannelViewPrivate : public QObject
+class ChannelViewPrivate
 {
-    Q_OBJECT
 public:
     ChannelViewPrivate(Aki::ChannelView* qq);
 public:

@@ -33,7 +33,8 @@ namespace Irc
 class NickInfo;
 } // End of namespace Irc.
 class BaseChatViewPrivate;
-class LIBAKI_EXPORT BaseChatView : public KWebView
+class LIBAKI_EXPORT BaseChatView
+    : public KWebView
 {
     Q_OBJECT
 public:

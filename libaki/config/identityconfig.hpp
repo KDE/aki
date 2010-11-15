@@ -26,7 +26,8 @@
 
 namespace Aki
 {
-class LIBAKI_EXPORT IdentityConfig : public Aki::ConfigFile
+class LIBAKI_EXPORT IdentityConfig
+    : public Aki::ConfigFile
 {
     Q_OBJECT
 public:

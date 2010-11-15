@@ -24,9 +24,8 @@
 #include "utils/sqlchannel.hpp"
 using namespace Aki;
 
-SqlChannelPrivate::SqlChannelPrivate(SqlChannel* qq)
-    : QObject(),
-    id(-1),
+SqlChannelPrivate::SqlChannelPrivate(Aki::SqlChannel* qq)
+    : id(-1),
     serverId(-1),
     _q(qq)
 {

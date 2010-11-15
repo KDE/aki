@@ -28,7 +28,8 @@
 namespace Aki
 {
 class ChatParserPrivate;
-class ChatParser : public QObject
+class ChatParser
+    : public QObject
 {
     Q_OBJECT
 public:

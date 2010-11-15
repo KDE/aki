@@ -29,7 +29,8 @@ namespace Aki
 {
 class JsonParserPrivate;
 class SqlIdentity;
-class LIBAKI_EXPORT JsonParser : public QObject
+class LIBAKI_EXPORT JsonParser
+    : public QObject
 {
     Q_OBJECT
 public:

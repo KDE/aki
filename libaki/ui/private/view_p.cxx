@@ -29,8 +29,7 @@
 using namespace Aki;
 
 ViewPrivate::ViewPrivate(Aki::View* qq)
-    : QObject(),
-    tabWidget(0),
+    : tabWidget(0),
     tabBar(0),
     layout(0),
     mainWindow(0),

@@ -28,8 +28,7 @@
 using namespace Aki;
 
 ChannelWidgetPrivate::ChannelWidgetPrivate(Aki::ChannelWidget* qq)
-    : QObject(),
-    topicBar(0),
+    : topicBar(0),
     chatView(0),
     nickSelector(0),
     channelInput(0),

@@ -24,9 +24,8 @@
 #include "utils/sqladdress.hpp"
 using namespace Aki;
 
-SqlAddressPrivate::SqlAddressPrivate(SqlAddress* qq)
-    : QObject(),
-    id(-1),
+SqlAddressPrivate::SqlAddressPrivate(Aki::SqlAddress* qq)
+    : id(-1),
     serverId(-1),
     _q(qq)
 {

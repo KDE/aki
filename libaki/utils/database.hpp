@@ -30,7 +30,8 @@
 namespace Aki
 {
 class DatabasePrivate;
-class LIBAKI_EXPORT Database : public QObject
+class LIBAKI_EXPORT Database
+    : public QObject
 {
     Q_OBJECT
 public:

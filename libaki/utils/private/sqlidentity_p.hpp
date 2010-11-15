@@ -28,9 +28,8 @@
 namespace Aki
 {
 class SqlIdentity;
-class SqlIdentityPrivate : public QObject
+class SqlIdentityPrivate
 {
-    Q_OBJECT
 public:
     explicit SqlIdentityPrivate(Aki::SqlIdentity* qq);
     static void checkError(const QSqlError& error);

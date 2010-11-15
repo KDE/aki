@@ -32,7 +32,8 @@ class NickInfo;
 } // End of namespace Irc.
 class IndicationSystemPrivate;
 class MainWindow;
-class LIBAKI_EXPORT IndicationSystem : public Aki::Singleton<Aki::IndicationSystem>
+class LIBAKI_EXPORT IndicationSystem
+    : public Aki::Singleton<Aki::IndicationSystem>
 {
     Q_OBJECT
 public:

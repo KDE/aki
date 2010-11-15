@@ -26,8 +26,7 @@ using namespace Aki;
 using namespace boost;
 
 ChatParserPrivate::ChatParserPrivate(ChatParser* qq)
-    : QObject(),
-    _q(qq)
+    : _q(qq)
 {
 }
 

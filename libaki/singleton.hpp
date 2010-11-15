@@ -7,7 +7,8 @@
 namespace Aki
 {
 template <typename T>
-class LIBAKI_EXPORT Singleton : public QObject
+class LIBAKI_EXPORT Singleton
+    : public QObject
 {
 public:
     static T* self()

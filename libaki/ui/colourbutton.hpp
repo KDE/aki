@@ -27,7 +27,8 @@
 namespace Aki
 {
 class ColourButtonPrivate;
-class ColourButton : public QToolButton
+class ColourButton
+    : public QToolButton
 {
     Q_OBJECT
 public:
