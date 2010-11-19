@@ -13,7 +13,6 @@ kde4_add_plugin(akiscriptingplugin ${akiscriptingplugin_SRCS})
 target_link_libraries(
     akiscriptingplugin
     akicore
-    akiirc
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KDEUI_LIBS}
     ${KDE4_KIO_LIBS}
