@@ -152,7 +152,7 @@ public:
      * Destroys the message.
      */
     ~Message();
-    Aki::Irc::Message& operator=(const Aki::Irc::Message& rhs) const;
+    Aki::Irc::Message& operator=(const Aki::Irc::Message& rhs);
     /**
      * Clears the message.
      */
@@ -247,6 +247,13 @@ public:
      */
     void setTimeStamp(const KDateTime& timeStamp);
     /**
+     * Sets the @p type of message this is.
+     *
+     * @param type Message Type.
+     * @sa Aki::Irc::Message::type()
+     */
+    void setType(Aki::Irc::Message::Type type);
+    /**
      * Gets the message state.
      *
      * @return Message state.
@@ -267,6 +274,13 @@ public:
      * @sa Aki::Irc::Message::setTimeStamp()
      */
     const KDateTime& timeStamp() const;
+    /**
+     * Gets the specific type of message this is.
+     *
+     * @return Message Type.
+     * @sa Aki::Irc::Message::setType()
+     */
+    Aki::Irc::Message::Type type() const;
 private:
     AKI_DECLARE_PRIVATE(Message)
 }; // End of class Message.

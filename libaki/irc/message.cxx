@@ -27,28 +27,35 @@ using namespace Irc;
 
 Message::Message()
 {
-    _d.reset(new Aki::Irc::MessagePrivate);
+    _d.reset(new Aki::Irc::MessagePrivate(this));
 }
 
-Message::Message (const Aki::Irc::Message& other)
+Message::Message(const Aki::Irc::Message& other)
 {
-    _d.reset(new Aki::Irc::MessagePrivate);
+    _d.reset(new Aki::Irc::MessagePrivate(this));
+    setDirection(other.direction());
+    _d->message = other._d->message;
+    setSender(other.sender());
+    setState(other.state());
+    setTarget(other.target());
+    setTimeStamp(other.timeStamp());
+    setType(other.type());
 }
 
 Message::~Message()
 {
 }
 
-Aki::Irc::Message& Message::operator=(const Aki::Irc::Message& rhs) const
+Aki::Irc::Message& Message::operator=(const Aki::Irc::Message& rhs)
 {
-    _d.reset(new Aki::Irc::MessagePrivate);
-    _d->direction = rhs._d->direction;
+    _d.reset(new Aki::Irc::MessagePrivate(this));
+    setDirection(rhs.direction());
     _d->message = rhs._d->message;
-    _d->sender = rhs._d->sender;
-    _d->state = rhs._d->state;
-    _d->target = rhs._d->target;
-    _d->timeStamp = rhs._d->timeStamp;
-    _d->type = rhs._d->type;
+    setSender(rhs.sender());
+    setState(rhs.state());
+    setTarget(rhs.target());
+    setTimeStamp(rhs.timeStamp());
+    setType(rhs.type());
 
     return *this;
 }
@@ -102,25 +109,19 @@ Message::setDirection(Message::Direction direction)
 void
 Message::setHtml(const QString& message)
 {
-    if (_d->message != message) {
-        _d->message = message;
-    }
+    _d->message = message;
 }
 
 void
 Message::setPlainText (const QString& message)
 {
-    if (_d->message != message) {
-        _d->message = message;
-    }
+    _d->message = message;
 }
 
 void
 Message::setSender(const Aki::Irc::NickInfo& sender)
 {
-    if (_d->sender != sender) {
-        _d->sender = sender;
-    }
+    _d->sender = sender;
 }
 
 void
@@ -132,22 +133,27 @@ Message::setState(Message::State state)
 }
 
 void
-Message::setTarget (const Aki::Irc::NickInfo& target)
+Message::setTarget(const Aki::Irc::NickInfo& target)
 {
-    if (_d->target != target) {
-        _d->target = target;
-    }
+    _d->target = target;
 }
 
-void Message::setTimeStamp (const KDateTime& timeStamp)
+void
+Message::setTimeStamp(const KDateTime& timeStamp)
 {
     if (timeStamp.isNull() || !timeStamp.isValid()) {
         return;
     }
 
     if (_d->timeStamp != timeStamp) {
-        _d->timeStamp = KGlobal::locale()->formatDateTime(timeStamp, KGlobal::locale()->dateFormat());
+        _d->timeStamp = timeStamp;
     }
+}
+
+void
+Message::setType(Aki::Irc::Message::Type type)
+{
+    _d->type = type;
 }
 
 Aki::Irc::Message::State
@@ -168,21 +174,27 @@ Message::timeStamp() const
     return _d->timeStamp;
 }
 
+Aki::Irc::Message::Type
+Message::type() const
+{
+    return _d->type;
+}
+
 QDebug operator<<(QDebug dbg, const Aki::Irc::Message& message)
 {
     dbg << "Sender: " << message.sender().hostmask() << '\n'
         << "Target: " << message.target().hostmask() << '\n'
         << "Message: " << message.plainText() << '\n'
         << "RTL: " << message.isRightToLeft() << '\n'
-        << "State: " << (message.state() == Aki::Irc::Message::Error) ? "Error" :
+        << "State: " << ((message.state() == Aki::Irc::Message::Error) ? "Error" :
             (message.state() == Aki::Irc::Message::Sending) ? "Sending" :
-            (message.state() == Aki::Irc::Message::Sent) ? "Sent" : "Unknown" << '\n'
+            (message.state() == Aki::Irc::Message::Sent) ? "Sent" : "Unknown") << '\n'
         << "TimeStamp: " << message.timeStamp() << '\n'
-        << "Type: " << (message.type() == Aki::Irc::Message::Action) ? "CTCP Action" :
+        << "Type: " << ((message.type() == Aki::Irc::Message::Action) ? "CTCP Action" :
                        (message.type() == Aki::Irc::Message::Ctcp) ? "CTCP" :
                        (message.type() == Aki::Irc::Message::DccChat) ? "DCC Chat" :
                        (message.type() == Aki::Irc::Message::DccFile) ? "DCC File" :
-                       (message.type() == Aki::Irc::Message::Highlight) ? "Highlight" : "Normal" << '\n'
-        << "Direction: " << (message.direction() == Aki::Irc::Message::Incoming) ? "Incoming" : "Outgoing";
+                       (message.type() == Aki::Irc::Message::Highlight) ? "Highlight" : "Normal") << '\n'
+        << "Direction: " << ((message.direction() == Aki::Irc::Message::Incoming) ? "Incoming" : "Outgoing");
     return dbg;
 }
