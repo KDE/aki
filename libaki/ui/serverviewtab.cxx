@@ -23,7 +23,7 @@
 #include "ui/channelcontainer.hpp"
 #include "ui/channelview.hpp"
 #include "ui/channelwidget.hpp"
-#include <Aki/Irc/Socket>
+#include "irc/socket.hpp"
 #include <QtGui/QSplitter>
 #include <QtGui/QVBoxLayout>
 using namespace Aki;

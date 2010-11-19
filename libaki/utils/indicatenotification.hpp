@@ -22,6 +22,7 @@
 #define AKI_INDICATENOTIFICATION_HPP
 
 #include "aki.hpp"
+#include "irc/nickinfo.hpp"
 #include <KDE/KIcon>
 #include <QtCore/QObject>
 
@@ -32,10 +33,6 @@ class Indicator;
 
 namespace Aki
 {
-namespace Irc
-{
-class NickInfo;
-} // End of namespace Irc.
 class IndicateNotificationPrivate;
 class MainWindow;
 class LIBAKI_EXPORT IndicateNotification
@@ -48,7 +45,7 @@ public:
     void setMainWindow(Aki::MainWindow* window);
     void addChannelMessage(const QString& channelName, const QString& message);
     void addCustomMessage(const QString& message, const KIcon& icon = KIcon(), const QString& eventName = QString());
-    void addPrivateMessage(const Aki::Irc::NickInfo* from, const QString& message);
+    void addPrivateMessage(const Aki::Irc::NickInfo& from, const QString& message);
 private:
     Q_PRIVATE_SLOT(_d, void displayIndicator(QIndicate::Indicator* indicator))
     Q_PRIVATE_SLOT(_d, void showMainWindow())

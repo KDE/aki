@@ -20,7 +20,7 @@
 
 #include "socket_p.hpp"
 #include "debughelper.hpp"
-#include "irc/rfccommands.hpp"
+#include "irc/rfc2812.hpp"
 #include <QtCore/QTimer>
 using namespace Aki;
 using namespace Irc;
@@ -33,7 +33,8 @@ SocketPrivate::SocketPrivate(Aki::Irc::Socket* qq)
 void
 SocketPrivate::commandReceived(const Aki::Irc::Message& message)
 {
-    switch (message.numeric()) {
+///TODO: Fix switch
+    switch (0) {
     case RPL_NULL: {
         break;
     }
@@ -132,7 +133,8 @@ SocketPrivate::commandReceived(const Aki::Irc::Message& message)
     case RPL_ADMINLOC1:
     case RPL_ADMINLOC2:
     case RPL_ADMINEMAIL:
-        emit _q->onAdminMessage(Aki::Irc::AdminMessage(message));
+        ///TODO: Fix me
+        //emit _q->onAdminMessage(Aki::Irc::AdminMessage(message));
         break;
     }
     case RPL_TRACELOG: {
@@ -164,7 +166,8 @@ SocketPrivate::commandReceived(const Aki::Irc::Message& message)
         break;
     }
     case RPL_AWAY: {
-        emit _q->onAwayMessage(Aki::Irc::AwayMessage(message));
+        ///TODO: Fix me
+        //emit _q->onAwayMessage(Aki::Irc::AwayMessage(message));
         break;
     }
     case RPL_USERHOST: {
@@ -180,7 +183,8 @@ SocketPrivate::commandReceived(const Aki::Irc::Message& message)
     }
     case RPL_UNAWAY: {
     case RPL_NOWAWAY:
-        emit _q->onAwayMessage(Aki::Irc::AwayMessage(message));
+        ///TODO: Fix me
+        //emit _q->onAwayMessage(Aki::Irc::AwayMessage(message));
         break;
     }
     case RPL_WHOISUSER: {
@@ -589,22 +593,24 @@ SocketPrivate::error(Aki::Irc::BaseSocket::SocketError error)
 void
 SocketPrivate::messageReceived(const Aki::Irc::Message& message)
 {
-    const QString command = message.command().toUpper();
+    ///TODO: Fix me
+    /*const QString command = message.command().toUpper();
     if (command == "PING" || command == "PONG") {
         emit _q->onPingPongMessage(message);
     } else if (command == "TOPIC") {
         emit _q->onTopicChangeMessage(message);
-    }
+    }*/
 }
 
 void
 SocketPrivate::rawMessageReceived(const Aki::Irc::Message& message)
 {
-    if (message.isNumeric()) {
+    ///TODO: Fix me
+    /*if (message.isNumeric()) {
         commandReceived(message);
     } else {
         messageReceived(message);
-    }
+    }*/
 }
 
 void
@@ -624,13 +630,13 @@ SocketPrivate::stateChanged(Aki::Irc::BaseSocket::SocketState state)
     }
     case Aki::Irc::BaseSocket::ConnectedState: {
         if (not _q->serverPassword().isEmpty()) {
-            Aki::Irc::Message message = Aki::Irc::RfcCommands::pass(_q->serverPassword());
+            Aki::Irc::Message message = Aki::Irc::Rfc2812::pass(_q->serverPassword());
             _q->sendMessage(message);
         }
 
-        Aki::Irc::Message message = Aki::Irc::RfcCommands::user(_q->identName(), false, _q->realName());
+        Aki::Irc::Message message = Aki::Irc::Rfc2812::user(_q->identName(), false, _q->realName());
         _q->sendMessage(message);
-        message = Aki::Irc::RfcCommands::nick(_q->currentNick());
+        message = Aki::Irc::Rfc2812::nick(_q->currentNick());
         _q->sendMessage(message);
         break;
     }

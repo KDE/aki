@@ -21,7 +21,7 @@
 #ifndef AKI_CHATVIEW_HPP
 #define AKI_CHATVIEW_HPP
 
-#include "message.hpp"
+#include "irc/message.hpp"
 #include "ui/basechatview.hpp"
 #include "utils/themestyle.hpp"
 
@@ -36,7 +36,7 @@ public:
     explicit ChatView(QWidget* parent = 0);
     explicit ChatView(Aki::Socket* socket, QWidget* parent = 0);
     ~ChatView();
-    void appendMessage(const Aki::Message& message);
+    void appendMessage(const Aki::Irc::Message& message);
     void changeTheme();
     void setTheme(const QString& style);
     void setTheme(Aki::ThemeStyle* style);
@@ -44,12 +44,12 @@ private:
     QWebFrame* mainFrame();
     void createTemplate();
     QString formatTheme(const QString& html);
-    QString formatTheme(const QString& html, const Aki::Message& message);
+    QString formatTheme(const QString& html, const Aki::Irc::Message& message);
 private Q_SLOTS:
     void slotContentsSizeChanged(const QSize& size);
     void slotThemeChanged();
 private:
-    QList<Aki::Message> _messages;
+    QList<Aki::Irc::Message> _messages;
     Aki::ThemeStyle* _currentTheme;
     Aki::Socket* _socket;
     bool _isUserMoved;

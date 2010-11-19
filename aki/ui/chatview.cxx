@@ -20,9 +20,7 @@
 
 #include "chatview.hpp"
 #include "debughelper.hpp"
-#include "message.hpp"
 #include "settings.h"
-#include "socket.hpp"
 #include "utils/themestylemanager.hpp"
 #include <QtWebKit/QWebFrame>
 using namespace Aki;
@@ -58,7 +56,7 @@ ChatView::~ChatView()
 }
 
 void
-ChatView::appendMessage(const Aki::Message& message)
+ChatView::appendMessage(const Aki::Irc::Message& message)
 {
     _messages.append(message);
 }
@@ -68,7 +66,7 @@ ChatView::changeTheme()
 {
     createTemplate();
 
-    foreach (const Aki::Message& message, _messages) {
+    foreach (const Aki::Irc::Message& message, _messages) {
         appendMessage(message);
     }
 }
@@ -122,7 +120,7 @@ ChatView::formatTheme(const QString& html)
 }
 
 QString
-ChatView::formatTheme(const QString& html, const Aki::Message& message)
+ChatView::formatTheme(const QString& html, const Aki::Irc::Message& message)
 {
     Q_UNUSED(html)
     Q_UNUSED(message)

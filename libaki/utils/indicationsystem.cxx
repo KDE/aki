@@ -23,10 +23,10 @@
 #include "debughelper.hpp"
 #include "private/indicationsystem_p.hpp"
 #include "ui/mainwindow.hpp"
-#include <Aki/Irc/NickInfo>
 using namespace Aki;
+using namespace Irc;
 
-template<> Aki::IndicationSystem* Aki::IndicationSystem::Singleton<Aki::IndicationSystem>::_instance = 0;
+template<> Aki::IndicationSystem* Aki::Singleton<Aki::IndicationSystem>::_instance = 0;
 
 IndicationSystem::IndicationSystem()
     : Singleton<Aki::IndicationSystem>()
@@ -51,7 +51,7 @@ IndicationSystem::addChannelMessage(const QString& channelName, const QString& m
 }
 
 void
-IndicationSystem::addPrivateMessage(const Aki::Irc::NickInfo* from, const QString& message)
+IndicationSystem::addPrivateMessage(const Aki::Irc::NickInfo& from, const QString& message)
 {
     _d->_indicateNotification->addPrivateMessage(from, message);
 }

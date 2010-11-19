@@ -23,8 +23,8 @@
 
 #include "aki.hpp"
 #include "irc/basesocket.hpp"
-#include "message/adminmessage.hpp"
-#include "message/awaymessage.hpp"
+//#include "message/adminmessage.hpp"
+//#include "message/awaymessage.hpp"
 #include <QtCore/QList>
 
 namespace Aki
@@ -42,8 +42,8 @@ public:
     virtual ~Socket();
     void connectSlotsBySignals(Aki::Irc::Socket* socket);
 Q_SIGNALS:
-    void onAdminMessage(const Aki::Irc::AdminMessage& adminMessage);
-    void onAwayMessage(const Aki::Irc::AwayMessage& awayMessage);
+//    void onAdminMessage(const Aki::Irc::AdminMessage& adminMessage);
+//    void onAwayMessage(const Aki::Irc::AwayMessage& awayMessage);
     void onBanListMessage(const Aki::Irc::Message& banListMessage);
     void onErrorMessage(const Aki::Irc::Message& errorMessage);
     void onExceptListMessage(const Aki::Irc::Message& exceptListMessage);

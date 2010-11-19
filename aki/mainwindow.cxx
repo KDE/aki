@@ -42,7 +42,7 @@
 #include "utils/indicationsystem.hpp"
 #include "utils/pluginmanager.hpp"
 #include "utils/themestylemanager.hpp"
-#include <Aki/Irc/NickInfo>
+#include "irc/nickinfo.hpp"
 #include <KDE/KAction>
 #include <KDE/KActionCollection>
 #include <KDE/KActionMenu>
@@ -96,7 +96,7 @@ AkiWindow::AkiWindow()
 
     Aki::IndicationSystem::self()->setMainWindow(this);
     Aki::IndicationSystem::self()->addChannelMessage("#Test", "Hello");
-    Aki::IndicationSystem::self()->addPrivateMessage(new Aki::Irc::NickInfo(""), "hello");
+    Aki::IndicationSystem::self()->addPrivateMessage(Aki::Irc::NickInfo(""), "hello");
 }
 
 AkiWindow::~AkiWindow()

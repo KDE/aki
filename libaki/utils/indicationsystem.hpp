@@ -23,13 +23,10 @@
 
 #include "aki.hpp"
 #include "singleton.hpp"
+#include "irc/nickinfo.hpp"
 
 namespace Aki
 {
-namespace Irc
-{
-class NickInfo;
-} // End of namespace Irc.
 class IndicationSystemPrivate;
 class MainWindow;
 class LIBAKI_EXPORT IndicationSystem
@@ -38,7 +35,7 @@ class LIBAKI_EXPORT IndicationSystem
     Q_OBJECT
 public:
     void addChannelMessage(const QString& channelName, const QString& message);
-    void addPrivateMessage(const Aki::Irc::NickInfo* from, const QString& message);
+    void addPrivateMessage(const Aki::Irc::NickInfo& from, const QString& message);
     void setMainWindow(Aki::MainWindow* window);
 private:
     friend class Aki::Singleton<Aki::IndicationSystem>;

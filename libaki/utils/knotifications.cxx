@@ -19,8 +19,8 @@
  */
 
 #include "knotifications.hpp"
+#include "irc/nickinfo.hpp"
 #include "private/knotifications_p.hpp"
-#include <Aki/Irc/NickInfo>
 #include <KDE/KNotification>
 using namespace Aki;
 

@@ -22,7 +22,6 @@
 #include "debughelper.hpp"
 #include "private/indicatenotification_p.hpp"
 #include "ui/mainwindow.hpp"
-#include <Aki/Irc/NickInfo>
 #include <QtCore/QDateTime>
 #include <QtCore/QTimer>
 #include <KDE/KComponentData>
@@ -87,13 +86,12 @@ IndicateNotification::addCustomMessage(const QString& message, const KIcon& icon
 }
 
 void
-IndicateNotification::addPrivateMessage(const Aki::Irc::NickInfo* from, const QString& message)
+IndicateNotification::addPrivateMessage(const Aki::Irc::NickInfo& from, const QString& message)
 {
     DEBUG_FUNC_NAME;
-    Q_ASSERT(from);
     _d->indicator = new QIndicate::Indicator(_d->server.data());
     _d->indicator->setIconProperty(KIcon("aki").pixmap(QSize(16, 16)).toImage());
-    _d->indicator->setNameProperty(QString("%1: \"%2\"").arg(from->nick()).arg(message));
+    _d->indicator->setNameProperty(QString("%1: \"%2\"").arg(from.nick()).arg(message));
     _d->indicator->setTimeProperty(QDateTime::currentDateTimeUtc());
 
     connect(_d->indicator, SIGNAL(display(QIndicate::Indicator*)),
