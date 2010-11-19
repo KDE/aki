@@ -336,7 +336,9 @@ Rfc2812::quit(const QString& message)
 Aki::Irc::Message
 Rfc2812::raw(const QString& command)
 {
-    return Aki::Irc::Message(command);
+    Aki::Irc::Message message;
+    message.setPlainText(command);
+    return message;
 }
 
 Aki::Irc::Message
