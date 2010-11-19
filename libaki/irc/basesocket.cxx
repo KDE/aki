@@ -20,7 +20,7 @@
 
 #include "basesocket.hpp"
 #include "debughelper.hpp"
-#include "irc/rfccommands.hpp"
+#include "irc/rfc2812.hpp"
 #include "irc/private/basesocket_p.hpp"
 #include <QtCore/QTextCodec>
 #include <QtNetwork/QNetworkProxy>
@@ -231,8 +231,8 @@ void
 BaseSocket::sendMessage(const Aki::Irc::Message& message)
 {
     DEBUG_FUNC_NAME;
-    kDebug() << _d->codec->fromUnicode(message.message()).replace("\r\n", "");
-    _d->socket->write(_d->codec->fromUnicode(message.message()));
+    kDebug() << _d->codec->fromUnicode(message.plainText()).replace("\r\n", "");
+    _d->socket->write(_d->codec->fromUnicode(message.plainText()));
     _d->socket->flush();
 }
 

@@ -44,7 +44,7 @@ class LIBAKI_EXPORT BaseSocket
     Q_PROPERTY(QString currentNick READ currentNick)
     Q_PROPERTY(QString identName READ identName WRITE setIdentName)
     Q_PROPERTY(bool isAutoIdentifyEnabled READ isAutoIdentifyEnabled WRITE setAutoIdentify)
-    Q_PROPERTY(bool isAutoReconnect READ isAutoReconnect WRITE setAutoReconnect)
+    Q_PROPERTY(bool isAutoReconnect READ isAutoReconnectEnabled WRITE setAutoReconnect)
     Q_PROPERTY(QString name READ name WRITE setName)
     Q_PROPERTY(QString realName READ realName WRITE setRealName)
     Q_PROPERTY(int retryAttemptCount READ retryAttemptCount WRITE setRetryAttemptCount)
@@ -97,9 +97,9 @@ public:
         Http = 2
     }; // End of enum ProxyType.
 
-    explicit IBaseSocket(QObject* parent = 0);
-    explicit IBaseSocket(const QString& name, QObject* parent = 0);
-    virtual ~IBaseSocket();
+    explicit BaseSocket(QObject* parent = 0);
+    explicit BaseSocket(const QString& name, QObject* parent = 0);
+    virtual ~BaseSocket();
     const QStringList& addressList() const;
     void appendNick(const QString& nick);
     QTextCodec* codec() const;
@@ -129,7 +129,7 @@ public:
     void setIdentName(const QString& identity);
     void setName(const QString& name);
     void setNickList(const QStringList& nicks);
-    void setProxy(Aki::Irc::IBaseSocket::ProxyType type, const QString& hostname = QString(), quint16 port = 0,
+    void setProxy(Aki::Irc::BaseSocket::ProxyType type, const QString& hostname = QString(), quint16 port = 0,
                   const QString& user = QString(), const QString& password = QString());
     void setRealName(const QString& name);
     void setRetryAttemptCount(int count);
@@ -142,10 +142,10 @@ public Q_SLOTS:
     void connectToHost();
     void ignoreSslErrors();
 Q_SIGNALS:
-    void error(Aki::Irc::IBaseSocket::SocketError error);
+    void error(Aki::Irc::BaseSocket::SocketError error);
     void rawMessageReceived(const Aki::Irc::Message& message);
-    void sslErrors(const QList<Aki::Irc::IBaseSocket::SslError>& errors);
-    void stateChanged(Aki::Irc::IBaseSocket::SocketState state);
+    void sslErrors(const QList<Aki::Irc::BaseSocket::SslError>& errors);
+    void stateChanged(Aki::Irc::BaseSocket::SocketState state);
 protected:
     virtual void connectToHost(const QString& address, quint16 port = 6667);
 private:
@@ -154,7 +154,7 @@ private:
     Q_PRIVATE_SLOT(_d, void socketState(KTcpSocket::State state))
     Q_PRIVATE_SLOT(_d, void sslErrors(const QList<KSslError>& errors))
 private:
-    AKIIRC_DECLARE_PRIVATE(BaseSocket)
+    AKI_DECLARE_PRIVATE(BaseSocket)
 }; // End of class BaseSocket.
 } // End of namespace Irc.
 } // End of namespace Aki.
