@@ -13,7 +13,6 @@ set(akicore_SRCS
     chatparser.cxx
     debughelper.cxx
     identity.cxx
-    message.cxx
     server.cxx
     socket.cxx
     ${akicore_config_SRCS}
@@ -25,9 +24,6 @@ set(akicore_SRCS
     ${akicore_serverlist_SRCS}
     ${akicore_ui_SRCS}
     ${akicore_utils_SRCS}
-)
-
-set(akicore_UIS
 )
 
 set(akicore_LIBS
@@ -49,7 +45,6 @@ set(akicore_LIBS
 
 
 kde4_add_kcfg_files(akicore_SRCS GENERATE_MOC settings.kcfgc)
-#kde4_add_ui_files(akicore_SRCS ${akicore_UIS})
 kde4_add_library(akicore SHARED ${akicore_SRCS})
 target_link_libraries(akicore ${akicore_LIBS})
 set_target_properties(akicore PROPERTIES VERSION ${AKI_VERSION} SOVERSION ${AKI_SOVERSION})

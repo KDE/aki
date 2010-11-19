@@ -22,9 +22,6 @@ include(KDE4Defaults)
 include(MacroLogFeature)
 include(MacroWriteBasicCMakeVersionFile)
 
-#find_package(AkiIrc REQUIRED)
-#macro_log_feature(AKIIRC_FOUND "akiirc" "IRC Library for Aki" "http://www.akiirc.org" TRUE "0.0.3" "")
-
 find_package(QJSON REQUIRED)
 macro_log_feature(QJSON_FOUND "qjson" "Network list importer/exporter for Aki" "http://qjson.sourceforge.net/" TRUE "0.7.1" "")
 
@@ -50,7 +47,6 @@ add_definitions(
 
 include_directories(
     ${KDE4_INCLUDES}
-#    ${AKIIRC_INCLUDE_DIR}
     ${Boost_INCLUDE_DIRS}
     ${QCA2_INCLUDE_DIR}
     ${CMAKE_BINARY_DIR}
