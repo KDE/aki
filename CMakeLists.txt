@@ -39,6 +39,9 @@ pkg_check_modules(INDICATEQT indicate-qt)
 macro_bool_to_01(INDICATEQT_FOUND HAVE_LIBINDICATE)
 macro_log_feature(INDICATEQT_FOUND "libindicate-qt" "DBus notifier for GNOME and KDE" FALSE "" "")
 
+find_package(ICU REQUIRED)
+macro_log_feature(ICU_FOUND "icu" "Unicode library" "http://site.icu-project.org/" TRUE "" "")
+
 add_definitions(
     ${QT_DEFINITIONS}
     ${KDE4_DEFINITIONS}
@@ -51,6 +54,7 @@ include_directories(
     ${QCA2_INCLUDE_DIR}
     ${CMAKE_BINARY_DIR}
     ${CMAKE_SOURCE_DIR}
+    ${ICU_INCLUDE_DIR}
     ${INDICATEQT_INCLUDE_DIRS}
 )
 

@@ -37,8 +37,9 @@ set(akicore_LIBS
     ${QT_QTNETWORK_LIBRARY}
     ${QT_QTSQL_LIBRARY}
     ${QT_QTWEBKIT_LIBRARY}
+    ${ICU_LIBRARIES}
+    ${ICU_I18N_LIBRARIES}
     ${INDICATEQT_LIBRARIES}
-    akiirc
 )
 
 
