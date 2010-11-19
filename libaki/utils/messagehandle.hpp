@@ -21,7 +21,7 @@
 #ifndef AKI_MESSAGEHANDLE_HPP
 #define AKI_MESSAGEHANDLE_HPP
 
-#include <Aki/Irc/ReplyCodes>
+#include "irc/replycodes.hpp"
 #include <KDE/KAction>
 
 namespace Aki
