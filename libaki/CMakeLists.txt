@@ -14,7 +14,6 @@ set(akicore_SRCS
     debughelper.cxx
     identity.cxx
     server.cxx
-    socket.cxx
     ${akicore_config_SRCS}
     ${akicore_dialogs_SRCS}
     ${akicore_interfaces_SRCS}
