@@ -20,9 +20,6 @@
 
 #include "socket.hpp"
 #include "debughelper.hpp"
-#include "irc/commandevent.hpp"
-#include "irc/ctcpreceiveevent.hpp"
-#include "irc/ctcpreplyevent.hpp"
 #include "irc/message.hpp"
 #include "private/socket_p.hpp"
 #include <QtCore/QCoreApplication>
