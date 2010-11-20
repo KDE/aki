@@ -18,26 +18,36 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-#include "message_p.hpp"
-#include "irc/message.hpp"
-#include <QtCore/QTextCodec>
+#include "basereply_p.hpp"
 using namespace Aki;
 using namespace Irc;
 
-MessagePrivate::MessagePrivate(Aki::Irc::Message* qq)
-    : sender(Aki::Irc::NickInfo()),
-    target(Aki::Irc::NickInfo()),
-    direction(Aki::Irc::Message::Outgoing),
-    state(Aki::Irc::Message::Unknown),
-    type(Aki::Irc::Message::Normal),
-    timeStamp(KDateTime()),
+BaseReplyPrivate::BaseReplyPrivate()
+    : QSharedData(),
+    sender(Aki::Irc::NickInfo()),
+    command(QString()),
     message(QString()),
-    _q(qq)
+    replyCode(Aki::Irc::RPL_NULL),
+    isNumeric(false)
+{
+}
+
+BaseReplyPrivate::BaseReplyPrivate(const QSharedData& other)
+    : QSharedData(other),
+    sender(Aki::Irc::NickInfo()),
+    command(QString()),
+    message(QString()),
+    replyCode(Aki::Irc::RPL_NULL),
+    isNumeric(false)
+{
+}
+
+BaseReplyPrivate::~BaseReplyPrivate()
 {
 }
 
 QString
-MessagePrivate::removeStringToFirstWhitespace(QString* line)
+BaseReplyPrivate::removeStringToFirstWhitespace(QString* line)
 {
     QString tmp = line->left(line->indexOf(' '));
     line->remove(0, tmp.length() + 1);
@@ -45,7 +55,7 @@ MessagePrivate::removeStringToFirstWhitespace(QString* line)
 }
 
 QString
-MessagePrivate::removeStringToFirstWhitespace(QString* line, int start, int stop)
+BaseReplyPrivate::removeStringToFirstWhitespace(QString* line, int start, int stop)
 {
     QString tmp = line->mid(start, line->indexOf(' ') - stop);
     line->remove(0, tmp.length() + 1 + stop);

@@ -18,36 +18,34 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-#include "message_p.hpp"
-#include "irc/message.hpp"
-#include <QtCore/QTextCodec>
-using namespace Aki;
-using namespace Irc;
+#ifndef AKI_IRC_BASEREPLY_P_HPP
+#define AKI_IRC_BASEREPLY_P_HPP
 
-MessagePrivate::MessagePrivate(Aki::Irc::Message* qq)
-    : sender(Aki::Irc::NickInfo()),
-    target(Aki::Irc::NickInfo()),
-    direction(Aki::Irc::Message::Outgoing),
-    state(Aki::Irc::Message::Unknown),
-    type(Aki::Irc::Message::Normal),
-    timeStamp(KDateTime()),
-    message(QString()),
-    _q(qq)
-{
-}
+#include "irc/nickinfo.hpp"
+#include "irc/replycodes.hpp"
+#include <QtCore/QSharedData>
 
-QString
-MessagePrivate::removeStringToFirstWhitespace(QString* line)
+namespace Aki
 {
-    QString tmp = line->left(line->indexOf(' '));
-    line->remove(0, tmp.length() + 1);
-    return tmp;
-}
+namespace Irc
+{
+class BaseReplyPrivate : public QSharedData
+{
+public:
+    BaseReplyPrivate();
+    BaseReplyPrivate(const QSharedData& other);
+    ~BaseReplyPrivate();
+    static QString removeStringToFirstWhitespace(QString* line);
+    static QString removeStringToFirstWhitespace(QString* line, int start, int stop);
+public:
+    Aki::Irc::NickInfo sender;
+    QString command;
+    QString message;
+    QStringList params;
+    Aki::Irc::ReplyCodes replyCode;
+    bool isNumeric;
+}; // End of class BaseReplyPrivate.
+} // End of namespace Irc.
+} // End of namespace Aki.
 
-QString
-MessagePrivate::removeStringToFirstWhitespace(QString* line, int start, int stop)
-{
-    QString tmp = line->mid(start, line->indexOf(' ') - stop);
-    line->remove(0, tmp.length() + 1 + stop);
-    return tmp;
-}
+#endif // AKI_IRC_BASEREPLY_P_HPP

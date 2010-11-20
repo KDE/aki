@@ -1,6 +1,7 @@
 include(irc/private/CMakeLists.txt)
 
 set(akicore_irc_SRCS
+    irc/basereply.cxx
     irc/basesocket.cxx
     irc/message.cxx
     irc/nickinfo.cxx
