@@ -22,6 +22,7 @@
 #define AKI_KNOTIFICATIONS_HPP
 
 #include "aki.hpp"
+#include "irc/nickinfo.hpp"
 #include "ui/mainwindow.hpp"
 #include <QtCore/QObject>
 
@@ -29,7 +30,6 @@ namespace Aki
 {
 namespace Irc
 {
-class NickInfo;
 } // End of namespace Irc.
 class KNotificationsPrivate;
 class KNotifications
@@ -40,7 +40,7 @@ public:
     ~KNotifications();
     void addChannelMessage(const QString& channelName, const QString& message);
     void addCustomMessage(const QString& message, const KIcon& icon = KIcon(), const QString& eventName = QString());
-    void addPrivateMessage(const Aki::Irc::NickInfo* from, const QString& message);
+    void addPrivateMessage(const Aki::Irc::NickInfo& from, const QString& message);
     void setMainWindow(Aki::MainWindow* window);
 private:
     AKI_DECLARE_PRIVATE(KNotifications)

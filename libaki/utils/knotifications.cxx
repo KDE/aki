@@ -49,10 +49,10 @@ KNotifications::addCustomMessage(const QString& message, const KIcon& icon, cons
 }
 
 void
-KNotifications::addPrivateMessage(const Aki::Irc::NickInfo* from, const QString& message)
+KNotifications::addPrivateMessage(const Aki::Irc::NickInfo& from, const QString& message)
 {
     Q_ASSERT(_d->mainWindow);
-    KNotification::event("private", QString("&lt;%1&gt; %2").arg(from->nick(), message), QPixmap(), _d->mainWindow);
+    KNotification::event("private", QString("&lt;%1&gt; %2").arg(from.nick(), message), QPixmap(), _d->mainWindow);
 }
 
 void

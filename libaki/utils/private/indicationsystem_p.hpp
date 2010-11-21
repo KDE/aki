@@ -23,9 +23,9 @@
 
 #include "aki.hpp"
 #include "config.hpp"
-#include "utils/indicatenotification.hpp"
-#if defined(HAVE_LIBINDICATE)
 #include "utils/indicationsystem.hpp"
+#if defined(HAVE_LIBINDICATE)
+#include "utils/indicatenotification.hpp"
 #endif // HAVE_LIBINDICATE
 #include "utils/knotifications.hpp"
 
