@@ -1,6 +1,6 @@
 include(utils/private/CMakeLists.txt)
 set(akicore_utils_SRCS
-    utils/database.cxx
+    #utils/database.cxx
     utils/indicationsystem.cxx
     utils/knotifications.cxx
     utils/messagehandle.cxx

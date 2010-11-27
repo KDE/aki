@@ -5,6 +5,7 @@ include(irc/CMakeLists.txt)
 include(plugin/CMakeLists.txt)
 include(private/CMakeLists.txt)
 include(serverlist/CMakeLists.txt)
+include(sql/CMakeLists.txt)
 include(ui/CMakeLists.txt)
 include(utils/CMakeLists.txt)
 
@@ -21,6 +22,7 @@ set(akicore_SRCS
     ${akicore_plugin_SRCS}
     ${akicore_private_SRCS}
     ${akicore_serverlist_SRCS}
+    ${akicore_sql_SRCS}
     ${akicore_ui_SRCS}
     ${akicore_utils_SRCS}
 )
