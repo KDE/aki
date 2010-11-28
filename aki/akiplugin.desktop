@@ -4,6 +4,7 @@ X-KDE-ServiceType=Aki/Plugin
 X-KDE-Derived=KPluginInfo
 Comment=Aki Plugin
 Comment[de]=Aki-Modul
+Comment[fr]=Module externe Aki
 Comment[nds]=Aki-Moduul
 Comment[pt]='Plugin' do Aki
 Comment[pt_BR]=Plugin do Aki
