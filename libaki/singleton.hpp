@@ -23,4 +23,13 @@ protected:
 }; // End of class Singleton.
 } // End of namespace Aki.
 
+#define AKI_DECLARE_SINGLETON(klass) \
+    friend class Aki::Singleton<Aki::Sql::Database>; \
+    klass(); \
+    ~klass(); \
+    Q_DISABLE_COPY(klass);
+
+#define AKI_INIT_SINGLETON(klass) \
+    template<> klass* Aki::Singleton<klass>::_instance = 0;
+
 #endif // AKI_SINGLETON_HPP
