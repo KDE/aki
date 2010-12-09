@@ -21,14 +21,20 @@
 #include "identitycombobox.hpp"
 #include "aki.hpp"
 #include "ui/identitymodel.hpp"
-#include "sql/database.hpp"
+//#include "sql/database.hpp"
 #include "utils/sqlidentity.hpp"
 using namespace Aki;
 
 IdentityComboBox::IdentityComboBox(QWidget* parent)
     : KComboBox(parent)
 {
-    Aki::Sql::Database::open(Aki::databaseFile());
+    /*QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+    db.setDatabaseName(Aki::databaseFile());
+    Aki::Sql::Database::self()->open(db);
+    Aki::Sql::Database::self()->create<QSqlDatabase>();*/
+
+    //connect(Aki::Sql::Database::self(), SIGNAL(error(QSqlError)),
+    //        SLOT(error(QSqlError)));
 
     _model = new Aki::IdentityModel(this);
     setModel(_model);
@@ -48,7 +54,7 @@ IdentityComboBox::IdentityComboBox(QWidget* parent)
 
 IdentityComboBox::~IdentityComboBox()
 {
-    Aki::Sql::Database::close();
+    //Aki::Sql::Database::self()->close();
 }
 
 void
