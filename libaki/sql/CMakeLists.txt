@@ -1,6 +1,11 @@
 include(sql/private/CMakeLists.txt)
 set(akicore_sql_SRCS
+    sql/address.cxx
+    sql/channel.cxx
     sql/database.cxx
-    sql/query.cxx
+    sql/identity.cxx
+    sql/nickname.cxx
+    sql/server.cxx
+    sql/table.cxx
     ${akicore_sqlprivate_SRCS}
 )

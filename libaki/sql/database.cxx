@@ -19,114 +19,69 @@
  */
 
 #include "database.hpp"
-#include "debughelper.hpp"
-#include "sql/query.hpp"
-#include <boost/static_assert.hpp>
-#include <boost/type_traits/is_base_of.hpp>
-#include <QtCore/QMetaClassInfo>
-#include <QtSql/QSqlDatabase>
+#include "private/database_p.hpp"
+#include <QtSql/QSqlQuery>
 using namespace Aki;
 using namespace Sql;
-using namespace boost;
-using namespace type_traits;
 
-Database::Database(QObject* parent)
-    : QObject(parent)
+AKI_INIT_SINGLETON(Aki::Sql::Database)
+
+Database::Database()
 {
-
+    _d.reset(new Aki::Sql::DatabasePrivate(this));
+    Aki::Sql::TableList list = Aki::Sql::DatabasePrivate::tableList;
+    foreach (Aki::Sql::Table* table, list) {
+        _d->parseMetaObjects(table);
+    }
 }
 
 Database::~Database()
 {
 }
 
-bool
+void
 Database::close()
 {
-    QSqlDatabase::database().close();
-    QSqlDatabase::removeDatabase(QSqlDatabase::defaultConnection);
-    return false;
+    const QString name = _d->db.connectionName();
+    QSqlDatabase::database(name).close();
+    QSqlDatabase::removeDatabase(name);
 }
 
-template<typename T> bool
-Database::create(T* table)
+QSqlDatabase
+Database::database()
 {
-    DEBUG_FUNC_NAME;
-
-    typedef is_base_of<T, Aki::Sql::Database> Value;
-    BOOST_STATIC_ASSERT(Value::value != false);
-
-    const QMetaObject* object = table->metaObject();
-    Q_ASSERT_X((object->indexOfClassInfo("TableName") != -1) || (object->classInfoCount() != 0), "Database::create",
-               "Unable to find Q_CLASSINFO(\"TableName\")");
-
-    QString queryStr;
-    queryStr.append(QString("CREATE TABLE IF NOT EXISTS %1 (\n").arg(object->classInfo(0).value()));
-
-    for (int i = 1; i < object->classInfoCount(); ++i) {
-        QMetaClassInfo info = object->classInfo(i);
-        queryStr.append(QString("    %1 %2,\n").arg(info.name(), info.value()));
-    }
-
-    queryStr.append(");");
-
-    Aki::Sql::Query query;
-    query.query(queryStr);
-    if (!query.exec()) {
-        DEBUG_TEXT(query.lastError().text());
-        return false;
-    }
-
-    return true;
-}
-
-template<typename T> bool
-Database::insert(T* table)
-{
-    typedef is_base_of<T, Aki::Sql::Database> Value;
-    BOOST_STATIC_ASSERT(Value::value != false);
-
-    const QMetaObject* object = table->metaObject();
-    Q_ASSERT_X((object->indexOfClassInfo("TableName") != -1) || (object->classInfoCount() != 0), "Database::create",
-               "Unable to find Q_CLASSINFO(\"TableName\")");
-
-    QString queryStr;
-    queryStr.append(QString("INSERT INTO %1 ").arg(object->classInfo(0).value()));
-    QString columns;
-    QString values;
-    QVariantList valueList;
-
-    const int count = object->classInfoCount();
-    for (int i = 1; i < count; ++i) {
-        QMetaClassInfo info = object->classInfo(i);
-        columns.append(info.name());
-        if (i == count) {
-            values.append("?);");
-        } else {
-            values.append("?,");
-        }
-    }
-
-    columns = '(' + columns + ')';
-
-    Aki::Sql::Query query;
-
-    return false;
+    return _d->db;
 }
 
 bool
-Database::open(const QString& path)
+Database::isOpen() const
 {
-    DEBUG_FUNC_NAME;
+    return _d->db.isOpen();
+}
 
-    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
-    db.setDatabaseName(path);
+bool
+Database::open() const
+{
+    return _d->db.open();
+}
 
-    if (!db.open()) {
-        DEBUG_TEXT("Unable to open database file")
+bool
+Database::registerClass(Aki::Sql::Table* t)
+{
+    Q_UNUSED(t)
+    if (t) {
+        if (!Aki::Sql::DatabasePrivate::tableList.contains(t->metaObject()->className())) {
+            Aki::Sql::DatabasePrivate::tableList.append(t);
+            return true;
+        } else {
+            return false;
+        }
     }
+    return false;
+}
 
-    Aki::Sql::Query query;
-    query.query("PRAGMA foreign_keys=ON");
-    return query.exec();
+void
+Database::setDatabase(QSqlDatabase database)
+{
+    _d->db = database;
 }

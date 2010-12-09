@@ -1,4 +1,4 @@
-/*
+FO /*
  * Copyright 2009-2010  Keith Rusler <xzekecomax@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
