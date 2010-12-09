@@ -1,3 +1,5 @@
 set(akicore_sqlprivate_SRCS
-    sql/private/query_p.cxx
+    sql/private/address_p.cxx
+    sql/private/database_p.cxx
+    sql/private/table_p.cxx
 )
