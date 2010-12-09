@@ -1,12 +1,14 @@
 [Desktop Entry]
 Name=Kross Scripting
 Name[de]=Kross-Skripte
+Name[fr]=Scriptage Kross
 Name[nds]=Kross-Skripten
 Name[pt]=Programação em Kross
 Name[pt_BR]=Kross Scripting
 Name[uk]=Скрипти Kross
 Name[x-test]=xxKross Scriptingxx
 Comment=Kross scripting plugin for Aki
+Comment[fr]=Module externe de scriptage Kross pour Aki
 Comment[nds]=Kross-Skriptmoduul för Aki
 Comment[pt]='Plugin' programado em Kross para o Aki
 Comment[pt_BR]=Plugin do Kross scripting para o Aki
