@@ -45,12 +45,13 @@ Table::create()
 bool
 Table::remove()
 {
-    QSqlQuery query(Aki::Sql::Database::self()->database());
+    /*QSqlQuery query(Aki::Sql::Database::self()->database());
     query.prepare(QString("DROP TABLE %1").arg(metaObject()->className()));
     if (!query.exec()) {
         return false;
     }
 
+    return true;*/
     return true;
 }
 
