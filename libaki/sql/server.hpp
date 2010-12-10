@@ -69,32 +69,32 @@ class Server
      *
      * The default value is false.
      */
-    Q_PROPERTY(bool isAutoIdentify READ isAutoIdentify WRITE setAutoIdentify)
+    Q_PROPERTY(bool autoIdentify READ isAutoIdentify WRITE setAutoIdentify)
     /**
      * This property holds the state of whether to auto join channels on connect or not.
      *
      * The default value is false.
      */
-    Q_PROPERTY(bool isAutoJoinChannels READ isAutoJoinChannels WRITE setAutoJoinChannels)
+    Q_PROPERTY(bool autoJoinChannels READ isAutoJoinChannels WRITE setAutoJoinChannels)
     /**
      * This property holds the state of whether to auto reconnect on disconnection or not.
      *
      * The default value is false.
      */
-    Q_PROPERTY(bool isAutoReconnect READ isAutoReconnect WRITE setAutoReconnect)
+    Q_PROPERTY(bool autoReconnect READ isAutoReconnect WRITE setAutoReconnect)
     /**
      * This property holds the state of whether to automatically connect on startup or not.
      *
      * The default value is false.
      */
-    Q_PROPERTY(bool isConnectOnStartup READ isConnectOnStartup WRITE setConnectOnStartup)
+    Q_PROPERTY(bool connectOnStartup READ isConnectOnStartup WRITE setConnectOnStartup)
     /**
      * This property holds the state of whether to randomly connect to a group of addresses or not.
      * This will have no effect if there is 0 or 1 servers listed in the list.
      *
      * The default value is false.
      */
-    Q_PROPERTY(bool isConnectToRandomServer READ isConnectToRandomServer WRITE setConnectToRandomServer)
+    Q_PROPERTY(bool connectToRandomServer READ isConnectToRandomServer WRITE setConnectToRandomServer)
     /**
      * This property holds the name of the default @p defaultEncoding.
      *

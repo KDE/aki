@@ -22,6 +22,8 @@
 using namespace Aki;
 using namespace Sql;
 
+AKI_REGISTER_SQL_TABLE(Aki::Sql::Channel, channel)
+
 Channel::Channel(QObject* parent)
     : Aki::Sql::Table(parent)
 {
