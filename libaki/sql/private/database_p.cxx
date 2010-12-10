@@ -36,7 +36,7 @@ DatabasePrivate::parseClassInfo(const QMetaObject* object, const QMetaClassInfo&
     const int index = metaObject->indexOfProperty(classInfo.name());
 
     Q_ASSERT_X(index != -1, __PRETTY_FUNCTION__,
-               qPrintable(QString("%1 does not contain a property called '%'").arg(className, QString(classInfo.name()))));
+               qPrintable(QString("%1 does not contain a property called '%2'").arg(className, QString(classInfo.name()))));
 
     const QMetaProperty property = metaObject->property(index);
     QVariant::Type type = property.type();

@@ -24,9 +24,8 @@
 using namespace Aki;
 using namespace Sql;
 
-AKI_INIT_SINGLETON(Aki::Sql::Database)
-
-Database::Database()
+Database::Database(QObject* parent)
+    : QObject(parent)
 {
     _d.reset(new Aki::Sql::DatabasePrivate(this));
     Aki::Sql::TableList list = Aki::Sql::DatabasePrivate::tableList;
@@ -35,16 +34,28 @@ Database::Database()
     }
 }
 
+Database::Database(const QString& type, const QString& connectionName, QObject* parent)
+    : QObject(parent)
+{
+    _d.reset(new Aki::Sql::DatabasePrivate(this));
+    _d->db = QSqlDatabase::addDatabase(type, connectionName);
+}
+
 Database::~Database()
 {
+    if (isOpen()) {
+        _d->db.close();
+    }
+    const QString connectionName = _d->db.connectionName();
+    _d.reset();
+    removeDatabase(connectionName);
 }
 
 void
 Database::close()
 {
     const QString name = _d->db.connectionName();
-    QSqlDatabase::database(name).close();
-    QSqlDatabase::removeDatabase(name);
+    QSqlDatabase::database().close();
 }
 
 QSqlDatabase
@@ -60,15 +71,15 @@ Database::isOpen() const
 }
 
 bool
-Database::open() const
+Database::open(const QString& path) const
 {
+    _d->db.setDatabaseName(path);
     return _d->db.open();
 }
 
 bool
 Database::registerClass(Aki::Sql::Table* t)
 {
-    Q_UNUSED(t)
     if (t) {
         if (!Aki::Sql::DatabasePrivate::tableList.contains(t->metaObject()->className())) {
             Aki::Sql::DatabasePrivate::tableList.append(t);
@@ -80,8 +91,7 @@ Database::registerClass(Aki::Sql::Table* t)
     return false;
 }
 
-void
-Database::setDatabase(QSqlDatabase database)
+void Database::removeDatabase(const QString& connectionName)
 {
-    _d->db = database;
+    QSqlDatabase::removeDatabase(connectionName);
 }

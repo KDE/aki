@@ -24,6 +24,7 @@
 #include "aki.hpp"
 #include "singleton.hpp"
 #include <boost/static_assert.hpp>
+#include <QtCore/QObject>
 #include <QtSql/QSqlDatabase>
 #include <QtSql/QSqlError>
 #include <tr1/type_traits>
@@ -35,10 +36,14 @@ namespace Sql
 class Table;
 class DatabasePrivate;
 class LIBAKI_EXPORT Database
-    : public Aki::Singleton<Aki::Sql::Database>
+    : public QObject
 {
     Q_OBJECT
 public:
+    explicit Database(QObject* parent = 0);
+    explicit Database(const QString& type, const QString& connectionName = QLatin1String(QSqlDatabase::defaultConnection),
+                      QObject* parent = 0);
+    ~Database();
     /**
      * Closes the database.
      */
@@ -73,7 +78,7 @@ public:
      *
      * @return true if the database was open successfully; false otherwise.
      */
-    bool open() const;
+    bool open(const QString& path) const;
     /**
      *
      */
@@ -94,12 +99,7 @@ public:
      * @return true if the table was drop; false otherwise.
      */
     template<typename T> bool remove();
-    /**
-     * Sets the connection for this @p database.
-     *
-     * @param database Database connection.
-     */
-    void setDatabase(QSqlDatabase database);
+    static void removeDatabase(const QString& connectionName);
 Q_SIGNALS:
     /**
      * This signal is emitted when an error has occurred.
@@ -108,9 +108,20 @@ Q_SIGNALS:
      */
     void error(const QSqlError& error);
 private:
-    AKI_DECLARE_SINGLETON(Database)
     AKI_DECLARE_PRIVATE(Database)
 }; // End of class Database.
+
+class DatabaseDeleter
+{
+public:
+    static inline void cleanup(Aki::Sql::Database* db)
+    {
+        db->close();
+        delete db;
+    }
+};
+
+typedef QScopedPointer<Aki::Sql::Database, Aki::Sql::DatabaseDeleter> DatabaseScopedPointer;
 
 template<typename T> bool
 Database::create()
