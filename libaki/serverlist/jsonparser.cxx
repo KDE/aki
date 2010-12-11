@@ -77,3 +77,5 @@ JsonParser::write(QIODevice* device, Aki::SqlIdentity* identity)
 
     return ok;
 }
+
+#include "serverlist/jsonparser.moc"

@@ -49,3 +49,5 @@ ChatParser::addCommand(const boost::function<bool (const QString&)>& command)
 {
     _d->commandHash.append(command);
 }
+
+#include "chatparser.moc"

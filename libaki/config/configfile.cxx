@@ -73,3 +73,5 @@ ConfigFile::setCurrentGroup(const QString& name)
 {
     _d->currentGroup = _d->config->group(name);
 }
+
+#include "config/configfile.moc"

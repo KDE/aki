@@ -217,3 +217,5 @@ SqlNickname::remove()
 
     return true;
 }
+
+#include "utils/sqlnickname.moc"

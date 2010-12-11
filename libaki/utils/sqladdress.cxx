@@ -275,3 +275,5 @@ SqlAddress::remove()
 
     return true;
 }
+
+#include "utils/sqladdress.moc"

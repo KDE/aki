@@ -43,3 +43,5 @@ Plugin::setMainController(Aki::IMainController* controller)
 {
     _mainController = controller;
 }
+
+#include "plugin/plugin.moc"

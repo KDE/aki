@@ -61,3 +61,5 @@ IndicationSystem::setMainWindow(Aki::MainWindow* window)
 {
     _d->_indicateNotification->setMainWindow(window);
 }
+
+#include "utils/indicationsystem.moc"

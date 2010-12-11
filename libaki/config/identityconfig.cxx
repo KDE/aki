@@ -183,3 +183,5 @@ IdentityConfig::setUseAwayMessages(bool enabled)
 {
     currentGroup().writeEntry("AwayMessagesEnabled", enabled);
 }
+
+#include "config/identityconfig.moc"

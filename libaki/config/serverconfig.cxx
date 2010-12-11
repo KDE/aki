@@ -215,3 +215,5 @@ ServerConfig::setSsl(bool enabled)
 {
     currentGroup().writeEntry("SslEnabled", enabled);
 }
+
+#include "config/serverconfig.moc"

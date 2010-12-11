@@ -200,3 +200,5 @@ Server::setServicePassword(const QString& password)
 {
     Q_UNUSED(password)
 }
+
+#include "sql/server.moc"

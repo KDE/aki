@@ -89,3 +89,5 @@ ChannelContainer::insertChannelView(int index, Aki::ChannelView* view)
 
     _d->horizontalSplitter->insertWidget(index, view);
 }
+
+#include "ui/channelcontainer.moc"

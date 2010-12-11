@@ -61,3 +61,5 @@ KNotifications::setMainWindow(MainWindow* window)
     Q_ASSERT(window);
     _d->mainWindow = window;
 }
+
+#include "utils/knotifications.moc"

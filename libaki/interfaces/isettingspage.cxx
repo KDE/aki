@@ -67,3 +67,5 @@ void
 ISettingsPage::updateWidgets()
 {
 }
+
+#include "interfaces/isettingspage.moc"

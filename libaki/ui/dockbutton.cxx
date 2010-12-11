@@ -163,3 +163,5 @@ DockButton::sizeHint() const
 
     return QSize(width, height);
 }
+
+#include "ui/dockbutton.moc"

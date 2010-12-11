@@ -187,5 +187,5 @@ View::window(int index) const
     return static_cast<Aki::IBaseWindow*>(_d->tabWidget->widget(index));
 }
 
-#include "view.moc"
+#include "ui/view.moc"
 

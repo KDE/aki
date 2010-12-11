@@ -95,3 +95,5 @@ void Database::removeDatabase(const QString& connectionName)
 {
     QSqlDatabase::removeDatabase(connectionName);
 }
+
+#include "sql/database.moc"

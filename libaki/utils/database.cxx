@@ -185,3 +185,5 @@ Database::createDefaultTables()
 
     return true;
 }
+
+#include "utils/database.moc"

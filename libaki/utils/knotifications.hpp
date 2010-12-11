@@ -35,6 +35,7 @@ class KNotificationsPrivate;
 class KNotifications
     : public QObject
 {
+    Q_OBJECT
 public:
     explicit KNotifications(QObject* parent = 0);
     ~KNotifications();

@@ -117,3 +117,5 @@ IBaseWindow::type() const
 {
     return _d->type;
 }
+
+#include "interfaces/ibasewindow.moc"

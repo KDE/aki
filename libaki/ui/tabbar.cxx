@@ -75,3 +75,5 @@ void TabBar::wheelEvent(QWheelEvent* event)
     setCurrentIndex(page);
     //KTabBar::wheelEvent(event);
 }
+
+#include "ui/tabbar.moc"

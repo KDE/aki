@@ -231,3 +231,5 @@ SqlChannel::remove()
 
     return true;
 }
+
+#include "utils/sqlchannel.moc"

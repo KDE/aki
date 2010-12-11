@@ -445,3 +445,5 @@ SqlNetwork::remove()
 
     return true;
 }
+
+#include "utils/sqlnetwork.moc"

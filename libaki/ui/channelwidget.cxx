@@ -144,3 +144,5 @@ ChannelWidget::topic() const
 {
     return _d->topicBar->text();
 }
+
+#include "ui/channelwidget.moc"

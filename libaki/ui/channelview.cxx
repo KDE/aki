@@ -35,3 +35,5 @@ ChannelView::ChannelView(QWidget* parent)
 ChannelView::~ChannelView()
 {
 }
+
+#include "ui/channelview.moc"

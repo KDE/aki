@@ -105,3 +105,5 @@ ServerViewTab::widget()
 {
     return 0;
 }
+
+#include "ui/serverviewtab.moc"

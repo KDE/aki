@@ -53,3 +53,5 @@ MessageHandle::type() const
 {
     return _type;
 }
+
+#include "utils/messagehandle.moc"

@@ -361,3 +361,5 @@ SqlIdentity::remove()
 
     return true;
 }
+
+#include "utils/sqlidentity.moc"
