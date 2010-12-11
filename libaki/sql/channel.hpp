@@ -29,6 +29,7 @@ namespace Aki
 {
 namespace Sql
 {
+class ChannelPrivate;
 class LIBAKI_EXPORT Channel
     : public Aki::Sql::Table
 {
@@ -52,6 +53,8 @@ public:
     void setId(int id);
     void setName(const QString& name);
     void setPassword(const QString& password);
+private:
+    AKI_DECLARE_PRIVATE(Channel)
 }; // End of class Channel.
 } // End of namespace Sql.
 } // End of namespace Aki.

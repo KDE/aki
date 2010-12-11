@@ -18,69 +18,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-#include "channel.hpp"
-#include "private/channel_p.hpp"
+#include "nickname_p.hpp"
 using namespace Aki;
 using namespace Sql;
 
-AKI_REGISTER_SQL_TABLE(Aki::Sql::Channel, channel)
-
-Channel::Channel(QObject* parent)
-    : Aki::Sql::Table(parent)
-{
-    _d.reset(new Aki::Sql::ChannelPrivate(this));
-}
-
-Channel::~Channel()
+NicknamePrivate::NicknamePrivate(Aki::Sql::Nickname* qq)
+    : id(-1),
+    nicknameIdentity(-1),
+    nickname(QString()),
+    _q(qq)
 {
 }
-
-int
-Channel::channelServer() const
-{
-    return _d->channelServer;
-}
-
-int
-Channel::id() const
-{
-    return _d->id;
-}
-
-QString
-Channel::name() const
-{
-    return _d->name;
-}
-
-QString
-Channel::password() const
-{
-    return _d->password;
-}
-
-void
-Channel::setChannelServer(int id)
-{
-    _d->channelServer = id;
-}
-
-void
-Channel::setId(int id)
-{
-    _d->id = id;
-}
-
-void
-Channel::setName(const QString& name)
-{
-    _d->name = name;
-}
-
-void
-Channel::setPassword(const QString& password)
-{
-    _d->password = password;
-}
-
-#include "sql/channel.moc"

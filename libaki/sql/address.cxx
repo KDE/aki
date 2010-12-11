@@ -118,3 +118,5 @@ Address::setSsl(bool enable)
         _d->isSsl = enable;
     }
 }
+
+#include "sql/address.moc"

@@ -29,6 +29,7 @@ namespace Aki
 {
 namespace Sql
 {
+class NicknamePrivate;
 class LIBAKI_EXPORT Nickname
     : public Aki::Sql::Table
 {
@@ -89,6 +90,8 @@ public:
      */
     void setNickname(const QString& nickname);
     void setNicknameIdentity(int id);
+private:
+    AKI_DECLARE_PRIVATE(Nickname)
 }; // End of class Nickname.
 } // End of namespace Sql.
 } // End of namespace Aki.

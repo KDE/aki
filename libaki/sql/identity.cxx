@@ -19,6 +19,7 @@
  */
 
 #include "identity.hpp"
+#include "private/identity_p.hpp"
 using namespace Aki;
 using namespace Sql;
 
@@ -27,141 +28,143 @@ AKI_REGISTER_SQL_TABLE(Aki::Sql::Identity, identity)
 Identity::Identity(QObject* parent)
     : Aki::Sql::Table(parent)
 {
+    _d.reset(new Aki::Sql::IdentityPrivate(this));
 }
 
 Identity::~Identity()
 {
-
 }
 
 QString
 Identity::awayMessage() const
 {
-    return QString();
+    return _d->awayMessage;
 }
 
 QString
 Identity::awayNickname() const
 {
-    return QString();
+    return _d->awayNickname;
 }
 
 int
 Identity::id() const
 {
-    return 0;
+    return _d->id;
 }
 
 bool
 Identity::isMarkLastPositionEnabled() const
 {
-    return false;
+    return _d->markLastPosition;
 }
 
 bool
 Identity::isMessagesEnabled() const
 {
-    return false;
+    return _d->enableMessages;
 }
 
 QString
 Identity::kickMessage() const
 {
-    return QString();
+    return _d->kickMessage;
 }
 
 QString
 Identity::name() const
 {
-    return QString();
+    return _d->name;
 }
 
 QString
 Identity::partMessage() const
 {
-    return QString();
+    return _d->partMessage;
 }
 
 QString
 Identity::quitMessage() const
 {
-    return QString();
+    return _d->quitMessage;
 }
 
 QString
 Identity::realName() const
 {
-    return QString();
+    return _d->realName;
 }
 
 QString
 Identity::returnMessage() const
 {
-    return QString();
+    return _d->returnMessage;
 }
 
 void
 Identity::setAwayMessage(const QString& message)
 {
-    Q_UNUSED(message)
+    _d->awayMessage = message;
 }
 
 void
 Identity::setAwayNickname(const QString& nickname)
 {
-    Q_UNUSED(nickname)
+    _d->awayNickname = nickname;
 }
 
 void
 Identity::setId(int id)
 {
-    Q_UNUSED(id)
+    _d->id = id;
 }
 
 void
 Identity::setKickMessage(const QString& message)
 {
-    Q_UNUSED(message)
+    _d->kickMessage = message;
 }
 
 void
 Identity::setMarkLastPositionEnabled(bool enable)
 {
-    Q_UNUSED(enable)
+    _d->markLastPosition = enable;
 }
 
 void
 Identity::setMessagesEnabled(bool enable)
 {
-    Q_UNUSED(enable)
+    _d->enableMessages = enable;
 }
 
 void
 Identity::setName(const QString& name)
 {
-    Q_UNUSED(name)
+    _d->name = name;
 }
 
 void
 Identity::setPartMessage(const QString& message)
 {
-    Q_UNUSED(message)
+    _d->partMessage = message;
 }
 
 void
 Identity::setQuitMessage(const QString& message)
 {
-    Q_UNUSED(message)
+    _d->quitMessage = message;
 }
 
 void
 Identity::setRealName(const QString& name)
 {
-    Q_UNUSED(name)
+    _d->realName = name;
 }
 
 void
 Identity::setReturnMessage(const QString& message)
 {
-    Q_UNUSED(message)
+    _d->returnMessage = message;
 }
+
+#include "sql/identity.moc"

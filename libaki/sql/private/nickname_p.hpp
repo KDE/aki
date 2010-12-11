@@ -18,69 +18,28 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-#include "channel.hpp"
-#include "private/channel_p.hpp"
-using namespace Aki;
-using namespace Sql;
+#ifndef AKI_SQL_NICKNAME_P_HPP
+#define AKI_SQL_NICKNAME_P_HPP
 
-AKI_REGISTER_SQL_TABLE(Aki::Sql::Channel, channel)
+#include "aki.hpp"
+#include "sql/nickname.hpp"
 
-Channel::Channel(QObject* parent)
-    : Aki::Sql::Table(parent)
+namespace Aki
 {
-    _d.reset(new Aki::Sql::ChannelPrivate(this));
-}
-
-Channel::~Channel()
+namespace Sql
 {
-}
-
-int
-Channel::channelServer() const
+class NicknamePrivate
 {
-    return _d->channelServer;
-}
+public:
+    explicit NicknamePrivate(Aki::Sql::Nickname* qq);
+public:
+    int id;
+    int nicknameIdentity;
+    QString nickname;
+private:
+    AKI_DECLARE_PUBLIC(Nickname)
+}; // End of class Nickname.
+} // End of namespace Sql.
+} // End of namespace Aki.
 
-int
-Channel::id() const
-{
-    return _d->id;
-}
-
-QString
-Channel::name() const
-{
-    return _d->name;
-}
-
-QString
-Channel::password() const
-{
-    return _d->password;
-}
-
-void
-Channel::setChannelServer(int id)
-{
-    _d->channelServer = id;
-}
-
-void
-Channel::setId(int id)
-{
-    _d->id = id;
-}
-
-void
-Channel::setName(const QString& name)
-{
-    _d->name = name;
-}
-
-void
-Channel::setPassword(const QString& password)
-{
-    _d->password = password;
-}
-
-#include "sql/channel.moc"
+#endif // AKI_SQL_NICKNAME_P_HPP

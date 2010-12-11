@@ -29,21 +29,22 @@ namespace Aki
 {
 namespace Sql
 {
+class IdentityPrivate;
 class LIBAKI_EXPORT Identity
     : public Aki::Sql::Table
 {
     Q_OBJECT
     Q_CLASSINFO("id","PRIMARY_KEY,AUTO_INCREMENT")
-    Q_CLASSINFO("awayMessage","LENGTH=30,NULL=true")
-    Q_CLASSINFO("awayNickname","LENGTH=0,NULL=true")
-    Q_CLASSINFO("name","LENGTH=0,NULL=false,UNIQUE")
-    Q_CLASSINFO("kickMessage","LENGTH=0,NULL=true")
+    Q_CLASSINFO("awayMessage","LENGTH=250,NULL=true")
+    Q_CLASSINFO("awayNickname","LENGTH=30,NULL=true")
+    Q_CLASSINFO("name","LENGTH=30,NULL=false,UNIQUE")
+    Q_CLASSINFO("kickMessage","LENGTH=250,NULL=true")
     Q_CLASSINFO("enableMessages","NULL=false")
     Q_CLASSINFO("markLastPosition","NULL=false")
-    Q_CLASSINFO("partMessage","LENGTH=0")
-    Q_CLASSINFO("quitMessage","LENGTH=0")
-    Q_CLASSINFO("realName","LENGTH=0,NULL=false")
-    Q_CLASSINFO("returnMessage","LENGTH=0")
+    Q_CLASSINFO("partMessage","LENGTH=250,NULL=true")
+    Q_CLASSINFO("quitMessage","LENGTH=250,NULL=true")
+    Q_CLASSINFO("realName","LENGTH=40,NULL=false")
+    Q_CLASSINFO("returnMessage","LENGTH=250,NULL=true")
     /**
      * This property holds the @p id of the row when it was commited.<br>
      * The @p id is unique. If the @p id is -1, it means it hasn't been committed yet.
@@ -247,6 +248,8 @@ public:
      * @param message Return message.
      */
     void setReturnMessage(const QString& message);
+private:
+    AKI_DECLARE_PRIVATE(Identity)
 }; // End of class Identity.
 } // End of namespace Sql.
 } // End of namespace Aki.

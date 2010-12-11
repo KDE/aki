@@ -19,6 +19,7 @@
  */
 
 #include "nickname.hpp"
+#include "private/nickname_p.hpp"
 using namespace Aki;
 using namespace Sql;
 
@@ -27,6 +28,7 @@ AKI_REGISTER_SQL_TABLE(Aki::Sql::Nickname, nickname)
 Nickname::Nickname(QObject* parent)
     : Aki::Sql::Table(parent)
 {
+    _d.reset(new Aki::Sql::NicknamePrivate(this));
 }
 
 Nickname::~Nickname()
@@ -68,3 +70,5 @@ Nickname::setNicknameIdentity(int id)
 {
     Q_UNUSED(id)
 }
+
+#include "sql/nickname.moc"
