@@ -39,10 +39,16 @@ Database::Database(const QString& type, const QString& connectionName, QObject* 
 {
     _d.reset(new Aki::Sql::DatabasePrivate(this));
     _d->db = QSqlDatabase::addDatabase(type, connectionName);
+    Aki::Sql::TableList list = Aki::Sql::DatabasePrivate::tableList;
+    foreach (Aki::Sql::Table* table, list) {
+        _d->parseMetaObjects(table);
+    }
 }
 
 Database::~Database()
 {
+    qDeleteAll(_d->tableList);
+
     if (isOpen()) {
         _d->db.close();
     }
