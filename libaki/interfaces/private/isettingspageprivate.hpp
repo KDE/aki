@@ -7,9 +7,8 @@ class KConfigSkeleton;
 namespace Aki
 {
 class ISettingsPage;
-class ISettingsPagePrivate : public QObject
+class ISettingsPagePrivate
 {
-    Q_OBJECT
 public:
     ISettingsPagePrivate(Aki::ISettingsPage* qq);
 public:

@@ -3,8 +3,7 @@
 using namespace Aki;
 
 ISettingsPagePrivate::ISettingsPagePrivate(Aki::ISettingsPage* qq)
-    : QObject(),
-    name(QString()),
+    : name(QString()),
     icon(QString()),
     header(QString()),
     config(0),
