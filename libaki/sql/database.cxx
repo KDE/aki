@@ -64,10 +64,34 @@ Database::close()
     QSqlDatabase::database().close();
 }
 
+QString
+Database::connectionName() const
+{
+    return _d->db.connectionName();
+}
+
+QString
+Database::connectOptions() const
+{
+    return _d->db.connectOptions();
+}
+
 QSqlDatabase
 Database::database()
 {
     return _d->db;
+}
+
+QString
+Database::databaseName() const
+{
+    return _d->db.databaseName();
+}
+
+QString
+Database::hostName() const
+{
+    return _d->db.hostName();
 }
 
 bool
@@ -77,10 +101,27 @@ Database::isOpen() const
 }
 
 bool
-Database::open(const QString& path) const
+Database::open()
 {
-    _d->db.setDatabaseName(path);
     return _d->db.open();
+}
+
+bool
+Database::open(const QString& user, const QString& password)
+{
+    return _d->db.open(user, password);
+}
+
+QString
+Database::password() const
+{
+    return _d->db.password();
+}
+
+int
+Database::port() const
+{
+    return _d->db.port();
 }
 
 bool
@@ -97,9 +138,52 @@ Database::registerClass(Aki::Sql::Table* t)
     return false;
 }
 
-void Database::removeDatabase(const QString& connectionName)
+void
+Database::removeDatabase(const QString& connectionName)
 {
     QSqlDatabase::removeDatabase(connectionName);
+}
+
+void
+Database::setConnectOptions(const QString& options)
+{
+    _d->db.setConnectOptions(options);
+}
+
+void
+Database::setDatabaseName(const QString& name)
+{
+    _d->db.setDatabaseName(name);
+}
+
+void
+Database::setHostName(const QString& host)
+{
+    _d->db.setHostName(host);
+}
+
+void
+Database::setPassword(const QString& password)
+{
+    _d->db.setPassword(password);
+}
+
+void
+Database::setPort(int port)
+{
+    _d->db.setPort(port);
+}
+
+void
+Database::setUserName(const QString& name)
+{
+    _d->db.setUserName(name);
+}
+
+QString
+Database::userName() const
+{
+    return _d->db.userName();
 }
 
 #include "sql/database.moc"

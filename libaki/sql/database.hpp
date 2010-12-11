@@ -39,6 +39,14 @@ class LIBAKI_EXPORT Database
     : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(QString connectOptions READ connectOptions WRITE setConnectOptions)
+    Q_PROPERTY(QString connectionName READ connectionName)
+    Q_PROPERTY(bool isOpen READ isOpen)
+    Q_PROPERTY(int port READ port WRITE setPort)
+    Q_PROPERTY(QString password READ password WRITE setPassword)
+    Q_PROPERTY(QString databaseName READ databaseName WRITE setDatabaseName)
+    Q_PROPERTY(QString hostName READ hostName WRITE setHostName)
+    Q_PROPERTY(QString userName READ userName WRITE setUserName)
 public:
     explicit Database(QObject* parent = 0);
     explicit Database(const QString& type, const QString& connectionName = QLatin1String(QSqlDatabase::defaultConnection),
@@ -47,7 +55,9 @@ public:
     /**
      * Closes the database.
      */
-    void close();
+    void close();;
+    QString connectionName() const;
+    QString connectOptions() const;
     /**
      * Creates a database for the given T.
      *
@@ -66,19 +76,18 @@ public:
      * @return Database connection.
      */
     QSqlDatabase database();
+    QString databaseName() const;
+    QString hostName() const;
     /**
      * Gets the open state of the database.
      *
      * @return true if the database is open; false otherwise.
      */
     bool isOpen() const;
-    /**
-     * Gets and opens the database with the connection. If setDatabase was never called
-     * or an invalid connect was given this will return false.
-     *
-     * @return true if the database was open successfully; false otherwise.
-     */
-    bool open(const QString& path) const;
+    bool open();
+    bool open(const QString& user, const QString& password);
+    QString password() const;
+    int port() const;
     /**
      *
      */
@@ -100,6 +109,13 @@ public:
      */
     template<typename T> bool remove();
     static void removeDatabase(const QString& connectionName);
+    void setConnectOptions(const QString& options = QString());
+    void setDatabaseName(const QString& name);
+    void setHostName(const QString& host);
+    void setPassword(const QString& password);
+    void setPort(int port);
+    void setUserName(const QString& name);
+    QString userName() const;
 Q_SIGNALS:
     /**
      * This signal is emitted when an error has occurred.
