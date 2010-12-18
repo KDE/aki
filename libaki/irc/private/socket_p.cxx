@@ -312,7 +312,7 @@ SocketPrivate::commandReceived(const Aki::Irc::Message& message)
         break;
     }
     case RPL_MOTD: {
-        emit _q->onMotdMessage(message);
+        //emit _q->onMotdMessage(message);
         break;
     }
     case RPL_INFOSTART: {
@@ -324,7 +324,7 @@ SocketPrivate::commandReceived(const Aki::Irc::Message& message)
     }
     case RPL_MOTDSTART: {
     case RPL_ENDOFMOTD:
-        emit _q->onMotdMessage(message);
+        //emit _q->onMotdMessage(message);
         break;
     }
     case RPL_WHOISHOST: {

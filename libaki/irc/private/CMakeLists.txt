@@ -3,6 +3,7 @@ set(akicore_ircprivate_SRCS
     irc/private/awayreply_p.cxx
     irc/private/basesocket_p.cxx
     irc/private/message_p.cxx
+    irc/private/motdreply_p.cxx
     irc/private/nickinfo_p.cxx
     irc/private/reply_p.cxx
     irc/private/replyinfo_p.cxx

@@ -23,8 +23,9 @@
 
 #include "aki.hpp"
 #include "irc/adminreply.hpp"
+#include "irc/awayreply.hpp"
 #include "irc/basesocket.hpp"
-//#include "message/awaymessage.hpp"
+#include "irc/motdreply.hpp"
 #include <QtCore/QList>
 
 namespace Aki
@@ -43,7 +44,7 @@ public:
     void connectSlotsBySignals(Aki::Irc::Socket* socket);
 Q_SIGNALS:
     void onAdminMessage(const Aki::Irc::AdminReply& reply);
-//    void onAwayMessage(const Aki::Irc::AwayMessage& awayMessage);
+    void onAwayMessage(const Aki::Irc::AwayReply& reply);
     void onBanListMessage(const Aki::Irc::Message& banListMessage);
     void onErrorMessage(const Aki::Irc::Message& errorMessage);
     void onExceptListMessage(const Aki::Irc::Message& exceptListMessage);
@@ -58,7 +59,7 @@ Q_SIGNALS:
     void onLUserMessage(const Aki::Irc::Message& luserMessage);
     void onModListMessage(const Aki::Irc::Message& modListMessage);
     void onMonitorMessage(const Aki::Irc::Message& monitorMessage);
-    void onMotdMessage(const Aki::Irc::Message& motdMessage);
+    void onMotdMessage(const Aki::Irc::MotdReply& reply);
     void onNamesMessage(const Aki::Irc::Message& namesMessage);
     void onOMotdMessage(const Aki::Irc::Message& omotdMessage);
     void onPingPongMessage(const Aki::Irc::Message& pingPongMessage);
