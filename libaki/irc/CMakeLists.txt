@@ -3,6 +3,7 @@ include(irc/private/CMakeLists.txt)
 set(akicore_irc_SRCS
     irc/adminreply.cxx
     irc/awayreply.cxx
+    irc/banreply.cxx
     irc/basesocket.cxx
     irc/message.cxx
     irc/motdreply.cxx

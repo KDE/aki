@@ -24,6 +24,7 @@
 #include "aki.hpp"
 #include "irc/adminreply.hpp"
 #include "irc/awayreply.hpp"
+#include "irc/banreply.hpp"
 #include "irc/basesocket.hpp"
 #include "irc/motdreply.hpp"
 #include <QtCore/QList>
@@ -45,7 +46,7 @@ public:
 Q_SIGNALS:
     void onAdminMessage(const Aki::Irc::AdminReply& reply);
     void onAwayMessage(const Aki::Irc::AwayReply& reply);
-    void onBanListMessage(const Aki::Irc::Message& banListMessage);
+    void onBanListMessage(const Aki::Irc::BanReply& reply);
     void onErrorMessage(const Aki::Irc::Message& errorMessage);
     void onExceptListMessage(const Aki::Irc::Message& exceptListMessage);
     void onHelpMessage(const Aki::Irc::Message& helpMessage);

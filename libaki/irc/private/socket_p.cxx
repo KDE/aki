@@ -296,7 +296,7 @@ SocketPrivate::commandReceived(const Aki::Irc::Message& message)
     }
     case RPL_BANLIST: {
     case RPL_ENDOFBANLIST:
-        emit _q->onBanListMessage(message);
+        //emit _q->onBanListMessage(message);
         break;
     }
     case RPL_ENDOFWHOWAS: {

@@ -18,30 +18,57 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-#ifndef AKI_IRC_REPLY_HPP
-#define AKI_IRC_REPLY_HPP
+#include "banreply.hpp"
+#include "private/banreply_p.hpp"
+using namespace Aki;
+using namespace Irc;
 
-#include "aki.hpp"
-#include "irc/replyinfo.hpp"
+BanReply::BanReply()
+    : Aki::Irc::Reply()
+{
+}
 
-namespace Aki
+BanReply::BanReply(const Aki::Irc::ReplyInfo& replyInfo, const QString& channel, const Aki::Irc::NickInfo& hostMask,
+                   const QString& who)
+    : Aki::Irc::Reply(replyInfo)
 {
-namespace Irc
-{
-class ReplyPrivate;
-class LIBAKI_EXPORT Reply
-{
-public:
-    Reply();
-    explicit Reply(const Aki::Irc::ReplyInfo& replyInfo);
-    Reply(const Aki::Irc::Reply& other);
-    virtual ~Reply();
-    Aki::Irc::Reply& operator=(const Aki::Irc::Reply& other);
-    Aki::Irc::ReplyInfo reply() const;
-private:
-    QSharedDataPointer<Aki::Irc::ReplyPrivate> _d;
-}; // End of class Reply.
-} // End of namespace Irc.
-} // End of namespace Aki.
+    _d->channel = channel;
+    _d->hostMask = hostMask;
+    _d->who = who;
+}
 
-#endif // AKI_IRC_REPLY_HPP
+BanReply::BanReply(const Aki::Irc::BanReply& other)
+    : Aki::Irc::Reply(other),
+    _d(other._d)
+{
+}
+
+BanReply::~BanReply()
+{
+}
+
+Aki::Irc::BanReply&
+BanReply::operator=(const Aki::Irc::BanReply& other)
+{
+    Aki::Irc::Reply::operator=(other);
+    _d = other._d;
+    return *this;
+}
+
+QString
+BanReply::channel() const
+{
+    return _d->channel;
+}
+
+Aki::Irc::NickInfo
+BanReply::hostMask() const
+{
+    return _d->hostMask;
+}
+
+QString
+BanReply::who() const
+{
+    return _d->who;
+}

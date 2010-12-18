@@ -18,30 +18,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-#ifndef AKI_IRC_REPLY_HPP
-#define AKI_IRC_REPLY_HPP
+#include "banreply_p.hpp"
+using namespace Aki;
+using namespace Irc;
 
-#include "aki.hpp"
-#include "irc/replyinfo.hpp"
+BanReplyPrivate::BanReplyPrivate()
+{
+}
 
-namespace Aki
+BanReplyPrivate::BanReplyPrivate(const Aki::Irc::BanReplyPrivate& other)
+    : QSharedData(other),
+    channel(other.channel),
+    hostMask(other.hostMask),
+    who(other.who)
 {
-namespace Irc
-{
-class ReplyPrivate;
-class LIBAKI_EXPORT Reply
-{
-public:
-    Reply();
-    explicit Reply(const Aki::Irc::ReplyInfo& replyInfo);
-    Reply(const Aki::Irc::Reply& other);
-    virtual ~Reply();
-    Aki::Irc::Reply& operator=(const Aki::Irc::Reply& other);
-    Aki::Irc::ReplyInfo reply() const;
-private:
-    QSharedDataPointer<Aki::Irc::ReplyPrivate> _d;
-}; // End of class Reply.
-} // End of namespace Irc.
-} // End of namespace Aki.
-
-#endif // AKI_IRC_REPLY_HPP
+}
