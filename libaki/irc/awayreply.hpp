@@ -29,7 +29,8 @@ namespace Aki
 namespace Irc
 {
 class AwayReplyPrivate;
-class AwayReply : public Aki::Irc::Reply
+class AwayReply
+    : public Aki::Irc::Reply
 {
 public:
     AwayReply();

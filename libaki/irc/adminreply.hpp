@@ -29,7 +29,8 @@ namespace Aki
 namespace Irc
 {
 class AdminReplyPrivate;
-class LIBAKI_EXPORT AdminReply : public Aki::Irc::Reply
+class LIBAKI_EXPORT AdminReply
+    : public Aki::Irc::Reply
 {
 public:
     AdminReply();

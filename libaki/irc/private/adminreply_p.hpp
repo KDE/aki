@@ -28,7 +28,8 @@ namespace Aki
 {
 namespace Irc
 {
-class AdminReplyPrivate : public QSharedData
+class AdminReplyPrivate
+    : public QSharedData
 {
 public:
     AdminReplyPrivate();
