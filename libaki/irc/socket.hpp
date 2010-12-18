@@ -22,8 +22,8 @@
 #define AKI_IRC_SOCKET_HOO
 
 #include "aki.hpp"
+#include "irc/adminreply.hpp"
 #include "irc/basesocket.hpp"
-//#include "message/adminmessage.hpp"
 //#include "message/awaymessage.hpp"
 #include <QtCore/QList>
 
@@ -42,7 +42,7 @@ public:
     virtual ~Socket();
     void connectSlotsBySignals(Aki::Irc::Socket* socket);
 Q_SIGNALS:
-//    void onAdminMessage(const Aki::Irc::AdminMessage& adminMessage);
+    void onAdminMessage(const Aki::Irc::AdminReply& reply);
 //    void onAwayMessage(const Aki::Irc::AwayMessage& awayMessage);
     void onBanListMessage(const Aki::Irc::Message& banListMessage);
     void onErrorMessage(const Aki::Irc::Message& errorMessage);
