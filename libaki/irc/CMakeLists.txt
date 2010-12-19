@@ -9,6 +9,7 @@ set(akicore_irc_SRCS
     irc/message.cxx
     irc/motdreply.cxx
     irc/nickinfo.cxx
+    irc/nickreply.cxx
     irc/reply.cxx
     irc/replyinfo.cxx
     irc/rfc2812.cxx
