@@ -29,7 +29,6 @@ BanReplyPrivate::BanReplyPrivate()
 BanReplyPrivate::BanReplyPrivate(const Aki::Irc::BanReplyPrivate& other)
     : QSharedData(other),
     channel(other.channel),
-    hostMask(other.hostMask),
-    who(other.who)
+    hostMask(other.hostMask)
 {
 }

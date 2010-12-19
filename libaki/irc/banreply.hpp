@@ -41,7 +41,6 @@ public:
     Aki::Irc::BanReply& operator=(const Aki::Irc::BanReply& other);
     QString channel() const;
     Aki::Irc::NickInfo hostMask() const;
-    QString who() const;
 private:
     QSharedDataPointer<Aki::Irc::BanReplyPrivate> _d;
 }; // End of class BanReply.

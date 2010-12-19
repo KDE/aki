@@ -66,9 +66,3 @@ BanReply::hostMask() const
 {
     return _d->hostMask;
 }
-
-QString
-BanReply::who() const
-{
-    return _d->who;
-}
