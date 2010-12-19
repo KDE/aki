@@ -24,12 +24,13 @@ using namespace Aki;
 using namespace Irc;
 
 AwayReply::AwayReply()
-    : _d(new Aki::Irc::AwayReplyPrivate)
+    : Aki::Irc::Reply(),
+    _d(new Aki::Irc::AwayReplyPrivate)
 {
 }
 
 AwayReply::AwayReply(const Aki::Irc::ReplyInfo& replyInfo, const QString& nick, const QString& message)
-    : Reply(replyInfo),
+    : Aki::Irc::Reply(replyInfo),
     _d(new Aki::Irc::AwayReplyPrivate)
 {
     _d->nick = nick;

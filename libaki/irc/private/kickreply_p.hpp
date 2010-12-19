@@ -18,33 +18,27 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-#ifndef AKI_IRC_KICKREPLY_HPP
-#define AKI_IRC_KICKREPLY_HPP
+#ifndef AKI_IRC_KICKREPLY_P_HPP
+#define AKI_IRC_KICKREPLY_P_HPP
 
 #include "aki.hpp"
-#include "irc/reply.hpp"
+#include <QtCore/QSharedData>
 
 namespace Aki
 {
 namespace Irc
 {
-class KickReplyPrivate;
-class KickReply
-    : public Aki::Irc::Reply
+class KickReplyPrivate : public QSharedData
 {
 public:
-    KickReply();
-    explicit KickReply(const Aki::Irc::ReplyInfo& replyInfo);
-    KickReply(const Aki::Irc::KickReply& other);
-    ~KickReply();
-    Aki::Irc::KickReply& operator=(const Aki::Irc::KickReply& other);
-    QString channel() const;
-    QString nick() const;
-    QString message() const;
-private:
-    QSharedDataPointer<Aki::Irc::KickReplyPrivate> _d;
-}; // End of class KickReply.
+    KickReplyPrivate();
+    KickReplyPrivate(const Aki::Irc::KickReplyPrivate& other);
+public:
+    QString message;
+    QString nick;
+    QString channel;
+}; // End of class KickReplyPrivate.
 } // End of namespace Irc.
 } // End of namespace Aki.
 
-#endif // AKI_IRC_KICKREPLY_HPP
+#endif // AKI_IRC_KICKREPLY_P_HPP

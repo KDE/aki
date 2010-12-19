@@ -18,58 +18,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-#include "kickreply.hpp"
-#include "private/kickreply_p.hpp"
+#include "kickreply_p.hpp"
 using namespace Aki;
 using namespace Irc;
 
-KickReply::KickReply()
-    : Aki::Irc::Reply(),
-    _d(new Aki::Irc::KickReplyPrivate)
+KickReplyPrivate::KickReplyPrivate()
+    : QSharedData(),
+    message(QString()),
+    nick(QString()),
+    channel(QString())
 {
 }
 
-KickReply::KickReply(const Aki::Irc::ReplyInfo& replyInfo)
-    : Aki::Irc::Reply(replyInfo),
-    _d(new Aki::Irc::KickReplyPrivate)
+KickReplyPrivate::KickReplyPrivate(const Aki::Irc::KickReplyPrivate& other)
+    : QSharedData(other),
+    message(other.message),
+    nick(other.nick),
+    channel(other.channel)
 {
-    _d->message = reply().params().value(2, QString());
-    _d->channel = reply().params().at(0);
-    _d->nick = reply().params().at(1);
-}
-
-KickReply::KickReply(const Aki::Irc::KickReply& other)
-    : Aki::Irc::Reply(other),
-    _d(other._d)
-{
-}
-
-KickReply::~KickReply()
-{
-}
-
-Aki::Irc::KickReply&
-KickReply::operator=(const Aki::Irc::KickReply& other)
-{
-    Aki::Irc::Reply::operator=(other);
-    _d = other._d;
-    return *this;
-}
-
-QString
-KickReply::channel() const
-{
-    return _d->channel;
-}
-
-QString
-KickReply::message() const
-{
-    return _d->message;
-}
-
-QString
-KickReply::nick() const
-{
-    return _d->nick;
 }
