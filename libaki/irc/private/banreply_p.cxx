@@ -23,12 +23,17 @@ using namespace Aki;
 using namespace Irc;
 
 BanReplyPrivate::BanReplyPrivate()
+    : QSharedData(),
+    channel(QString()),
+    hostMask(Aki::Irc::NickInfo()),
+    isLast(false)
 {
 }
 
 BanReplyPrivate::BanReplyPrivate(const Aki::Irc::BanReplyPrivate& other)
     : QSharedData(other),
     channel(other.channel),
-    hostMask(other.hostMask)
+    hostMask(other.hostMask),
+    isLast(other.isLast)
 {
 }

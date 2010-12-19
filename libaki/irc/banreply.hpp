@@ -35,11 +35,13 @@ class BanReply
 public:
     BanReply();
     explicit BanReply(const Aki::Irc::ReplyInfo& replyInfo);
+    explicit BanReply(const Aki::Irc::ReplyInfo& replyInfo, bool lastMessage = false);
     BanReply(const Aki::Irc::BanReply& other);
     ~BanReply();
     Aki::Irc::BanReply& operator=(const Aki::Irc::BanReply& other);
     QString channel() const;
     Aki::Irc::NickInfo hostMask() const;
+    bool isLastMessage() const;
 private:
     QSharedDataPointer<Aki::Irc::BanReplyPrivate> _d;
 }; // End of class BanReply.

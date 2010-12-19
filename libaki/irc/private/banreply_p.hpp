@@ -38,6 +38,7 @@ public:
 public:
     QString channel;
     Aki::Irc::NickInfo hostMask;
+    bool isLast;
 }; // End of class BanReply.
 } // End of namespace Irc.
 } // End of namespace Aki.
