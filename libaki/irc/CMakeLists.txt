@@ -14,5 +14,6 @@ set(akicore_irc_SRCS
     irc/replyinfo.cxx
     irc/rfc2812.cxx
     irc/socket.cxx
+    irc/topicreply.cxx
     ${akicore_ircprivate_SRCS}
 )
