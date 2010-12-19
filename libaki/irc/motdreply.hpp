@@ -35,10 +35,11 @@ class LIBAKI_EXPORT MotdReply
 {
 public:
     MotdReply();
-    explicit MotdReply(const Aki::Irc::ReplyInfo& replyInfo, const QString& message);
+    explicit MotdReply(const Aki::Irc::ReplyInfo& replyInfo, bool lastMessage = false);
     MotdReply(const Aki::Irc::MotdReply& other);
     ~MotdReply();
     Aki::Irc::MotdReply& operator=(const Aki::Irc::MotdReply& other);
+    bool isLastMessage() const;
     QString message() const;
 private:
     QSharedDataPointer<Aki::Irc::MotdReplyPrivate> _d;

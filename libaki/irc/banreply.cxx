@@ -29,14 +29,6 @@ BanReply::BanReply()
 {
 }
 
-BanReply::BanReply(const Aki::Irc::ReplyInfo& replyInfo)
-    : Aki::Irc::Reply(replyInfo),
-    _d(new Aki::Irc::BanReplyPrivate)
-{
-    _d->channel = reply().params().at(1);
-    _d->hostMask = Aki::Irc::NickInfo(reply().params().at(2));
-}
-
 BanReply::BanReply(const Aki::Irc::ReplyInfo& replyInfo, bool lastMessage)
     : Aki::Irc::Reply(replyInfo),
     _d(new Aki::Irc::BanReplyPrivate)

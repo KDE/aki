@@ -24,13 +24,17 @@ using namespace Aki;
 using namespace Irc;
 
 MotdReply::MotdReply()
+    : Aki::Irc::Reply(),
+    _d(new Aki::Irc::MotdReplyPrivate)
 {
 }
 
-MotdReply::MotdReply(const Aki::Irc::ReplyInfo& replyInfo, const QString& message)
-    : Reply(replyInfo)
+MotdReply::MotdReply(const Aki::Irc::ReplyInfo& replyInfo, bool lastMessage)
+    : Aki::Irc::Reply(replyInfo),
+    _d(new Aki::Irc::MotdReplyPrivate)
 {
-    _d->message = message;
+    _d->message = reply().params().at(1);
+    _d->isLast = lastMessage;
 }
 
 MotdReply::MotdReply(const Aki::Irc::MotdReply& other)
@@ -49,6 +53,12 @@ MotdReply::operator=(const Aki::Irc::MotdReply& other)
     Aki::Irc::Reply::operator=(other);
     _d = other._d;
     return *this;
+}
+
+bool
+MotdReply::isLastMessage() const
+{
+    return _d->isLast;
 }
 
 QString

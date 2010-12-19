@@ -34,7 +34,6 @@ class BanReply
 {
 public:
     BanReply();
-    explicit BanReply(const Aki::Irc::ReplyInfo& replyInfo);
     explicit BanReply(const Aki::Irc::ReplyInfo& replyInfo, bool lastMessage = false);
     BanReply(const Aki::Irc::BanReply& other);
     ~BanReply();

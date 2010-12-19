@@ -23,12 +23,15 @@ using namespace Aki;
 using namespace Irc;
 
 MotdReplyPrivate::MotdReplyPrivate()
-    : message(QString())
+    : QSharedData(),
+    message(QString()),
+    isLast(false)
 {
 }
 
 MotdReplyPrivate::MotdReplyPrivate(const Aki::Irc::MotdReplyPrivate& other)
     : QSharedData(other),
-    message(other.message)
+    message(other.message),
+    isLast(other.isLast)
 {
 }

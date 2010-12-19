@@ -36,6 +36,7 @@ public:
     explicit MotdReplyPrivate(const Aki::Irc::MotdReplyPrivate& other);
 public:
     QString message;
+    bool isLast;
 }; // End of class MotdReplyPrivate.
 } // End of namespace Irc.
 } // End of namespace Aki.
