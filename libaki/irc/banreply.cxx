@@ -24,17 +24,17 @@ using namespace Aki;
 using namespace Irc;
 
 BanReply::BanReply()
-    : Aki::Irc::Reply()
+    : Aki::Irc::Reply(),
+    _d(new Aki::Irc::BanReplyPrivate)
 {
 }
 
-BanReply::BanReply(const Aki::Irc::ReplyInfo& replyInfo, const QString& channel, const Aki::Irc::NickInfo& hostMask,
-                   const QString& who)
-    : Aki::Irc::Reply(replyInfo)
+BanReply::BanReply(const Aki::Irc::ReplyInfo& replyInfo)
+    : Aki::Irc::Reply(replyInfo),
+    _d(new Aki::Irc::BanReplyPrivate)
 {
-    _d->channel = channel;
-    _d->hostMask = hostMask;
-    _d->who = who;
+    _d->channel = reply().params().at(1);
+    _d->hostMask = Aki::Irc::NickInfo(reply().params().at(2));
 }
 
 BanReply::BanReply(const Aki::Irc::BanReply& other)

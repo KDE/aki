@@ -34,8 +34,7 @@ class BanReply
 {
 public:
     BanReply();
-    explicit BanReply(const Aki::Irc::ReplyInfo& replyInfo, const QString& channel, const Aki::Irc::NickInfo& hostMask,
-                      const QString& who);
+    explicit BanReply(const Aki::Irc::ReplyInfo& replyInfo);
     BanReply(const Aki::Irc::BanReply& other);
     ~BanReply();
     Aki::Irc::BanReply& operator=(const Aki::Irc::BanReply& other);
