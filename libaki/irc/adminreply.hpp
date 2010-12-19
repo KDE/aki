@@ -34,7 +34,7 @@ class LIBAKI_EXPORT AdminReply
 {
 public:
     AdminReply();
-    explicit AdminReply(const Aki::Irc::ReplyInfo& replyInfo, const QString& message);
+    explicit AdminReply(const Aki::Irc::ReplyInfo& replyInfo);
     AdminReply(const Aki::Irc::AdminReply& other);
     ~AdminReply();
     Aki::Irc::AdminReply& operator=(const Aki::Irc::AdminReply& other);

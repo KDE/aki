@@ -24,15 +24,20 @@ using namespace Aki;
 using namespace Irc;
 
 AdminReply::AdminReply()
-    : Aki::Irc::Reply()
+    : Aki::Irc::Reply(),
+    _d(new Aki::Irc::AdminReplyPrivate)
 {
 }
 
-AdminReply::AdminReply(const Aki::Irc::ReplyInfo& replyInfo, const QString& message)
-    : Aki::Irc::Reply(replyInfo)
+AdminReply::AdminReply(const Aki::Irc::ReplyInfo& replyInfo)
+    : Aki::Irc::Reply(replyInfo),
+    _d(new Aki::Irc::AdminReplyPrivate)
 {
-    _d = new Aki::Irc::AdminReplyPrivate;
-    _d->message = message;
+    if (reply().numeric() == Aki::Irc::RPL_ADMINME) {
+        _d->message = reply().params().at(0) + ':' + reply().params().at(1);
+    } else {
+        _d->message = reply().params().at(1);
+    }
 }
 
 AdminReply::AdminReply(const Aki::Irc::AdminReply& other)
