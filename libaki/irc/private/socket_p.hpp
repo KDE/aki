@@ -34,12 +34,24 @@ class SocketPrivate
 public:
     explicit SocketPrivate(Aki::Irc::Socket* qq);
     void error(Aki::Irc::BaseSocket::SocketError error);
-    void rawMessageReceived(const Aki::Irc::Message& message);
+    void rawMessageReceived(const QString& message);
     void sslErrors(const QList<Aki::Irc::BaseSocket::SslError>& errors);
     void stateChanged(Aki::Irc::BaseSocket::SocketState state);
 private:
-    void commandReceived(const Aki::Irc::Message& message);
-    void messageReceived(const Aki::Irc::Message& message);
+    QString removeStringToFirstWhitespace(QString* line);
+    QString removeStringToFirstWhitespace(QString* line, int start, int stop);
+private:
+    class Message
+    {
+    public:
+        Aki::Irc::NickInfo sender;
+        QString command;
+        QString message;
+        QStringList params;
+        Aki::Irc::ReplyCodes replyCode;
+    }; // End of class Message.
+    void commandReceived(const Aki::Irc::ReplyInfo& message);
+    void messageReceived(const Aki::Irc::ReplyInfo& message);
 private:
     Aki::Irc::Socket* _q;
 }; // End of class SocketPrivate.

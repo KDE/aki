@@ -143,7 +143,7 @@ public Q_SLOTS:
     void ignoreSslErrors();
 Q_SIGNALS:
     void error(Aki::Irc::BaseSocket::SocketError error);
-    void rawMessageReceived(const Aki::Irc::Message& message);
+    void rawMessageReceived(const QString& message);
     void sslErrors(const QList<Aki::Irc::BaseSocket::SslError>& errors);
     void stateChanged(Aki::Irc::BaseSocket::SocketState state);
 protected:

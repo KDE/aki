@@ -31,10 +31,9 @@ SocketPrivate::SocketPrivate(Aki::Irc::Socket* qq)
 }
 
 void
-SocketPrivate::commandReceived(const Aki::Irc::Message& message)
+SocketPrivate::commandReceived(const Aki::Irc::ReplyInfo& message)
 {
-///TODO: Fix switch
-    switch (0) {
+    switch (message.numeric()) {
     case RPL_NULL: {
         break;
     }
@@ -80,7 +79,7 @@ SocketPrivate::commandReceived(const Aki::Irc::Message& message)
     case RPL_TRACESERVER:
     case RPL_TRACENEWTYPE:
     case RPL_TRACECLASS:
-        emit _q->onTraceMessage(message);
+        //emit _q->onTraceMessage(message);
         break;
     }
     case RPL_STATSLINKINFO: {
@@ -93,7 +92,7 @@ SocketPrivate::commandReceived(const Aki::Irc::Message& message)
     case RPL_STATSYLINE:
     case RPL_ENDOFSTATS:
     case RPL_STATSPLINE:
-        emit _q->onStatsMessage(message);
+        //emit _q->onStatsMessage(message);
         break;
     }
     case RPL_UMODEIS: {
@@ -101,12 +100,12 @@ SocketPrivate::commandReceived(const Aki::Irc::Message& message)
     }
     case RPL_STATSFLINE: {
     case RPL_STATSDLINE:
-        emit _q->onStatsMessage(message);
+        //emit _q->onStatsMessage(message);
         break;
     }
     case RPL_SERVLIST: {
     case RPL_SERVLISTEND:
-        emit _q->onServerListMessage(message);
+        //emit _q->onServerListMessage(message);
         break;
     }
     case RPL_STATSLLINE: {
@@ -118,7 +117,7 @@ SocketPrivate::commandReceived(const Aki::Irc::Message& message)
     case RPL_STATSULINE:
     case RPL_STATSDEBUG:
     case RPL_STATSCONN:
-        emit _q->onStatsMessage(message);
+        //emit _q->onStatsMessage(message);
         break;
     }
     case RPL_LUSERCLIENT: {
@@ -126,20 +125,19 @@ SocketPrivate::commandReceived(const Aki::Irc::Message& message)
     case RPL_LUSERUNKNOWN:
     case RPL_LUSERCHANNELS:
     case RPL_LUSERME:
-        emit _q->onLUserMessage(message);
+        //emit _q->onLUserMessage(message);
         break;
     }
     case RPL_ADMINME: {
     case RPL_ADMINLOC1:
     case RPL_ADMINLOC2:
     case RPL_ADMINEMAIL:
-        ///TODO: Fix me
-        //emit _q->onAdminMessage(Aki::Irc::AdminMessage(message));
+        emit _q->onAdminMessage(Aki::Irc::AdminReply(message));
         break;
     }
     case RPL_TRACELOG: {
     case RPL_ENDOFTRACE:
-        emit _q->onTraceMessage(message);
+        //emit _q->onTraceMessage(message);
         break;
     }
     case RPL_LOAD2HI: {
@@ -171,11 +169,11 @@ SocketPrivate::commandReceived(const Aki::Irc::Message& message)
         break;
     }
     case RPL_USERHOST: {
-        emit _q->onUserHostMessage(message);
+        //emit _q->onUserHostMessage(message);
         break;
     }
     case RPL_ISON: {
-        emit _q->onIsOnMessage(message);
+        //emit _q->onIsOnMessage(message);
         break;
     }
     case RPL_TEXT: {
@@ -190,28 +188,28 @@ SocketPrivate::commandReceived(const Aki::Irc::Message& message)
     case RPL_WHOISUSER: {
     case RPL_WHOISSERVER:
     case RPL_WHOISOPERATOR:
-        emit _q->onWhoIsMessage(message);
+        //emit _q->onWhoIsMessage(message);
         break;
     }
     case RPL_WHOWASUSER: {
-        emit _q->onWhoWasMessage(message);
+        //emit _q->onWhoWasMessage(message);
         break;
     }
     case RPL_ENDOFWHO: {
-        emit _q->onWhoMessage(message);
+        //emit _q->onWhoMessage(message);
         break;
     }
     case RPL_WHOISIDLE: {
     case RPL_ENDOFWHOIS:
     case RPL_WHOISCHANNELS:
     case RPL_WHOISSPECIAL:
-        emit _q->onWhoIsMessage(message);
+        //emit _q->onWhoIsMessage(message);
         break;
     }
     case RPL_LISTSTART: {
     case RPL_LIST:
     case RPL_LISTEND:
-        emit _q->onListMessage(message);
+        //emit _q->onListMessage(message);
         break;
     }
     case RPL_CHANNELMODEIS: {
@@ -227,62 +225,62 @@ SocketPrivate::commandReceived(const Aki::Irc::Message& message)
         break;
     }
     case RPL_WHOISLOGGEDIN: {
-        emit _q->onWhoIsMessage(message);
+        //emit _q->onWhoIsMessage(message);
         break;
     }
     case RPL_NOTOPIC: {
     case RPL_TOPIC:
     case RPL_TOPICWHOTIME:
-        emit _q->onTopicMessage(message);
+        //emit _q->onTopicMessage(message);
         break;
     }
     case RPL_WHOISACTUALLY: {
-        emit _q->onWhoIsMessage(message);
+        //emit _q->onWhoIsMessage(message);
         break;
     }
     case RPL_INVITING: {
-        emit _q->onInviteMessage(message);
+        //emit _q->onInviteMessage(message);
         break;
     }
     case RPL_SUMMONING: {
-        emit _q->onSummonMessage(message);
+        //emit _q->onSummonMessage(message);
         break;
     }
     case RPL_INVITELIST: {
     case RPL_ENDOFINVITELIST:
-        emit _q->onInviteListMessage(message);
+        //emit _q->onInviteListMessage(message);
         break;
     }
     case RPL_EXCEPTLIST: {
     case RPL_ENDOFEXCEPTLIST:
-        emit _q->onExceptListMessage(message);
+        //emit _q->onExceptListMessage(message);
         break;
     }
     case RPL_VERSION: {
         break;
     }
     case RPL_WHOREPLY: {
-        emit _q->onWhoMessage(message);
+        //emit _q->onWhoMessage(message);
         break;
     }
     case RPL_WHOSPCRPL: {
         break;
     }
     case RPL_NAMREPLY: {
-        emit _q->onNamesMessage(message);
+        //emit _q->onNamesMessage(message);
         break;
     }
     case RPL_WHOWASREAL: {
-        emit _q->onWhoWasMessage(message);
+        //emit _q->onWhoWasMessage(message);
         break;
     }
     case RPL_LINKS: {
     case RPL_ENDOFLINKS:
-        emit _q->onLinksMessage(message);
+        //emit _q->onLinksMessage(message);
         break;
     }
     case RPL_ENDOFNAMES: {
-        emit _q->onNamesMessage(message);
+        //emit _q->onNamesMessage(message);
         break;
     }
     case RPL_KILLDONE: {
@@ -300,35 +298,35 @@ SocketPrivate::commandReceived(const Aki::Irc::Message& message)
         break;
     }
     case RPL_ENDOFWHOWAS: {
-        emit _q->onWhoWasMessage(message);
+        //emit _q->onWhoWasMessage(message);
         break;
     }
     case RPL_WHOISCHANOP: {
-        emit _q->onWhoIsMessage(message);
+        //emit _q->onWhoIsMessage(message);
         break;
     }
     case RPL_INFO: {
-        emit _q->onInfoMessage(message);
+        //emit _q->onInfoMessage(message);
         break;
     }
     case RPL_MOTD: {
-        //emit _q->onMotdMessage(message);
+        emit _q->onMotdMessage(Aki::Irc::MotdReply(message));
         break;
     }
     case RPL_INFOSTART: {
         break;
     }
     case RPL_ENDOFINFO: {
-        emit _q->onInfoMessage(message);
+        //emit _q->onInfoMessage(message);
         break;
     }
     case RPL_MOTDSTART: {
     case RPL_ENDOFMOTD:
-        //emit _q->onMotdMessage(message);
+        emit _q->onMotdMessage(Aki::Irc::MotdReply(message, (message.numeric() == RPL_ENDOFMOTD)));
         break;
     }
     case RPL_WHOISHOST: {
-        emit _q->onWhoIsMessage(message);
+        //emit _q->onWhoIsMessage(message);
         break;
     }
     case RPL_YOUREOPER: {
@@ -347,14 +345,14 @@ SocketPrivate::commandReceived(const Aki::Irc::Message& message)
         break;
     }
     case RPL_TIME: {
-        emit _q->onTimeMessage(message);
+        //emit _q->onTimeMessage(message);
         break;
     }
     case RPL_USERSSTART: {
     case RPL_USERS:
     case RPL_ENDOFUSERS:
     case RPL_NOUSERS:
-        emit _q->onUsersMessage(message);
+        //emit _q->onUsersMessage(message);
         break;
     }
     case RPL_HOSTHIDDEN: {
@@ -430,26 +428,26 @@ SocketPrivate::commandReceived(const Aki::Irc::Message& message)
     case ERR_WRONGPONG:
     case ERR_DISABLED:
     case ERR_HELPNOTFOUND:
-        emit _q->onErrorMessage(message);
+        //emit _q->onErrorMessage(message);
         break;
     }
     case RPL_WHOISSECURE: {
-        emit _q->onWhoIsMessage(message);
+        //emit _q->onWhoIsMessage(message);
         break;
     }
     case RPL_MODLIST: {
     case RPL_ENDOFMODLIST:
-        emit _q->onModListMessage(message);
+        //emit _q->onModListMessage(message);
         break;
     }
     case RPL_HELPSTART: {
     case RPL_HELPTXT:
     case RPL_ENDOFHELP:
-        emit _q->onHelpMessage(message);
+        //emit _q->onHelpMessage(message);
         break;
     }
     case ERR_TARGCHANGE: {
-        emit _q->onErrorMessage(message);
+        //emit _q->onErrorMessage(message);
         break;
     }
     case RPL_ETRACEFULL: {
@@ -458,7 +456,7 @@ SocketPrivate::commandReceived(const Aki::Irc::Message& message)
     }
     case RPL_KNOCK: {
     case RPL_KNOCKDLVR:
-        emit _q->onKnockMessage(message);
+        //emit _q->onKnockMessage(message);
         break;
     }
     case ERR_TOOMANYKNOCK: {
@@ -466,7 +464,7 @@ SocketPrivate::commandReceived(const Aki::Irc::Message& message)
     case ERR_KNOCKONCHAN:
     case ERR_KNOCKDISABLED:
     case ERR_TARGUMODEG:
-        emit _q->onErrorMessage(message);
+        //emit _q->onErrorMessage(message);
         break;
     }
     case RPL_TARGNOTIFY: {
@@ -478,17 +476,17 @@ SocketPrivate::commandReceived(const Aki::Irc::Message& message)
     case RPL_OMOTDSTART: {
     case RPL_OMOTD:
     case RPL_ENDOFOMOTD:
-        emit _q->onOMotdMessage(message);
+        //emit _q->onOMotdMessage(message);
         break;
     }
     case ERR_NOPRIVS: {
-        emit _q->onErrorMessage(message);
+        //emit _q->onErrorMessage(message);
         break;
     }
     case RPL_TESTMASK: {
     case RPL_TESTLINE:
     case RPL_NOTESTLINE:
-        emit _q->onTestMessage(message);
+        //emit _q->onTestMessage(message);
         break;
     }
     case RPL_TESTMASKGECOS: {
@@ -503,11 +501,11 @@ SocketPrivate::commandReceived(const Aki::Irc::Message& message)
     case RPL_MONOFFLINE:
     case RPL_MONLIST:
     case RPL_ENDOFMONLIST:
-        emit _q->onMonitorMessage(message);
+        //emit _q->onMonitorMessage(message);
         break;
     }
     case ERR_MONLISTFULL: {
-        emit _q->onErrorMessage(message);
+        //emit _q->onErrorMessage(message);
         break;
     }
     case RPL_RSACHALLENGE2: {
@@ -532,7 +530,7 @@ SocketPrivate::commandReceived(const Aki::Irc::Message& message)
         break;
     }
     case ERR_NICKLOCKED: {
-        emit _q->onErrorMessage(message);
+        //emit _q->onErrorMessage(message);
         break;
     }
     case RPL_SASLSUCCESS: {
@@ -542,7 +540,7 @@ SocketPrivate::commandReceived(const Aki::Irc::Message& message)
     case ERR_SASLTOOLONG:
     case ERR_SASLABORTED:
     case ERR_SASLALREADY:
-        emit _q->onErrorMessage(message);
+        //emit _q->onErrorMessage(message);
         break;
     }
     case ERR_LAST_ERR_MSG: {
@@ -591,8 +589,9 @@ SocketPrivate::error(Aki::Irc::BaseSocket::SocketError error)
 }
 
 void
-SocketPrivate::messageReceived(const Aki::Irc::Message& message)
+SocketPrivate::messageReceived(const Aki::Irc::ReplyInfo& message)
 {
+    Q_UNUSED(message)
     ///TODO: Fix me
     /*const QString command = message.command().toUpper();
     if (command == "PING" || command == "PONG") {
@@ -603,14 +602,56 @@ SocketPrivate::messageReceived(const Aki::Irc::Message& message)
 }
 
 void
-SocketPrivate::rawMessageReceived(const Aki::Irc::Message& message)
+SocketPrivate::rawMessageReceived(const QString& message)
 {
-    ///TODO: Fix me
-    /*if (message.isNumeric()) {
-        commandReceived(message);
+    QString line = message;
+
+    Aki::Irc::SocketPrivate::Message msg;
+    msg.message = message;
+
+    if (line.startsWith(':')) {
+        msg.sender.setHostmask(removeStringToFirstWhitespace(&line, 1, 1));
+    }
+
+    msg.command = removeStringToFirstWhitespace(&line);
+    msg.replyCode = static_cast<Aki::Irc::ReplyCodes>(msg.command.toInt());
+
+    while (!line.isEmpty()) {
+        if (line.startsWith(':')) {
+            line.remove(0, 1);
+            msg.params << line;
+            line.clear();
+        } else {
+            msg.params << removeStringToFirstWhitespace(&line);
+        }
+    }
+
+    if (!msg.params.isEmpty()) {
+        msg.params.removeAll("");
+    }
+
+    const Aki::Irc::ReplyInfo info(msg.sender, msg.command, msg.message, msg.params, msg.replyCode);
+    if (info.isNumeric()) {
+        commandReceived(info);
     } else {
-        messageReceived(message);
-    }*/
+        messageReceived(info);
+    }
+}
+
+QString
+SocketPrivate::removeStringToFirstWhitespace(QString* line)
+{
+    const QString tmp = line->left(line->indexOf(' '));
+    line->remove(0, tmp.length() + 1);
+    return tmp;
+}
+
+QString
+SocketPrivate::removeStringToFirstWhitespace(QString* line, int start, int stop)
+{
+    const QString tmp = line->mid(start, line->indexOf(' ') - stop);
+    line->remove(0, tmp.length() + 1 + stop);
+    return tmp;
 }
 
 void

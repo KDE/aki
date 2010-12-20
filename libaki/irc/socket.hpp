@@ -80,7 +80,7 @@ Q_SIGNALS:
     void onWelcomeMessage(const Aki::Irc::Message& welcomeMessage);
 private:
     Q_PRIVATE_SLOT(_d, void error(Aki::Irc::BaseSocket::SocketError))
-    Q_PRIVATE_SLOT(_d, void rawMessageReceived(const Aki::Irc::Message& message))
+    Q_PRIVATE_SLOT(_d, void rawMessageReceived(const QString& message))
     Q_PRIVATE_SLOT(_d, void sslErrors(const QList<Aki::Irc::BaseSocket::SslError>& errors))
     Q_PRIVATE_SLOT(_d, void stateChanged(Aki::Irc::BaseSocket::SocketState))
 private:

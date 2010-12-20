@@ -151,14 +151,7 @@ BaseSocketPrivate::readyRead()
         data = data.mid(i + 2);
         if (!line.isEmpty()) {
             QTextCodec* codec = QTextCodec::codecForName(detectUnicode(line));
-#warning "This needs to be parsed for setTarget and setSender"
-            Aki::Irc::Message message;
-            message.setDirection(Aki::Irc::Message::Incoming);
-            message.setPlainText(codec->toUnicode(line));
-            message.setState(Aki::Irc::Message::Unknown);
-            message.setTimeStamp(KDateTime::currentUtcDateTime());
-            message.setType(Aki::Irc::Message::Normal);
-            emit _q->rawMessageReceived(message);
+            emit _q->rawMessageReceived(codec->toUnicode(line));
         }
     }
 }

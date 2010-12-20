@@ -38,8 +38,8 @@ Socket::Socket(QObject* parent)
             SLOT(sslErrors(QList<Aki::Irc::BaseSocket::SslError>)));
     connect(this, SIGNAL(stateChanged(Aki::Irc::BaseSocket::SocketState)),
             SLOT(stateChanged(Aki::Irc::BaseSocket::SocketState)));
-    connect(this, SIGNAL(rawMessageReceived(Aki::Irc::Message)),
-            SLOT(rawMessageReceived(Aki::Irc::Message)));
+    connect(this, SIGNAL(rawMessageReceived(QString)),
+            SLOT(rawMessageReceived(QString)));
 }
 
 Socket::Socket(const QString& name, QObject* parent)
@@ -53,8 +53,8 @@ Socket::Socket(const QString& name, QObject* parent)
             SLOT(sslErrors(QList<Aki::Irc::BaseSocket::SslError>)));
     connect(this, SIGNAL(stateChanged(Aki::Irc::BaseSocket::SocketState)),
             SLOT(stateChanged(Aki::Irc::BaseSocket::SocketState)));
-    connect(this, SIGNAL(rawMessageReceived(Aki::Irc::Message)),
-            SLOT(rawMessageReceived(Aki::Irc::Message)));
+    connect(this, SIGNAL(rawMessageReceived(QString)),
+            SLOT(rawMessageReceived(QString)));
 }
 
 Socket::~Socket()
