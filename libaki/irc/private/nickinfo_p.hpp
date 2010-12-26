@@ -21,24 +21,23 @@
 #ifndef AKI_IRC_NICKINFO_P_HPP
 #define AKI_IRC_NICKINFO_P_HPP
 
-#include <QtCore/QString>
+#include "aki.hpp"
 
 namespace Aki
 {
 namespace Irc
 {
-class NickInfo;
 class NickInfoPrivate
+    : public QSharedData
 {
 public:
-    explicit NickInfoPrivate(Aki::Irc::NickInfo* qq);
+    NickInfoPrivate();
+    NickInfoPrivate(const Aki::Irc::NickInfoPrivate& other);
     QString host() const;
     QString nick() const;
     QString user() const;
 public:
     QString hostmask;
-private:
-    Aki::Irc::NickInfo* _q;
 }; // End of class NickInfoPrivate.
 } // End of namespace Irc.
 } // End of namespace Aki.

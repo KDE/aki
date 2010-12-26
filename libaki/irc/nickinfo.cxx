@@ -25,20 +25,20 @@ using namespace Aki;
 using namespace Irc;
 
 NickInfo::NickInfo()
+    : _d(new Aki::Irc::NickInfoPrivate)
 {
-    _d.reset(new Aki::Irc::NickInfoPrivate(this));
 }
 
 NickInfo::NickInfo(const QString& hostmask)
+    : _d(new Aki::Irc::NickInfoPrivate)
 {
-    _d.reset(new Aki::Irc::NickInfoPrivate(this));
     setHostmask(hostmask);
 }
 
-NickInfo::NickInfo(const Aki::Irc::NickInfo& nickInfo)
+NickInfo::NickInfo(const Aki::Irc::NickInfo& other)
+    : _d(other._d)
 {
-    _d.reset(new Aki::Irc::NickInfoPrivate(this));
-    setHostmask(nickInfo.hostmask());
+    setHostmask(other.hostmask());
 }
 
 NickInfo::~NickInfo()
@@ -46,11 +46,9 @@ NickInfo::~NickInfo()
 }
 
 Aki::Irc::NickInfo&
-NickInfo::operator=(const Aki::Irc::NickInfo & rhs)
+NickInfo::operator=(const Aki::Irc::NickInfo& other)
 {
-    _d.reset(new Aki::Irc::NickInfoPrivate(this));
-    setHostmask(rhs.hostmask());
-
+    _d = other._d;
     return *this;
 }
 

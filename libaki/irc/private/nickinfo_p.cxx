@@ -20,11 +20,18 @@
 
 #include "nickinfo_p.hpp"
 #include "irc/nickinfo.hpp"
-using namespace Aki::Irc;
+using namespace Aki;
+using namespace Irc;
 
-NickInfoPrivate::NickInfoPrivate(Aki::Irc::NickInfo* qq)
-    : hostmask(QString()),
-    _q(qq)
+NickInfoPrivate::NickInfoPrivate()
+    : QSharedData(),
+    hostmask(QString())
+{
+}
+
+NickInfoPrivate::NickInfoPrivate(const Aki::Irc::NickInfoPrivate& other)
+    : QSharedData(other),
+    hostmask(other.hostmask)
 {
 }
 
