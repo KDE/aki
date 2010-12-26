@@ -29,14 +29,44 @@ namespace Aki
 namespace Irc
 {
 class ReplyPrivate;
+/**
+ * Base class for all replies.
+ * Gives access to ReplyInfo so users can have access to the details of the message.
+ */
 class LIBAKI_EXPORT Reply
 {
 public:
+    /**
+     * Constructs an empty Reply.
+     */
     Reply();
+    /**
+     * Sets the ReplyInfo for the message.
+     *
+     * @param replyInfo IRC message information.
+     */
     explicit Reply(const Aki::Irc::ReplyInfo& replyInfo);
+    /**
+     * Copies @p other Reply to this.
+     *
+     * @param other IRC Reply to copy.
+     */
     Reply(const Aki::Irc::Reply& other);
+    /**
+     * Destroys the object.
+     */
     virtual ~Reply();
+    /**
+     * Assigns the @p other Reply to this.
+     *
+     * @param other IRC Reply to copy.
+     */
     Aki::Irc::Reply& operator=(const Aki::Irc::Reply& other);
+    /**
+     * Gets the detail information of the reply.
+     *
+     * @return Detail information about the reply.
+     */
     Aki::Irc::ReplyInfo reply() const;
 private:
     QSharedDataPointer<Aki::Irc::ReplyPrivate> _d;
