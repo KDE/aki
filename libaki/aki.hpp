@@ -37,6 +37,17 @@ private: \
 
 namespace Aki
 {
+    template<bool>
+    struct StaticAssert;
+
+    template<>
+    struct StaticAssert<true>
+    {
+    };
+
+#define AKI_STATIC_ASSERT(e) (StaticAssert<((e) != 0)>())
+    
+
     LIBAKI_EXPORT QString databaseFile();
     LIBAKI_EXPORT QStringList themeDirectory();
     LIBAKI_EXPORT QStringList themeDirectoryByName(const QString& themeName);

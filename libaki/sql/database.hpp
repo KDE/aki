@@ -23,7 +23,6 @@
 
 #include "aki.hpp"
 #include "singleton.hpp"
-#include <boost/static_assert.hpp>
 #include <QtCore/QObject>
 #include <QtSql/QSqlDatabase>
 #include <QtSql/QSqlError>
@@ -225,7 +224,7 @@ template<typename T> bool
 Database::create()
 {
     using namespace std::tr1;
-    BOOST_STATIC_ASSERT((is_base_of<Aki::Sql::Table, T>::value));
+    AKI_STATIC_ASSERT((is_base_of<Aki::Sql::Table, T>::value));
     const QMetaObject tableObject = T::staticMetaObject;
     QObject* tObject = tableObject.newInstance();
     bool status = false;
@@ -237,11 +236,11 @@ template<typename T> bool
 Database::remove()
 {
     using namespace std::tr1;
-    BOOST_STATIC_ASSERT((is_base_of<Aki::Sql::Table, T>::value));
+    AKI_STATIC_ASSERT((is_base_of<Aki::Sql::Table, T>::value));
     const QMetaObject tableObject = T::staticMetaObject;
     QObject* tObject = tableObject.newInstance();
     bool status = false;
-    QMetaObject::invokeMethod(tObject, "remove", Q_RETURN_ARG(bool, false));
+    QMetaObject::invokeMethod(tObject, "remove", Q_RETURN_ARG(bool, status));
     return false;
 }
 
