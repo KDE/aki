@@ -17,5 +17,6 @@ set(akicore_irc_SRCS
     irc/socket.cxx
     irc/startupreply.cxx
     irc/topicreply.cxx
+    irc/quitreply.cxx
     ${akicore_ircprivate_SRCS}
 )
