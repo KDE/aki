@@ -586,14 +586,14 @@ SocketPrivate::error(Aki::Irc::BaseSocket::SocketError error)
 void
 SocketPrivate::messageReceived(const Aki::Irc::ReplyInfo& message)
 {
-    Q_UNUSED(message)
-    ///TODO: Fix me
-    /*const QString command = message.command().toUpper();
-    if (command == "PING" || command == "PONG") {
-        emit _q->onPingPongMessage(message);
-    } else if (command == "TOPIC") {
-        emit _q->onTopicChangeMessage(message);
-    }*/
+    const QString command = message.command().toUpper();
+    if (command == "NOTICE") {
+        if (message.message().startsWith('\1') &&
+            message.message().endsWith('\1')) {
+        } else {
+            emit _q->onNoticeReply(Aki::Irc::NoticeReply(message));
+        }
+    }
 }
 
 void

@@ -18,25 +18,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-#ifndef SOCKETTEST_HPP
-#define SOCKETTEST_HPP
+#include "noticereply_p.hpp"
+using namespace Aki;
+using namespace Irc;
 
-#include "irc/socket.hpp"
-
-class SocketTest
-    : QObject
+NoticeReplyPrivate::NoticeReplyPrivate()
+    : QSharedData(),
+    message(QString())
 {
-    Q_OBJECT
-public:
-    SocketTest(QObject* parent = 0);
-    ~SocketTest();
-    void connectToHost();
-private Q_SLOTS:
-    void slotOnMotdMessage(const Aki::Irc::MotdReply& reply);
-    void slotOnNoticeReply(const Aki::Irc::NoticeReply& reply);
-    void slotOnStartupReply(const Aki::Irc::StartupReply& reply);
-private:
-    Aki::Irc::Socket* _socket;
-};
+}
 
-#endif // SOCKETTEST_HPP
+NoticeReplyPrivate::NoticeReplyPrivate(const Aki::Irc::NoticeReplyPrivate& other)
+    : QSharedData(other),
+    message(other.message)
+{
+}

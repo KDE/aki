@@ -18,25 +18,44 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-#ifndef SOCKETTEST_HPP
-#define SOCKETTEST_HPP
+#include "noticereply.hpp"
+#include "private/noticereply_p.hpp"
+using namespace Aki;
+using namespace Irc;
 
-#include "irc/socket.hpp"
-
-class SocketTest
-    : QObject
+NoticeReply::NoticeReply()
+    : Aki::Irc::Reply(),
+    _d(new Aki::Irc::NoticeReplyPrivate)
 {
-    Q_OBJECT
-public:
-    SocketTest(QObject* parent = 0);
-    ~SocketTest();
-    void connectToHost();
-private Q_SLOTS:
-    void slotOnMotdMessage(const Aki::Irc::MotdReply& reply);
-    void slotOnNoticeReply(const Aki::Irc::NoticeReply& reply);
-    void slotOnStartupReply(const Aki::Irc::StartupReply& reply);
-private:
-    Aki::Irc::Socket* _socket;
-};
+}
 
-#endif // SOCKETTEST_HPP
+NoticeReply::NoticeReply(const Aki::Irc::ReplyInfo& replyInfo)
+    : Aki::Irc::Reply(replyInfo),
+    _d(new Aki::Irc::NoticeReplyPrivate)
+{
+    _d->message = replyInfo.params().at(1);
+}
+
+NoticeReply::NoticeReply(const Aki::Irc::NoticeReply& other)
+    : Aki::Irc::Reply(other),
+    _d(other._d)
+{
+}
+
+NoticeReply::~NoticeReply()
+{
+}
+
+Aki::Irc::NoticeReply&
+NoticeReply::operator=(const Aki::Irc::NoticeReply& other)
+{
+    Aki::Irc::Reply::operator=(other);
+    _d = other._d;
+    return *this;
+}
+
+QString
+NoticeReply::message() const
+{
+    return _d->message;
+}

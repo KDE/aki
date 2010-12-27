@@ -27,6 +27,7 @@
 #include "irc/banreply.hpp"
 #include "irc/basesocket.hpp"
 #include "irc/motdreply.hpp"
+#include "irc/noticereply.hpp"
 #include "irc/startupreply.hpp"
 #include <QtCore/QList>
 
@@ -63,6 +64,7 @@ Q_SIGNALS:
     void onMonitorMessage(const Aki::Irc::Message& monitorMessage);
     void onMotdMessage(const Aki::Irc::MotdReply& reply);
     void onNamesMessage(const Aki::Irc::Message& namesMessage);
+    void onNoticeReply(const Aki::Irc::NoticeReply& reply);
     void onOMotdMessage(const Aki::Irc::Message& omotdMessage);
     void onPingPongMessage(const Aki::Irc::Message& pingPongMessage);
     void onServerListMessage(const Aki::Irc::Message& serverListMessage);
