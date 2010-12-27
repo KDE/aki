@@ -51,10 +51,7 @@ ReplyInfo::~ReplyInfo()
 Aki::Irc::ReplyInfo&
 ReplyInfo::operator=(const Aki::Irc::ReplyInfo& other)
 {
-    if (this != &other) {
-        
-    }
-
+    _d = other._d;
     return *this;
 }
 
@@ -92,4 +89,16 @@ Aki::Irc::NickInfo
 ReplyInfo::sender() const
 {
     return _d->sender;
+}
+
+QDebug
+operator<<(QDebug dbg, const Aki::Irc::ReplyInfo& replyInfo)
+{
+    dbg << "Command: " << replyInfo.command() << '\n'
+        << "Has Numeric: " << replyInfo.isNumeric() << '\n'
+        << "Message: " << replyInfo.message() << '\n'
+        << "Numeric: " << replyInfo.numeric() << '\n'
+        << "Params: " << replyInfo.params() << '\n'
+        << "Sender: " << replyInfo.sender();
+    return dbg;
 }

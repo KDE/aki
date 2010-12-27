@@ -33,23 +33,18 @@ SocketPrivate::SocketPrivate(Aki::Irc::Socket* qq)
 void
 SocketPrivate::commandReceived(const Aki::Irc::ReplyInfo& message)
 {
+    DEBUG_FUNC_NAME
     switch (message.numeric()) {
     case RPL_NULL: {
         break;
     }
-    case RPL_WELCOME: {
-        break;
-    }
-    case RPL_YOURHOST: {
-        break;
-    }
-    case RPL_CREATED: {
-        break;
-    }
-    case RPL_MYINFO: {
-        break;
-    }
+    case RPL_WELCOME:
+    case RPL_YOURHOST:
+    case RPL_CREATED:
+    case RPL_MYINFO:
     case RPL_ISUPPORT: {
+        DEBUG_TEXT("StartupReply")
+        emit _q->onStartupReply(Aki::Irc::StartupReply(message));
         break;
     }
     case RPL_SNOMASK: {
@@ -605,6 +600,7 @@ void
 SocketPrivate::rawMessageReceived(const QString& message)
 {
     QString line = message;
+    qDebug() << line;
 
     Aki::Irc::SocketPrivate::Message msg;
     msg.message = message;
@@ -627,7 +623,6 @@ SocketPrivate::rawMessageReceived(const QString& message)
     }
 
     if (!msg.params.isEmpty()) {
-        msg.params.removeAll("");
     }
 
     const Aki::Irc::ReplyInfo info(msg.sender, msg.command, msg.message, msg.params, msg.replyCode);
@@ -667,27 +662,29 @@ SocketPrivate::stateChanged(Aki::Irc::BaseSocket::SocketState state)
     DEBUG_FUNC_NAME;
     switch (state) {
     case Aki::Irc::BaseSocket::ClosingState: {
+        DEBUG_TEXT("ClosingState")
         break;
     }
     case Aki::Irc::BaseSocket::ConnectedState: {
-        if (not _q->serverPassword().isEmpty()) {
-            Aki::Irc::Message message = Aki::Irc::Rfc2812::pass(_q->serverPassword());
-            _q->sendMessage(message);
+        DEBUG_TEXT("ConnectedState")
+        if (!_q->serverPassword().isEmpty()) {
+            _q->sendMessage(Aki::Irc::Rfc2812::pass(_q->serverPassword()));
         }
 
-        Aki::Irc::Message message = Aki::Irc::Rfc2812::user(_q->identName(), false, _q->realName());
-        _q->sendMessage(message);
-        message = Aki::Irc::Rfc2812::nick(_q->currentNick());
-        _q->sendMessage(message);
+        _q->sendMessage(Aki::Irc::Rfc2812::user(_q->identName(), false, _q->realName()));
+        _q->sendMessage(Aki::Irc::Rfc2812::nick(_q->currentNick()));
         break;
     }
     case Aki::Irc::BaseSocket::ConnectingState: {
+        DEBUG_TEXT("ConnectingState")
         break;
     }
     case Aki::Irc::BaseSocket::HostLookupState: {
+        DEBUG_TEXT("HostLookupState")
         break;
     }
     case Aki::Irc::BaseSocket::UnconnectState: {
+        DEBUG_TEXT("UnconnectState")
         if (_q->isAutoReconnectEnabled()) {
             QTimer::singleShot(_q->retryInterval() * 1000, _q, SLOT(connectToHost()));
         }

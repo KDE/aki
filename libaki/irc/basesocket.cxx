@@ -97,7 +97,6 @@ BaseSocket::connectToHost()
 {
     DEBUG_FUNC_NAME;
     const QString addy = addressList().value(_d->addressListIndex);
-    kDebug() << "Addy: " << addy;
     if (addy.contains('/')) {
         const QStringList tmp = addy.split('/');
         _d->address = tmp[0];
@@ -113,7 +112,7 @@ BaseSocket::connectToHost()
         _d->port = 6667;
     }
 
-    kDebug() << "Connecting to: " << currentAddress() << " Port: " << currentPort();
+    DEBUG_TEXT3("Connecting to: %1 Port: %2", currentAddress(), currentPort());
     connectToHost(currentAddress(), currentPort());
 }
 
@@ -123,7 +122,6 @@ BaseSocket::connectToHost(const QString& address, quint16 port)
     if (isSslEnabled()) {
         _d->socket->connectToHostEncrypted(address, port);
     } else {
-        kDebug() << "Address: " << address << " Port: " << port;
         _d->socket->connectToHost(address, port, KTcpSocket::ManualProxy);
     }
 }
@@ -231,8 +229,8 @@ void
 BaseSocket::sendMessage(const Aki::Irc::Message& message)
 {
     DEBUG_FUNC_NAME;
-    kDebug() << _d->codec->fromUnicode(message.plainText()).replace("\r\n", "");
-    _d->socket->write(_d->codec->fromUnicode(message.plainText()));
+    DEBUG_TEXT(_d->codec->fromUnicode(message.plainText()).replace("\r\n", ""))
+    _d->socket->write(_d->codec->fromUnicode(message.plainText() + "\r\n"));
     _d->socket->flush();
 }
 

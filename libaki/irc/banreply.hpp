@@ -29,7 +29,7 @@ namespace Aki
 namespace Irc
 {
 class BanReplyPrivate;
-class BanReply
+class LIBAKI_EXPORT BanReply
     : public Aki::Irc::Reply
 {
 public:

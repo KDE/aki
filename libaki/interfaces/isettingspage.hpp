@@ -28,22 +28,65 @@ class KConfigSkeleton;
 namespace Aki
 {
 class ISettingsPagePrivate;
+/**
+ * @brief Creates a new page in the configuration dialugue in Aki.
+ * Plugins and in application classes can use this to register a new page.
+ */
 class LIBAKI_EXPORT ISettingsPage
     : public QWidget
 {
     Q_OBJECT
 public:
+    /**
+     * Creates a new configuration page.
+     *
+     * @param name Name that appears in the list view.
+     * @param config Configuration instance to the configuration file.
+     * @param icon Name of the icon to be used on this page.
+     * @param header Description of the page.
+     * @param parent Parent of the object.
+     */
     explicit ISettingsPage(const QString& name, KConfigSkeleton* config, const QString& icon,
                            const QString& header, QWidget* parent = 0);
+    /**
+     * Deletes the object.
+     */
     virtual ~ISettingsPage();
+    /**
+     * Gets the configuration file instance.
+     *
+     * @return Instance to the configuration file if it was set; 0 if there was
+     * no instance set.
+     */
     KConfigSkeleton* config();
+    /**
+     *
+     */
     virtual bool hasChanged() const = 0;
+    /**
+     *
+     */
     QString header() const;
+    /**
+     *
+     */
     QString icon() const;
+    /**
+     *
+     */
     QString name() const;
+    /**
+     *
+     */
     virtual void updateSettings() = 0;
+    /**
+     *
+     */
     virtual void updateWidgets();
 Q_SIGNALS:
+    /**
+     *
+     */
     void widgetsModified();
 private:
     AKI_DECLARE_PRIVATE(ISettingsPage)

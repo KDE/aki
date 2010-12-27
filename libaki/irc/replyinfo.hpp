@@ -115,4 +115,6 @@ private:
 } // End of namespace Irc.
 } // End of namespace Aki.
 
+QDebug LIBAKI_EXPORT operator<<(QDebug dbg, const Aki::Irc::ReplyInfo& replyInfo);
+
 #endif // AKI_IRC_REPLYINFO_HPP

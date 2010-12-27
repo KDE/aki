@@ -29,7 +29,7 @@ class DockWidget;
 class ISettingsPage;
 class Plugin;
 /**
- * Interface class for calling the functions of the MainWindow class.
+ * @brief Interface class for calling the functions of the MainWindow class.
  * Plugins use these functions to add docks, settings pages, etc to the
  * running applications.
  */

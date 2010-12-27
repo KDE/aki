@@ -28,7 +28,7 @@ namespace Aki
 {
 namespace Irc
 {
-class TopicReply
+class LIBAKI_EXPORT TopicReply
     : public Aki::Irc::Reply
 {
 public:
