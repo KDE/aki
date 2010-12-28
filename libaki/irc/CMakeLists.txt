@@ -11,6 +11,7 @@ set(akicore_irc_SRCS
     irc/luserreply.cxx
     irc/message.cxx
     irc/motdreply.cxx
+    irc/namesreply.cxx
     irc/nickinfo.cxx
     irc/nickreply.cxx
     irc/noticereply.cxx

@@ -9,6 +9,7 @@ set(akicore_ircprivate_SRCS
     irc/private/luserreply_p.cxx
     irc/private/message_p.cxx
     irc/private/motdreply_p.cxx
+    irc/private/namesreply_p.cxx
     irc/private/nickinfo_p.cxx
     irc/private/nickreply_p.cxx
     irc/private/noticereply_p.cxx

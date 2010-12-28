@@ -33,7 +33,6 @@ SocketPrivate::SocketPrivate(Aki::Irc::Socket* qq)
 void
 SocketPrivate::commandReceived(const Aki::Irc::ReplyInfo& message)
 {
-    DEBUG_FUNC_NAME
     switch (message.numeric()) {
     case RPL_NULL: {
         break;
@@ -280,7 +279,7 @@ SocketPrivate::commandReceived(const Aki::Irc::ReplyInfo& message)
         break;
     }
     case RPL_NAMREPLY: {
-        //emit _q->onNamesMessage(message);
+        emit _q->onNamesReply(Aki::Irc::NamesReply(message));
         break;
     }
     case RPL_WHOWASREAL: {
@@ -293,7 +292,7 @@ SocketPrivate::commandReceived(const Aki::Irc::ReplyInfo& message)
         break;
     }
     case RPL_ENDOFNAMES: {
-        //emit _q->onNamesMessage(message);
+        emit _q->onNamesReply(Aki::Irc::NamesReply(message, true));
         break;
     }
     case RPL_KILLDONE: {
@@ -566,7 +565,6 @@ SocketPrivate::commandReceived(const Aki::Irc::ReplyInfo& message)
 void
 SocketPrivate::error(Aki::Irc::BaseSocket::SocketError error)
 {
-    DEBUG_FUNC_NAME;
     switch (error) {
     case Aki::Irc::BaseSocket::ConnectionRefusedError: {
         break;
@@ -670,21 +668,17 @@ SocketPrivate::removeStringToFirstWhitespace(QString* line, int start, int stop)
 void
 SocketPrivate::sslErrors(const QList<Aki::Irc::BaseSocket::SslError>& errors)
 {
-    DEBUG_FUNC_NAME;
     Q_UNUSED(errors)
 }
 
 void
 SocketPrivate::stateChanged(Aki::Irc::BaseSocket::SocketState state)
 {
-    DEBUG_FUNC_NAME;
     switch (state) {
     case Aki::Irc::BaseSocket::ClosingState: {
-        DEBUG_TEXT("ClosingState")
         break;
     }
     case Aki::Irc::BaseSocket::ConnectedState: {
-        DEBUG_TEXT("ConnectedState")
         if (!_q->serverPassword().isEmpty()) {
             _q->sendMessage(Aki::Irc::Rfc2812::pass(_q->serverPassword()));
         }
@@ -694,15 +688,12 @@ SocketPrivate::stateChanged(Aki::Irc::BaseSocket::SocketState state)
         break;
     }
     case Aki::Irc::BaseSocket::ConnectingState: {
-        DEBUG_TEXT("ConnectingState")
         break;
     }
     case Aki::Irc::BaseSocket::HostLookupState: {
-        DEBUG_TEXT("HostLookupState")
         break;
     }
     case Aki::Irc::BaseSocket::UnconnectState: {
-        DEBUG_TEXT("UnconnectState")
         if (_q->isAutoReconnectEnabled()) {
             QTimer::singleShot(_q->retryInterval() * 1000, _q, SLOT(connectToHost()));
         }

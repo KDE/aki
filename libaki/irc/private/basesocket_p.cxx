@@ -66,7 +66,6 @@ BaseSocketPrivate::appendSslError(QList<Aki::Irc::BaseSocket::SslError>& list,
 QByteArray
 BaseSocketPrivate::detectUnicode(const QByteArray& data) const
 {
-    DEBUG_FUNC_NAME;
     QByteArray encoding("");
     UErrorCode status = U_ZERO_ERROR;
     UCharsetDetector* detector = ucsdet_open(&status);
@@ -92,7 +91,6 @@ BaseSocketPrivate::detectUnicode(const QByteArray& data) const
 void
 BaseSocketPrivate::error(KTcpSocket::Error error)
 {
-    DEBUG_FUNC_NAME;
     Aki::Irc::BaseSocket::SocketError myError = Aki::Irc::BaseSocket::UnknownError;
 
     switch (error) {
@@ -159,33 +157,27 @@ BaseSocketPrivate::readyRead()
 void
 BaseSocketPrivate::socketState(KTcpSocket::State state)
 {
-    DEBUG_FUNC_NAME;
     Aki::Irc::BaseSocket::SocketState myState = Aki::Irc::BaseSocket::UnconnectState;
 
     switch (state) {
     case KTcpSocket::ClosingState: {
         myState = Aki::Irc::BaseSocket::ClosingState;
-        kDebug() << "Closing State";
         break;
     }
     case KTcpSocket::ConnectedState: {
         myState = Aki::Irc::BaseSocket::ConnectedState;
-        kDebug() << "Connected State";
         break;
     }
     case KTcpSocket::ConnectingState: {
         myState = Aki::Irc::BaseSocket::ConnectingState;
-        kDebug() << "Connecting State";
         break;
     }
     case KTcpSocket::HostLookupState: {
         myState = Aki::Irc::BaseSocket::HostLookupState;
-        kDebug() << "Host Lookup State";
         break;
     }
     case KTcpSocket::UnconnectedState: {
         myState = Aki::Irc::BaseSocket::UnconnectState;
-        kDebug() << "Unconnected State";
         break;
     }
     default: {
@@ -198,7 +190,6 @@ BaseSocketPrivate::socketState(KTcpSocket::State state)
 void
 BaseSocketPrivate::sslErrors(const QList<KSslError>& errors)
 {
-    DEBUG_FUNC_NAME;
     QListIterator<KSslError> errorIter(errors);
 
     // Predefine it with NoError.

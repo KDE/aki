@@ -30,6 +30,7 @@
 #include "irc/localusersreply.hpp"
 #include "irc/luserreply.hpp"
 #include "irc/motdreply.hpp"
+#include "irc/namesreply.hpp"
 #include "irc/noticereply.hpp"
 #include "irc/startupreply.hpp"
 #include <QtCore/QList>
@@ -70,7 +71,7 @@ Q_SIGNALS:
     void onModListReply(const Aki::Irc::Message& modListMessage);
     void onMonitorReply(const Aki::Irc::Message& monitorMessage);
     void onMotdReply(const Aki::Irc::MotdReply& reply);
-    void onNamesReply(const Aki::Irc::Message& namesMessage);
+    void onNamesReply(const Aki::Irc::NamesReply& namesMessage);
     void onNoticeReply(const Aki::Irc::NoticeReply& reply);
     void onOMotdReply(const Aki::Irc::Message& omotdMessage);
     void onPingPongReply(const Aki::Irc::Message& pingPongMessage);
