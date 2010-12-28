@@ -18,26 +18,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-#ifndef SOCKETTEST_HPP
-#define SOCKETTEST_HPP
+#ifndef AKI_IRC_LUSERREPLY_P_HPP
+#define AKI_IRC_LUSERREPLY_P_HPP
 
-#include "irc/socket.hpp"
+#include "aki.hpp"
+#include <QtCore/QSharedData>
 
-class SocketTest
-    : QObject
+namespace Aki
 {
-    Q_OBJECT
+namespace Irc
+{
+class LUserReplyPrivate
+    : public QSharedData
+{
 public:
-    SocketTest(QObject* parent = 0);
-    ~SocketTest();
-    void connectToHost();
-private Q_SLOTS:
-    void slotOnLUserReply(const Aki::Irc::LUserReply& reply);
-    void slotOnMotdMessage(const Aki::Irc::MotdReply& reply);
-    void slotOnNoticeReply(const Aki::Irc::NoticeReply& reply);
-    void slotOnStartupReply(const Aki::Irc::StartupReply& reply);
-private:
-    Aki::Irc::Socket* _socket;
-};
+    LUserReplyPrivate();
+    LUserReplyPrivate(const Aki::Irc::LUserReplyPrivate& other);
+public:
+    QString message;
+}; // End of class LUserReplyPrivate.
+} // End of namespace Irc.
+} // End of namespace Aki.
 
-#endif // SOCKETTEST_HPP
+#endif // AKI_IRC_LUSERREPLY_P_HPP

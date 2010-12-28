@@ -120,7 +120,7 @@ SocketPrivate::commandReceived(const Aki::Irc::ReplyInfo& message)
     case RPL_LUSERUNKNOWN:
     case RPL_LUSERCHANNELS:
     case RPL_LUSERME:
-        //emit _q->onLUserMessage(message);
+        emit _q->onLUserMessage(Aki::Irc::LUserReply(message));
         break;
     }
     case RPL_ADMINME: {

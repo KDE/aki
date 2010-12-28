@@ -18,26 +18,31 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-#ifndef SOCKETTEST_HPP
-#define SOCKETTEST_HPP
+#ifndef AKI_IRC_LUSERREPLY_HPP
+#define AKI_IRC_LUSERREPLY_HPP
 
-#include "irc/socket.hpp"
+#include "aki.hpp"
+#include "irc/reply.hpp"
 
-class SocketTest
-    : QObject
+namespace Aki
 {
-    Q_OBJECT
+namespace Irc
+{
+class LUserReplyPrivate;
+class LIBAKI_EXPORT LUserReply
+    : public Aki::Irc::Reply
+{
 public:
-    SocketTest(QObject* parent = 0);
-    ~SocketTest();
-    void connectToHost();
-private Q_SLOTS:
-    void slotOnLUserReply(const Aki::Irc::LUserReply& reply);
-    void slotOnMotdMessage(const Aki::Irc::MotdReply& reply);
-    void slotOnNoticeReply(const Aki::Irc::NoticeReply& reply);
-    void slotOnStartupReply(const Aki::Irc::StartupReply& reply);
+    LUserReply();
+    explicit LUserReply(const Aki::Irc::ReplyInfo& replyInfo);
+    LUserReply(const Aki::Irc::LUserReply& other);
+    virtual ~LUserReply();
+    Aki::Irc::LUserReply& operator=(const Aki::Irc::LUserReply& other);
+    QString message() const;
 private:
-    Aki::Irc::Socket* _socket;
-};
+    QSharedDataPointer<Aki::Irc::LUserReplyPrivate> _d;
+}; // End of class LUserReply.
+} // End of namespace Irc.
+} // End of namespace Aki.
 
-#endif // SOCKETTEST_HPP
+#endif // AKI_IRC_LUSERREPLY_HPP

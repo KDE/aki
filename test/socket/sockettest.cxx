@@ -46,6 +46,8 @@ SocketTest::SocketTest(QObject* parent)
             SLOT(slotOnNoticeReply(Aki::Irc::NoticeReply)));
     connect(_socket, SIGNAL(onStartupReply(Aki::Irc::StartupReply)),
             SLOT(slotOnStartupReply(Aki::Irc::StartupReply)));
+    connect(_socket, SIGNAL(onLUserMessage(Aki::Irc::LUserReply)),
+            SLOT(slotOnLUserReply(Aki::Irc::LUserReply)));
 }
 
 SocketTest::~SocketTest()
@@ -60,19 +62,26 @@ SocketTest::connectToHost()
 }
 
 void
+SocketTest::slotOnLUserReply(const Aki::Irc::LUserReply& reply)
+{
+    qDebug() << reply.message();
+}
+
+void
 SocketTest::slotOnMotdMessage(const Aki::Irc::MotdReply& reply)
 {
-    qDebug() << reply.reply();
+    qDebug() << reply.message();
+    qDebug() << reply.isLastMessage();
 }
 
 void
 SocketTest::slotOnNoticeReply(const Aki::Irc::NoticeReply& reply)
 {
-    qDebug() << reply.reply();
+    qDebug() << reply.message();
 }
 
 void
 SocketTest::slotOnStartupReply(const Aki::Irc::StartupReply& reply)
 {
-    qDebug() << reply.reply();
+    qDebug() << reply.message();
 }

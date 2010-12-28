@@ -4,6 +4,7 @@ set(akicore_ircprivate_SRCS
     irc/private/banreply_p.cxx
     irc/private/basesocket_p.cxx
     irc/private/kickreply_p.cxx
+    irc/private/luserreply_p.cxx
     irc/private/message_p.cxx
     irc/private/motdreply_p.cxx
     irc/private/nickinfo_p.cxx

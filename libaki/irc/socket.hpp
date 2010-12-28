@@ -26,6 +26,7 @@
 #include "irc/awayreply.hpp"
 #include "irc/banreply.hpp"
 #include "irc/basesocket.hpp"
+#include "irc/luserreply.hpp"
 #include "irc/motdreply.hpp"
 #include "irc/noticereply.hpp"
 #include "irc/startupreply.hpp"
@@ -59,7 +60,7 @@ Q_SIGNALS:
     void onKnockMessage(const Aki::Irc::Message& knockMessage);
     void onLinksMessage(const Aki::Irc::Message& linksMessage);
     void onListMessage(const Aki::Irc::Message& listMessage);
-    void onLUserMessage(const Aki::Irc::Message& luserMessage);
+    void onLUserMessage(const Aki::Irc::LUserReply& reply);
     void onModListMessage(const Aki::Irc::Message& modListMessage);
     void onMonitorMessage(const Aki::Irc::Message& monitorMessage);
     void onMotdMessage(const Aki::Irc::MotdReply& reply);
