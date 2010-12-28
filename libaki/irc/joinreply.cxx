@@ -18,29 +18,44 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-#ifndef SOCKETTEST_HPP
-#define SOCKETTEST_HPP
+#include "joinreply.hpp"
+#include "private/joinreply_p.hpp"
+using namespace Aki;
+using namespace Irc;
 
-#include "irc/socket.hpp"
-
-class SocketTest
-    : QObject
+JoinReply::JoinReply()
+    : Aki::Irc::Reply(),
+    _d(new Aki::Irc::JoinReplyPrivate)
 {
-    Q_OBJECT
-public:
-    SocketTest(QObject* parent = 0);
-    ~SocketTest();
-    void connectToHost();
-private Q_SLOTS:
-    void slotOnGlobalUsersReply(const Aki::Irc::GlobalUsersReply& reply);
-    void slotOnLocalUsersReply(const Aki::Irc::LocalUsersReply& reply);
-    void slotOnLUserReply(const Aki::Irc::LUserReply& reply);
-    void slotOnNamesReply(const Aki::Irc::NamesReply& reply);
-    void slotOnMotdReply(const Aki::Irc::MotdReply& reply);
-    void slotOnNoticeReply(const Aki::Irc::NoticeReply& reply);
-    void slotOnStartupReply(const Aki::Irc::StartupReply& reply);
-private:
-    Aki::Irc::Socket* _socket;
-};
+}
 
-#endif // SOCKETTEST_HPP
+JoinReply::JoinReply(const Aki::Irc::ReplyInfo& replyInfo)
+    : Aki::Irc::Reply(replyInfo),
+    _d(new Aki::Irc::JoinReplyPrivate)
+{
+    _d->channel = replyInfo.params().at(0);
+}
+
+JoinReply::JoinReply(const Aki::Irc::JoinReply& other)
+    : Aki::Irc::Reply(other),
+    _d(other._d)
+{
+}
+
+JoinReply::~JoinReply()
+{
+}
+
+Aki::Irc::JoinReply&
+JoinReply::operator=(const Aki::Irc::JoinReply& other)
+{
+    Aki::Irc::Reply::operator=(other);
+    _d = other._d;
+    return *this;
+}
+
+QString
+JoinReply::channel() const
+{
+    return _d->channel;
+}

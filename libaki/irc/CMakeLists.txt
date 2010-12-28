@@ -6,6 +6,7 @@ set(akicore_irc_SRCS
     irc/banreply.cxx
     irc/basesocket.cxx
     irc/globalusersreply.cxx
+    irc/joinreply.cxx
     irc/kickreply.cxx
     irc/localusersreply.cxx
     irc/luserreply.cxx

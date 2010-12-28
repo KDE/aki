@@ -623,7 +623,7 @@ SocketPrivate::messageReceived(const Aki::Irc::ReplyInfo& message)
     } else if (command == "PART") {
         
     } else if (command == "JOIN") {
-        
+        emit _q->onJoinReply(Aki::Irc::JoinReply(message));
     }
 }
 

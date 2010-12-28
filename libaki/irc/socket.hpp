@@ -27,6 +27,7 @@
 #include "irc/banreply.hpp"
 #include "irc/basesocket.hpp"
 #include "irc/globalusersreply.hpp"
+#include "irc/joinreply.hpp"
 #include "irc/kickreply.hpp"
 #include "irc/localusersreply.hpp"
 #include "irc/luserreply.hpp"
@@ -66,6 +67,7 @@ Q_SIGNALS:
     void onInviteListReply(const Aki::Irc::Message& inviteListMessage);
     void onInviteReply(const Aki::Irc::Message& inviteMessage);
     void onIsOnReply(const Aki::Irc::Message& isOnMessage);
+    void onJoinReply(const Aki::Irc::JoinReply& reply);
     void onKickReply(const Aki::Irc::KickReply& reply);
     void onKnockReply(const Aki::Irc::Message& knockMessage);
     void onLinksReply(const Aki::Irc::Message& linksMessage);

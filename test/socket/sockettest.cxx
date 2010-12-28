@@ -24,14 +24,12 @@ SocketTest::SocketTest(QObject* parent)
     : QObject(parent),
     _socket(new Aki::Irc::Socket("Freenode", parent))
 {
-    QStringList addresses;
-    addresses << "irc.freenode.net/6667";
-    _socket->setAddressList(addresses);
+    _socket->setAddressList(QStringList() << "irc.freenode.net/6667");
     _socket->setAutoIdentify(false);
     _socket->setAutoReconnect(true);
     _socket->setEncoding("UTF-8");
     _socket->setIdentName("testBot");
-    _socket->setNickList(QStringList()<< "testBot1" << "testBot2" << "testBot3");
+    _socket->setNickList(QStringList() << "testBot1" << "testBot2" << "testBot3");
     _socket->setRealName("Aki test bot");
     _socket->setRetryAttemptCount(10);
     _socket->setRetryInterval(10);
@@ -40,14 +38,20 @@ SocketTest::SocketTest(QObject* parent)
     _socket->setServicePassword(QString());
     _socket->setSsl(false);
 
-    connect(_socket, SIGNAL(onMotdMessage(Aki::Irc::MotdReply)),
-            SLOT(slotOnMotdMessage(Aki::Irc::MotdReply)));
+    connect(_socket, SIGNAL(onMotdReply(Aki::Irc::MotdReply)),
+            SLOT(slotOnMotdReply(Aki::Irc::MotdReply)));
     connect(_socket, SIGNAL(onNoticeReply(Aki::Irc::NoticeReply)),
             SLOT(slotOnNoticeReply(Aki::Irc::NoticeReply)));
     connect(_socket, SIGNAL(onStartupReply(Aki::Irc::StartupReply)),
             SLOT(slotOnStartupReply(Aki::Irc::StartupReply)));
-    connect(_socket, SIGNAL(onLUserMessage(Aki::Irc::LUserReply)),
+    connect(_socket, SIGNAL(onLUserReply(Aki::Irc::LUserReply)),
             SLOT(slotOnLUserReply(Aki::Irc::LUserReply)));
+    connect(_socket, SIGNAL(onLocalUsersReply(Aki::Irc::LocalUsersReply)),
+            SLOT(slotOnLocalUsersReply(Aki::Irc::LocalUsersReply)));
+    connect(_socket, SIGNAL(onGlobalUsersReply(Aki::Irc::GlobalUsersReply)),
+            SLOT(slotOnGlobalUsersReply(Aki::Irc::GlobalUsersReply)));
+    connect(_socket, SIGNAL(onNamesReply(Aki::Irc::NamesReply)),
+            SLOT(slotOnNamesReply(Aki::Irc::NamesReply)));
 }
 
 SocketTest::~SocketTest()
@@ -62,26 +66,55 @@ SocketTest::connectToHost()
 }
 
 void
-SocketTest::slotOnLUserReply(const Aki::Irc::LUserReply& reply)
+SocketTest::slotOnGlobalUsersReply(const Aki::Irc::GlobalUsersReply& reply)
 {
-    qDebug() << reply.message();
+    Q_UNUSED(reply)
+    /*qDebug() << reply.global();
+    qDebug() << reply.max();
+    qDebug() << reply.message();*/
 }
 
 void
-SocketTest::slotOnMotdMessage(const Aki::Irc::MotdReply& reply)
+SocketTest::slotOnLocalUsersReply(const Aki::Irc::LocalUsersReply& reply)
 {
-    qDebug() << reply.message();
-    qDebug() << reply.isLastMessage();
+    Q_UNUSED(reply)
+    /*qDebug() << reply.local();
+    qDebug() << reply.max();
+    qDebug() << reply.message();*/
+}
+
+void
+SocketTest::slotOnLUserReply(const Aki::Irc::LUserReply& reply)
+{
+    Q_UNUSED(reply)
+    //qDebug() << reply.message();
+}
+
+void
+SocketTest::slotOnMotdReply(const Aki::Irc::MotdReply& reply)
+{
+    Q_UNUSED(reply)
+    /*qDebug() << reply.message();
+    qDebug() << reply.isLastMessage();*/
+}
+
+void
+SocketTest::slotOnNamesReply(const Aki::Irc::NamesReply& reply)
+{
+    qDebug() << reply.reply();
+    qDebug() << reply.reply().params();
 }
 
 void
 SocketTest::slotOnNoticeReply(const Aki::Irc::NoticeReply& reply)
 {
-    qDebug() << reply.message();
+    Q_UNUSED(reply)
+    //qDebug() << reply.message();
 }
 
 void
 SocketTest::slotOnStartupReply(const Aki::Irc::StartupReply& reply)
 {
-    qDebug() << reply.message();
+    Q_UNUSED(reply)
+    //qDebug() << reply.message();
 }
