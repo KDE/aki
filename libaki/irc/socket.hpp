@@ -33,6 +33,7 @@
 #include "irc/namesreply.hpp"
 #include "irc/noticereply.hpp"
 #include "irc/startupreply.hpp"
+#include "irc/topicreply.hpp"
 #include <QtCore/QList>
 
 namespace Aki
@@ -82,7 +83,7 @@ Q_SIGNALS:
     void onTestReply(const Aki::Irc::Message& testMessage);
     void onTimeReply(const Aki::Irc::Message& timeMessage);
     void onTopicChangeReply(const Aki::Irc::Message& topicChangeMessage);
-    void onTopicReply(const Aki::Irc::Message& topicMessage);
+    void onTopicReply(const Aki::Irc::TopicReply& reply);
     void onTraceReply(const Aki::Irc::Message& traceMessage);
     void onUserHostReply(const Aki::Irc::Message& userHostMessage);
     void onUsersReply(const Aki::Irc::Message& usersMessage);

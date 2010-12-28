@@ -37,6 +37,7 @@ public:
 public:
     QString channel;
     QString topic;
+    QString message;
 }; // End of class TopicReplyPrivate.
 } // End of namespace Irc.
 } // End of namespace Aki.

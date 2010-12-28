@@ -25,14 +25,16 @@ using namespace Irc;
 TopicReplyPrivate::TopicReplyPrivate()
     : QSharedData(),
     channel(QString()),
-    topic(QString())
+    topic(QString()),
+    message(QString())
 {
 }
 
 TopicReplyPrivate::TopicReplyPrivate(const TopicReplyPrivate& other)
     : QSharedData(other),
     channel(other.channel),
-    topic(other.topic)
+    topic(other.topic),
+    message(other.message)
 {
 }
 

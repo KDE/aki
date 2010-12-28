@@ -39,6 +39,7 @@ public:
     ~TopicReply();
     Aki::Irc::TopicReply& operator=(const Aki::Irc::TopicReply& other);
     QString channel() const;
+    QString message() const;
     QString topic() const;
 private:
     QSharedDataPointer<Aki::Irc::TopicReplyPrivate> _d;

@@ -240,9 +240,12 @@ SocketPrivate::commandReceived(const Aki::Irc::ReplyInfo& message)
         //emit _q->onWhoIsMessage(message);
         break;
     }
-    case RPL_NOTOPIC: {
-    case RPL_TOPIC:
-    case RPL_TOPICWHOTIME:
+    case RPL_NOTOPIC:
+    case RPL_TOPIC: {
+        emit _q->onTopicReply(Aki::Irc::TopicReply(message));
+        break;
+    }
+    case RPL_TOPICWHOTIME: {
         //emit _q->onTopicMessage(message);
         break;
     }

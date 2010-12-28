@@ -34,7 +34,11 @@ TopicReply::TopicReply(const Aki::Irc::ReplyInfo& replyInfo)
     _d(new Aki::Irc::TopicReplyPrivate)
 {
     _d->channel = replyInfo.params().at(1);
-    _d->topic = replyInfo.params().value(2);
+    if (replyInfo.numeric() == Aki::Irc::RPL_NOTOPIC) {
+        _d->message = replyInfo.params().value(2);
+    } else {
+        _d->topic = replyInfo.params().value(2);
+    }
 }
 
 TopicReply::TopicReply(const Aki::Irc::TopicReply& other)
