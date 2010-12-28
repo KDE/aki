@@ -18,4 +18,5 @@ set(akicore_ircprivate_SRCS
     irc/private/replyinfo_p.cxx
     irc/private/socket_p.cxx
     irc/private/startupreply_p.cxx
+    irc/private/topicreply_p.cxx
 )

@@ -18,37 +18,43 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-#include "topicreply.hpp"
-#include "private/topicreply_p.hpp"
+#include "namesreply.hpp"
+#include "private/namesreply_p.hpp"
 using namespace Aki;
 using namespace Irc;
 
-TopicReply::TopicReply()
+NamesReply::NamesReply()
     : Aki::Irc::Reply(),
-    _d(new Aki::Irc::TopicReplyPrivate)
+    _d(new Aki::Irc::NamesReplyPrivate)
 {
 }
 
-TopicReply::TopicReply(const Aki::Irc::ReplyInfo& replyInfo)
+NamesReply::NamesReply(const Aki::Irc::ReplyInfo& replyInfo, bool lastMessage)
     : Aki::Irc::Reply(replyInfo),
-    _d(new Aki::Irc::TopicReplyPrivate)
+    _d(new Aki::Irc::NamesReplyPrivate)
 {
-    _d->channel = replyInfo.params().at(1);
-    _d->topic = replyInfo.params().value(2);
+    _d->lastMessage = lastMessage;
+    if (!_d->lastMessage) {
+        _d->channel = replyInfo.params().at(2);
+        _d->names = replyInfo.params().at(3).split(' ');
+    } else {
+        _d->channel = replyInfo.params().at(1);
+        _d->message = replyInfo.params().at(2);
+    }
 }
 
-TopicReply::TopicReply(const Aki::Irc::TopicReply& other)
+NamesReply::NamesReply(const NamesReply& other)
     : Aki::Irc::Reply(other),
-    _d(other._d)
+    _d(new Aki::Irc::NamesReplyPrivate)
 {
 }
 
-TopicReply::~TopicReply()
+NamesReply::~NamesReply()
 {
 }
 
-Aki::Irc::TopicReply&
-TopicReply::operator=(const Aki::Irc::TopicReply& other)
+Aki::Irc::NamesReply&
+NamesReply::operator=(const NamesReply& other)
 {
     Aki::Irc::Reply::operator=(other);
     _d = other._d;
@@ -56,13 +62,25 @@ TopicReply::operator=(const Aki::Irc::TopicReply& other)
 }
 
 QString
-TopicReply::channel() const
+NamesReply::channel() const
 {
     return _d->channel;
 }
 
-QString
-TopicReply::topic() const
+bool
+NamesReply::isLastMessage() const
 {
-    return _d->topic;
+    return _d->lastMessage;
+}
+
+QString
+NamesReply::message() const
+{
+    return _d->message;
+}
+
+QStringList
+NamesReply::names() const
+{
+    return _d->names;
 }

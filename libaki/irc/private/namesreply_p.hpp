@@ -18,32 +18,29 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-#ifndef AKI_IRC_TOPICREPLY_HPP
-#define AKI_IRC_TOPICREPLY_HPP
+#ifndef AKI_IRC_NAMESREPLY_P_HPP
+#define AKI_IRC_NAMESREPLY_P_HPP
 
 #include "aki.hpp"
-#include "irc/reply.hpp"
+#include <QtCore/QSharedData>
 
 namespace Aki
 {
 namespace Irc
 {
-class TopicReplyPrivate;
-class LIBAKI_EXPORT TopicReply
-    : public Aki::Irc::Reply
+class NamesReplyPrivate
+    : public QSharedData
 {
 public:
-    TopicReply();
-    explicit TopicReply(const Aki::Irc::ReplyInfo& replyInfo);
-    TopicReply(const Aki::Irc::TopicReply& other);
-    ~TopicReply();
-    Aki::Irc::TopicReply& operator=(const Aki::Irc::TopicReply& other);
-    QString channel() const;
-    QString topic() const;
-private:
-    QSharedDataPointer<Aki::Irc::TopicReplyPrivate> _d;
-}; // End of class TopicReply.
+    NamesReplyPrivate();
+    NamesReplyPrivate(const NamesReplyPrivate& other);
+public:
+    QString channel;
+    QString message;
+    QStringList names;
+    bool lastMessage;
+}; // End of class NamesReplyPrivate.
 } // End of namespace Irc.
 } // End of namespace Aki.
 
-#endif // AKI_IRC_TOPICREPLY_HPP
+#endif // AKI_IRC_NAMESREPLY_P_HPP

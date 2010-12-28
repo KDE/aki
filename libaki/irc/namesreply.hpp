@@ -18,8 +18,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-#ifndef AKI_IRC_TOPICREPLY_HPP
-#define AKI_IRC_TOPICREPLY_HPP
+#ifndef AKI_IRC_NAMESREPLY_HPP
+#define AKI_IRC_NAMESREPLY_HPP
 
 #include "aki.hpp"
 #include "irc/reply.hpp"
@@ -28,22 +28,24 @@ namespace Aki
 {
 namespace Irc
 {
-class TopicReplyPrivate;
-class LIBAKI_EXPORT TopicReply
+class NamesReplyPrivate;
+class LIBAKI_EXPORT NamesReply
     : public Aki::Irc::Reply
 {
 public:
-    TopicReply();
-    explicit TopicReply(const Aki::Irc::ReplyInfo& replyInfo);
-    TopicReply(const Aki::Irc::TopicReply& other);
-    ~TopicReply();
-    Aki::Irc::TopicReply& operator=(const Aki::Irc::TopicReply& other);
+    NamesReply();
+    explicit NamesReply(const Aki::Irc::ReplyInfo& replyInfo, bool lastMessage = false);
+    NamesReply(const NamesReply& other);
+    virtual ~NamesReply();
+    virtual NamesReply& operator=(const NamesReply& other);
     QString channel() const;
-    QString topic() const;
+    bool isLastMessage() const;
+    QString message() const;
+    QStringList names() const;
 private:
-    QSharedDataPointer<Aki::Irc::TopicReplyPrivate> _d;
-}; // End of class TopicReply.
+    QSharedDataPointer<Aki::Irc::NamesReplyPrivate> _d;
+}; // End of class NamesReply.
 } // End of namespace Irc.
 } // End of namespace Aki.
 
-#endif // AKI_IRC_TOPICREPLY_HPP
+#endif // AKI_IRC_NAMESREPLY_HPP
