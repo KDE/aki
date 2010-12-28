@@ -26,6 +26,7 @@
 #include "irc/awayreply.hpp"
 #include "irc/banreply.hpp"
 #include "irc/basesocket.hpp"
+#include "irc/globalusersreply.hpp"
 #include "irc/localusersreply.hpp"
 #include "irc/luserreply.hpp"
 #include "irc/motdreply.hpp"
@@ -53,6 +54,7 @@ Q_SIGNALS:
     void onBanListMessage(const Aki::Irc::BanReply& reply);
     void onErrorMessage(const Aki::Irc::Message& errorMessage);
     void onExceptListMessage(const Aki::Irc::Message& exceptListMessage);
+    void onGlobalUsersReply(const Aki::Irc::GlobalUsersReply& reply);
     void onHelpMessage(const Aki::Irc::Message& helpMessage);
     void onInfoMessage(const Aki::Irc::Message& infoMessage);
     void onInviteListMessage(const Aki::Irc::Message& inviteListMessage);

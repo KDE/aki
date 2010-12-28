@@ -143,6 +143,7 @@ SocketPrivate::commandReceived(const Aki::Irc::ReplyInfo& message)
         break;
     }
     case RPL_GLOBALUSERS: {
+        emit _q->onGlobalUsersReply(Aki::Irc::GlobalUsersReply(message));
         break;
     }
     case RPL_PRIVS: {
