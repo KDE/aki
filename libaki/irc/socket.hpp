@@ -27,10 +27,12 @@
 #include "irc/banreply.hpp"
 #include "irc/basesocket.hpp"
 #include "irc/globalusersreply.hpp"
+#include "irc/kickreply.hpp"
 #include "irc/localusersreply.hpp"
 #include "irc/luserreply.hpp"
 #include "irc/motdreply.hpp"
 #include "irc/namesreply.hpp"
+#include "irc/nickreply.hpp"
 #include "irc/noticereply.hpp"
 #include "irc/startupreply.hpp"
 #include "irc/topicreply.hpp"
@@ -64,6 +66,7 @@ Q_SIGNALS:
     void onInviteListReply(const Aki::Irc::Message& inviteListMessage);
     void onInviteReply(const Aki::Irc::Message& inviteMessage);
     void onIsOnReply(const Aki::Irc::Message& isOnMessage);
+    void onKickReply(const Aki::Irc::KickReply& reply);
     void onKnockReply(const Aki::Irc::Message& knockMessage);
     void onLinksReply(const Aki::Irc::Message& linksMessage);
     void onListReply(const Aki::Irc::Message& listMessage);
@@ -73,6 +76,7 @@ Q_SIGNALS:
     void onMonitorReply(const Aki::Irc::Message& monitorMessage);
     void onMotdReply(const Aki::Irc::MotdReply& reply);
     void onNamesReply(const Aki::Irc::NamesReply& namesMessage);
+    void onNickReply(const Aki::Irc::NickReply& reply);
     void onNoticeReply(const Aki::Irc::NoticeReply& reply);
     void onOMotdReply(const Aki::Irc::Message& omotdMessage);
     void onPingPongReply(const Aki::Irc::Message& pingPongMessage);
@@ -90,7 +94,6 @@ Q_SIGNALS:
     void onWhoIsReply(const Aki::Irc::Message& whoisMessage);
     void onWhoReply(const Aki::Irc::Message& whoMessage);
     void onWhoWasReply(const Aki::Irc::Message& whoWasMessage);
-    void onWelcomeReply(const Aki::Irc::Message& welcomeMessage);
 private:
     Q_PRIVATE_SLOT(_d, void error(Aki::Irc::BaseSocket::SocketError))
     Q_PRIVATE_SLOT(_d, void rawMessageReceived(const QString& message))

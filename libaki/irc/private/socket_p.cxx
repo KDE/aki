@@ -612,6 +612,18 @@ SocketPrivate::messageReceived(const Aki::Irc::ReplyInfo& message)
         } else {
             emit _q->onNoticeReply(Aki::Irc::NoticeReply(message));
         }
+    } else if (command == "KICK") {
+        emit _q->onKickReply(Aki::Irc::KickReply(message));
+    } else if (command == "NICK") {
+        emit _q->onNickReply(Aki::Irc::NickReply(message));
+    } else if (command == "TOPIC") {
+        
+    } else if (command == "INVITE") {
+        
+    } else if (command == "PART") {
+        
+    } else if (command == "JOIN") {
+        
     }
 }
 
