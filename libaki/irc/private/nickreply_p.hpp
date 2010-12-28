@@ -18,32 +18,27 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-#ifndef AKI_IRC_NICKREPLY_HPP
-#define AKI_IRC_NICKREPLY_HPP
+#ifndef AKI_IRC_NICKREPLY_P_HPP
+#define AKI_IRC_NICKREPLY_P_HPP
 
 #include "aki.hpp"
-#include "irc/reply.hpp"
+#include <QtCore/QSharedData>
 
 namespace Aki
 {
 namespace Irc
 {
-class NickReplyPrivate;
-class LIBAKI_EXPORT NickReply
-    : public Aki::Irc::Reply
+class NickReplyPrivate
+    : public QSharedData
 {
 public:
-    NickReply();
-    explicit NickReply(const Aki::Irc::ReplyInfo& replyInfo);
-    NickReply(const Aki::Irc::NickReply& other);
-    ~NickReply();
-    Aki::Irc::NickReply& operator=(const Aki::Irc::NickReply& other);
-    QString oldNick() const;
-    QString newNick() const;
-private:
-    QSharedDataPointer<Aki::Irc::NickReplyPrivate> _d;
-}; // End of class NickReply.
+    NickReplyPrivate();
+    NickReplyPrivate(const NickReplyPrivate& other);
+public:
+    QString oldNick;
+    QString newNick;
+}; // End of class NickReplyPrivate.
 } // End of namespace Irc.
 } // End of namespace Aki.
 
-#endif // AKI_IRC_NICKREPLY_HPP
+#endif // AKI_IRC_NICKREPLY_P_HPP

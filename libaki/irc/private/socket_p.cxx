@@ -41,10 +41,26 @@ SocketPrivate::commandReceived(const Aki::Irc::ReplyInfo& message)
     case RPL_WELCOME:
     case RPL_YOURHOST:
     case RPL_CREATED:
-    case RPL_MYINFO:
-    case RPL_ISUPPORT: {
-        DEBUG_TEXT("StartupReply")
+    case RPL_MYINFO: {
         emit _q->onStartupReply(Aki::Irc::StartupReply(message));
+        break;
+    }
+    case RPL_ISUPPORT: {
+        emit _q->onStartupReply(Aki::Irc::StartupReply(message));
+        // We skip the first one because that is the user's nickname.
+        // We skip the last one because that is a message to the user which has no use in the capabilities.
+        // I'm not sure if all the network's have that so I have to do something different if there is.
+        // But I highly doubt it will be different but then again you can't trust input :(
+        for (int i = 1, count = (message.params().count() - 1); i < count; ++i) {
+            const QString cap = message.params().at(i);
+            // Capabilities are done like <cap>=<option> or just <cap>
+            if (cap.contains('=')) {
+                const QStringList split = cap.split('=');
+                serverCapabilities.insert(split.at(0), split.at(1));
+            } else {
+                serverCapabilities.insert(cap, QString());
+            }
+        }
         break;
     }
     case RPL_SNOMASK: {
@@ -120,14 +136,14 @@ SocketPrivate::commandReceived(const Aki::Irc::ReplyInfo& message)
     case RPL_LUSERUNKNOWN:
     case RPL_LUSERCHANNELS:
     case RPL_LUSERME:
-        emit _q->onLUserMessage(Aki::Irc::LUserReply(message));
+        emit _q->onLUserReply(Aki::Irc::LUserReply(message));
         break;
     }
     case RPL_ADMINME: {
     case RPL_ADMINLOC1:
     case RPL_ADMINLOC2:
     case RPL_ADMINEMAIL:
-        emit _q->onAdminMessage(Aki::Irc::AdminReply(message));
+        emit _q->onAdminReply(Aki::Irc::AdminReply(message));
         break;
     }
     case RPL_TRACELOG: {
@@ -307,7 +323,7 @@ SocketPrivate::commandReceived(const Aki::Irc::ReplyInfo& message)
         break;
     }
     case RPL_MOTD: {
-        emit _q->onMotdMessage(Aki::Irc::MotdReply(message));
+        emit _q->onMotdReply(Aki::Irc::MotdReply(message));
         break;
     }
     case RPL_INFOSTART: {
@@ -319,7 +335,7 @@ SocketPrivate::commandReceived(const Aki::Irc::ReplyInfo& message)
     }
     case RPL_MOTDSTART: {
     case RPL_ENDOFMOTD:
-        emit _q->onMotdMessage(Aki::Irc::MotdReply(message, (message.numeric() == RPL_ENDOFMOTD)));
+        emit _q->onMotdReply(Aki::Irc::MotdReply(message, (message.numeric() == RPL_ENDOFMOTD)));
         break;
     }
     case RPL_WHOISHOST: {

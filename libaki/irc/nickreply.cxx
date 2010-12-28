@@ -19,21 +19,27 @@
  */
 
 #include "nickreply.hpp"
+#include "private/nickreply_p.hpp"
 using namespace Aki;
 using namespace Irc;
 
 NickReply::NickReply()
-    : Aki::Irc::Reply()
+    : Aki::Irc::Reply(),
+    _d(new Aki::Irc::NickReplyPrivate)
 {
 }
 
 NickReply::NickReply(const Aki::Irc::ReplyInfo& replyInfo)
-    : Aki::Irc::Reply(replyInfo)
+    : Aki::Irc::Reply(replyInfo),
+    _d(new Aki::Irc::NickReplyPrivate)
 {
+    _d->newNick = reply().sender().nick();
+    _d->oldNick = reply().params().at(0);
 }
 
 NickReply::NickReply(const Aki::Irc::NickReply& other)
-    : Aki::Irc::Reply(other)
+    : Aki::Irc::Reply(other),
+    _d(other._d)
 {
 }
 
@@ -45,17 +51,18 @@ Aki::Irc::NickReply&
 NickReply::operator=(const Aki::Irc::NickReply& other)
 {
     Aki::Irc::Reply::operator=(other);
+    _d = other._d;
     return *this;
 }
 
 QString
 NickReply::newNick() const
 {
-    return reply().sender().nick();
+    return _d->newNick;
 }
 
 QString
 NickReply::oldNick() const
 {
-    return reply().params().at(0);
+    return _d->oldNick;
 }

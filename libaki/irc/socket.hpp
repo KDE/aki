@@ -44,49 +44,51 @@ class LIBAKI_EXPORT Socket
 {
     Q_OBJECT
 public:
+    typedef QHash<QString,QString> ServerCapabilities;
     explicit Socket(QObject* parent = 0);
     explicit Socket(const QString& name, QObject* parent = 0);
     virtual ~Socket();
     void connectSlotsBySignals(Aki::Irc::Socket* socket);
+    Aki::Irc::Socket::ServerCapabilities serverCapabilities() const;
 Q_SIGNALS:
-    void onAdminMessage(const Aki::Irc::AdminReply& reply);
-    void onAwayMessage(const Aki::Irc::AwayReply& reply);
-    void onBanListMessage(const Aki::Irc::BanReply& reply);
-    void onErrorMessage(const Aki::Irc::Message& errorMessage);
-    void onExceptListMessage(const Aki::Irc::Message& exceptListMessage);
+    void onAdminReply(const Aki::Irc::AdminReply& reply);
+    void onAwayReply(const Aki::Irc::AwayReply& reply);
+    void onBanListReply(const Aki::Irc::BanReply& reply);
+    void onErrorReply(const Aki::Irc::Message& errorMessage);
+    void onExceptListReply(const Aki::Irc::Message& exceptListMessage);
     void onGlobalUsersReply(const Aki::Irc::GlobalUsersReply& reply);
-    void onHelpMessage(const Aki::Irc::Message& helpMessage);
-    void onInfoMessage(const Aki::Irc::Message& infoMessage);
-    void onInviteListMessage(const Aki::Irc::Message& inviteListMessage);
-    void onInviteMessage(const Aki::Irc::Message& inviteMessage);
-    void onIsOnMessage(const Aki::Irc::Message& isOnMessage);
-    void onKnockMessage(const Aki::Irc::Message& knockMessage);
-    void onLinksMessage(const Aki::Irc::Message& linksMessage);
-    void onListMessage(const Aki::Irc::Message& listMessage);
+    void onHelpReply(const Aki::Irc::Message& helpMessage);
+    void onInfoReply(const Aki::Irc::Message& infoMessage);
+    void onInviteListReply(const Aki::Irc::Message& inviteListMessage);
+    void onInviteReply(const Aki::Irc::Message& inviteMessage);
+    void onIsOnReply(const Aki::Irc::Message& isOnMessage);
+    void onKnockReply(const Aki::Irc::Message& knockMessage);
+    void onLinksReply(const Aki::Irc::Message& linksMessage);
+    void onListReply(const Aki::Irc::Message& listMessage);
     void onLocalUsersReply(const Aki::Irc::LocalUsersReply& reply);
-    void onLUserMessage(const Aki::Irc::LUserReply& reply);
-    void onModListMessage(const Aki::Irc::Message& modListMessage);
-    void onMonitorMessage(const Aki::Irc::Message& monitorMessage);
-    void onMotdMessage(const Aki::Irc::MotdReply& reply);
-    void onNamesMessage(const Aki::Irc::Message& namesMessage);
+    void onLUserReply(const Aki::Irc::LUserReply& reply);
+    void onModListReply(const Aki::Irc::Message& modListMessage);
+    void onMonitorReply(const Aki::Irc::Message& monitorMessage);
+    void onMotdReply(const Aki::Irc::MotdReply& reply);
+    void onNamesReply(const Aki::Irc::Message& namesMessage);
     void onNoticeReply(const Aki::Irc::NoticeReply& reply);
-    void onOMotdMessage(const Aki::Irc::Message& omotdMessage);
-    void onPingPongMessage(const Aki::Irc::Message& pingPongMessage);
-    void onServerListMessage(const Aki::Irc::Message& serverListMessage);
+    void onOMotdReply(const Aki::Irc::Message& omotdMessage);
+    void onPingPongReply(const Aki::Irc::Message& pingPongMessage);
+    void onServerListReply(const Aki::Irc::Message& serverListMessage);
     void onStartupReply(const Aki::Irc::StartupReply& reply);
-    void onStatsMessage(const Aki::Irc::Message& statsMessage);
-    void onSummonMessage(const Aki::Irc::Message& summonMessage);
-    void onTestMessage(const Aki::Irc::Message& testMessage);
-    void onTimeMessage(const Aki::Irc::Message& timeMessage);
-    void onTopicChangeMessage(const Aki::Irc::Message& topicChangeMessage);
-    void onTopicMessage(const Aki::Irc::Message& topicMessage);
-    void onTraceMessage(const Aki::Irc::Message& traceMessage);
-    void onUserHostMessage(const Aki::Irc::Message& userHostMessage);
-    void onUsersMessage(const Aki::Irc::Message& usersMessage);
-    void onWhoIsMessage(const Aki::Irc::Message& whoisMessage);
-    void onWhoMessage(const Aki::Irc::Message& whoMessage);
-    void onWhoWasMessage(const Aki::Irc::Message& whoWasMessage);
-    void onWelcomeMessage(const Aki::Irc::Message& welcomeMessage);
+    void onStatsReply(const Aki::Irc::Message& statsMessage);
+    void onSummonReply(const Aki::Irc::Message& summonMessage);
+    void onTestReply(const Aki::Irc::Message& testMessage);
+    void onTimeReply(const Aki::Irc::Message& timeMessage);
+    void onTopicChangeReply(const Aki::Irc::Message& topicChangeMessage);
+    void onTopicReply(const Aki::Irc::Message& topicMessage);
+    void onTraceReply(const Aki::Irc::Message& traceMessage);
+    void onUserHostReply(const Aki::Irc::Message& userHostMessage);
+    void onUsersReply(const Aki::Irc::Message& usersMessage);
+    void onWhoIsReply(const Aki::Irc::Message& whoisMessage);
+    void onWhoReply(const Aki::Irc::Message& whoMessage);
+    void onWhoWasReply(const Aki::Irc::Message& whoWasMessage);
+    void onWelcomeReply(const Aki::Irc::Message& welcomeMessage);
 private:
     Q_PRIVATE_SLOT(_d, void error(Aki::Irc::BaseSocket::SocketError))
     Q_PRIVATE_SLOT(_d, void rawMessageReceived(const QString& message))

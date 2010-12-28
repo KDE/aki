@@ -115,4 +115,10 @@ Socket::connectSlotsBySignals(Socket* socket)
     }
 }
 
+Aki::Irc::Socket::ServerCapabilities
+Socket::serverCapabilities() const
+{
+    return _d->serverCapabilities;
+}
+
 #include "irc/socket.moc"
