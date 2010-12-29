@@ -35,9 +35,9 @@ class LIBAKI_EXPORT NamesReply
 public:
     NamesReply();
     explicit NamesReply(const Aki::Irc::ReplyInfo& replyInfo, bool lastMessage = false);
-    NamesReply(const NamesReply& other);
+    NamesReply(const Aki::Irc::NamesReply& other);
     virtual ~NamesReply();
-    virtual NamesReply& operator=(const NamesReply& other);
+    Aki::Irc::NamesReply& operator=(const Aki::Irc::NamesReply& other);
     QString channel() const;
     bool isLastMessage() const;
     QString message() const;

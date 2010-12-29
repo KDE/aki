@@ -36,8 +36,8 @@ public:
     JoinReply();
     explicit JoinReply(const Aki::Irc::ReplyInfo& replyInfo);
     JoinReply(const JoinReply& other);
-    virtual ~JoinReply();
-    virtual JoinReply& operator=(const JoinReply& other);
+    ~JoinReply();
+    Aki::Irc::JoinReply& operator=(const Aki::Irc::JoinReply& other);
     QString channel() const;
 private:
     QSharedDataPointer<Aki::Irc::JoinReplyPrivate> _d;

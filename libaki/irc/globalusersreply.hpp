@@ -35,9 +35,9 @@ class LIBAKI_EXPORT GlobalUsersReply
 public:
     GlobalUsersReply();
     explicit GlobalUsersReply(const Aki::Irc::ReplyInfo& replyInfo);
-    GlobalUsersReply(const GlobalUsersReply& other);
-    virtual ~GlobalUsersReply();
-    virtual GlobalUsersReply& operator=(const GlobalUsersReply& other);
+    GlobalUsersReply(const Aki::Irc::GlobalUsersReply& other);
+    ~GlobalUsersReply();
+    Aki::Irc::GlobalUsersReply& operator=(const Aki::Irc::GlobalUsersReply& other);
     int global() const;
     int max() const;
     QString message() const;

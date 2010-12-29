@@ -36,7 +36,7 @@ public:
     LUserReply();
     explicit LUserReply(const Aki::Irc::ReplyInfo& replyInfo);
     LUserReply(const Aki::Irc::LUserReply& other);
-    virtual ~LUserReply();
+    ~LUserReply();
     Aki::Irc::LUserReply& operator=(const Aki::Irc::LUserReply& other);
     QString message() const;
 private:
