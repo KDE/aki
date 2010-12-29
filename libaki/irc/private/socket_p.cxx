@@ -609,8 +609,25 @@ SocketPrivate::messageReceived(const Aki::Irc::ReplyInfo& message)
     if (command == "NOTICE") {
         if (message.message().startsWith('\1') &&
             message.message().endsWith('\1')) {
+            
         } else {
             emit _q->onNoticeReply(Aki::Irc::NoticeReply(message));
+        }
+    } else if (command == "PRIVMSG") {
+        if (message.params().at(1).startsWith('\1') &&
+            message.params().at(1).endsWith('\1')) {
+            QString tmpMessage = message.params().at(1);
+
+            tmpMessage.remove(0, 1);
+            tmpMessage.remove(tmpMessage.count() - 1, 1);
+
+            const QString cmd = removeStringToFirstWhitespace(&tmpMessage);
+            if (cmd.toUpper() == "ACTION") {
+                emit _q->onActionReply(Aki::Irc::ActionReply(Aki::Irc::CtcpReply(message)));
+            } else {
+                emit _q->onCtcpReply(Aki::Irc::CtcpReply(message));
+            }
+        } else {
         }
     } else if (command == "KICK") {
         emit _q->onKickReply(Aki::Irc::KickReply(message));

@@ -25,13 +25,23 @@ using namespace Irc;
 CtcpReplyPrivate::CtcpReplyPrivate()
     : QSharedData(),
     command(QString()),
-    param(QString())
+    param(QString()),
+    channel(QString())
 {
 }
 
 CtcpReplyPrivate::CtcpReplyPrivate(const Aki::Irc::CtcpReplyPrivate& other)
     : QSharedData(other),
     command(other.command),
-    param(other.param)
+    param(other.param),
+    channel(other.channel)
 {
+}
+
+QString
+CtcpReplyPrivate::removeStringToFirstWhitespace(QString* line)
+{
+    const QString tmp = line->left(line->indexOf(' '));
+    line->remove(0, tmp.length() + 1);
+    return tmp;
 }

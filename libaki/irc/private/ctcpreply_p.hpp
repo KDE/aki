@@ -34,9 +34,11 @@ class CtcpReplyPrivate
 public:
     CtcpReplyPrivate();
     CtcpReplyPrivate(const Aki::Irc::CtcpReplyPrivate& other);
+    QString removeStringToFirstWhitespace(QString* line);
 public:
     QString command;
     QString param;
+    QString channel;
 }; // End of class CtcpReplyPrivate.
 } // End of namespace Irc.
 } // End of namespace Aki.

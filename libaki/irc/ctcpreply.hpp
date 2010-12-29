@@ -38,6 +38,7 @@ public:
     CtcpReply(const CtcpReply& other);
     virtual ~CtcpReply();
     Aki::Irc::CtcpReply& operator=(const CtcpReply& other);
+    QString channel() const;
     QString command() const;
     QString param() const;
 private:

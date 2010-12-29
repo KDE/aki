@@ -33,6 +33,7 @@ ActionReply::ActionReply(const Aki::Irc::CtcpReply& reply)
     : Aki::Irc::CtcpReply(reply),
     _d(new Aki::Irc::ActionReplyPrivate)
 {
+    _d->message = reply.param();
 }
 
 ActionReply::ActionReply(const Aki::Irc::ActionReply& other)
@@ -53,3 +54,8 @@ ActionReply::operator=(const Aki::Irc::ActionReply& other)
     return *this;
 }
 
+QString
+ActionReply::message() const
+{
+    return _d->message;
+}

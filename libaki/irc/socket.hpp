@@ -22,10 +22,12 @@
 #define AKI_IRC_SOCKET_HOO
 
 #include "aki.hpp"
+#include "irc/actionreply.hpp"
 #include "irc/adminreply.hpp"
 #include "irc/awayreply.hpp"
 #include "irc/banreply.hpp"
 #include "irc/basesocket.hpp"
+#include "irc/ctcpreply.hpp"
 #include "irc/globalusersreply.hpp"
 #include "irc/joinreply.hpp"
 #include "irc/kickreply.hpp"
@@ -56,9 +58,11 @@ public:
     void connectSlotsBySignals(Aki::Irc::Socket* socket);
     Aki::Irc::Socket::ServerCapabilities serverCapabilities() const;
 Q_SIGNALS:
+    void onActionReply(const Aki::Irc::ActionReply& reply);
     void onAdminReply(const Aki::Irc::AdminReply& reply);
     void onAwayReply(const Aki::Irc::AwayReply& reply);
     void onBanListReply(const Aki::Irc::BanReply& reply);
+    void onCtcpReply(const Aki::Irc::CtcpReply& reply);
     void onErrorReply(const Aki::Irc::Message& errorMessage);
     void onExceptListReply(const Aki::Irc::Message& exceptListMessage);
     void onGlobalUsersReply(const Aki::Irc::GlobalUsersReply& reply);

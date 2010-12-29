@@ -33,14 +33,17 @@ CtcpReply::CtcpReply(const Aki::Irc::ReplyInfo& replyInfo)
     : Aki::Irc::Reply(replyInfo),
     _d(new Aki::Irc::CtcpReplyPrivate)
 {
-    QString tmpMessage = replyInfo.message();
+    _d->channel = replyInfo.params().at(0);
+
+    QString tmpMessage = replyInfo.params().at(1);
     // Remove the first \1
     tmpMessage.remove(0, 1);
     // Remove the last \1
     tmpMessage.remove(tmpMessage.count() - 1, 1);
 
     if (tmpMessage.contains(' ')) {
-        // FIXME This needs to be determined.
+        _d->command = _d->removeStringToFirstWhitespace(&tmpMessage);
+        _d->param = tmpMessage;
     } else {
         _d->command = tmpMessage.toUpper();
     }
@@ -62,6 +65,12 @@ CtcpReply::operator=(const Aki::Irc::CtcpReply& other)
     Aki::Irc::Reply::operator=(other);
     _d = other._d;
     return *this;
+}
+
+QString
+CtcpReply::channel() const
+{
+    return _d->channel;
 }
 
 QString
