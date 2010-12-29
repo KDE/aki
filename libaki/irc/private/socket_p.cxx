@@ -630,8 +630,7 @@ SocketPrivate::messageReceived(const Aki::Irc::ReplyInfo& message)
         } else if (message.params().at(1) == _q->currentNick()) {
             emit _q->onPrivateMessageReply(Aki::Irc::PrivateMessageReply(message));
         } else {
-            // Channel message
-            // :comawhite!comawhite_@kde/developer/karusler PRIVMSG #bbe :hello
+            emit _q->onChannelMessageReply(Aki::Irc::ChannelMessageReply(Aki::Irc::PrivateMessageReply(message)));
         }
     } else if (command == "KICK") {
         emit _q->onKickReply(Aki::Irc::KickReply(message));
