@@ -37,6 +37,7 @@
 #include "irc/namesreply.hpp"
 #include "irc/nickreply.hpp"
 #include "irc/noticereply.hpp"
+#include "irc/privatemessagereply.hpp"
 #include "irc/startupreply.hpp"
 #include "irc/topicreply.hpp"
 #include <QtCore/QList>
@@ -86,6 +87,7 @@ Q_SIGNALS:
     void onNoticeReply(const Aki::Irc::NoticeReply& reply);
     void onOMotdReply(const Aki::Irc::Message& omotdMessage);
     void onPingPongReply(const Aki::Irc::Message& pingPongMessage);
+    void onPrivateMessageReply(const Aki::Irc::PrivateMessageReply& reply);
     void onServerListReply(const Aki::Irc::Message& serverListMessage);
     void onStartupReply(const Aki::Irc::StartupReply& reply);
     void onStatsReply(const Aki::Irc::Message& statsMessage);

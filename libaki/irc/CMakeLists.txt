@@ -18,6 +18,7 @@ set(akicore_irc_SRCS
     irc/nickinfo.cxx
     irc/nickreply.cxx
     irc/noticereply.cxx
+    irc/privatemessagereply.cxx
     irc/reply.cxx
     irc/replyinfo.cxx
     irc/rfc2812.cxx

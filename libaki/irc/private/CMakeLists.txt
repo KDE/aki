@@ -16,6 +16,7 @@ set(akicore_ircprivate_SRCS
     irc/private/nickinfo_p.cxx
     irc/private/nickreply_p.cxx
     irc/private/noticereply_p.cxx
+    irc/private/privatemessagereply_p.cxx
     irc/private/quitreply_p.cxx
     irc/private/reply_p.cxx
     irc/private/replyinfo_p.cxx
