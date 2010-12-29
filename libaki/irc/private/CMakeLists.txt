@@ -1,4 +1,5 @@
 set(akicore_ircprivate_SRCS
+    irc/private/actionreply_p.cxx
     irc/private/adminreply_p.cxx
     irc/private/awayreply_p.cxx
     irc/private/banreply_p.cxx
