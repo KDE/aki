@@ -8,6 +8,7 @@ set(akicore_ircprivate_SRCS
     irc/private/channelurlreply_p.cxx
     irc/private/ctcpreply_p.cxx
     irc/private/globalusersreply_p.cxx
+    irc/private/invitesentreply_p.cxx
     irc/private/joinreply_p.cxx
     irc/private/kickreply_p.cxx
     irc/private/localusersreply_p.cxx

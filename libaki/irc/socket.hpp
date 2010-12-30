@@ -31,6 +31,7 @@
 #include "irc/channelurlreply.hpp"
 #include "irc/ctcpreply.hpp"
 #include "irc/globalusersreply.hpp"
+#include "irc/invitesentreply.hpp"
 #include "irc/joinreply.hpp"
 #include "irc/kickreply.hpp"
 #include "irc/localusersreply.hpp"
@@ -78,6 +79,7 @@ Q_SIGNALS:
     void onInfoReply(const Aki::Irc::Message& infoMessage);
     void onInviteListReply(const Aki::Irc::Message& inviteListMessage);
     void onInviteReply(const Aki::Irc::Message& inviteMessage);
+    void onInviteSent(const Aki::Irc::InviteSentReply& reply);
     void onIsOnReply(const Aki::Irc::Message& isOnMessage);
     void onJoinReply(const Aki::Irc::JoinReply& reply);
     void onKickReply(const Aki::Irc::KickReply& reply);

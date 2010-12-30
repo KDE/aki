@@ -255,7 +255,7 @@ SocketPrivate::commandReceived(const Aki::Irc::ReplyInfo& message)
         break;
     }
     case RPL_INVITING: {
-        //emit _q->onInviteMessage(message);
+        emit _q->onInviteSent(Aki::Irc::InviteSentReply(message));
         break;
     }
     case RPL_SUMMONING: {
