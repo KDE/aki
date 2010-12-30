@@ -26,6 +26,7 @@ set(akicore_irc_SRCS
     irc/rfc2812.cxx
     irc/socket.cxx
     irc/startupreply.cxx
+    irc/topicchangereply.cxx
     irc/topicreply.cxx
     irc/whoreply.cxx
     ${akicore_ircprivate_SRCS}

@@ -40,6 +40,7 @@
 #include "irc/noticereply.hpp"
 #include "irc/privatemessagereply.hpp"
 #include "irc/startupreply.hpp"
+#include "irc/topicchangereply.hpp"
 #include "irc/topicreply.hpp"
 #include "irc/whoreply.hpp"
 #include <QtCore/QList>
@@ -97,7 +98,7 @@ Q_SIGNALS:
     void onSummonReply(const Aki::Irc::Message& summonMessage);
     void onTestReply(const Aki::Irc::Message& testMessage);
     void onTimeReply(const Aki::Irc::Message& timeMessage);
-    void onTopicChangeReply(const Aki::Irc::Message& topicChangeMessage);
+    void onTopicChangeReply(const Aki::Irc::TopicChangeReply& reply);
     void onTopicReply(const Aki::Irc::TopicReply& reply);
     void onTraceReply(const Aki::Irc::Message& traceMessage);
     void onUserHostReply(const Aki::Irc::Message& userHostMessage);

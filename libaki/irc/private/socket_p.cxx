@@ -637,7 +637,7 @@ SocketPrivate::messageReceived(const Aki::Irc::ReplyInfo& message)
     } else if (command == "NICK") {
         emit _q->onNickReply(Aki::Irc::NickReply(message));
     } else if (command == "TOPIC") {
-        
+        emit _q->onTopicChangeReply(Aki::Irc::TopicChangeReply(message));
     } else if (command == "INVITE") {
         
     } else if (command == "PART") {
