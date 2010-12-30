@@ -26,7 +26,8 @@ using namespace Aki;
 using namespace Irc;
 
 SocketPrivate::SocketPrivate(Aki::Irc::Socket* qq)
-    : _q(qq)
+    : isMotdEnabled(true),
+    _q(qq)
 {
 }
 
@@ -326,7 +327,9 @@ SocketPrivate::commandReceived(const Aki::Irc::ReplyInfo& message)
         break;
     }
     case RPL_MOTD: {
-        emit _q->onMotdReply(Aki::Irc::MotdReply(message));
+        if (_q->isMotdEnabled()) {
+            emit _q->onMotdReply(Aki::Irc::MotdReply(message));
+        }
         break;
     }
     case RPL_INFOSTART: {
@@ -338,7 +341,9 @@ SocketPrivate::commandReceived(const Aki::Irc::ReplyInfo& message)
     }
     case RPL_MOTDSTART: {
     case RPL_ENDOFMOTD:
-        emit _q->onMotdReply(Aki::Irc::MotdReply(message, (message.numeric() == RPL_ENDOFMOTD)));
+        if (_q->isMotdEnabled()) {
+            emit _q->onMotdReply(Aki::Irc::MotdReply(message, (message.numeric() == RPL_ENDOFMOTD)));
+        }
         break;
     }
     case RPL_WHOISHOST: {

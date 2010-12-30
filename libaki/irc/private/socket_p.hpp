@@ -39,6 +39,7 @@ public:
     void stateChanged(Aki::Irc::BaseSocket::SocketState state);
 public:
     Aki::Irc::Socket::ServerCapabilities serverCapabilities;
+    bool isMotdEnabled;
 private:
     QString removeStringToFirstWhitespace(QString* line);
     QString removeStringToFirstWhitespace(QString* line, int start, int stop);

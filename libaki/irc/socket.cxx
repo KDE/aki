@@ -115,10 +115,22 @@ Socket::connectSlotsBySignals(Socket* socket)
     }
 }
 
+bool
+Socket::isMotdEnabled() const
+{
+    return _d->isMotdEnabled;
+}
+
 Aki::Irc::Socket::ServerCapabilities
 Socket::serverCapabilities() const
 {
     return _d->serverCapabilities;
+}
+
+void
+Socket::setMotd(bool enable)
+{
+    _d->isMotdEnabled = enable;
 }
 
 #include "irc/socket.moc"

@@ -57,13 +57,16 @@ class LIBAKI_EXPORT Socket
     : public Aki::Irc::BaseSocket
 {
     Q_OBJECT
+    Q_PROPERTY(bool isMotdEnabled READ isMotdEnabled WRITE setMotd)
 public:
     typedef QHash<QString,QString> ServerCapabilities;
     explicit Socket(QObject* parent = 0);
     explicit Socket(const QString& name, QObject* parent = 0);
     virtual ~Socket();
     void connectSlotsBySignals(Aki::Irc::Socket* socket);
+    bool isMotdEnabled() const;
     Aki::Irc::Socket::ServerCapabilities serverCapabilities() const;
+    void setMotd(bool enable);
 Q_SIGNALS:
     void onActionReply(const Aki::Irc::ActionReply& reply);
     void onAdminReply(const Aki::Irc::AdminReply& reply);
