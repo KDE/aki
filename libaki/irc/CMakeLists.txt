@@ -10,6 +10,7 @@ set(akicore_irc_SRCS
     irc/channelurlreply.cxx
     irc/ctcpreply.cxx
     irc/globalusersreply.cxx
+    irc/invitereply.cxx
     irc/invitesentreply.cxx
     irc/joinreply.cxx
     irc/kickreply.cxx

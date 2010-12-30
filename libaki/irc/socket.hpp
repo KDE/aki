@@ -31,6 +31,7 @@
 #include "irc/channelurlreply.hpp"
 #include "irc/ctcpreply.hpp"
 #include "irc/globalusersreply.hpp"
+#include "irc/invitereply.hpp"
 #include "irc/invitesentreply.hpp"
 #include "irc/joinreply.hpp"
 #include "irc/kickreply.hpp"
@@ -81,7 +82,7 @@ Q_SIGNALS:
     void onHelpReply(const Aki::Irc::Message& helpMessage);
     void onInfoReply(const Aki::Irc::Message& infoMessage);
     void onInviteListReply(const Aki::Irc::Message& inviteListMessage);
-    void onInviteReply(const Aki::Irc::Message& inviteMessage);
+    void onInviteReply(const Aki::Irc::InviteReply& reply);
     void onInviteSent(const Aki::Irc::InviteSentReply& reply);
     void onIsOnReply(const Aki::Irc::Message& isOnMessage);
     void onJoinReply(const Aki::Irc::JoinReply& reply);
@@ -110,6 +111,7 @@ Q_SIGNALS:
     void onTopicReply(const Aki::Irc::TopicReply& reply);
     void onTopicSetByReply(const Aki::Irc::TopicSetByReply& reply);
     void onTraceReply(const Aki::Irc::Message& traceMessage);
+    void onUnknownReply(const Aki::Irc::ReplyInfo& reply);
     void onUserHostReply(const Aki::Irc::Message& userHostMessage);
     void onUsersReply(const Aki::Irc::Message& usersMessage);
     void onWhoIsReply(const Aki::Irc::Message& whoisMessage);

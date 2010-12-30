@@ -567,6 +567,11 @@ SocketPrivate::commandReceived(const Aki::Irc::ReplyInfo& message)
     case ERR_LAST_ERR_MSG: {
         break;
     }
+    default: {
+        emit _q->onUnknownReply(message);
+        return;
+        break;
+    }
     }
 
 }
@@ -645,7 +650,7 @@ SocketPrivate::messageReceived(const Aki::Irc::ReplyInfo& message)
     } else if (command == "TOPIC") {
         emit _q->onTopicChangeReply(Aki::Irc::TopicChangeReply(message));
     } else if (command == "INVITE") {
-        
+        emit _q->onInviteReply(Aki::Irc::InviteReply(message));
     } else if (command == "PART") {
         
     } else if (command == "JOIN") {
