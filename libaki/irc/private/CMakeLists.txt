@@ -5,6 +5,7 @@ set(akicore_ircprivate_SRCS
     irc/private/banreply_p.cxx
     irc/private/basesocket_p.cxx
     irc/private/channelmessagereply_p.cxx
+    irc/private/channelurlreply_p.cxx
     irc/private/ctcpreply_p.cxx
     irc/private/globalusersreply_p.cxx
     irc/private/joinreply_p.cxx

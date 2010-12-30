@@ -80,7 +80,7 @@ SocketPrivate::commandReceived(const Aki::Irc::ReplyInfo& message)
     case RPL_SAVENICK: {
         break;
     }
-    case RPL_TRACELINK: {
+    case RPL_TRACELINK:
     case RPL_TRACECONNECTING:
     case RPL_TRACEHANDSHAKE:
     case RPL_TRACEUNKNOWN:
@@ -88,11 +88,11 @@ SocketPrivate::commandReceived(const Aki::Irc::ReplyInfo& message)
     case RPL_TRACEUSER:
     case RPL_TRACESERVER:
     case RPL_TRACENEWTYPE:
-    case RPL_TRACECLASS:
+    case RPL_TRACECLASS: {
         //emit _q->onTraceMessage(message);
         break;
     }
-    case RPL_STATSLINKINFO: {
+    case RPL_STATSLINKINFO:
     case RPL_STATSCOMMANDS:
     case RPL_STATSCLINE:
     case RPL_STATSNLINE:
@@ -101,24 +101,24 @@ SocketPrivate::commandReceived(const Aki::Irc::ReplyInfo& message)
     case RPL_STATSQLINE:
     case RPL_STATSYLINE:
     case RPL_ENDOFSTATS:
-    case RPL_STATSPLINE:
+    case RPL_STATSPLINE: {
         //emit _q->onStatsMessage(message);
         break;
     }
     case RPL_UMODEIS: {
         break;
     }
-    case RPL_STATSFLINE: {
-    case RPL_STATSDLINE:
+    case RPL_STATSFLINE:
+    case RPL_STATSDLINE: {
         //emit _q->onStatsMessage(message);
         break;
     }
-    case RPL_SERVLIST: {
-    case RPL_SERVLISTEND:
+    case RPL_SERVLIST:
+    case RPL_SERVLISTEND: {
         //emit _q->onServerListMessage(message);
         break;
     }
-    case RPL_STATSLLINE: {
+    case RPL_STATSLLINE:
     case RPL_STATSUPTIME:
     case RPL_STATSOLINE:
     case RPL_STATSHLINE:
@@ -126,27 +126,27 @@ SocketPrivate::commandReceived(const Aki::Irc::ReplyInfo& message)
     case RPL_STATSXLINE:
     case RPL_STATSULINE:
     case RPL_STATSDEBUG:
-    case RPL_STATSCONN:
+    case RPL_STATSCONN: {
         //emit _q->onStatsMessage(message);
         break;
     }
-    case RPL_LUSERCLIENT: {
+    case RPL_LUSERCLIENT:
     case RPL_LUSEROP:
     case RPL_LUSERUNKNOWN:
     case RPL_LUSERCHANNELS:
-    case RPL_LUSERME:
+    case RPL_LUSERME: {
         emit _q->onLUserReply(Aki::Irc::LUserReply(message));
         break;
     }
-    case RPL_ADMINME: {
+    case RPL_ADMINME:
     case RPL_ADMINLOC1:
     case RPL_ADMINLOC2:
-    case RPL_ADMINEMAIL:
+    case RPL_ADMINEMAIL: {
         emit _q->onAdminReply(Aki::Irc::AdminReply(message));
         break;
     }
-    case RPL_TRACELOG: {
-    case RPL_ENDOFTRACE:
+    case RPL_TRACELOG:
+    case RPL_ENDOFTRACE: {
         //emit _q->onTraceMessage(message);
         break;
     }
@@ -167,8 +167,8 @@ SocketPrivate::commandReceived(const Aki::Irc::ReplyInfo& message)
     case RPL_WHOISCERTFP: {
         break;
     }
-    case RPL_ACCEPTLIST:{
-    case RPL_ENDOFACCEPT:
+    case RPL_ACCEPTLIST:
+    case RPL_ENDOFACCEPT: {
         break;
     }
     case RPL_NONE: {
@@ -191,15 +191,15 @@ SocketPrivate::commandReceived(const Aki::Irc::ReplyInfo& message)
     case RPL_TEXT: {
         break;
     }
-    case RPL_UNAWAY: {
-    case RPL_NOWAWAY:
+    case RPL_UNAWAY:
+    case RPL_NOWAWAY: {
         ///TODO: Fix me
         //emit _q->onAwayMessage(Aki::Irc::AwayMessage(message));
         break;
     }
-    case RPL_WHOISUSER: {
+    case RPL_WHOISUSER: 
     case RPL_WHOISSERVER:
-    case RPL_WHOISOPERATOR:
+    case RPL_WHOISOPERATOR: {
         //emit _q->onWhoIsMessage(message);
         break;
     }
@@ -211,10 +211,10 @@ SocketPrivate::commandReceived(const Aki::Irc::ReplyInfo& message)
         emit _q->onWhoReply(Aki::Irc::WhoReply(message));
         break;
     }
-    case RPL_WHOISIDLE: {
+    case RPL_WHOISIDLE: 
     case RPL_ENDOFWHOIS:
     case RPL_WHOISCHANNELS:
-    case RPL_WHOISSPECIAL:
+    case RPL_WHOISSPECIAL: {
         //emit _q->onWhoIsMessage(message);
         break;
     }
@@ -231,6 +231,7 @@ SocketPrivate::commandReceived(const Aki::Irc::ReplyInfo& message)
         break;
     }
     case RPL_CHANNELURL: {
+        emit _q->onChannelUrlReply(Aki::Irc::ChannelUrlReply(message));
         break;
     }
     case RPL_CREATIONTIME: {

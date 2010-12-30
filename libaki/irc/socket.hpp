@@ -28,6 +28,7 @@
 #include "irc/banreply.hpp"
 #include "irc/basesocket.hpp"
 #include "irc/channelmessagereply.hpp"
+#include "irc/channelurlreply.hpp"
 #include "irc/ctcpreply.hpp"
 #include "irc/globalusersreply.hpp"
 #include "irc/joinreply.hpp"
@@ -67,6 +68,7 @@ Q_SIGNALS:
     void onAwayReply(const Aki::Irc::AwayReply& reply);
     void onBanListReply(const Aki::Irc::BanReply& reply);
     void onChannelMessageReply(const Aki::Irc::ChannelMessageReply& reply);
+    void onChannelUrlReply(const Aki::Irc::ChannelUrlReply& reply);
     void onCtcpReply(const Aki::Irc::CtcpReply& reply);
     void onErrorReply(const Aki::Irc::Message& errorMessage);
     void onExceptListReply(const Aki::Irc::Message& exceptListMessage);
