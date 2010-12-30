@@ -28,11 +28,12 @@ namespace Aki
 {
 namespace Irc
 {
-class LocalUsersReplyPrivate : public QSharedData
+class LocalUsersReplyPrivate
+    : public QSharedData
 {
 public:
     LocalUsersReplyPrivate();
-    LocalUsersReplyPrivate(const LocalUsersReplyPrivate& other);
+    LocalUsersReplyPrivate(const Aki::Irc::LocalUsersReplyPrivate& other);
 public:
     int local;
     int max;

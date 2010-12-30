@@ -43,7 +43,7 @@ NamesReply::NamesReply(const Aki::Irc::ReplyInfo& replyInfo, bool lastMessage)
     }
 }
 
-NamesReply::NamesReply(const NamesReply& other)
+NamesReply::NamesReply(const Aki::Irc::NamesReply& other)
     : Aki::Irc::Reply(other),
     _d(new Aki::Irc::NamesReplyPrivate)
 {
@@ -54,7 +54,7 @@ NamesReply::~NamesReply()
 }
 
 Aki::Irc::NamesReply&
-NamesReply::operator=(const NamesReply& other)
+NamesReply::operator=(const Aki::Irc::NamesReply& other)
 {
     Aki::Irc::Reply::operator=(other);
     _d = other._d;

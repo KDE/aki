@@ -35,9 +35,9 @@ class LIBAKI_EXPORT ActionReply
 public:
     ActionReply();
     explicit ActionReply(const Aki::Irc::CtcpReply& reply);
-    ActionReply(const ActionReply& other);
-    virtual ~ActionReply();
-    virtual ActionReply& operator=(const ActionReply& other);
+    ActionReply(const Aki::Irc::ActionReply& other);
+    ~ActionReply();
+    Aki::Irc::ActionReply& operator=(const Aki::Irc::ActionReply& other);
     QString message() const;
 private:
     QSharedDataPointer<Aki::Irc::ActionReplyPrivate> _d;

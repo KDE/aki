@@ -37,7 +37,7 @@ public:
     explicit CtcpReply(const Aki::Irc::ReplyInfo& replyInfo);
     CtcpReply(const CtcpReply& other);
     virtual ~CtcpReply();
-    Aki::Irc::CtcpReply& operator=(const CtcpReply& other);
+    Aki::Irc::CtcpReply& operator=(const Aki::Irc::CtcpReply& other);
     QString channel() const;
     QString command() const;
     QString param() const;

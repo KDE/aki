@@ -31,7 +31,7 @@ NamesReplyPrivate::NamesReplyPrivate()
 {
 }
 
-NamesReplyPrivate::NamesReplyPrivate(const NamesReplyPrivate& other)
+NamesReplyPrivate::NamesReplyPrivate(const Aki::Irc::NamesReplyPrivate& other)
     : QSharedData(other),
     channel(other.channel),
     message(other.message),

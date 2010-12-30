@@ -30,7 +30,7 @@ TopicReplyPrivate::TopicReplyPrivate()
 {
 }
 
-TopicReplyPrivate::TopicReplyPrivate(const TopicReplyPrivate& other)
+TopicReplyPrivate::TopicReplyPrivate(const Aki::Irc::TopicReplyPrivate& other)
     : QSharedData(other),
     channel(other.channel),
     topic(other.topic),

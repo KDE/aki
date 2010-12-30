@@ -33,7 +33,7 @@ class JoinReplyPrivate
 {
 public:
     JoinReplyPrivate();
-    JoinReplyPrivate(const JoinReplyPrivate& other);
+    JoinReplyPrivate(const Aki::Irc::JoinReplyPrivate& other);
 public:
     QString channel;
 }; // End of class JoinReplyPrivate.

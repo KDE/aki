@@ -35,7 +35,3 @@ ReplyInfoPrivate::ReplyInfoPrivate(const Aki::Irc::ReplyInfoPrivate& other)
     replyCode(other.replyCode)
 {
 }
-
-ReplyInfoPrivate::~ReplyInfoPrivate()
-{
-}

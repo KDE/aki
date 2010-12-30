@@ -33,7 +33,7 @@ class NickReplyPrivate
 {
 public:
     NickReplyPrivate();
-    NickReplyPrivate(const NickReplyPrivate& other);
+    NickReplyPrivate(const Aki::Irc::NickReplyPrivate& other);
 public:
     QString oldNick;
     QString newNick;

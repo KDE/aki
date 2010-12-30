@@ -33,7 +33,7 @@ class PrivateMessageReplyPrivate
 {
 public:
     PrivateMessageReplyPrivate();
-    PrivateMessageReplyPrivate(const PrivateMessageReplyPrivate& other);
+    PrivateMessageReplyPrivate(const Aki::Irc::PrivateMessageReplyPrivate& other);
 public:
     QString message;
 }; // End of class PrivateMessageReplyPrivate.

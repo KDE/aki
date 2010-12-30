@@ -31,7 +31,3 @@ ReplyPrivate::ReplyPrivate(const Aki::Irc::ReplyPrivate& other)
     reply(other.reply)
 {
 }
-
-ReplyPrivate::~ReplyPrivate()
-{
-}

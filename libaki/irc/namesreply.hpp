@@ -36,7 +36,7 @@ public:
     NamesReply();
     explicit NamesReply(const Aki::Irc::ReplyInfo& replyInfo, bool lastMessage = false);
     NamesReply(const Aki::Irc::NamesReply& other);
-    virtual ~NamesReply();
+    ~NamesReply();
     Aki::Irc::NamesReply& operator=(const Aki::Irc::NamesReply& other);
     QString channel() const;
     bool isLastMessage() const;

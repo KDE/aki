@@ -33,7 +33,7 @@ PrivateMessageReply::PrivateMessageReply(const Aki::Irc::ReplyInfo& replyInfo)
     : Aki::Irc::Reply(replyInfo),
     _d(new Aki::Irc::PrivateMessageReplyPrivate)
 {
-    _d->message = replyInfo.params().at(1);
+    _d->message = replyInfo.params().at(2);
 }
 
 PrivateMessageReply::PrivateMessageReply(const Aki::Irc::PrivateMessageReply& other)

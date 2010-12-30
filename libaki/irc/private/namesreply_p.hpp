@@ -33,7 +33,7 @@ class NamesReplyPrivate
 {
 public:
     NamesReplyPrivate();
-    NamesReplyPrivate(const NamesReplyPrivate& other);
+    NamesReplyPrivate(const Aki::Irc::NamesReplyPrivate& other);
 public:
     QString channel;
     QString message;

@@ -30,7 +30,7 @@ LocalUsersReplyPrivate::LocalUsersReplyPrivate()
 {
 }
 
-LocalUsersReplyPrivate::LocalUsersReplyPrivate(const LocalUsersReplyPrivate& other)
+LocalUsersReplyPrivate::LocalUsersReplyPrivate(const Aki::Irc::LocalUsersReplyPrivate& other)
     : QSharedData(other),
     local(other.local),
     max(other.max),

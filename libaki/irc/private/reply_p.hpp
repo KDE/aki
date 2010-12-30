@@ -34,7 +34,6 @@ class ReplyPrivate
 public:
     ReplyPrivate();
     ReplyPrivate(const Aki::Irc::ReplyPrivate& other);
-    ~ReplyPrivate();
 public:
     Aki::Irc::ReplyInfo reply;
 }; // End of class ReplyPrivate.

@@ -28,7 +28,7 @@ JoinReplyPrivate::JoinReplyPrivate()
 {
 }
 
-JoinReplyPrivate::JoinReplyPrivate(const JoinReplyPrivate& other)
+JoinReplyPrivate::JoinReplyPrivate(const Aki::Irc::JoinReplyPrivate& other)
     : QSharedData(other),
     channel(other.channel)
 {

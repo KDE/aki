@@ -33,7 +33,7 @@ class TopicReplyPrivate
 {
 public:
     TopicReplyPrivate();
-    TopicReplyPrivate(const TopicReplyPrivate& other);
+    TopicReplyPrivate(const Aki::Irc::TopicReplyPrivate& other);
 public:
     QString channel;
     QString topic;

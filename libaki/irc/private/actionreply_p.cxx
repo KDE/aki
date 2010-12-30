@@ -28,7 +28,7 @@ ActionReplyPrivate::ActionReplyPrivate()
 {
 }
 
-ActionReplyPrivate::ActionReplyPrivate(const ActionReplyPrivate& other)
+ActionReplyPrivate::ActionReplyPrivate(const Aki::Irc::ActionReplyPrivate& other)
     : QSharedData(other),
     message(other.message)
 {

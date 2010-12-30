@@ -37,8 +37,6 @@ class ReplyInfoPrivate
 public:
     ReplyInfoPrivate();
     ReplyInfoPrivate(const Aki::Irc::ReplyInfoPrivate& other);
-    ~ReplyInfoPrivate();
-    //Aki::Irc::ReplyInfoPrivate& operator=(const Aki::Irc::ReplyInfoPrivate& other);
 public:
     Aki::Irc::NickInfo sender;
     QString command;

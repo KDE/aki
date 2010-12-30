@@ -29,15 +29,15 @@ namespace Aki
 namespace Irc
 {
 class PrivateMessageReplyPrivate;
-class PrivateMessageReply
+class LIBAKI_EXPORT PrivateMessageReply
     : public Aki::Irc::Reply
 {
 public:
     PrivateMessageReply();
     explicit PrivateMessageReply(const Aki::Irc::ReplyInfo& replyInfo);
-    PrivateMessageReply(const PrivateMessageReply& other);
-    virtual ~PrivateMessageReply();
-    virtual PrivateMessageReply& operator=(const PrivateMessageReply& other);
+    PrivateMessageReply(const Aki::Irc::PrivateMessageReply& other);
+    ~PrivateMessageReply();
+    Aki::Irc::PrivateMessageReply& operator=(const Aki::Irc::PrivateMessageReply& other);
     QString message() const;
 private:
     QSharedDataPointer<Aki::Irc::PrivateMessageReplyPrivate> _d;

@@ -28,11 +28,12 @@ namespace Aki
 {
 namespace Irc
 {
-class GlobalUsersReplyPrivate : public QSharedData
+class GlobalUsersReplyPrivate
+    : public QSharedData
 {
 public:
     GlobalUsersReplyPrivate();
-    GlobalUsersReplyPrivate(const GlobalUsersReplyPrivate& other);
+    GlobalUsersReplyPrivate(const Aki::Irc::GlobalUsersReplyPrivate& other);
 public:
     int global;
     int max;

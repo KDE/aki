@@ -33,7 +33,7 @@ class ChannelMessageReplyPrivate
 {
 public:
     ChannelMessageReplyPrivate();
-    ChannelMessageReplyPrivate(const ChannelMessageReplyPrivate& other);
+    ChannelMessageReplyPrivate(const Aki::Irc::ChannelMessageReplyPrivate& other);
 public:
     QString channel;
 }; // End of class ChannelMessageReplyPrivate.

@@ -29,7 +29,7 @@ NickReplyPrivate::NickReplyPrivate()
 {
 }
 
-NickReplyPrivate::NickReplyPrivate(const NickReplyPrivate& other)
+NickReplyPrivate::NickReplyPrivate(const Aki::Irc::NickReplyPrivate& other)
     : QSharedData(other),
     oldNick(other.oldNick),
     newNick(other.newNick)

@@ -33,7 +33,7 @@ class ActionReplyPrivate
 {
 public:
     ActionReplyPrivate();
-    ActionReplyPrivate(const ActionReplyPrivate& other);
+    ActionReplyPrivate(const Aki::Irc::ActionReplyPrivate& other);
 public:
     QString message;
 }; // End of class ActionReplyPrivate.
