@@ -208,7 +208,7 @@ SocketPrivate::commandReceived(const Aki::Irc::ReplyInfo& message)
         break;
     }
     case RPL_ENDOFWHO: {
-        //emit _q->onWhoMessage(message);
+        emit _q->onWhoReply(Aki::Irc::WhoReply(message));
         break;
     }
     case RPL_WHOISIDLE: {
@@ -275,7 +275,7 @@ SocketPrivate::commandReceived(const Aki::Irc::ReplyInfo& message)
         break;
     }
     case RPL_WHOREPLY: {
-        //emit _q->onWhoMessage(message);
+        emit _q->onWhoReply(Aki::Irc::WhoReply(message));
         break;
     }
     case RPL_WHOSPCRPL: {

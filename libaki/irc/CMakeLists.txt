@@ -20,12 +20,13 @@ set(akicore_irc_SRCS
     irc/nickreply.cxx
     irc/noticereply.cxx
     irc/privatemessagereply.cxx
+    irc/quitreply.cxx
     irc/reply.cxx
     irc/replyinfo.cxx
     irc/rfc2812.cxx
     irc/socket.cxx
     irc/startupreply.cxx
     irc/topicreply.cxx
-    irc/quitreply.cxx
+    irc/whoreply.cxx
     ${akicore_ircprivate_SRCS}
 )

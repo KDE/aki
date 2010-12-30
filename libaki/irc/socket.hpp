@@ -41,6 +41,7 @@
 #include "irc/privatemessagereply.hpp"
 #include "irc/startupreply.hpp"
 #include "irc/topicreply.hpp"
+#include "irc/whoreply.hpp"
 #include <QtCore/QList>
 
 namespace Aki
@@ -102,7 +103,7 @@ Q_SIGNALS:
     void onUserHostReply(const Aki::Irc::Message& userHostMessage);
     void onUsersReply(const Aki::Irc::Message& usersMessage);
     void onWhoIsReply(const Aki::Irc::Message& whoisMessage);
-    void onWhoReply(const Aki::Irc::Message& whoMessage);
+    void onWhoReply(const Aki::Irc::WhoReply& reply);
     void onWhoWasReply(const Aki::Irc::Message& whoWasMessage);
 private:
     Q_PRIVATE_SLOT(_d, void error(Aki::Irc::BaseSocket::SocketError))
