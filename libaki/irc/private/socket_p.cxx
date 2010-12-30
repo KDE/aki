@@ -247,7 +247,7 @@ SocketPrivate::commandReceived(const Aki::Irc::ReplyInfo& message)
         break;
     }
     case RPL_TOPICWHOTIME: {
-        //emit _q->onTopicMessage(message);
+        emit _q->onTopicSetByReply(Aki::Irc::TopicSetByReply(message));
         break;
     }
     case RPL_WHOISACTUALLY: {
