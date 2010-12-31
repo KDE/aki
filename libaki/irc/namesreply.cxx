@@ -29,11 +29,11 @@ NamesReply::NamesReply()
 {
 }
 
-NamesReply::NamesReply(const Aki::Irc::ReplyInfo& replyInfo, bool lastMessage)
+NamesReply::NamesReply(const Aki::Irc::ReplyInfo& replyInfo)
     : Aki::Irc::Reply(replyInfo),
     _d(new Aki::Irc::NamesReplyPrivate)
 {
-    _d->lastMessage = lastMessage;
+    _d->lastMessage = (replyInfo.numeric() == Aki::Irc::RPL_ENDOFNAMES);
     if (!_d->lastMessage) {
         _d->channel = replyInfo.params().at(2);
         _d->names = replyInfo.params().at(3).split(' ');

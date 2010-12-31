@@ -298,7 +298,7 @@ SocketPrivate::commandReceived(const Aki::Irc::ReplyInfo& message)
         break;
     }
     case RPL_ENDOFNAMES: {
-        emit _q->onNamesReply(Aki::Irc::NamesReply(message, true));
+        emit _q->onNamesReply(Aki::Irc::NamesReply(message));
         break;
     }
     case RPL_KILLDONE: {
@@ -343,7 +343,7 @@ SocketPrivate::commandReceived(const Aki::Irc::ReplyInfo& message)
     case RPL_MOTDSTART: {
     case RPL_ENDOFMOTD:
         if (_q->isMotdEnabled()) {
-            emit _q->onMotdReply(Aki::Irc::MotdReply(message, (message.numeric() == RPL_ENDOFMOTD)));
+            emit _q->onMotdReply(Aki::Irc::MotdReply(message));
         }
         break;
     }

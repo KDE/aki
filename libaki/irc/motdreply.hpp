@@ -35,7 +35,7 @@ class LIBAKI_EXPORT MotdReply
 {
 public:
     MotdReply();
-    explicit MotdReply(const Aki::Irc::ReplyInfo& replyInfo, bool lastMessage = false);
+    explicit MotdReply(const Aki::Irc::ReplyInfo& replyInfo);
     MotdReply(const Aki::Irc::MotdReply& other);
     ~MotdReply();
     Aki::Irc::MotdReply& operator=(const Aki::Irc::MotdReply& other);

@@ -34,7 +34,7 @@ class LIBAKI_EXPORT NamesReply
 {
 public:
     NamesReply();
-    explicit NamesReply(const Aki::Irc::ReplyInfo& replyInfo, bool lastMessage = false);
+    explicit NamesReply(const Aki::Irc::ReplyInfo& replyInfo);
     NamesReply(const Aki::Irc::NamesReply& other);
     ~NamesReply();
     Aki::Irc::NamesReply& operator=(const Aki::Irc::NamesReply& other);

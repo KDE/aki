@@ -29,12 +29,12 @@ MotdReply::MotdReply()
 {
 }
 
-MotdReply::MotdReply(const Aki::Irc::ReplyInfo& replyInfo, bool lastMessage)
+MotdReply::MotdReply(const Aki::Irc::ReplyInfo& replyInfo)
     : Aki::Irc::Reply(replyInfo),
     _d(new Aki::Irc::MotdReplyPrivate)
 {
     _d->message = reply().params().at(1);
-    _d->isLast = lastMessage;
+    _d->isLast = (replyInfo.numeric() == Aki::Irc::RPL_ENDOFMOTD);
 }
 
 MotdReply::MotdReply(const Aki::Irc::MotdReply& other)
