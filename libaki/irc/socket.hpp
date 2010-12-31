@@ -59,6 +59,7 @@ class LIBAKI_EXPORT Socket
 {
     Q_OBJECT
     Q_PROPERTY(bool isMotdEnabled READ isMotdEnabled WRITE setMotd)
+    Q_PROPERTY(bool isSaslEnabled READ isSaslEnabled WRITE setSasl)
 public:
     typedef QHash<QString,QString> ServerCapabilities;
     explicit Socket(QObject* parent = 0);
@@ -66,8 +67,10 @@ public:
     virtual ~Socket();
     void connectSlotsBySignals(Aki::Irc::Socket* socket);
     bool isMotdEnabled() const;
+    bool isSaslEnabled() const;
     Aki::Irc::Socket::ServerCapabilities serverCapabilities() const;
     void setMotd(bool enable);
+    void setSasl(bool enable);
 Q_SIGNALS:
     void onActionReply(const Aki::Irc::ActionReply& reply);
     void onAdminReply(const Aki::Irc::AdminReply& reply);

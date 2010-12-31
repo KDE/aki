@@ -121,6 +121,12 @@ Socket::isMotdEnabled() const
     return _d->isMotdEnabled;
 }
 
+bool
+Socket::isSaslEnabled() const
+{
+    return _d->isSaslEnabled;
+}
+
 Aki::Irc::Socket::ServerCapabilities
 Socket::serverCapabilities() const
 {
@@ -131,6 +137,12 @@ void
 Socket::setMotd(bool enable)
 {
     _d->isMotdEnabled = enable;
+}
+
+void
+Socket::setSasl(bool enable)
+{
+    _d->isSaslEnabled = enable;
 }
 
 #include "irc/socket.moc"

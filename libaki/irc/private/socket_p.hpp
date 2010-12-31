@@ -40,6 +40,7 @@ public:
 public:
     Aki::Irc::Socket::ServerCapabilities serverCapabilities;
     bool isMotdEnabled;
+    bool isSaslEnabled;
 private:
     QString removeStringToFirstWhitespace(QString* line);
     QString removeStringToFirstWhitespace(QString* line, int start, int stop);

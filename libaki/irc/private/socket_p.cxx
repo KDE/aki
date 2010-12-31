@@ -27,6 +27,7 @@ using namespace Irc;
 
 SocketPrivate::SocketPrivate(Aki::Irc::Socket* qq)
     : isMotdEnabled(true),
+    isSaslEnabled(false),
     _q(qq)
 {
 }
@@ -616,6 +617,7 @@ SocketPrivate::error(Aki::Irc::BaseSocket::SocketError error)
 void
 SocketPrivate::messageReceived(const Aki::Irc::ReplyInfo& message)
 {
+    qDebug() << message;
     const QString command = message.command().toUpper();
     if (command == "NOTICE") {
         if (message.message().startsWith('\1') &&
@@ -655,6 +657,49 @@ SocketPrivate::messageReceived(const Aki::Irc::ReplyInfo& message)
         
     } else if (command == "JOIN") {
         emit _q->onJoinReply(Aki::Irc::JoinReply(message));
+    } else if (command == "CAP") {
+        const QString subCommand = message.params().at(1);
+        const QStringList split = message.params().value(2).split(' ');
+        if (subCommand == "LS") {
+            QStringList avail;
+            foreach (const QString& support, split) {
+                if (support == "multi-prefix") {
+                    avail.append("multi-prefix");
+                } else if (support == "sasl") {
+                    if (_q->isSaslEnabled()) {
+                        avail.append("sasl");
+                    }
+                } else if (support == "identify-msg") {
+                    avail.append("identify-msg");
+                }
+            }
+
+            if (!avail.isEmpty()) {
+                _q->sendMessage(Aki::Irc::Rfc2812::raw(QString("CAP REQ :%1").arg(avail.join(" "))));
+            } else {
+                _q->sendMessage(Aki::Irc::Rfc2812::raw("CAP END"));
+            }
+        } else if (subCommand == "ACK") {
+            foreach (const QString& support, split) {
+                if (support == "sasl") {
+                    if (_q->isSaslEnabled()) {
+                        _q->sendMessage(Aki::Irc::Rfc2812::raw("AUTHENTICATE PLAIN"));
+                    }
+                }
+            }
+        } else if (subCommand == "NAK") {
+            _q->sendMessage(Aki::Irc::Rfc2812::raw("CAP END"));
+        } else if (subCommand == "LIST") {
+            
+        }
+    } else if (command == "AUTHENTICATE") {
+        if (_q->isSaslEnabled()) {
+            const QString nick = _q->currentNick().toLower();
+            const QString password = _q->servicePassword();
+            const QByteArray base64 = (nick + '\0' + nick + '\0' + password).toAscii().toBase64();
+
+            _q->sendMessage(Aki::Irc::Rfc2812::raw(QString("AUTHENTICATE %1").arg(QString(base64))));
+        }
     }
 }
 
@@ -729,6 +774,7 @@ SocketPrivate::stateChanged(Aki::Irc::BaseSocket::SocketState state)
             _q->sendMessage(Aki::Irc::Rfc2812::pass(_q->serverPassword()));
         }
 
+        _q->sendMessage(Aki::Irc::Rfc2812::raw("CAP LS"));
         _q->sendMessage(Aki::Irc::Rfc2812::user(_q->identName(), false, _q->realName()));
         _q->sendMessage(Aki::Irc::Rfc2812::nick(_q->currentNick()));
         break;
