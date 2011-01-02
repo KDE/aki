@@ -12,6 +12,7 @@ set(akicore_ircprivate_SRCS
     irc/private/invitesentreply_p.cxx
     irc/private/joinreply_p.cxx
     irc/private/kickreply_p.cxx
+    irc/private/linksreplyprivate.cxx
     irc/private/localusersreply_p.cxx
     irc/private/luserreply_p.cxx
     irc/private/message_p.cxx

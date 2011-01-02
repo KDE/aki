@@ -33,9 +33,15 @@ GlobalUsersReply::GlobalUsersReply(const Aki::Irc::ReplyInfo& replyInfo)
     : Aki::Irc::Reply(replyInfo),
     _d(new Aki::Irc::GlobalUsersReplyPrivate)
 {
-    _d->global = replyInfo.params().at(1).toInt();
-    _d->max = replyInfo.params().at(2).toInt();
-    _d->message = replyInfo.params().at(3);
+    if (replyInfo.params().count() > 2) {
+        _d->global = replyInfo.params().at(1).toInt();
+        _d->max = replyInfo.params().at(2).toInt();
+        _d->message = replyInfo.params().at(3);
+    } else {
+        // This is a fix for afternet
+        // Need to make it so that we get the global/max count.
+        _d->message = replyInfo.params().at(1);
+    }
 }
 
 GlobalUsersReply::GlobalUsersReply(const Aki::Irc::GlobalUsersReply& other)

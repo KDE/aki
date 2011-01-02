@@ -556,6 +556,7 @@ SocketPrivate::commandReceived(const Aki::Irc::ReplyInfo& message)
         break;
     }
     case RPL_SASLSUCCESS: {
+        _q->sendMessage(Aki::Irc::Rfc2812::raw("CAP END"));
         break;
     }
     case ERR_SASLFAIL: {
@@ -627,13 +628,18 @@ SocketPrivate::messageReceived(const Aki::Irc::ReplyInfo& message)
             emit _q->onNoticeReply(Aki::Irc::NoticeReply(message));
         }
     } else if (command == "PRIVMSG") {
+        // We need to check if this is a ctcp reply privmsg.
         if (message.params().at(1).startsWith('\1') &&
             message.params().at(1).endsWith('\1')) {
+            // Get the message which will be for example <ACTION> <message>
             QString tmpMessage = message.params().at(1);
 
+            // Remove the \1 from the beginning.
             tmpMessage.remove(0, 1);
+            // Remove the last \1 at the end.
             tmpMessage.remove(tmpMessage.count() - 1, 1);
 
+            // Remove the message from the start
             const QString cmd = removeStringToFirstWhitespace(&tmpMessage);
             if (cmd.toUpper() == "ACTION") {
                 emit _q->onActionReply(Aki::Irc::ActionReply(Aki::Irc::CtcpReply(message)));
@@ -641,8 +647,10 @@ SocketPrivate::messageReceived(const Aki::Irc::ReplyInfo& message)
                 emit _q->onCtcpReply(Aki::Irc::CtcpReply(message));
             }
         } else if (message.params().at(1) == _q->currentNick()) {
+            // We gotten a privmsg meant for the user only.
             emit _q->onPrivateMessageReply(Aki::Irc::PrivateMessageReply(message));
         } else {
+            // We gotten a privmsg meant for the channel.
             emit _q->onChannelMessageReply(Aki::Irc::ChannelMessageReply(Aki::Irc::PrivateMessageReply(message)));
         }
     } else if (command == "KICK") {
@@ -700,6 +708,8 @@ SocketPrivate::messageReceived(const Aki::Irc::ReplyInfo& message)
 
             _q->sendMessage(Aki::Irc::Rfc2812::raw(QString("AUTHENTICATE %1").arg(QString(base64))));
         }
+    } else if (command == "PING") {
+        _q->sendMessage(Aki::Irc::Rfc2812::pong(message.params().at(0)));
     }
 }
 

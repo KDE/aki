@@ -14,6 +14,7 @@ set(akicore_irc_SRCS
     irc/invitesentreply.cxx
     irc/joinreply.cxx
     irc/kickreply.cxx
+    irc/linksreply.cxx
     irc/localusersreply.cxx
     irc/luserreply.cxx
     irc/message.cxx

@@ -18,64 +18,37 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-#include "localusersreply.hpp"
-#include "private/localusersreply_p.hpp"
+#include "linksreply.hpp"
+#include "private/linksreplyprivate.hpp"
 using namespace Aki;
 using namespace Irc;
 
-LocalUsersReply::LocalUsersReply()
+LinksReply::LinksReply()
     : Aki::Irc::Reply(),
-    _d(new Aki::Irc::LocalUsersReplyPrivate)
+    _d(new Aki::Irc::LinksReplyPrivate)
 {
 }
 
-LocalUsersReply::LocalUsersReply(const Aki::Irc::ReplyInfo& replyInfo)
+LinksReply::LinksReply(const Aki::Irc::ReplyInfo& replyInfo)
     : Aki::Irc::Reply(replyInfo),
-    _d(new Aki::Irc::LocalUsersReplyPrivate)
+    _d(new Aki::Irc::LinksReplyPrivate)
 {
-    if (replyInfo.params().count() > 2) {
-        _d->local = replyInfo.params().at(1).toInt();
-        _d->max = replyInfo.params().at(2).toInt();
-        _d->message = replyInfo.params().at(3);
-    } else {
-        // This is a fix for afternet
-        // Need to make it so that we get the local/max count.
-        _d->message = replyInfo.params().at(1);
-    }
 }
 
-LocalUsersReply::LocalUsersReply(const Aki::Irc::LocalUsersReply& other)
+LinksReply::LinksReply(const Aki::Irc::LinksReply& other)
     : Aki::Irc::Reply(other),
     _d(other._d)
 {
 }
 
-LocalUsersReply::~LocalUsersReply()
+LinksReply::~LinksReply()
 {
 }
 
-Aki::Irc::LocalUsersReply&
-LocalUsersReply::operator=(const Aki::Irc::LocalUsersReply& other)
+Aki::Irc::LinksReply&
+LinksReply::operator=(const Aki::Irc::LinksReply& other)
 {
     Aki::Irc::Reply::operator=(other);
     _d = other._d;
     return *this;
-}
-
-int
-LocalUsersReply::local() const
-{
-    return _d->local;
-}
-
-int
-LocalUsersReply::max() const
-{
-    return _d->max;
-}
-
-QString
-LocalUsersReply::message() const
-{
-    return _d->message;
 }
