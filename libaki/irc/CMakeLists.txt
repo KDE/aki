@@ -29,6 +29,7 @@ set(akicore_irc_SRCS
     irc/rfc2812.cxx
     irc/socket.cxx
     irc/startupreply.cxx
+    irc/text.cxx
     irc/topicchangereply.cxx
     irc/topicsetbyreply.cxx
     irc/topicreply.cxx
