@@ -663,6 +663,8 @@ SocketPrivate::messageReceived(const Aki::Irc::ReplyInfo& message)
         emit _q->onInviteReply(Aki::Irc::InviteReply(message));
     } else if (command == "PART") {
         
+    } else if (command == "QUIT") {
+        emit _q->onQuitReply(Aki::Irc::QuitReply(message));
     } else if (command == "JOIN") {
         emit _q->onJoinReply(Aki::Irc::JoinReply(message));
     } else if (command == "CAP") {
