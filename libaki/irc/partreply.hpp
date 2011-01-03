@@ -29,7 +29,7 @@ namespace Aki
 namespace Irc
 {
 class PartReplyPrivate;
-class PartReply
+class LIBAKI_EXPORT PartReply
     : public Aki::Irc::Reply
 {
 public:
