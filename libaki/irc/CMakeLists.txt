@@ -7,6 +7,7 @@ set(akicore_irc_SRCS
     irc/banreply.cxx
     irc/basesocket.cxx
     irc/channelmessagereply.cxx
+    irc/channelmodereply.cxx
     irc/channelurlreply.cxx
     irc/ctcpreply.cxx
     irc/globalusersreply.cxx
@@ -18,7 +19,6 @@ set(akicore_irc_SRCS
     irc/localusersreply.cxx
     irc/luserreply.cxx
     irc/message.cxx
-    irc/modereply.cxx
     irc/motdreply.cxx
     irc/namesreply.cxx
     irc/nickinfo.cxx

@@ -5,6 +5,7 @@ set(akicore_ircprivate_SRCS
     irc/private/banreply_p.cxx
     irc/private/basesocket_p.cxx
     irc/private/channelmessagereply_p.cxx
+    irc/private/channelmodereply_p.cxx
     irc/private/channelurlreply_p.cxx
     irc/private/ctcpreply_p.cxx
     irc/private/globalusersreply_p.cxx
@@ -16,7 +17,6 @@ set(akicore_ircprivate_SRCS
     irc/private/localusersreply_p.cxx
     irc/private/luserreply_p.cxx
     irc/private/message_p.cxx
-    irc/private/modereply_p.cxx
     irc/private/motdreply_p.cxx
     irc/private/namesreply_p.cxx
     irc/private/nickinfo_p.cxx

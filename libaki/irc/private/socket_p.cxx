@@ -653,6 +653,23 @@ SocketPrivate::messageReceived(const Aki::Irc::ReplyInfo& message)
             // We gotten a privmsg meant for the channel.
             emit _q->onChannelMessageReply(Aki::Irc::ChannelMessageReply(Aki::Irc::PrivateMessageReply(message)));
         }
+    } else if (command == "MODE") {
+        if (message.sender().nick() == _q->currentNick()) {
+            if (message.params().count() == 2) {
+                // self user mode
+            } else if (message.params().at(0).startsWith('!') ||
+                       message.params().at(0).startsWith('&') ||
+                       message.params().at(0).startsWith('#') ||
+                       message.params().at(0).startsWith('+')) {
+                emit _q->onChannelModeReply(Aki::Irc::ChannelModeReply(message));
+            }
+        } else {
+            if (message.params().at(0) == _q->currentNick()) {
+                // User mode
+            } else {
+                emit _q->onChannelModeReply(Aki::Irc::ChannelModeReply(message));
+            }
+        }
     } else if (command == "KICK") {
         emit _q->onKickReply(Aki::Irc::KickReply(message));
     } else if (command == "NICK") {
