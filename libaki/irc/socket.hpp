@@ -42,6 +42,7 @@
 #include "irc/nickreply.hpp"
 #include "irc/noticereply.hpp"
 #include "irc/privatemessagereply.hpp"
+#include "irc/quitreply.hpp"
 #include "irc/startupreply.hpp"
 #include "irc/topicchangereply.hpp"
 #include "irc/topicreply.hpp"
@@ -104,6 +105,7 @@ Q_SIGNALS:
     void onOMotdReply(const Aki::Irc::Message& omotdMessage);
     void onPingPongReply(const Aki::Irc::Message& pingPongMessage);
     void onPrivateMessageReply(const Aki::Irc::PrivateMessageReply& reply);
+    void onQuitReply(const Aki::Irc::QuitReply& reply);
     void onServerListReply(const Aki::Irc::Message& serverListMessage);
     void onStartupReply(const Aki::Irc::StartupReply& reply);
     void onStatsReply(const Aki::Irc::Message& statsMessage);

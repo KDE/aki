@@ -18,44 +18,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-#include "quitreply.hpp"
-#include "private/quitreply_p.hpp"
-using namespace Aki;
-using namespace Irc;
+#ifndef AKI_IRC_PARTREPLY_P_HPP
+#define AKI_IRC_PARTREPLY_P_HPP
 
-QuitReply::QuitReply()
-    : Aki::Irc::Reply(),
-    _d(new Aki::Irc::QuitReplyPrivate)
-{
-}
+#include "aki.hpp"
+#include <QtCore/QSharedData>
 
-QuitReply::QuitReply(const Aki::Irc::ReplyInfo& replyInfo)
-    : Aki::Irc::Reply(replyInfo),
-    _d(new Aki::Irc::QuitReplyPrivate)
+namespace Aki
 {
-    _d->message = replyInfo.params().value(0);
-}
+namespace Irc
+{
+class PartReplyPrivate
+    : public QSharedData
+{
+public:
+    PartReplyPrivate();
+    PartReplyPrivate(const Aki::Irc::PartReplyPrivate& other);
+    QString channel;
+    QString message;
+}; // End of class PartReplyPrivate.
+} // End of namespace Irc.
+} // End of namespace Aki.
 
-QuitReply::QuitReply(const Aki::Irc::QuitReply& other)
-    : Aki::Irc::Reply(other),
-    _d(other._d)
-{
-}
-
-QuitReply::~QuitReply()
-{
-}
-
-Aki::Irc::QuitReply&
-QuitReply::operator=(const Aki::Irc::QuitReply& other)
-{
-    Aki::Irc::Reply::operator=(other);
-    _d = other._d;
-    return *this;
-}
-
-QString
-QuitReply::message() const
-{
-    return _d->message;
-}
+#endif // AKI_IRC_PARTREPLY_P_HPP

@@ -18,36 +18,37 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-#include "quitreply.hpp"
-#include "private/quitreply_p.hpp"
+#include "partreply.hpp"
+#include "private/partreply_p.hpp"
 using namespace Aki;
 using namespace Irc;
 
-QuitReply::QuitReply()
+PartReply::PartReply()
     : Aki::Irc::Reply(),
-    _d(new Aki::Irc::QuitReplyPrivate)
+    _d(new Aki::Irc::PartReplyPrivate)
 {
 }
 
-QuitReply::QuitReply(const Aki::Irc::ReplyInfo& replyInfo)
+PartReply::PartReply(const Aki::Irc::ReplyInfo& replyInfo)
     : Aki::Irc::Reply(replyInfo),
-    _d(new Aki::Irc::QuitReplyPrivate)
+    _d(new Aki::Irc::PartReplyPrivate)
 {
-    _d->message = replyInfo.params().value(0);
+    _d->channel = replyInfo.params().at(0);
+    _d->message = replyInfo.params().value(1);
 }
 
-QuitReply::QuitReply(const Aki::Irc::QuitReply& other)
+PartReply::PartReply(const Aki::Irc::PartReply& other)
     : Aki::Irc::Reply(other),
     _d(other._d)
 {
 }
 
-QuitReply::~QuitReply()
+PartReply::~PartReply()
 {
 }
 
-Aki::Irc::QuitReply&
-QuitReply::operator=(const Aki::Irc::QuitReply& other)
+Aki::Irc::PartReply&
+PartReply::operator=(const Aki::Irc::PartReply& other)
 {
     Aki::Irc::Reply::operator=(other);
     _d = other._d;
@@ -55,7 +56,13 @@ QuitReply::operator=(const Aki::Irc::QuitReply& other)
 }
 
 QString
-QuitReply::message() const
+PartReply::channel() const
+{
+    return _d->channel;
+}
+
+QString
+PartReply::message() const
 {
     return _d->message;
 }
