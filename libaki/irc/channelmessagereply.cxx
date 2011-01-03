@@ -33,7 +33,7 @@ ChannelMessageReply::ChannelMessageReply(const Aki::Irc::PrivateMessageReply& re
     : PrivateMessageReply(reply),
     _d(new Aki::Irc::ChannelMessageReplyPrivate)
 {
-    _d->channel = reply.reply().params().at(1);
+    _d->channel = reply.reply().params().at(0);
 }
 
 ChannelMessageReply::ChannelMessageReply(const Aki::Irc::ChannelMessageReply& other)
