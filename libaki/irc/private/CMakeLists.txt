@@ -34,5 +34,6 @@ set(akicore_ircprivate_SRCS
     irc/private/topicchangereply_p.cxx
     irc/private/topicreply_p.cxx
     irc/private/topicsetbyreply_p.cxx
+    irc/private/user_p.cxx
     irc/private/whoreply_p.cxx
 )

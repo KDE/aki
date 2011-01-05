@@ -38,6 +38,7 @@ set(akicore_irc_SRCS
     irc/topicchangereply.cxx
     irc/topicsetbyreply.cxx
     irc/topicreply.cxx
+    irc/user.cxx
     irc/whoreply.cxx
     ${akicore_ircprivate_SRCS}
 )

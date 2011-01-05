@@ -18,37 +18,30 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-#ifndef AKI_IRC_NICKINFO_HPP
-#define AKI_IRC_NICKINFO_HPP
+#ifndef AKI_IRC_USER_P_HPP
+#define AKI_IRC_USER_P_HPP
 
-#include "aki.hpp"
+#include "irc/nickinfo.hpp"
+#include <QtCore/QDateTime>
+#include <QtGui/QColor>
 
 namespace Aki
 {
 namespace Irc
 {
-class NickInfoPrivate;
-class LIBAKI_EXPORT NickInfo
+class UserPrivate
 {
 public:
-    NickInfo();
-    explicit NickInfo(const QString& hostmask);
-    NickInfo(const Aki::Irc::NickInfo& other);
-    ~NickInfo();
-    Aki::Irc::NickInfo& operator=(const Aki::Irc::NickInfo& rhs);
-    QString host() const;
-    QString hostmask() const;
-    QString nick() const;
-    void setHostmask(const QString& hostmask);
-    QString user() const;
-private:
-    QSharedDataPointer<Aki::Irc::NickInfoPrivate> _d;
-}; // End of class NickInfo.
+    UserPrivate();
+public:
+    Aki::Irc::NickInfo nickInfo;
+    QString awayMessage;
+    QString modes;
+    QDateTime idleTime;
+    QColor colour;
+    bool isAway;
+}; // End of class User.
 } // End of namespace Irc.
 } // End of namespace Aki.
 
-Q_DECLARE_METATYPE(Aki::Irc::NickInfo)
-
-QDebug operator<<(QDebug dbg, const Aki::Irc::NickInfo& nickInfo);
-
-#endif // AKI_IRC_NICKINFO_HPP
+#endif // AKI_IRC_USER_P_HPP
