@@ -30,7 +30,6 @@ using namespace Irc;
 Socket::Socket(QObject* parent)
     : Aki::Irc::BaseSocket(parent)
 {
-    DEBUG_FUNC_NAME;
     _d.reset(new Aki::Irc::SocketPrivate(this));
     connect(this, SIGNAL(error(Aki::Irc::BaseSocket::SocketError)),
             SLOT(error(Aki::Irc::BaseSocket::SocketError)));
@@ -45,7 +44,6 @@ Socket::Socket(QObject* parent)
 Socket::Socket(const QString& name, QObject* parent)
     : Aki::Irc::BaseSocket(name, parent)
 {
-    DEBUG_FUNC_NAME;
     _d.reset(new Aki::Irc::SocketPrivate(this));
     connect(this, SIGNAL(error(Aki::Irc::BaseSocket::SocketError)),
             SLOT(error(Aki::Irc::BaseSocket::SocketError)));
@@ -59,14 +57,12 @@ Socket::Socket(const QString& name, QObject* parent)
 
 Socket::~Socket()
 {
-    DEBUG_FUNC_NAME;
     disconnectFromHost();
 }
 
 void
 Socket::connectSlotsBySignals(Socket* socket)
 {
-    DEBUG_FUNC_NAME;
     if (!socket) {
         return;
     }
@@ -107,7 +103,6 @@ Socket::connectSlotsBySignals(Socket* socket)
                 QByteArray otherName = QByteArray::fromRawData(otherSignature, qstrlen(otherSignature));
                 if (!connectedSlots.contains(otherName)) {
                     connectedSlots << otherName;
-                    DEBUG_TEXT3("Connecting signal: %1 To slot: %2", slot.typeName(), signal.typeName())
                     QMetaObject::connect(this, i, socket, j);
                 }
             }

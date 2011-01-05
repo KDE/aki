@@ -29,7 +29,6 @@ using namespace Aki::Irc;
 BaseSocket::BaseSocket(QObject* parent)
     : QObject(parent)
 {
-    DEBUG_FUNC_NAME;
     _d.reset(new Aki::Irc::BaseSocketPrivate(this));
     setName("Default");
 
@@ -49,7 +48,6 @@ BaseSocket::BaseSocket(QObject* parent)
 BaseSocket::BaseSocket(const QString& name, QObject* parent)
     : QObject(parent)
 {
-    DEBUG_FUNC_NAME;
     _d.reset(new Aki::Irc::BaseSocketPrivate(this));
     setName(name);
 
@@ -68,7 +66,6 @@ BaseSocket::BaseSocket(const QString& name, QObject* parent)
 
 BaseSocket::~BaseSocket()
 {
-    DEBUG_FUNC_NAME;
 }
 
 const QStringList&
@@ -95,7 +92,6 @@ BaseSocket::codec() const
 void
 BaseSocket::connectToHost()
 {
-    DEBUG_FUNC_NAME;
     const QString addy = addressList().value(_d->addressListIndex);
     if (addy.contains('/')) {
         const QStringList tmp = addy.split('/');
@@ -112,7 +108,6 @@ BaseSocket::connectToHost()
         _d->port = 6667;
     }
 
-    DEBUG_TEXT3("Connecting to: %1 Port: %2", currentAddress(), currentPort());
     connectToHost(currentAddress(), currentPort());
 }
 
@@ -147,7 +142,6 @@ BaseSocket::currentPort() const
 void
 BaseSocket::disconnectFromHost()
 {
-    DEBUG_FUNC_NAME;
     _d->socket->disconnectFromHost();
     _d->isSelfDisconnect = true;
 }
@@ -191,7 +185,6 @@ BaseSocket::name() const
 QString
 BaseSocket::nextAvailableNick() const
 {
-    DEBUG_FUNC_NAME;
     const int nextIndex = _d->nickListIndex + 1;
 
     if (nextIndex > nickList().count()) {
@@ -275,7 +268,6 @@ BaseSocket::setAutoReconnect(bool enable)
 void
 BaseSocket::setCurrentNick(const QString& nick)
 {
-    DEBUG_FUNC_NAME;
     const int index = _d->nickList.indexOf(nick);
     if (index >= 0) {
         _d->nickListIndex = index;

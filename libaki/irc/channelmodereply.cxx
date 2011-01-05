@@ -33,9 +33,14 @@ ChannelModeReply::ChannelModeReply(const Aki::Irc::ReplyInfo& replyInfo)
     : Aki::Irc::Reply(replyInfo),
     _d(new Aki::Irc::ChannelModeReplyPrivate)
 {
-    _d->channel = replyInfo.params().at(0);
-    _d->modes = replyInfo.params().at(1);
-    _d->options = replyInfo.params().value(2);
+    if (replyInfo.numeric() == Aki::Irc::RPL_CHANNELMODEIS) {
+        _d->channel = replyInfo.params().at(1);
+        _d->modes = replyInfo.params().at(2);
+    } else {
+        _d->channel = replyInfo.params().at(0);
+        _d->modes = replyInfo.params().at(1);
+        _d->options = replyInfo.params().value(2);
+    }
 }
 
 ChannelModeReply::ChannelModeReply(const Aki::Irc::ChannelModeReply& other)
