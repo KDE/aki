@@ -18,37 +18,36 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-#include "awayreply.hpp"
-#include "private/awayreply_p.hpp"
+#include "selfawayreply.hpp"
+#include "private/selfawayreply_p.hpp"
 using namespace Aki;
 using namespace Irc;
 
-AwayReply::AwayReply()
+SelfAwayReply::SelfAwayReply()
     : Aki::Irc::Reply(),
-    _d(new Aki::Irc::AwayReplyPrivate)
+    _d(new Aki::Irc::SelfAwayReplyPrivate)
 {
 }
 
-AwayReply::AwayReply(const Aki::Irc::ReplyInfo& replyInfo)
+SelfAwayReply::SelfAwayReply(const Aki::Irc::ReplyInfo& replyInfo)
     : Aki::Irc::Reply(replyInfo),
-    _d(new Aki::Irc::AwayReplyPrivate)
+    _d(new Aki::Irc::SelfAwayReplyPrivate)
 {
-    _d->nick = replyInfo.params().at(1);
-    _d->message = replyInfo.params().at(2);
+    _d->message = replyInfo.params().at(1);
 }
 
-AwayReply::AwayReply(const Aki::Irc::AwayReply& other)
+SelfAwayReply::SelfAwayReply(const Aki::Irc::SelfAwayReply& other)
     : Aki::Irc::Reply(other),
     _d(other._d)
 {
 }
 
-AwayReply::~AwayReply()
+SelfAwayReply::~SelfAwayReply()
 {
 }
 
-Aki::Irc::AwayReply&
-AwayReply::operator=(const Aki::Irc::AwayReply& other)
+Aki::Irc::SelfAwayReply&
+SelfAwayReply::operator=(const Aki::Irc::SelfAwayReply& other)
 {
     Aki::Irc::Reply::operator=(other);
     _d = other._d;
@@ -56,13 +55,7 @@ AwayReply::operator=(const Aki::Irc::AwayReply& other)
 }
 
 QString
-AwayReply::message() const
+SelfAwayReply::message() const
 {
     return _d->message;
-}
-
-QString
-AwayReply::nick() const
-{
-    return _d->nick;
 }

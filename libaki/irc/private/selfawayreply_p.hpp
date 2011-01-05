@@ -18,51 +18,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-#include "awayreply.hpp"
-#include "private/awayreply_p.hpp"
-using namespace Aki;
-using namespace Irc;
+#ifndef AKI_IRC_SELFAWAYREPLY_P_HPP
+#define AKI_IRC_SELFAWAYREPLY_P_HPP
 
-AwayReply::AwayReply()
-    : Aki::Irc::Reply(),
-    _d(new Aki::Irc::AwayReplyPrivate)
-{
-}
+#include "aki.hpp"
+#include <QtCore/QSharedData>
 
-AwayReply::AwayReply(const Aki::Irc::ReplyInfo& replyInfo)
-    : Aki::Irc::Reply(replyInfo),
-    _d(new Aki::Irc::AwayReplyPrivate)
+namespace Aki
 {
-    _d->nick = replyInfo.params().at(1);
-    _d->message = replyInfo.params().at(2);
-}
+namespace Irc
+{
+class SelfAwayReplyPrivate
+    : public QSharedData
+{
+public:
+    SelfAwayReplyPrivate();
+    SelfAwayReplyPrivate(const Aki::Irc::SelfAwayReplyPrivate& other);
+public:
+    QString message;
+}; // End of class SelfAwayReplyPrivate.
+} // End of namespace Irc.
+} // End of namespace Aki.
 
-AwayReply::AwayReply(const Aki::Irc::AwayReply& other)
-    : Aki::Irc::Reply(other),
-    _d(other._d)
-{
-}
-
-AwayReply::~AwayReply()
-{
-}
-
-Aki::Irc::AwayReply&
-AwayReply::operator=(const Aki::Irc::AwayReply& other)
-{
-    Aki::Irc::Reply::operator=(other);
-    _d = other._d;
-    return *this;
-}
-
-QString
-AwayReply::message() const
-{
-    return _d->message;
-}
-
-QString
-AwayReply::nick() const
-{
-    return _d->nick;
-}
+#endif // AKI_IRC_SELFAWAYREPLY_P_HPP

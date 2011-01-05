@@ -178,8 +178,7 @@ SocketPrivate::commandReceived(const Aki::Irc::ReplyInfo& message)
         break;
     }
     case RPL_AWAY: {
-        ///TODO: Fix me
-        //emit _q->onAwayMessage(Aki::Irc::AwayMessage(message));
+        emit _q->onAwayReply(Aki::Irc::AwayReply(message));
         break;
     }
     case RPL_USERHOST: {
@@ -195,8 +194,7 @@ SocketPrivate::commandReceived(const Aki::Irc::ReplyInfo& message)
     }
     case RPL_UNAWAY:
     case RPL_NOWAWAY: {
-        ///TODO: Fix me
-        //emit _q->onAwayMessage(Aki::Irc::AwayMessage(message));
+        emit _q->onSelfAwayReply(Aki::Irc::SelfAwayReply(message));
         break;
     }
     case RPL_WHOISUSER: 

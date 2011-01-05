@@ -34,7 +34,7 @@ class LIBAKI_EXPORT AwayReply
 {
 public:
     AwayReply();
-    explicit AwayReply(const Aki::Irc::ReplyInfo& replyInfo, const QString& nick, const QString& message);
+    explicit AwayReply(const Aki::Irc::ReplyInfo& replyInfo);
     AwayReply(const Aki::Irc::AwayReply& other);
     ~AwayReply();
     Aki::Irc::AwayReply& operator=(const Aki::Irc::AwayReply& other);

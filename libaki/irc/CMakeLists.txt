@@ -31,6 +31,7 @@ set(akicore_irc_SRCS
     irc/reply.cxx
     irc/replyinfo.cxx
     irc/rfc2812.cxx
+    irc/selfawayreply.cxx
     irc/socket.cxx
     irc/startupreply.cxx
     irc/text.cxx

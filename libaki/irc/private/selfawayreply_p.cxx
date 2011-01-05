@@ -18,51 +18,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-#include "awayreply.hpp"
-#include "private/awayreply_p.hpp"
+#include "selfawayreply_p.hpp"
 using namespace Aki;
 using namespace Irc;
 
-AwayReply::AwayReply()
-    : Aki::Irc::Reply(),
-    _d(new Aki::Irc::AwayReplyPrivate)
+SelfAwayReplyPrivate::SelfAwayReplyPrivate()
+    : QSharedData(),
+    message(QString())
 {
 }
 
-AwayReply::AwayReply(const Aki::Irc::ReplyInfo& replyInfo)
-    : Aki::Irc::Reply(replyInfo),
-    _d(new Aki::Irc::AwayReplyPrivate)
+SelfAwayReplyPrivate::SelfAwayReplyPrivate(const Aki::Irc::SelfAwayReplyPrivate& other)
+    : QSharedData(other),
+    message(other.message)
 {
-    _d->nick = replyInfo.params().at(1);
-    _d->message = replyInfo.params().at(2);
-}
-
-AwayReply::AwayReply(const Aki::Irc::AwayReply& other)
-    : Aki::Irc::Reply(other),
-    _d(other._d)
-{
-}
-
-AwayReply::~AwayReply()
-{
-}
-
-Aki::Irc::AwayReply&
-AwayReply::operator=(const Aki::Irc::AwayReply& other)
-{
-    Aki::Irc::Reply::operator=(other);
-    _d = other._d;
-    return *this;
-}
-
-QString
-AwayReply::message() const
-{
-    return _d->message;
-}
-
-QString
-AwayReply::nick() const
-{
-    return _d->nick;
 }
