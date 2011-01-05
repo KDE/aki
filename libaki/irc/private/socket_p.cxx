@@ -227,6 +227,7 @@ SocketPrivate::commandReceived(const Aki::Irc::ReplyInfo& message)
         break;
     }
     case RPL_CHANNELMODEIS: {
+        emit _q->onChannelModeReply(Aki::Irc::ChannelModeReply(message));
         break;
     }
     case RPL_CHANNELMLOCK: {
@@ -575,7 +576,6 @@ SocketPrivate::commandReceived(const Aki::Irc::ReplyInfo& message)
         break;
     }
     }
-
 }
 
 void
@@ -618,7 +618,7 @@ SocketPrivate::error(Aki::Irc::BaseSocket::SocketError error)
 void
 SocketPrivate::messageReceived(const Aki::Irc::ReplyInfo& message)
 {
-    qDebug() << message;
+    DEBUG_FUNC_NAME;
     const QString command = message.command().toUpper();
     if (command == "NOTICE") {
         if (message.message().startsWith('\1') &&
@@ -654,19 +654,26 @@ SocketPrivate::messageReceived(const Aki::Irc::ReplyInfo& message)
             emit _q->onChannelMessageReply(Aki::Irc::ChannelMessageReply(Aki::Irc::PrivateMessageReply(message)));
         }
     } else if (command == "MODE") {
+        DEBUG_TEXT("MODE")
         if (message.sender().nick() == _q->currentNick()) {
+            DEBUG_TEXT("Nick == Current Nick")
             if (message.params().count() == 2) {
+                DEBUG_TEXT("Count 2")
                 // self user mode
             } else if (message.params().at(0).startsWith('!') ||
                        message.params().at(0).startsWith('&') ||
                        message.params().at(0).startsWith('#') ||
                        message.params().at(0).startsWith('+')) {
+                DEBUG_TEXT("Is Channel")
                 emit _q->onChannelModeReply(Aki::Irc::ChannelModeReply(message));
             }
         } else {
+            DEBUG_TEXT("Nick != Current Nick")
             if (message.params().at(0) == _q->currentNick()) {
+                DEBUG_TEXT("0 == Current Nick")
                 // User mode
             } else {
+                DEBUG_TEXT("0 != Current Nick")
                 emit _q->onChannelModeReply(Aki::Irc::ChannelModeReply(message));
             }
         }
