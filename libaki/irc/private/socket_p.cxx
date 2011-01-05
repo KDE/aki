@@ -687,7 +687,7 @@ SocketPrivate::messageReceived(const Aki::Irc::ReplyInfo& message)
     } else if (command == "INVITE") {
         emit _q->onInviteReply(Aki::Irc::InviteReply(message));
     } else if (command == "PART") {
-        
+        emit _q->onPartReply(Aki::Irc::PartReply(message));
     } else if (command == "QUIT") {
         emit _q->onQuitReply(Aki::Irc::QuitReply(message));
     } else if (command == "JOIN") {
