@@ -27,6 +27,7 @@
 #include "irc/awayreply.hpp"
 #include "irc/banreply.hpp"
 #include "irc/basesocket.hpp"
+#include "irc/channelcreationtimereply.hpp"
 #include "irc/channelmessagereply.hpp"
 #include "irc/channelmodereply.hpp"
 #include "irc/channelurlreply.hpp"
@@ -78,6 +79,7 @@ Q_SIGNALS:
     void onAdminReply(const Aki::Irc::AdminReply& reply);
     void onAwayReply(const Aki::Irc::AwayReply& reply);
     void onBanListReply(const Aki::Irc::BanReply& reply);
+    void onChannelCreationTimeReply(const Aki::Irc::ChannelCreationTimeReply& reply);
     void onChannelMessageReply(const Aki::Irc::ChannelMessageReply& reply);
     void onChannelModeReply(const Aki::Irc::ChannelModeReply& reply);
     void onChannelUrlReply(const Aki::Irc::ChannelUrlReply& reply);

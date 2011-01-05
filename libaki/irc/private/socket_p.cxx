@@ -238,6 +238,7 @@ SocketPrivate::commandReceived(const Aki::Irc::ReplyInfo& message)
         break;
     }
     case RPL_CREATIONTIME: {
+        emit _q->onChannelCreationTimeReply(Aki::Irc::ChannelCreationTimeReply(message));
         break;
     }
     case RPL_WHOISLOGGEDIN: {
