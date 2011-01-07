@@ -11,6 +11,10 @@ set(aki_ui_SRCS
     ui/nicknamelist.cxx
     ui/nicknamemodel.cxx
     ui/systemtray.cxx
+    ui/userlist.cxx
+    ui/userlistdelegate.cxx
+    ui/userlistsort.cxx
+    ui/usermodel.cxx
 )
 
 if(WIN32)

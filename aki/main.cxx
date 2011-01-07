@@ -31,7 +31,7 @@ main(int argc, char** argv)
 {
     KAboutData aboutData("aki", 0, ki18n("Aki"), AKI_VERSION_STR,
                          ki18n("Extensive IRC client for KDE4."), KAboutData::License_GPL_V2,
-                         ki18n("Copyright (c) 2009-2010 Keith Rusler"),
+                         ki18n("Copyright (c) 2009-2011 Keith Rusler"),
                          ki18n("IRC: irc.freenode.net - #akiirc\n"
                                "Build Data: %1 at %2").subs(__DATE__).subs(__TIME__));
     aboutData.addAuthor(ki18n("Keith Rusler"), ki18n("Lead Developer"), "xzekecomax@gmail.com");
