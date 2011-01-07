@@ -95,10 +95,34 @@ User::isVoice() const
     return containsMode('v');
 }
 
+QString
+User::modes() const
+{
+    return _d->modes;
+}
+
 Aki::Irc::NickInfo&
 User::nickInfo() const
 {
     return _d->nickInfo;
+}
+
+void
+User::removeModes(const QString& modes)
+{
+    if (modes.isEmpty()) {
+        return;
+    }
+
+    QString newModes = this->modes();
+
+    foreach (const QChar& c, modes) {
+        if (containsMode(c)) {
+            newModes.remove(c);
+        }
+    }
+
+    _d->modes = newModes;
 }
 
 void
@@ -123,6 +147,20 @@ void
 User::setIdleTime(const QDateTime& idleTime)
 {
     _d->idleTime = idleTime;
+}
+
+void
+User::setModes(const QString& modes)
+{
+    QString tmp = this->modes();
+
+    foreach (const QChar c, modes) {
+        if (!containsMode(c)) {
+            tmp.append(c);
+        }
+    }
+
+    _d->modes = tmp;
 }
 
 void

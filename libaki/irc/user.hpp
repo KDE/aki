@@ -37,6 +37,7 @@ class LIBAKI_EXPORT User
 {
     Q_OBJECT
     Q_PROPERTY(QString awayMessage READ awayMessage WRITE setAwayMessage)
+    Q_PROPERTY(QString modes READ modes WRITE setModes)
     Q_PROPERTY(QDateTime idleTime READ idleTime WRITE setIdleTime)
     Q_PROPERTY(QColor colour READ colour WRITE setColour)
     Q_PROPERTY(bool isAway READ isAway WRITE setAway)
@@ -57,11 +58,14 @@ public:
     bool isNormal() const;
     bool isOp() const;
     bool isVoice() const;
+    QString modes() const;
     Aki::Irc::NickInfo& nickInfo() const;
+    void removeModes(const QString& modes);
     void setAway(bool away);
     void setAwayMessage(const QString& message);
     void setColour(const QColor& colour);
     void setIdleTime(const QDateTime& idleTime);
+    void setModes(const QString& modes);
     void setNickInfo(const Aki::Irc::NickInfo& info);
 private:
     AKI_DECLARE_PRIVATE(Aki::Irc::User)

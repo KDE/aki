@@ -68,15 +68,6 @@ class MessagePrivate;
  */
 class LIBAKI_EXPORT Message
 {
-    Q_ENUMS(Direction)
-    Q_PROPERTY(Direction direction READ direction WRITE setDirection)
-    Q_PROPERTY(bool isRightToLeft READ isRightToLeft)
-    Q_PROPERTY(QString plainText READ plainText WRITE setPlainText READ clear)
-    Q_PROPERTY(QString html READ html WRITE setHtml RESET clear)
-    Q_PROPERTY(KDateTime timeStamp READ timeStamp WRITE setTimeStamp)
-    Q_PROPERTY(State state READ read WRITE setState)
-    Q_PROPERTY(Aki::Irc::NickInfo sender READ sender WRITE setSender)
-    Q_PROPERTY(Aki::Irc::NickInfo target READ target WRITE setTarget)
 public:
     /**
      * Direction of the message.
