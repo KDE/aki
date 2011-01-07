@@ -22,7 +22,7 @@
 #define AKI_IRC_BASESOCKET_P_HPP
 
 #include "irc/basesocket.hpp"
-#include <ktcpsocket.h>
+#include <QtNetwork/QSslSocket>
 
 class QTextCodec;
 namespace Aki
@@ -35,12 +35,12 @@ public:
     explicit BaseSocketPrivate(Aki::Irc::BaseSocket* qq);
     void appendSslError(QList<Aki::Irc::BaseSocket::SslError>& list,
                         Aki::Irc::BaseSocket::SslError error);
-    void error(KTcpSocket::Error error);
+    void error(QSslSocket::SocketError error);
     void readyRead();
-    void socketState(KTcpSocket::State state);
-    void sslErrors(const QList<KSslError>& errors);
+    void socketState(QSslSocket::SocketState state);
+    void sslErrors(const QList<QSslError>& errors);
 public:
-    KTcpSocket* socket;
+    QSslSocket* socket;
     QTextCodec* codec;
     QStringList addressList;
     QStringList nickList;

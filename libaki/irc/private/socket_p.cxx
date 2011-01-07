@@ -581,34 +581,55 @@ void
 SocketPrivate::error(Aki::Irc::BaseSocket::SocketError error)
 {
     switch (error) {
-    case Aki::Irc::BaseSocket::ConnectionRefusedError: {
+    case Aki::Irc::Socket::ConnectionRefusedError: {
         break;
     }
-    case Aki::Irc::BaseSocket::HostNotFoundError: {
+    case Aki::Irc::Socket::RemoteHostClosedError: {
         break;
     }
-    case Aki::Irc::BaseSocket::NetworkError: {
+    case Aki::Irc::Socket::HostNotFoundError: {
         break;
     }
-    case Aki::Irc::BaseSocket::RemoteHostClosedError: {
+    case Aki::Irc::Socket::SocketAccessError: {
         break;
     }
-    case Aki::Irc::BaseSocket::SocketAccessError: {
+    case Aki::Irc::Socket::SocketResourceError: {
         break;
     }
-    case Aki::Irc::BaseSocket::SocketResourceError: {
+    case Aki::Irc::Socket::SocketTimeoutError: {
         break;
     }
-    case Aki::Irc::BaseSocket::SocketTimeoutError: {
+    case Aki::Irc::Socket::NetworkError: {
         break;
     }
-    case Aki::Irc::BaseSocket::UnknownError: {
+    case Aki::Irc::Socket::UnsupportedSocketOperationError: {
         break;
     }
-    case Aki::Irc::BaseSocket::UnsupportedSocketOperationError: {
+    case Aki::Irc::Socket::ProxyAuthenticationRequiredError: {
         break;
     }
-    default: {
+    case Aki::Irc::Socket::SslHandshakeFailedError: {
+        break;
+    }
+    case Aki::Irc::Socket::UnfinishedSocketOperationError: {
+        break;
+    }
+    case Aki::Irc::Socket::ProxyConnectionRefusedError: {
+        break;
+    }
+    case Aki::Irc::Socket::ProxyConnectionClosedError: {
+        break;
+    }
+    case Aki::Irc::Socket::ProxyConnectionTimeoutError: {
+        break;
+    }
+    case Aki::Irc::Socket::ProxyNotFoundError: {
+        break;
+    }
+    case Aki::Irc::Socket::ProxyProtocolError: {
+        break;
+    }
+    case Aki::Irc::Socket::UnknownSocketError: {
         break;
     }
     }

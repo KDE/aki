@@ -63,32 +63,51 @@ public:
     }; // End of enum SocketState.
 
     enum SocketError {
-        UnknownError = 0,
-        ConnectionRefusedError = 1,
-        RemoteHostClosedError = 2,
-        HostNotFoundError = 3,
-        SocketAccessError = 4,
-        SocketResourceError = 5,
-        SocketTimeoutError = 6,
+        ConnectionRefusedError = 0,
+        RemoteHostClosedError = 1,
+        HostNotFoundError = 2,
+        SocketAccessError = 3,
+        SocketResourceError = 4,
+        SocketTimeoutError = 5,
         NetworkError = 7,
-        UnsupportedSocketOperationError = 8
+        UnsupportedSocketOperationError = 10,
+        ProxyAuthenticationRequiredError = 12,
+        SslHandshakeFailedError = 13,
+        UnfinishedSocketOperationError = 11,
+        ProxyConnectionRefusedError = 14,
+        ProxyConnectionClosedError = 15,
+        ProxyConnectionTimeoutError = 16,
+        ProxyNotFoundError = 17,
+        ProxyProtocolError = 18,
+        UnknownSocketError = -1
     }; // End of enum SocketError.
 
     enum SslError {
         NoError = 0,
-        UnknownSslError = 1,
-        InvalidCertificateAuthorityCertificate = 2,
-        InvalidCertificate = 3,
+        UnableToGetIssuerCertificate = 1,
+        UnableToDecryptCertificateSignature = 2,
+        UnableToDecodeIssuerPublicKey = 3,
         CertificateSignatureFailed = 4,
-        SelfSignedCertificate = 5,
-        ExpiredCertificate = 6,
-        RevokedCertificate = 7,
-        InvalidCertificatePurpose = 8,
-        RejectedCertificate = 9,
-        UntrustedCertificate = 10,
-        NoPeerCertificate = 11,
-        HostNameMismatch = 12,
-        PathLengthExceeded = 13
+        CertificateNotYetValid = 5,
+        CertificateExpired = 6,
+        InvalidNotBeforeField = 7,
+        InvalidNotAfterField = 8,
+        SelfSignedCertificate = 9,
+        SelfSignedCertificateInChain = 10,
+        UnableToGetLocalIssuerCertificate = 11,
+        UnableToVerifyFirstCertificate = 12,
+        CertificateRevoked = 13,
+        InvalidCaCertificate = 14,
+        PathLengthExceeded = 15,
+        InvalidPurpose = 16,
+        CertificateUntrusted = 17,
+        CertificateRejected = 18,
+        SubjectIssuerMismatch = 19,
+        AuthorityIssuerSerialNumberMismatch = 20,
+        NoPeerCertificate = 21,
+        HostNameMismatch = 22,
+        UnspecifiedError = 23,
+        NoSslSupport = 24
     }; // End of enum SslError.
 
     enum ProxyType {
@@ -149,10 +168,10 @@ Q_SIGNALS:
 protected:
     virtual void connectToHost(const QString& address, quint16 port = 6667);
 private:
-    Q_PRIVATE_SLOT(_d, void error(KTcpSocket::Error error))
+    Q_PRIVATE_SLOT(_d, void error(QAbstractSocket::SocketError error))
     Q_PRIVATE_SLOT(_d, void readyRead())
-    Q_PRIVATE_SLOT(_d, void socketState(KTcpSocket::State state))
-    Q_PRIVATE_SLOT(_d, void sslErrors(const QList<KSslError>& errors))
+    Q_PRIVATE_SLOT(_d, void socketState(QAbstractSocket::SocketState state))
+    Q_PRIVATE_SLOT(_d, void sslErrors(const QList<QSslError>& errors))
 private:
     AKI_DECLARE_PRIVATE(BaseSocket)
 }; // End of class BaseSocket.

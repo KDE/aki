@@ -32,15 +32,15 @@ BaseSocket::BaseSocket(QObject* parent)
     _d.reset(new Aki::Irc::BaseSocketPrivate(this));
     setName("Default");
 
-    _d->socket = new KTcpSocket(this);
+    _d->socket = new QSslSocket(this);
     Q_CHECK_PTR(_d->socket);
 
-    connect(_d->socket, SIGNAL(stateChanged(KTcpSocket::State)),
-            SLOT(socketState(KTcpSocket::State)));
-    connect(_d->socket, SIGNAL(error(KTcpSocket::Error)),
-            SLOT(error(KTcpSocket::Error)));
-    connect(_d->socket, SIGNAL(sslErrors(QList<KSslError>)),
-            SLOT(sslErrors(QList<KSslError>)));
+    connect(_d->socket, SIGNAL(stateChanged(QAbstractSocket::SocketState)),
+            SLOT(socketState(QAbstractSocket::SocketState)));
+    connect(_d->socket, SIGNAL(error(QAbstractSocket::SocketError)),
+            SLOT(error(QAbstractSocket::SocketError)));
+    connect(_d->socket, SIGNAL(sslErrors(QList<QSslError>)),
+            SLOT(sslErrors(QList<QSslError>)));
     connect(_d->socket, SIGNAL(readyRead()),
             SLOT(readyRead()));
 }
@@ -51,15 +51,15 @@ BaseSocket::BaseSocket(const QString& name, QObject* parent)
     _d.reset(new Aki::Irc::BaseSocketPrivate(this));
     setName(name);
 
-    _d->socket = new KTcpSocket(this);
+    _d->socket = new QSslSocket(this);
     Q_CHECK_PTR(_d->socket);
 
-    connect(_d->socket, SIGNAL(stateChanged(KTcpSocket::State)),
-            SLOT(socketState(KTcpSocket::State)));
-    connect(_d->socket, SIGNAL(error(KTcpSocket::Error)),
-            SLOT(error(KTcpSocket::Error)));
-    connect(_d->socket, SIGNAL(sslErrors(QList<KSslError>)),
-            SLOT(sslErrors(QList<KSslError>)));
+    connect(_d->socket, SIGNAL(stateChanged(QAbstractSocket::SocketState)),
+            SLOT(socketState(QAbstractSocket::SocketState)));
+    connect(_d->socket, SIGNAL(error(QAbstractSocket::SocketError)),
+            SLOT(error(QAbstractSocket::SocketError)));
+    connect(_d->socket, SIGNAL(sslErrors(QList<QSslError>)),
+            SLOT(sslErrors(QList<QSslError>)));
     connect(_d->socket, SIGNAL(readyRead()),
             SLOT(readyRead()));
 }
@@ -117,7 +117,7 @@ BaseSocket::connectToHost(const QString& address, quint16 port)
     if (isSslEnabled()) {
         _d->socket->connectToHostEncrypted(address, port);
     } else {
-        _d->socket->connectToHost(address, port, KTcpSocket::ManualProxy);
+        _d->socket->connectToHost(address, port);
     }
 }
 

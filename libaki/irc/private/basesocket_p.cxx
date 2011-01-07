@@ -89,53 +89,9 @@ BaseSocketPrivate::detectUnicode(const QByteArray& data) const
 }
 
 void
-BaseSocketPrivate::error(KTcpSocket::Error error)
+BaseSocketPrivate::error(QAbstractSocket::SocketError error)
 {
-    Aki::Irc::BaseSocket::SocketError myError = Aki::Irc::BaseSocket::UnknownError;
-
-    switch (error) {
-    case KTcpSocket::ConnectionRefusedError: {
-        myError = Aki::Irc::BaseSocket::ConnectionRefusedError;
-        break;
-    }
-    case KTcpSocket::HostNotFoundError: {
-        myError = Aki::Irc::BaseSocket::HostNotFoundError;
-        break;
-    }
-    case KTcpSocket::NetworkError: {
-        myError = Aki::Irc::BaseSocket::NetworkError;
-        break;
-    }
-    case KTcpSocket::RemoteHostClosedError: {
-        myError = Aki::Irc::BaseSocket::RemoteHostClosedError;
-        break;
-    }
-    case KTcpSocket::SocketAccessError: {
-        myError = Aki::Irc::BaseSocket::SocketAccessError;
-        break;
-    }
-    case KTcpSocket::SocketResourceError: {
-        myError = Aki::Irc::BaseSocket::SocketResourceError;
-        break;
-    }
-    case KTcpSocket::SocketTimeoutError: {
-        myError = Aki::Irc::BaseSocket::SocketTimeoutError;
-        break;
-    }
-    case KTcpSocket::UnknownError: {
-        myError = Aki::Irc::BaseSocket::UnknownError;
-        break;
-    }
-    case KTcpSocket::UnsupportedSocketOperationError: {
-        myError = Aki::Irc::BaseSocket::UnsupportedSocketOperationError;
-        break;
-    }
-    default: {
-        myError = Aki::Irc::BaseSocket::UnknownError;
-    }
-    }
-
-    emit _q->error(myError);
+    emit _q->error(static_cast<Aki::Irc::BaseSocket::SocketError>(error));
 }
 
 void
@@ -155,115 +111,22 @@ BaseSocketPrivate::readyRead()
 }
 
 void
-BaseSocketPrivate::socketState(KTcpSocket::State state)
+BaseSocketPrivate::socketState(QAbstractSocket::SocketState state)
 {
-    Aki::Irc::BaseSocket::SocketState myState = Aki::Irc::BaseSocket::UnconnectState;
-
-    switch (state) {
-    case KTcpSocket::ClosingState: {
-        myState = Aki::Irc::BaseSocket::ClosingState;
-        break;
-    }
-    case KTcpSocket::ConnectedState: {
-        myState = Aki::Irc::BaseSocket::ConnectedState;
-        break;
-    }
-    case KTcpSocket::ConnectingState: {
-        myState = Aki::Irc::BaseSocket::ConnectingState;
-        break;
-    }
-    case KTcpSocket::HostLookupState: {
-        myState = Aki::Irc::BaseSocket::HostLookupState;
-        break;
-    }
-    case KTcpSocket::UnconnectedState: {
-        myState = Aki::Irc::BaseSocket::UnconnectState;
-        break;
-    }
-    default: {
-    }
-    }
-
-    emit _q->stateChanged(myState);
+    emit _q->stateChanged(static_cast<Aki::Irc::BaseSocket::SocketState>(state));
 }
 
 void
-BaseSocketPrivate::sslErrors(const QList<KSslError>& errors)
+BaseSocketPrivate::sslErrors(const QList<QSslError>& errors)
 {
-    QListIterator<KSslError> errorIter(errors);
-
-    // Predefine it with NoError.
-    QList<Aki::Irc::BaseSocket::SslError> myError =
-        QList<Aki::Irc::BaseSocket::SslError>() << Aki::Irc::BaseSocket::NoError;
+    QListIterator<QSslError> errorIter(errors);
+    QList<Aki::Irc::BaseSocket::SslError> myErrors;
 
     while (errorIter.hasNext()) {
-        KSslError error = errorIter.next();
+        myErrors.append(static_cast<Aki::Irc::BaseSocket::SslError>(errorIter.next().error()));
+    }
 
-        switch (error.error()) {
-        case KSslError::CertificateSignatureFailed: {
-            appendSslError(myError, Aki::Irc::BaseSocket::CertificateSignatureFailed);
-            break;
-        }
-        case KSslError::ExpiredCertificate: {
-            appendSslError(myError, Aki::Irc::BaseSocket::ExpiredCertificate);
-            break;
-        }
-        case KSslError::HostNameMismatch: {
-            appendSslError(myError, Aki::Irc::BaseSocket::HostNameMismatch);
-            break;
-        }
-        case KSslError::InvalidCertificate: {
-            appendSslError(myError, Aki::Irc::BaseSocket::InvalidCertificate);
-            break;
-        }
-        case KSslError::InvalidCertificateAuthorityCertificate: {
-            appendSslError(myError, Aki::Irc::BaseSocket::InvalidCertificateAuthorityCertificate);
-            break;
-        }
-        case KSslError::InvalidCertificatePurpose: {
-            appendSslError(myError, Aki::Irc::BaseSocket::InvalidCertificatePurpose);
-            break;
-        }
-        case KSslError::NoError: {
-            if (!myError.isEmpty()) {
-                myError.clear();
-                myError.append(Aki::Irc::BaseSocket::NoError);
-            }
-            break;
-        }
-        case KSslError::NoPeerCertificate: {
-            appendSslError(myError, Aki::Irc::BaseSocket::NoPeerCertificate);
-            break;
-        }
-        case KSslError::PathLengthExceeded: {
-            appendSslError(myError, Aki::Irc::BaseSocket::PathLengthExceeded);
-            break;
-        }
-        case KSslError::RejectedCertificate: {
-            appendSslError(myError, Aki::Irc::BaseSocket::RejectedCertificate);
-            break;
-        }
-        case KSslError::RevokedCertificate: {
-            appendSslError(myError, Aki::Irc::BaseSocket::RevokedCertificate);
-            break;
-        }
-        case KSslError::SelfSignedCertificate: {
-            appendSslError(myError, Aki::Irc::BaseSocket::SelfSignedCertificate);
-            break;
-        }
-        case KSslError::UnknownError: {
-            appendSslError(myError, Aki::Irc::BaseSocket::UnknownSslError);
-            break;
-        }
-        case KSslError::UntrustedCertificate: {
-            appendSslError(myError, Aki::Irc::BaseSocket::UntrustedCertificate);
-            break;
-        }
-        default: {
-            break;
-        }
-        }
-
-        emit _q->sslErrors(myError);
+    if (!myErrors.isEmpty()) {
+        emit _q->sslErrors(myErrors);
     }
 }
