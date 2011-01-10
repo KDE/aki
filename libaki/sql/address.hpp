@@ -30,7 +30,7 @@ namespace Aki
 namespace Sql
 {
 class AddressPrivate;
-class Address
+class LIBAKI_EXPORT Address
     : public Aki::Sql::Table
 {
     Q_OBJECT

@@ -5,6 +5,7 @@ set(akicore_sql_SRCS
     sql/database.cxx
     sql/identity.cxx
     sql/nickname.cxx
+    sql/query.cxx
     sql/server.cxx
     sql/table.cxx
     ${akicore_sqlprivate_SRCS}

@@ -106,7 +106,7 @@ DatabasePrivate::parseClassInfo(const QMetaObject* object, const QMetaClassInfo&
         }
     }
 
-    qDebug();
+    /*qDebug();
     qDebug() << "--- " << classInfo.name() << " ---";
     qDebug() << "Primary: " << isPrimaryKey;
     qDebug() << "Unique: " << isUnique;
@@ -116,7 +116,7 @@ DatabasePrivate::parseClassInfo(const QMetaObject* object, const QMetaClassInfo&
     qDebug() << "-- Count: " << length;
     qDebug() << "Foreign: " << isForeignKey;
     qDebug() << "-- Table: " << foreignTable;
-    qDebug() << "-- Field: " << foreignTableField;
+    qDebug() << "-- Field: " << foreignTableField;*/
 
     return true;
 }

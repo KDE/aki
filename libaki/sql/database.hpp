@@ -68,6 +68,10 @@ public:
      */
     void close();
     /**
+     *
+     */
+    bool commit();
+    /**
      * Gets the connection name that was set in the constructor if any.
      *
      * @return QSqlDatabase::defaultConnection if the one in the constructor was not set.
@@ -172,6 +176,10 @@ public:
     /**
      *
      */
+    bool rollback();
+    /**
+     *
+     */
     void setConnectOptions(const QString& options = QString());
     /**
      *
@@ -193,6 +201,10 @@ public:
      *
      */
     void setUserName(const QString& name);
+    /**
+     *
+     */
+    bool transaction();
     /**
      *
      */
@@ -253,6 +265,9 @@ Database::registerClass()
 } // End of namespace Sql.
 } // End of namespace Aki.
 
+/**
+ * @internal Internal use only.
+ */
 template<typename T>
 struct RegisterTable
 {

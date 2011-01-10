@@ -64,6 +64,12 @@ Database::close()
     QSqlDatabase::database().close();
 }
 
+bool
+Database::commit()
+{
+    return _d->db.commit();
+}
+
 QString
 Database::connectionName() const
 {
@@ -144,6 +150,12 @@ Database::removeDatabase(const QString& connectionName)
     QSqlDatabase::removeDatabase(connectionName);
 }
 
+bool
+Database::rollback()
+{
+    return _d->db.rollback();
+}
+
 void
 Database::setConnectOptions(const QString& options)
 {
@@ -178,6 +190,12 @@ void
 Database::setUserName(const QString& name)
 {
     _d->db.setUserName(name);
+}
+
+bool
+Database::transaction()
+{
+    return _d->db.transaction();
 }
 
 QString
