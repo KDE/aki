@@ -21,18 +21,21 @@
 #ifndef AKI_SQL_QUERY_HPP
 #define AKI_SQL_QUERY_HPP
 
+#include "aki.hpp"
+#include "debughelper.hpp"
 #include "sql/database.hpp"
 #include <QtCore/QMetaClassInfo>
 #include <QtCore/QObject>
 #include <QtCore/QSharedPointer>
 #include <QtSql/QSqlQuery>
+#include <QtSql/QSqlRecord>
 
 namespace Aki
 {
 namespace Sql
 {
 template<typename T>
-class Query
+class LIBAKI_EXPORT Query
 {
 public:
     Query();
@@ -160,17 +163,29 @@ Query<T>::orderBy(const QString& field)
 template<typename T> QList<QSharedPointer<T> >
 Query<T>::result()
 {
+    DEBUG_FUNC_NAME;
     QList<QSharedPointer<T> > results;
+    DEBUG_TEXT2("Preparing Sql Statement:\n%1", _sql);
     _query.prepare(_sql);
 
     QMapIterator<QString, QVariant> i(_placeHolders);
     while (i.hasNext()) {
         i.next();
+        DEBUG_TEXT2("Binding: %1", i.key());
         _query.bindValue(i.key(), i.value());
     }
 
     if (_query.exec()) {
-        
+        if (_query.next()) {
+            T* res = qobject_cast<T*>(_object.newInstance());
+            for (int i = 0, c = _object.classInfoCount(); i < c; ++i) {
+                const QMetaClassInfo classInfo = _object.classInfo(i);
+                const int indexRecord = _query.record().indexOf(classInfo.name());
+                res->setProperty(classInfo.name(), _query.value(indexRecord));
+            }
+
+            results.append(QSharedPointer<T>(res));
+        }
     }
 
     return results;
