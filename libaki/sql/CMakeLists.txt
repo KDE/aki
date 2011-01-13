@@ -4,6 +4,8 @@ set(akicore_sql_SRCS
     sql/channel.cxx
     sql/database.cxx
     sql/identity.cxx
+    sql/field.cxx
+    sql/metatable.cxx
     sql/nickname.cxx
     sql/query.cxx
     sql/server.cxx

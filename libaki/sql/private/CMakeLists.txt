@@ -3,6 +3,8 @@ set(akicore_sqlprivate_SRCS
     sql/private/channel_p.cxx
     sql/private/database_p.cxx
     sql/private/identity_p.cxx
+    sql/private/field_p.cxx
+    sql/private/metatable_p.cxx
     sql/private/nickname_p.cxx
     sql/private/query_p.cxx
     sql/private/table_p.cxx
