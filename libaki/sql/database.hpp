@@ -23,6 +23,7 @@
 
 #include "aki.hpp"
 #include "singleton.hpp"
+#include "sql/metatable.hpp"
 #include <QtCore/QObject>
 #include <QtSql/QSqlDatabase>
 #include <QtSql/QSqlError>
@@ -216,7 +217,10 @@ Q_SIGNALS:
      * @param error Recent error that has occurred.
      */
     void error(const QSqlError& error);
+protected:
+    static Aki::Sql::MetaTable metaTable(const Aki::Sql::Table* table);
 private:
+    friend class Aki::Sql::Table;
     AKI_DECLARE_PRIVATE(Database)
 }; // End of class Database.
 
@@ -238,9 +242,10 @@ Database::create()
     using namespace std::tr1;
     AKI_STATIC_ASSERT((is_base_of<Aki::Sql::Table, T>::value));
     const QMetaObject tableObject = T::staticMetaObject;
-    QObject* tObject = tableObject.newInstance();
+    T* tObject = qobject_cast<T*>(tableObject.newInstance());
+    Q_ASSERT(tObject);
     bool status = false;
-    QMetaObject::invokeMethod(tObject, "create", Q_RETURN_ARG(bool, status));
+    QMetaObject::invokeMethod(tObject, "create");
     return status;
 }
 
@@ -274,7 +279,7 @@ struct RegisterTable
 public:
     RegisterTable()
     {
-        Aki::Sql::Database::registerClass<T>();
+        Q_ASSERT(Aki::Sql::Database::registerClass<T>());
     }
 };
 

@@ -19,7 +19,10 @@
  */
 
 #include "database.hpp"
+#include "debughelper.hpp"
 #include "private/database_p.hpp"
+#include "sql/metatable.hpp"
+#include "sql/table.hpp"
 #include <QtSql/QSqlQuery>
 using namespace Aki;
 using namespace Sql;
@@ -28,10 +31,6 @@ Database::Database(QObject* parent)
     : QObject(parent)
 {
     _d.reset(new Aki::Sql::DatabasePrivate(this));
-    Aki::Sql::TableList list = Aki::Sql::DatabasePrivate::tableList;
-    foreach (Aki::Sql::Table* table, list) {
-        _d->parseMetaObjects(table);
-    }
 }
 
 Database::Database(const QString& type, const QString& connectionName, QObject* parent)
@@ -39,16 +38,10 @@ Database::Database(const QString& type, const QString& connectionName, QObject* 
 {
     _d.reset(new Aki::Sql::DatabasePrivate(this));
     _d->db = QSqlDatabase::addDatabase(type, connectionName);
-    Aki::Sql::TableList list = Aki::Sql::DatabasePrivate::tableList;
-    foreach (Aki::Sql::Table* table, list) {
-        _d->parseMetaObjects(table);
-    }
 }
 
 Database::~Database()
 {
-    qDeleteAll(_d->tableList);
-
     if (isOpen()) {
         _d->db.close();
     }
@@ -106,6 +99,23 @@ Database::isOpen() const
     return _d->db.isOpen();
 }
 
+Aki::Sql::MetaTable
+Database::metaTable(const Aki::Sql::Table* table)
+{
+    DEBUG_FUNC_NAME;
+    foreach (Aki::Sql::MetaTable metaTable, Aki::Sql::DatabasePrivate::tableList) {
+        DEBUG_TEXT2("Searching for %1", table->metaObject()->className());
+        DEBUG_TEXT2("Checking %1", metaTable.name())
+        if (table->metaObject()->className() == metaTable.name()) {
+            DEBUG_TEXT2("Found %1", metaTable.name());
+            return metaTable;
+        }
+    }
+
+    DEBUG_TEXT2("Unable to find %1", table->metaObject()->className())
+    return Aki::Sql::MetaTable();
+}
+
 bool
 Database::open()
 {
@@ -135,10 +145,11 @@ Database::registerClass(Aki::Sql::Table* t)
 {
     if (t) {
         if (!Aki::Sql::DatabasePrivate::tableList.contains(t->metaObject()->className())) {
-            Aki::Sql::DatabasePrivate::tableList.append(t);
-            return true;
-        } else {
-            return false;
+            Aki::Sql::MetaTable table;
+            if (table.parseMetaInformation(t)) {
+                Aki::Sql::DatabasePrivate::tableList.append(table);
+                return true;
+            }
         }
     }
     return false;

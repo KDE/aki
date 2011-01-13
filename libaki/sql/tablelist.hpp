@@ -21,7 +21,7 @@
 #ifndef AKI_SQL_TABLELIST_HPP
 #define AKI_SQL_TABLELIST_HPP
 
-#include "sql/table.hpp"
+#include "sql/metatable.hpp"
 #include <QtCore/QList>
 #include <QtCore/QMetaObject>
 
@@ -34,7 +34,7 @@ namespace Sql
  * @internal internal use only.
  */
 class TableList
-    : public QList<Aki::Sql::Table*>
+    : public QList<Aki::Sql::MetaTable>
 {
 public:
     /**
@@ -46,7 +46,7 @@ public:
      *
      * @param table Sql table to add.
      */
-    inline TableList(Aki::Sql::Table* table)
+    inline TableList(Aki::Sql::MetaTable table)
     {
         append(table);
     }
@@ -56,7 +56,7 @@ public:
      * @param other Other TableList to copy.
      */
     inline TableList(const Aki::Sql::TableList& other)
-        : QList<Aki::Sql::Table*>(other)
+        : QList<Aki::Sql::MetaTable>(other)
     {
     }
     /**
@@ -64,8 +64,8 @@ public:
      *
      * @param other Other QList<Aki::Sql::Table>.
      */
-    inline explicit TableList(const QList<Aki::Sql::Table*>& other)
-        : QList<Aki::Sql::Table*>(other)
+    inline explicit TableList(const QList<Aki::Sql::MetaTable>& other)
+        : QList<Aki::Sql::MetaTable>(other)
     {
     }
     /**
@@ -79,8 +79,8 @@ public:
      */
     inline QBool contains(const QString& str, Qt::CaseSensitivity cs = Qt::CaseSensitive) const
     {
-        foreach (const Aki::Sql::Table* ti, *this) {
-            if (QString(ti->metaObject()->className()).contains(str, cs)) {
+        foreach (const Aki::Sql::MetaTable ti, *this) {
+            if (QString(ti.name()).contains(str, cs)) {
                 return QBool(true);
             }
         }
@@ -97,8 +97,8 @@ public:
     inline Aki::Sql::TableList filter(const QString& str, Qt::CaseSensitivity cs = Qt::CaseSensitive) const
     {
         Aki::Sql::TableList results;
-        foreach (Aki::Sql::Table* ti, *this) {
-            if (QString(ti->metaObject()->className()).contains(str, cs)) {
+        foreach (Aki::Sql::MetaTable ti, *this) {
+            if (QString(ti.name()).contains(str, cs)) {
                 results.append(ti);
             }
         }
@@ -110,7 +110,7 @@ public:
      * @param interface New Table to insert.
      * @return TableList containing the new @p interface.
      */
-    inline Aki::Sql::TableList& operator<<(Aki::Sql::Table* table)
+    inline Aki::Sql::TableList& operator<<(Aki::Sql::MetaTable table)
     {
         append(table);
         return *this;
@@ -126,12 +126,12 @@ public:
         append(other);
         return *this;
     }
-    using QList<Aki::Sql::Table*>::indexOf;
-    using QList<Aki::Sql::Table*>::lastIndexOf;
+    using QList<Aki::Sql::MetaTable>::indexOf;
+    using QList<Aki::Sql::MetaTable>::lastIndexOf;
     inline int indexOf(const QString& str, int from = 0)
     {
         for (int i = from, s = size(); i < s; ++i) {
-            if (QString(at(i)->metaObject()->className()) == str) {
+            if (QString(at(i).name()) == str) {
                 return i;
             }
         }
@@ -146,7 +146,7 @@ public:
             last = from;
         }
         for (int i = last; i > 0; --i) {
-            if (QString(at(i)->metaObject()->className()) == str) {
+            if (QString(at(i).name()) == str) {
                 return i;
             }
         }

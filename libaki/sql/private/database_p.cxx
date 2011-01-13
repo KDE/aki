@@ -19,6 +19,7 @@
  */
 
 #include "database_p.hpp"
+#include "sql/table.hpp"
 using namespace Aki::Sql;
 
 Aki::Sql::TableList Aki::Sql::DatabasePrivate::tableList = Aki::Sql::TableList();
@@ -60,6 +61,8 @@ DatabasePrivate::parseClassInfo(const QMetaObject* object, const QMetaClassInfo&
     bool isForeignKey = false;
     QString foreignTable;
     QString foreignTableField;
+
+    Q_UNUSED(isForeignKey)
 
     foreach (const QString &optionValue, optionList) {
         if (!optionValue.contains('=')) {
@@ -105,18 +108,6 @@ DatabasePrivate::parseClassInfo(const QMetaObject* object, const QMetaClassInfo&
             }
         }
     }
-
-    /*qDebug();
-    qDebug() << "--- " << classInfo.name() << " ---";
-    qDebug() << "Primary: " << isPrimaryKey;
-    qDebug() << "Unique: " << isUnique;
-    qDebug() << "AutoIncrement: " << isAutoIncrement;
-    qDebug() << "Null: " << isNull;
-    qDebug() << "Length: " << isLength;
-    qDebug() << "-- Count: " << length;
-    qDebug() << "Foreign: " << isForeignKey;
-    qDebug() << "-- Table: " << foreignTable;
-    qDebug() << "-- Field: " << foreignTableField;*/
 
     return true;
 }
