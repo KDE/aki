@@ -177,7 +177,7 @@ Query<T>::result()
     }
 
     if (_query.exec()) {
-        if (_query.next()) {
+        while (_query.next()) {
             T* res = qobject_cast<T*>(_object.newInstance());
             for (int i = 0, c = _object.classInfoCount(); i < c; ++i) {
                 const QMetaClassInfo classInfo = _object.classInfo(i);
