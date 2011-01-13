@@ -33,11 +33,6 @@ class TablePrivate
 {
 public:
     explicit TablePrivate(Aki::Sql::Table* qq);
-    bool getOption(QString* line, QString* value);
-    bool checkProperties();
-    bool parseClassInfo(const QMetaClassInfo& classInfo);
-    bool parseMetaOptions();
-    QString propertyDontMatchErrorString(const QString& propertyName);
 private:
     AKI_DECLARE_PUBLIC(Table)
 }; // End of class TablePrivate.
