@@ -244,7 +244,6 @@ template<typename T> bool
 Database::add(T* data)
 {
     using namespace std::tr1;
-    AKI_STATIC_ASSERT((is_base_of<Aki::Sql::Table, T>::value));
     Q_ASSERT(data);
 
     QStringList propertyList;
@@ -263,7 +262,6 @@ Database::add(T* data)
     }
 
     QString str = QString("INSERT INTO %1 (%2) values(%3)").arg(className, propertyList.join(", "), params.join(", "));
-    qDebug() << str;
 
     QSqlQuery query(str);
     for (int i = 0, c = propertyList.count(); i < c; ++i) {

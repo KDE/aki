@@ -164,15 +164,12 @@ Query<T>::orderBy(const QString& field)
 template<typename T> QList<QSharedPointer<T> >
 Query<T>::result()
 {
-    DEBUG_FUNC_NAME;
     QList<QSharedPointer<T> > results;
-    DEBUG_TEXT2("Preparing Sql Statement:\n%1", _sql);
     _query.prepare(_sql);
 
     QMapIterator<QString, QVariant> i(_placeHolders);
     while (i.hasNext()) {
         i.next();
-        DEBUG_TEXT2("Binding: %1", i.key());
         _query.bindValue(i.key(), i.value());
     }
 

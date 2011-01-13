@@ -93,13 +93,9 @@ MetaTablePrivate::parseClassInfo(const QMetaObject* object, const QMetaClassInfo
 bool
 MetaTablePrivate::parseMetaObjects(Aki::Sql::Table* table)
 {
-    DEBUG_FUNC_NAME;
-
     const QMetaObject* metaObject(table->metaObject());
     const int classInfoCount(metaObject->classInfoCount());
     const QString className(metaObject->className());
-
-    DEBUG_TEXT2("--> Parsing %1", className);
 
     for (int i = 0; i < classInfoCount; ++i) {
         const QMetaClassInfo classInfo = metaObject->classInfo(i);

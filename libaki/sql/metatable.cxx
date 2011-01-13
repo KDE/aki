@@ -51,7 +51,6 @@ MetaTable::operator=(const Aki::Sql::MetaTable& other)
 bool
 MetaTable::createTable()
 {
-    DEBUG_FUNC_NAME;
     QString className = _d->name;
 
     if (className.contains("::")) {
@@ -116,11 +115,9 @@ MetaTable::createTable()
         }
     }
 
-    DEBUG_TEXT(statement + "\n);")
     QSqlQuery query;
     query.prepare(statement + "\n);");
     if (!query.exec()) {
-        DEBUG_TEXT2("Error creating table: %1", query.lastError().text());
         return false;
     }
 
