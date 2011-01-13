@@ -39,19 +39,13 @@ Table::~Table()
 bool
 Table::create()
 {
+    Aki::Sql::Database::metaTable(this).createTable();
     return false;
 }
 
 bool
 Table::remove()
 {
-    /*QSqlQuery query(Aki::Sql::Database::self()->database());
-    query.prepare(QString("DROP TABLE %1").arg(metaObject()->className()));
-    if (!query.exec()) {
-        return false;
-    }
-
-    return true;*/
     return true;
 }
 

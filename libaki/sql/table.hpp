@@ -48,13 +48,13 @@ protected:
      *
      * @internal Internal use only.
      */
-    bool create();
+    Q_INVOKABLE bool create();
     /**
      * Drops the table and all the records from the table.
      *
      * @internal Internal use only.
      */
-    bool remove();
+    Q_INVOKABLE bool remove();
 private:
     AKI_DECLARE_PRIVATE(Table)
 }; // End of class Table.
