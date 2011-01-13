@@ -245,7 +245,7 @@ Database::create()
     T* tObject = qobject_cast<T*>(tableObject.newInstance());
     Q_ASSERT(tObject);
     bool status = false;
-    QMetaObject::invokeMethod(tObject, "create");
+    QMetaObject::invokeMethod(tObject, "create", Q_RETURN_ARG(bool, status));
     return status;
 }
 

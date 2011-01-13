@@ -39,8 +39,7 @@ Table::~Table()
 bool
 Table::create()
 {
-    Aki::Sql::Database::metaTable(this).createTable();
-    return false;
+    return Aki::Sql::Database::metaTable(this).createTable();
 }
 
 bool

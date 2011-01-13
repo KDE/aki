@@ -38,8 +38,8 @@ public:
     MetaTable(const Aki::Sql::MetaTable& other);
     ~MetaTable();
     Aki::Sql::MetaTable& operator=(const Aki::Sql::MetaTable& other);
-    void createTable();
-    void dropTable();
+    bool createTable();
+    bool dropTable();
     QList<Aki::Sql::Field> fields();
     QList<Aki::Sql::Field> fields() const;
     QString name() const;

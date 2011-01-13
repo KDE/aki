@@ -48,7 +48,7 @@ MetaTable::operator=(const Aki::Sql::MetaTable& other)
     return *this;
 }
 
-void
+bool
 MetaTable::createTable()
 {
     DEBUG_FUNC_NAME;
@@ -115,19 +115,23 @@ MetaTable::createTable()
     query.prepare(statement + "\n);");
     if (!query.exec()) {
         DEBUG_TEXT2("Error creating table: %1", query.lastError().text());
+        return false;
     }
+
+    return true;
 }
 
-void
+bool
 MetaTable::dropTable()
 {
     DEBUG_FUNC_NAME;
     QSqlQuery query("DROP TABLE " + name());
     if (query.exec()) {
-        return;
+        return true;
     }
 
     DEBUG_TEXT(query.lastError().text());
+    return false;
 }
 
 QList<Aki::Sql::Field>
