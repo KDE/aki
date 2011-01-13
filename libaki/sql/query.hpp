@@ -23,10 +23,10 @@
 
 #include "aki.hpp"
 #include "debughelper.hpp"
-#include "sql/database.hpp"
 #include <QtCore/QMetaClassInfo>
 #include <QtCore/QObject>
 #include <QtCore/QSharedPointer>
+#include <QtSql/QSqlError>
 #include <QtSql/QSqlQuery>
 #include <QtSql/QSqlRecord>
 
@@ -34,6 +34,7 @@ namespace Aki
 {
 namespace Sql
 {
+class Database;
 template<typename T>
 class LIBAKI_EXPORT Query
 {
@@ -180,12 +181,20 @@ Query<T>::result()
             T* res = qobject_cast<T*>(_object.newInstance());
             for (int i = 0, c = _object.classInfoCount(); i < c; ++i) {
                 const QMetaClassInfo classInfo = _object.classInfo(i);
+                const QMetaProperty property = _object.property(_object.indexOfProperty(classInfo.name()));
                 const int indexRecord = _query.record().indexOf(classInfo.name());
-                res->setProperty(classInfo.name(), _query.value(indexRecord));
+                if (property.isEnumType()) {
+                    QMetaEnum enumData = _object.enumerator(_object.indexOfEnumerator(property.typeName()));
+                    res->setProperty(classInfo.name(), enumData.valueToKey(_query.value(indexRecord).toInt()));
+                } else {
+                    res->setProperty(classInfo.name(), _query.value(indexRecord));
+                }
             }
 
             results.append(QSharedPointer<T>(res));
         }
+    } else {
+        qDebug() << _query.lastError().text();
     }
 
     return results;

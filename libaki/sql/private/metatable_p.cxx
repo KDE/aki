@@ -52,7 +52,6 @@ MetaTablePrivate::parseClassInfo(const QMetaObject* object, const QMetaClassInfo
     Q_ASSERT(field.type() != QVariant::Invalid);
 
     const QStringList optionList = QString(classInfo.value()).split(',', QString::SkipEmptyParts);
-    Q_ASSERT(optionList.count());
 
     foreach (const QString& option, optionList) {
         if (!option.contains('=')) {

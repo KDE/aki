@@ -24,6 +24,7 @@
 #include "aki.hpp"
 #include "singleton.hpp"
 #include "sql/metatable.hpp"
+#include "sql/query.hpp"
 #include <QtCore/QObject>
 #include <QtSql/QSqlDatabase>
 #include <QtSql/QSqlError>
@@ -64,6 +65,7 @@ public:
     explicit Database(const QString& type, const QString& connectionName = QLatin1String(QSqlDatabase::defaultConnection),
                       QObject* parent = 0);
     ~Database();
+    template<typename T> bool add(T* data);
     /**
      * Closes the database.
      */
@@ -106,6 +108,8 @@ public:
      * @return SQL database name if using an SQL server else the path to the sql file.
      */
     QString databaseName() const;
+
+    template<typename T> Aki::Sql::Query<T> find();
     /**
      * Gets the host name of the connection. Usually localhost.
      *
@@ -237,6 +241,43 @@ public:
 typedef QScopedPointer<Aki::Sql::Database, Aki::Sql::DatabaseDeleter> DatabaseScopedPointer;
 
 template<typename T> bool
+Database::add(T* data)
+{
+    using namespace std::tr1;
+    AKI_STATIC_ASSERT((is_base_of<Aki::Sql::Table, T>::value));
+    Q_ASSERT(data);
+
+    QStringList propertyList;
+    QStringList params;
+    QVariantList valueList;
+    for (int i = 0, c = data->metaObject()->classInfoCount(); i < c; ++i) {
+        params << "?";
+        propertyList << QString(data->metaObject()->classInfo(i).name());
+        valueList << data->property(data->metaObject()->classInfo(i).name());
+    }
+
+    QString className = data->metaObject()->className();
+    if (className.contains("::")) {
+        QString tmp = className.left(className.lastIndexOf("::") + 2);
+        className.remove(0, tmp.count());
+    }
+
+    QString str = QString("INSERT INTO %1 (%2) values(%3)").arg(className, propertyList.join(", "), params.join(", "));
+    qDebug() << str;
+
+    QSqlQuery query(str);
+    for (int i = 0, c = propertyList.count(); i < c; ++i) {
+        query.addBindValue(valueList.at(i));
+    }
+
+    if (query.exec()) {
+        return true;
+    }
+
+    return false;
+}
+
+template<typename T> bool
 Database::create()
 {
     using namespace std::tr1;
@@ -247,6 +288,14 @@ Database::create()
     bool status = false;
     QMetaObject::invokeMethod(tObject, "create", Q_RETURN_ARG(bool, status));
     return status;
+}
+
+template<typename T> Aki::Sql::Query<T>
+Database::find()
+{
+    using namespace std::tr1;
+    AKI_STATIC_ASSERT((is_base_of<Aki::Sql::Table, T>::value));
+    return Aki::Sql::Query<T>();
 }
 
 template<typename T> bool
