@@ -97,7 +97,13 @@ MetaTable::createTable()
             }
 
             if (field.requiredStatus() == Aki::Sql::Field::Required) {
-                fieldText.append("NOT NULL");
+                fieldText.append(" NOT NULL");
+            }
+
+            if (!field.foreignKeyTable().isEmpty()) {
+                Q_ASSERT(!field.foreignKey().isEmpty());
+                fieldText.append(QString(",\n    FOREIGN KEY(%1) REFERENCES %2(%3) ON DELETE CASCADE")
+                                    .arg(field.name(), field.foreignKeyTable(), field.foreignKey()));
             }
 
             if (fieldIter.hasNext()) {

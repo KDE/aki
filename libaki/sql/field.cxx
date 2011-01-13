@@ -80,14 +80,14 @@ Field::isPrimaryKey() const
 void
 Field::setForeignKey(const QString& key)
 {
-    Q_ASSERT(key.isEmpty());
+    Q_ASSERT(!key.isEmpty());
     _d->foreignKey = key;
 }
 
 void
 Field::setForeignKeyTable(const QString& table)
 {
-    Q_ASSERT(table.isEmpty());
+    Q_ASSERT(!table.isEmpty());
     _d->foreignKeyTable = table;
 }
 

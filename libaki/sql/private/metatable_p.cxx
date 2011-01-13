@@ -72,11 +72,11 @@ MetaTablePrivate::parseClassInfo(const QMetaObject* object, const QMetaClassInfo
             const QString sqlOption = optionSplit.at(0);
             const QString value = optionSplit.at(1);
 
-            if (option == "NULL") {
+            if (sqlOption == "NULL") {
                 field.setRequiredStatus((value == "true") ? QSqlField::Optional : QSqlField::Required);
-            } else if (option == "LENGTH") {
+            } else if (sqlOption == "LENGTH") {
                 field.setLength(value.toInt());
-            } else if (option == "FOREIGN_KEY") {
+            } else if (sqlOption == "FOREIGN_KEY") {
                 Q_ASSERT_X(value.contains(';'), __PRETTY_FUNCTION__, "FOREIGN_KEY does not contain an ';'");
                 const QStringList tableId = value.split(';', QString::SkipEmptyParts);
                 Q_ASSERT_X(tableId.count() == 2, __PRETTY_FUNCTION__,
