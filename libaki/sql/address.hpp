@@ -58,7 +58,7 @@ class LIBAKI_EXPORT Address
      *
      * The default value is 6667.
      */
-    Q_PROPERTY(quint16 port READ port WRITE setPort)
+    Q_PROPERTY(unsigned int port READ port WRITE setPort)
     /**
      * This property holds the @p password for the server.
      *
@@ -76,9 +76,9 @@ class LIBAKI_EXPORT Address
      *
      * The default value is -1.
      */
-    Q_PROPERTY(long addressServer READ addressServer WRITE setAddressServer)
+    Q_PROPERTY(int addressServer READ addressServer WRITE setAddressServer)
 public:
-    explicit Address(QObject* parent = 0);
+    Q_INVOKABLE explicit Address(QObject* parent = 0);
     ~Address();
     /**
      * Gets the address for the server.
@@ -118,7 +118,7 @@ public:
      *
      * @return Address port.
      */
-    quint16 port() const;
+    unsigned int port() const;
     /**
      * Sets the @p address for to be able to connect to.
      * @note Cannot be nulled.
@@ -139,7 +139,7 @@ public:
      *
      * @param port Port number for this address.
      */
-    void setPort(quint16 port);
+    void setPort(unsigned int port);
     /**
      * Sets the SSL state for this address.
      *

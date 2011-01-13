@@ -59,7 +59,7 @@ class LIBAKI_EXPORT Nickname
      */
     Q_PROPERTY(int nicknameIdentity READ nicknameIdentity WRITE setNicknameIdentity)
 public:
-    explicit Nickname(QObject* parent = 0);
+    Q_INVOKABLE explicit Nickname(QObject* parent = 0);
     ~Nickname();
     /**
      * Gets the id of this data.

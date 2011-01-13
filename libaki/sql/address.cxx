@@ -65,7 +65,7 @@ Address::password() const
     return _d->password;
 }
 
-quint16
+unsigned int
 Address::port() const
 {
     return _d->port;
@@ -104,7 +104,7 @@ Address::setPassword(const QString& password)
 }
 
 void
-Address::setPort(quint16 port)
+Address::setPort(unsigned int port)
 {
     if (_d->port != port) {
         _d->port = port;

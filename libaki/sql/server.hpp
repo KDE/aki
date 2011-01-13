@@ -33,7 +33,7 @@ namespace Sql
  * Server information about a row in the Server SQL table. Determines all the settings
  * for a single given row.
  */
-class Server
+class LIBAKI_EXPORT Server
     : public Aki::Sql::Table
 {
     Q_OBJECT
@@ -141,7 +141,7 @@ class Server
      */
     Q_PROPERTY(int serverIdentity READ serverIdentity WRITE setServerIdentity)
 public:
-    explicit Server(QObject* parent = 0);
+    Q_INVOKABLE explicit Server(QObject* parent = 0);
     ~Server();
     /**
      * Gets the default encoding.

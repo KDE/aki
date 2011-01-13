@@ -43,7 +43,7 @@ class LIBAKI_EXPORT Channel
     Q_PROPERTY(QString password READ password WRITE setPassword)
     Q_PROPERTY(int channelServer READ channelServer WRITE setChannelServer)
 public:
-    explicit Channel(QObject* parent = 0);
+    Q_INVOKABLE explicit Channel(QObject* parent = 0);
     ~Channel();
     int channelServer() const;
     int id() const;

@@ -116,7 +116,7 @@ class LIBAKI_EXPORT Identity
      */
     Q_PROPERTY(QString returnMessage READ returnMessage WRITE setReturnMessage)
 public:
-    explicit Identity(QObject* parent = 0);
+    Q_INVOKABLE explicit Identity(QObject* parent = 0);
     ~Identity();
     /**
      * Gets the user's away message.
