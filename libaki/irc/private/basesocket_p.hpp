@@ -33,8 +33,6 @@ class BaseSocketPrivate
 {
 public:
     explicit BaseSocketPrivate(Aki::Irc::BaseSocket* qq);
-    void appendSslError(QList<Aki::Irc::BaseSocket::SslError>& list,
-                        Aki::Irc::BaseSocket::SslError error);
     void error(QSslSocket::SocketError error);
     void readyRead();
     void socketState(QSslSocket::SocketState state);

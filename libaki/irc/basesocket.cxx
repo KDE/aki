@@ -200,6 +200,12 @@ BaseSocket::nickList() const
     return _d->nickList;
 }
 
+QSslCertificate
+Aki::Irc::BaseSocket::peerCertificate() const
+{
+    return _d->socket->peerCertificate();
+}
+
 QString
 BaseSocket::realName() const
 {
@@ -243,6 +249,12 @@ QString
 BaseSocket::servicePassword() const
 {
     return _d->servicePassword;
+}
+
+QSslCipher
+Aki::Irc::BaseSocket::sessionCipher() const
+{
+    return _d->socket->sessionCipher();
 }
 
 void

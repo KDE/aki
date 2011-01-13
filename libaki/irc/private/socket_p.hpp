@@ -35,7 +35,7 @@ public:
     explicit SocketPrivate(Aki::Irc::Socket* qq);
     void error(Aki::Irc::BaseSocket::SocketError error);
     void rawMessageReceived(const QString& message);
-    void sslErrors(const QList<Aki::Irc::BaseSocket::SslError>& errors);
+    void sslErrors(const QList<QSslError>& errors);
     void stateChanged(Aki::Irc::BaseSocket::SocketState state);
 public:
     Aki::Irc::Socket::ServerCapabilities serverCapabilities;

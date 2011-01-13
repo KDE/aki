@@ -813,7 +813,7 @@ SocketPrivate::removeStringToFirstWhitespace(QString* line, int start, int stop)
 }
 
 void
-SocketPrivate::sslErrors(const QList<Aki::Irc::BaseSocket::SslError>& errors)
+SocketPrivate::sslErrors(const QList<QSslError>& errors)
 {
     Q_UNUSED(errors)
 }
@@ -830,7 +830,7 @@ SocketPrivate::stateChanged(Aki::Irc::BaseSocket::SocketState state)
             _q->sendMessage(Aki::Irc::Rfc2812::pass(_q->serverPassword()));
         }
 
-        _q->sendMessage(Aki::Irc::Rfc2812::raw("CAP LS"));
+        //_q->sendMessage(Aki::Irc::Rfc2812::raw("CAP LS"));
         _q->sendMessage(Aki::Irc::Rfc2812::user(_q->identName(), false, _q->realName()));
         _q->sendMessage(Aki::Irc::Rfc2812::nick(_q->currentNick()));
         break;

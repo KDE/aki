@@ -26,6 +26,8 @@
 #include "irc/message.hpp"
 #include <QtCore/QObject>
 #include <QtCore/QStringList>
+#include <QtNetwork/QSslCertificate>
+#include <QtNetwork/QSslCipher>
 
 class QTextCodec;
 
@@ -82,34 +84,6 @@ public:
         UnknownSocketError = -1
     }; // End of enum SocketError.
 
-    enum SslError {
-        NoError = 0,
-        UnableToGetIssuerCertificate = 1,
-        UnableToDecryptCertificateSignature = 2,
-        UnableToDecodeIssuerPublicKey = 3,
-        CertificateSignatureFailed = 4,
-        CertificateNotYetValid = 5,
-        CertificateExpired = 6,
-        InvalidNotBeforeField = 7,
-        InvalidNotAfterField = 8,
-        SelfSignedCertificate = 9,
-        SelfSignedCertificateInChain = 10,
-        UnableToGetLocalIssuerCertificate = 11,
-        UnableToVerifyFirstCertificate = 12,
-        CertificateRevoked = 13,
-        InvalidCaCertificate = 14,
-        PathLengthExceeded = 15,
-        InvalidPurpose = 16,
-        CertificateUntrusted = 17,
-        CertificateRejected = 18,
-        SubjectIssuerMismatch = 19,
-        AuthorityIssuerSerialNumberMismatch = 20,
-        NoPeerCertificate = 21,
-        HostNameMismatch = 22,
-        UnspecifiedError = 23,
-        NoSslSupport = 24
-    }; // End of enum SslError.
-
     enum ProxyType {
         NoProxy = 0,
         Socks5 = 1,
@@ -133,6 +107,7 @@ public:
     QString name() const;
     QString nextAvailableNick() const;
     QStringList nickList() const;
+    QSslCertificate peerCertificate() const;
     QString realName() const;
     int retryAttemptCount() const;
     int retryInterval() const;
@@ -140,6 +115,7 @@ public:
     QString serverPassword() const;
     QString serviceName() const;
     QString servicePassword() const;
+    QSslCipher sessionCipher() const;
     void setAddressList(const QStringList& addresses);
     void setAutoIdentify(bool enable);
     void setAutoReconnect(bool enable);
@@ -163,7 +139,7 @@ public Q_SLOTS:
 Q_SIGNALS:
     void error(Aki::Irc::BaseSocket::SocketError error);
     void rawMessageReceived(const QString& message);
-    void sslErrors(const QList<Aki::Irc::BaseSocket::SslError>& errors);
+    void sslErrors(const QList<QSslError>& errors);
     void stateChanged(Aki::Irc::BaseSocket::SocketState state);
 protected:
     virtual void connectToHost(const QString& address, quint16 port = 6667);

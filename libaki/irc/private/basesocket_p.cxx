@@ -49,20 +49,6 @@ BaseSocketPrivate::BaseSocketPrivate(Aki::Irc::BaseSocket* qq)
     addressList.clear();
 }
 
-void
-BaseSocketPrivate::appendSslError(QList<Aki::Irc::BaseSocket::SslError>& list,
-                              Aki::Irc::BaseSocket::SslError error)
-{
-    if (list.contains(Aki::Irc::BaseSocket::NoError)) {
-        list.removeAll(Aki::Irc::BaseSocket::NoError);
-    }
-
-    if (list.contains(error)) {
-        list.removeAll(error);
-        list.append(error);
-    }
-}
-
 QByteArray
 BaseSocketPrivate::detectUnicode(const QByteArray& data) const
 {
@@ -119,14 +105,5 @@ BaseSocketPrivate::socketState(QAbstractSocket::SocketState state)
 void
 BaseSocketPrivate::sslErrors(const QList<QSslError>& errors)
 {
-    QListIterator<QSslError> errorIter(errors);
-    QList<Aki::Irc::BaseSocket::SslError> myErrors;
-
-    while (errorIter.hasNext()) {
-        myErrors.append(static_cast<Aki::Irc::BaseSocket::SslError>(errorIter.next().error()));
-    }
-
-    if (!myErrors.isEmpty()) {
-        emit _q->sslErrors(myErrors);
-    }
+    emit _q->sslErrors(errors);
 }
