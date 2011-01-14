@@ -269,9 +269,11 @@ Database::add(T* data)
     }
 
     if (query.exec()) {
+        query.clear();
         return true;
     }
 
+    query.clear();
     return false;
 }
 
