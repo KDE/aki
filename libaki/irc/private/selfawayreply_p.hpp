@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010  Keith Rusler <xzekecomax@gmail.com>
+ * Copyright 2009-2011  Keith Rusler <xzekecomax@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as

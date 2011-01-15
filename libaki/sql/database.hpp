@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010  Keith Rusler <xzekecomax@gmail.com>
+ * Copyright 2009-2011  Keith Rusler <xzekecomax@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -108,7 +108,21 @@ public:
      * @return SQL database name if using an SQL server else the path to the sql file.
      */
     QString databaseName() const;
-
+    /**
+     * Drops the the table from the database.
+     *
+     * * @code
+     * if (!Aki::Sql::Database::self()->remove<Aki::Sql::Identity>()) {
+     *     ... Unable to drop database ...
+     * }
+     * @endcode
+     *
+     * @return true if the table was drop; false otherwise.
+     */
+    template<typename T> bool drop();
+    /**
+     *
+     */
     template<typename T> Aki::Sql::Query<T> find();
     /**
      * Gets the host name of the connection. Usually localhost.
@@ -161,17 +175,9 @@ public:
      */
     template<typename T> static bool registerClass();
     /**
-     * Drops the the table from the database.
      *
-     * * @code
-     * if (!Aki::Sql::Database::self()->remove<Aki::Sql::Identity>()) {
-     *     ... Unable to drop database ...
-     * }
-     * @endcode
-     *
-     * @return true if the table was drop; false otherwise.
      */
-    template<typename T> bool remove();
+    template<typename T> bool remove(T* data);
     /**
      * Removes the database with the @p connectionName from the global database.
      *
@@ -210,6 +216,7 @@ public:
      *
      */
     bool transaction();
+    template<typename T> bool update(T* data);
     /**
      *
      */
@@ -245,6 +252,7 @@ Database::add(T* data)
 {
     using namespace std::tr1;
     Q_ASSERT(data);
+    AKI_STATIC_ASSERT((is_base_of<Aki::Sql::Table, T>::value));
 
     QStringList propertyList;
     QStringList params;
@@ -290,16 +298,8 @@ Database::create()
     return status;
 }
 
-template<typename T> Aki::Sql::Query<T>
-Database::find()
-{
-    using namespace std::tr1;
-    AKI_STATIC_ASSERT((is_base_of<Aki::Sql::Table, T>::value));
-    return Aki::Sql::Query<T>();
-}
-
 template<typename T> bool
-Database::remove()
+Database::drop()
 {
     using namespace std::tr1;
     AKI_STATIC_ASSERT((is_base_of<Aki::Sql::Table, T>::value));
@@ -310,10 +310,92 @@ Database::remove()
     return false;
 }
 
+template<typename T> Aki::Sql::Query<T>
+Database::find()
+{
+    using namespace std::tr1;
+    AKI_STATIC_ASSERT((is_base_of<Aki::Sql::Table, T>::value));
+    return Aki::Sql::Query<T>();
+}
+
 template<typename T> bool
 Database::registerClass()
 {
     return Aki::Sql::Database::registerClass(new T);
+}
+
+template<typename T> bool
+Database::remove(T* data)
+{
+    using namespace std::tr1;
+    Q_ASSERT(data);
+    AKI_STATIC_ASSERT((is_base_of<Aki::Sql::Table, T>::value));
+
+    QStringList propertyList;
+    QVariantList valueList;
+    for (int i = 0, c = data->metaObject()->classInfoCount(); i < c; ++i) {
+        propertyList << QString(data->metaObject()->classInfo(i).name());
+        valueList << data->property(data->metaObject()->classInfo(i).name());
+    }
+
+    QString className = data->metaObject()->className();
+    if (className.contains("::")) {
+        QString tmp = className.left(className.lastIndexOf("::") + 2);
+        className.remove(0, tmp.count());
+    }
+
+    QString str = QString("DELETE FROM %1 WHERE ").arg(className);
+    for (int i = 0, c = propertyList.count(); i < c; ++i) {
+        str += propertyList.at(i) + "='" + valueList.at(i).toString() + "' AND ";
+    }
+
+    QSqlQuery query;
+    if (query.exec(str)) {
+        query.clear();
+        return true;
+    }
+
+    query.clear();
+    return false;
+}
+
+template<typename T> bool
+Database::update(T* data)
+{
+    using namespace std::tr1;
+    Q_ASSERT(data);
+    AKI_STATIC_ASSERT((is_base_of<Aki::Sql::Table, T>::value));
+
+    QStringList propertyList;
+    QVariantList valueList;
+    for (int i = 0, c = data->metaObject()->classInfoCount(); i < c; ++i) {
+        propertyList << QString(data->metaObject()->classInfo(i).name());
+        valueList << data->property(data->metaObject()->classInfo(i).name());
+    }
+
+    QString className = data->metaObject()->className();
+    if (className.contains("::")) {
+        QString tmp = className.left(className.lastIndexOf("::") + 2);
+        className.remove(0, tmp.count());
+    }
+
+    QString str = QString("UPDATE %1 SET").arg(className);
+    for (int i = 0, c = propertyList.count(); i < c; ++i) {
+        str += ' ' + propertyList.at(i) + "='" +  valueList.at(i).toString() + "',";
+    }
+    str.remove(str.length() - 1, 1);
+    str += " WHERE " + propertyList.at(0) + "='" + valueList.at(0).toString() + "'";
+
+    qDebug() << str;
+
+    QSqlQuery query;
+    if (query.exec(str)) {
+        query.clear();
+        return true;
+    }
+
+    query.clear();
+    return false;
 }
 
 } // End of namespace Sql.

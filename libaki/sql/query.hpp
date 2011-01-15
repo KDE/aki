@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010  Keith Rusler <xzekecomax@gmail.com>
+ * Copyright 2009-2011  Keith Rusler <xzekecomax@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -49,6 +49,7 @@ public:
     Aki::Sql::Query<T>& limit(int count);
     Aki::Sql::Query<T>& offset(int count);
     Aki::Sql::Query<T>& orderBy(const QString& field);
+    Aki::Sql::Query<T>& orderBy(const QString& field, Qt::SortOrder order);
     QList<QSharedPointer<T> > result();
     QList<QSharedPointer<T> > result() const;
     Aki::Sql::Query<T>& where(const QString& condition);
@@ -158,6 +159,17 @@ Query<T>::orderBy(const QString& field)
     }
 
     _sql += "ORDER BY " + field + "\n";
+    return *this;
+}
+
+template<typename T>Aki::Sql::Query<T>&
+Query<T>::orderBy(const QString& field, Qt::SortOrder order)
+{
+    if (field.isEmpty()) {
+        return *this;
+    }
+
+    _sql += "ORDER BY " + field + ((order == Qt::AscendingOrder) ? " ASC" : " DESC");
     return *this;
 }
 
