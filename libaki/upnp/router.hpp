@@ -72,4 +72,6 @@ private:
 } // End of namespace Upnp.
 } // End of namespace Aki.
 
+QDebug LIBAKI_EXPORT operator<<(QDebug dbg, const Aki::Upnp::Router* router);
+
 #endif // AKI_UPNP_ROUTER_HPP

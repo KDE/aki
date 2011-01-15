@@ -31,19 +31,13 @@ Socket::Socket(QObject* parent)
     : QUdpSocket(parent),
     _d(new Aki::Upnp::SocketPrivate(this))
 {
-    DEBUG_FUNC_NAME;
-
     connect(this, SIGNAL(error(QAbstractSocket::SocketError)),
             SLOT(error(QAbstractSocket::SocketError)));
     connect(this, SIGNAL(readyRead()),
             SLOT(readyRead()));
 
     for (int i = 0; i < 15; ++i) {
-        if (!bind(1900 + i, QUdpSocket::ShareAddress)) {
-            DEBUG_TEXT2("Unable to bind to UDP port: %1", 1900 + i);
-            DEBUG_TEXT(errorString());
-        } else {
-            DEBUG_TEXT2("Bound to UDP port: %1", 1900 + i);
+        if (bind(1900 + i, QUdpSocket::ShareAddress)) {
             break;
         }
     }

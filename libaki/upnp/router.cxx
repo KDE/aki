@@ -20,7 +20,6 @@
  */
 
 #include "router.hpp"
-#include "debughelper.hpp"
 #include "parser.hpp"
 #include "private/router_p.hpp"
 #include <QtNetwork/QNetworkReply>
@@ -46,10 +45,6 @@ void
 Router::addPortForwarding(quint16 port, Aki::Upnp::Router::Method method,
                           const QString& description)
 {
-    DEBUG_FUNC_NAME;
-    DEBUG_TEXT3("Attempting to forward port: %1 using Method: %2", port,
-                (method == Aki::Upnp::Router::Tcp) ? "TCP" : "UDP");
-
     bool found = false;
 
     foreach (const Aki::Upnp::Service& service, _d->serviceList) {
@@ -58,10 +53,6 @@ Router::addPortForwarding(quint16 port, Aki::Upnp::Router::Method method,
             _d->addPortForwarding(service, port, method, description);
             found = true;
         }
-    }
-
-    if (!found) {
-        DEBUG_TEXT("Unable to find WANIPConnection or WANPPPConnection");
     }
 }
 
@@ -108,10 +99,6 @@ Router::isPortForwarded(quint16 port)
 void
 Router::removePortForwarding(quint16 port, Aki::Upnp::Router::Method method)
 {
-    DEBUG_FUNC_NAME;
-    DEBUG_TEXT3("Attempting to remove forward port: %1 with method: %2", port,
-                (method == Aki::Upnp::Router::Tcp) ? "TCP" : "UDP");
-
     QList<Aki::Upnp::PortForward>::Iterator portForwardIter = _d->forwardPortsList.begin();
     while (portForwardIter != _d->forwardPortsList.end()) {
         Aki::Upnp::PortForward& forward = *portForwardIter;
@@ -141,6 +128,22 @@ const QUrl&
 Router::xmlFile() const
 {
     return _d->xmlFileLocation;
+}
+
+QDebug
+operator<<(QDebug dbg, const Aki::Upnp::Router* router)
+{
+    dbg << "Server Name: " << router->serverName() << '\n'
+        << "External IP Address: " << router->requestExternalIp() << '\n'
+        << "Xml File Location: " << router->xmlFile() << '\n'
+        << "--- Description ---" << '\n'
+        << "Friendly Name: " << router->description().friendlyName() << '\n'
+        << "Manufactuer: " << router->description().manufacturer() << '\n'
+        << "Model Description: " << router->description().modelDescription() << '\n'
+        << "Model Name: " << router->description().modelName() << '\n'
+        << "Model Number: " << router->description().modelNumber();
+    
+    return dbg;
 }
 
 #include "test/upnp/router.moc"

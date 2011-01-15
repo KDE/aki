@@ -143,7 +143,6 @@ RouterPrivate::removePortForwarding(const Aki::Upnp::Service& service, quint16 p
 void
 RouterPrivate::reply(QNetworkReply* reply)
 {
-    DEBUG_FUNC_NAME;
     if (reply->error() == QNetworkReply::NoError) {
         if (reply->url().toString().contains(".xml")) {
             Aki::Upnp::Parser parser;
@@ -155,19 +154,11 @@ RouterPrivate::reply(QNetworkReply* reply)
                 QDomDocument document;
                 document.setContent(reply->readAll());
                 externalIp = document.elementsByTagName("NewExternalIPAddress").at(0).toElement().text();
-                DEBUG_TEXT("Successfully Received External IP");
-                DEBUG_TEXT2("IP Address: %1", externalIp);
             } else if (reply->request().rawHeader("SOAPAction").contains("AddPortMapping")) {
                 Aki::Upnp::PortForward forward = pendingForwardPortsQueue.dequeue();
-                DEBUG_TEXT("Successful Port Forward");
-                DEBUG_TEXT2("Port: %1", forward.port());
-                DEBUG_TEXT2("Method: %1", ((forward.method() == Aki::Upnp::Router::Tcp) ? "TCP" : "UDP"));
                 forwardPortsList.append(forward);
             } else if (reply->request().rawHeader("SOAPAction").contains("DeletePortMapping")) {
                 Aki::Upnp::PortForward forward = pendingUnforwardPortsQueue.dequeue();
-                DEBUG_TEXT("Successful Port Unforward");
-                DEBUG_TEXT2("Port: %1", forward.port());
-                DEBUG_TEXT2("Method: %1", (forward.method() == Aki::Upnp::Router::Tcp) ? "TCP" : "UDP");
                 forwardPortsList.removeOne(forward);
             }
         }

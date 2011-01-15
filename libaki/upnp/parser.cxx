@@ -46,26 +46,21 @@ Parser::operator=(const Aki::Upnp::Parser& other)
 bool
 Parser::parse(const QString& file, Aki::Upnp::Router* router)
 {
-    DEBUG_FUNC_NAME;
     Q_ASSERT(router);
     _d->router = router;
 
     if (file.isEmpty()) {
-        DEBUG_TEXT("Unable to parse xml file: File name is empty");
         return false;
     }
 
     QFile f(file);
     if (!f.open(QIODevice::ReadOnly)) {
-        DEBUG_TEXT2("Unable to open file: %1", file);
-        DEBUG_TEXT2("Error: %1", f.errorString());
         return false;
     }
 
     _d->xml.setDevice(&f);
 
     if (_d->xml.hasError()) {
-        DEBUG_TEXT2("Unable to parser xml file: %1", _d->xml.errorString());
         return false;
     }
 
@@ -74,26 +69,22 @@ Parser::parse(const QString& file, Aki::Upnp::Router* router)
             return _d->readRoot();
         }
     }
-
     return false;
 }
 
 bool
 Parser::parse(const QByteArray& data, Aki::Upnp::Router* router)
 {
-    DEBUG_FUNC_NAME;
     Q_ASSERT(router);
     _d->router = router;
 
     if (data.isEmpty()) {
-        DEBUG_TEXT("Unable to parse xml file: Empty data");
         return false;
     }
 
     _d->xml.addData(data);
 
     if (_d->xml.hasError()) {
-        DEBUG_TEXT2("Unable to parse xml file: %1", _d->xml.errorString());
         return false;
     }
 
@@ -102,6 +93,5 @@ Parser::parse(const QByteArray& data, Aki::Upnp::Router* router)
             return _d->readRoot();
         }
     }
-
     return false;
 }

@@ -43,7 +43,6 @@ ParserPrivate::ParserPrivate(const Aki::Upnp::ParserPrivate& other)
 bool
 ParserPrivate::readDevice()
 {
-    DEBUG_FUNC_NAME;
     Q_ASSERT(xml.isStartElement() && xml.name() == "device");
     while (xml.readNextStartElement()) {
         if (xml.name() == "deviceType") {
@@ -123,7 +122,6 @@ ParserPrivate::readRoot()
 bool
 ParserPrivate::readService()
 {
-    DEBUG_FUNC_NAME;
     Q_ASSERT(xml.isStartElement() && xml.name() == "service");
     while (xml.readNextStartElement()) {
         if (xml.name() == "serviceType") {

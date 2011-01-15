@@ -102,8 +102,6 @@ SocketPrivate::leaveMulticastGroup(int socketDescriptor)
 Aki::Upnp::Router*
 SocketPrivate::parseResponse(const QByteArray& data)
 {
-    DEBUG_FUNC_NAME;
-    
     const QStringList lines = QString::fromAscii(data).split("\r\n");
     QString server;
     QUrl location;
@@ -111,11 +109,9 @@ SocketPrivate::parseResponse(const QByteArray& data)
     QString line = lines.first();
     if (!line.contains("HTTP")) {
         if (!line.contains("NOTIFY") && !line.contains("200")) {
-            DEBUG_TEXT("Unable to get valid 200 reply or notify");
             return 0;
         }
     } else if (line.contains("M-SEARCH")) {
-        DEBUG_TEXT("Ignoring M-SEARCH");
         return 0;
     }
 
@@ -123,13 +119,11 @@ SocketPrivate::parseResponse(const QByteArray& data)
     for (int i = 0, c = lines.count(); i < c && !validDevice; ++i) {
         line = lines.value(i);
         if ((line.contains("ST:") || line.contains("NT:")) && line.contains("InternetGatewayDevice")) {
-            DEBUG_TEXT("Now have a valid device");
             validDevice = true;
         }
     }
 
     if (!validDevice) {
-        DEBUG_TEXT("Unable to find valid device")
         return 0;
     }
 
@@ -138,18 +132,12 @@ SocketPrivate::parseResponse(const QByteArray& data)
         if (line.startsWith("Location", Qt::CaseInsensitive)) {
             location = line.mid(line.indexOf(':') + 1).trimmed();
             if (!location.isValid()) {
-                DEBUG_TEXT("Location is invalid");
                 return 0;
-            } else {
-                DEBUG_TEXT2("Location: %1", location.toString());
             }
         } else if (line.startsWith("Server", Qt::CaseInsensitive)) {
             server = line.mid(line.indexOf(':') + 1).trimmed();
             if (server.isEmpty()) {
-                DEBUG_TEXT("Server is invalid.");
                 return 0;
-            } else {
-                DEBUG_TEXT2("Server: %1", server);
             }
         }
     }
@@ -157,7 +145,6 @@ SocketPrivate::parseResponse(const QByteArray& data)
     if (_q->findDevice(location.toString())) {
         return 0;
     } else {
-        DEBUG_TEXT("Detected IGD");
         return new Aki::Upnp::Router(server, location);
     }
     return 0;
@@ -166,9 +153,7 @@ SocketPrivate::parseResponse(const QByteArray& data)
 void
 SocketPrivate::readyRead()
 {
-    DEBUG_FUNC_NAME;
     if (_q->pendingDatagramSize() == 0) {
-        DEBUG_TEXT("0 byte UDP packet");
         int fd = _q->socketDescriptor();
         char tmp;
         ::read(fd, &tmp, 1);
@@ -180,17 +165,12 @@ SocketPrivate::readyRead()
         return;
     }
 
-    qDebug() << QString(data);
-
     Aki::Upnp::Router* router = parseResponse(data);
     if (router) {
-        DEBUG_TEXT("Received valid router");
         _q->connect(router, SIGNAL(xmlFileDownloaded(Aki::Upnp::Router*,bool)),
                     _q, SLOT(xmlFileDownloaded(Aki::Upnp::Router*,bool)));
         router->downloadXmlFile();
         pendingRouterList.append(router);
-    } else {
-        DEBUG_TEXT("Received invalid router");
     }
 }
 
