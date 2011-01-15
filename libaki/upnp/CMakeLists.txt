@@ -1,0 +1,10 @@
+include(upnp/private/CMakeLists.txt)
+set(akicore_upnp_SRCS
+    upnp/devicedescription.cxx
+    upnp/parser.cxx
+    upnp/portforward.cxx
+    upnp/router.cxx
+    upnp/service.cxx
+    upnp/socket.cxx
+    ${akicore_upnpprivate_SRCS}
+)
