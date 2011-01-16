@@ -31,6 +31,7 @@ set (aki_SRCS
 set (aki_LIBS
     ${KDE4_KDEUI_LIBS}
     ${KDE4_KDECORE_LIBS}
+    ${KDE4_KUTILS_LIBS}
     ${KDE4_KNOTIFYCONFIG_LIBS}
     ${QT_QTXML_LIBRARY}
     akicore
