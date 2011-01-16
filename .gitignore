@@ -2,4 +2,5 @@ build/
 *.kdev4
 doc/
 aki-doc/
+aki-docs/
 *.tag
