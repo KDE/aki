@@ -64,6 +64,12 @@ SocketPrivate::findDevice(const QUrl& location)
 void
 SocketPrivate::joinMulticastGroup(int socketDescriptor)
 {
+#if QT_VERSION >= 0x040800
+    Q_UNUSED(socketDescriptor)
+    if (!_q->joinMulticastGroup(QHostAddress("239.255.255.250"))) {
+        qDebug() << "Unable to join multicast group: 239.255.255.250";
+    }
+#else
     struct ip_mreq mreq;
     memset(&mreq, 0, sizeof(struct ip_mreq));
 
@@ -78,11 +84,18 @@ SocketPrivate::joinMulticastGroup(int socketDescriptor)
 #endif // !defined(Q_WS_WIN)
 //        DEBUG_TEXT("Unable to join multicast group 239.255.255.250");
     }
+#endif
 }
 
 void
 SocketPrivate::leaveMulticastGroup(int socketDescriptor)
 {
+#if QT_VERSION >= 0x040800
+    Q_UNUSED(socketDescriptor)
+    if (!_q->leaveMulticastGroup(QHostAddress("239.255.255.250"))) {
+        qDebug() << "Unable to leave multicast group: 239.255.255.250";
+    }
+#else
     struct ip_mreq mreq;
     memset(&mreq, 0, sizeof(struct ip_mreq));
 
@@ -97,6 +110,7 @@ SocketPrivate::leaveMulticastGroup(int socketDescriptor)
 #endif // !defined(Q_WS_WIN)
         //DEBUG_TEXT("Unable to leave multicast group 239.255.255.250");
     }
+#endif
 }
 
 Aki::Upnp::Router*
