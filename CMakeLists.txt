@@ -48,8 +48,6 @@ add_definitions(
     -fno-strict-aliasing
 )
 
-MESSAGE(STATUS "${QT_DEFINITIONS}")
-
 include_directories(
     ${KDE4_INCLUDES}
     ${Boost_INCLUDE_DIRS}

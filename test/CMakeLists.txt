@@ -20,4 +20,7 @@ set(encrypttest_SRCS encrypttest.cxx)
 kde4_add_unit_test(encrypttest ${encrypttest_SRCS})
 target_link_libraries(encrypttest ${KDE4_KDECORE_LIBS} ${QCA2_LIBRARIES} ${QT_QTTEST_LIBRARY})
 
+add_subdirectory(database)
 add_subdirectory(socket)
+add_subdirectory(upnp)
+add_subdirectory(userlist)
