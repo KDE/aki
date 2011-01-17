@@ -170,7 +170,7 @@ SocketPrivate::readyRead()
     if (_q->pendingDatagramSize() == 0) {
         int fd = _q->socketDescriptor();
         char tmp;
-        (void)read(fd, &tmp, 1);
+        fd = ::read(fd, &tmp, 1);
         return;
     }
 
