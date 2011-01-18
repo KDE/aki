@@ -45,7 +45,7 @@ public:
     bool enableMessages;
     bool markLastPosition;
 private:
-    AKI_DECLARE_PUBLIC(Identity);
+    AKI_DECLARE_PUBLIC(Identity)
 }; // End of class IdentityPrivate.
 } // End of namespace Sql.
 } // End of namespace Aki.

@@ -42,7 +42,7 @@ public:
     QSqlDatabase db;
     static Aki::Sql::TableList tableList;
 private:
-    AKI_DECLARE_PUBLIC(Database);
+    AKI_DECLARE_PUBLIC(Database)
 }; // End of class DatabasePrivate.
 } // End of namespace Sql.
 } // End of namespace Aki.
