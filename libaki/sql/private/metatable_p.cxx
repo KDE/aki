@@ -99,7 +99,9 @@ MetaTablePrivate::parseMetaObjects(Aki::Sql::Table* table)
 
     for (int i = 0; i < classInfoCount; ++i) {
         const QMetaClassInfo classInfo = metaObject->classInfo(i);
-        Q_ASSERT(parseClassInfo(metaObject, classInfo));
+        if (!parseClassInfo(metaObject, classInfo)) {
+            return false;
+        }
     }
 
     return true;

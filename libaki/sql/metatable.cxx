@@ -116,8 +116,10 @@ MetaTable::createTable()
     }
 
     QSqlQuery query;
+    qDebug() << statement + "\n);";
     query.prepare(statement + "\n);");
     if (!query.exec()) {
+        qDebug() << query.lastError().text();
         return false;
     }
 

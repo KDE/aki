@@ -263,22 +263,32 @@ Database::add(T* data)
         valueList << data->property(data->metaObject()->classInfo(i).name());
     }
 
+    QString mainField = propertyList.at(0);
+    propertyList.removeAt(0);
+    valueList.removeAt(0);
+    params.removeAt(0);
+
     QString className = data->metaObject()->className();
     if (className.contains("::")) {
         QString tmp = className.left(className.lastIndexOf("::") + 2);
         className.remove(0, tmp.count());
     }
 
-    QString str = QString("INSERT INTO %1 (%2) values(%3)").arg(className, propertyList.join(", "), params.join(", "));
+    QString str = QString("INSERT INTO %1 (%2) VALUES(%3)").arg(className, propertyList.join(","), params.join(","));
 
     QSqlQuery query(str);
     for (int i = 0, c = propertyList.count(); i < c; ++i) {
         query.addBindValue(valueList.at(i));
     }
 
+
     if (query.exec()) {
+        data->setProperty(mainField.toUtf8().constData(), query.lastInsertId());
         query.clear();
         return true;
+    } else {
+        qDebug() << str;
+        qDebug() << query.lastError().text();
     }
 
     query.clear();
@@ -305,6 +315,7 @@ Database::drop()
     AKI_STATIC_ASSERT((is_base_of<Aki::Sql::Table, T>::value));
     const QMetaObject tableObject = T::staticMetaObject;
     QObject* tObject = tableObject.newInstance();
+    Q_ASSERT(tObject);
     bool status = false;
     QMetaObject::invokeMethod(tObject, "remove", Q_RETURN_ARG(bool, status));
     return false;
@@ -386,8 +397,6 @@ Database::update(T* data)
     str.remove(str.length() - 1, 1);
     str += " WHERE " + propertyList.at(0) + "='" + valueList.at(0).toString() + "'";
 
-    qDebug() << str;
-
     QSqlQuery query;
     if (query.exec(str)) {
         query.clear();
@@ -410,7 +419,12 @@ struct RegisterTable
 public:
     RegisterTable()
     {
-        Q_ASSERT(Aki::Sql::Database::registerClass<T>());
+        DEBUG_FUNC_NAME;
+        if (Aki::Sql::Database::registerClass<T>()) {
+            DEBUG_TEXT("Successfully registered class");
+        } else {
+            DEBUG_TEXT("Unable to register class");
+        }
     }
 };
 
