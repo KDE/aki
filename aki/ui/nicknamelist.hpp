@@ -37,7 +37,7 @@ class NicknameList : public QListView
     Q_OBJECT
 public:
     typedef QList<Aki::Sql::Nickname*> List;
-    explicit NicknameList(Aki::Sql::Database* database, QWidget* parent = 0);
+    explicit NicknameList(QWidget* parent = 0);
     ~NicknameList();
     void addNickname(Aki::Sql::Nickname* nickname);
     int count() const;
@@ -52,6 +52,7 @@ public:
     void setCurrentNickname(Aki::Sql::Nickname* nickname, QItemSelectionModel::SelectionFlags command);
     void setCurrentRow(int row);
     void setCurrentRow(int row, QItemSelectionModel::SelectionFlags command);
+    void setDatabase(Aki::Sql::Database* database);
     Aki::Sql::Nickname* takeNickname(int row);
 public Q_SLOTS:
     void repopulateNicknames(Aki::Sql::Identity* identity);

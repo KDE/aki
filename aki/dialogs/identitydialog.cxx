@@ -19,7 +19,6 @@
  */
 
 #include "identitydialog.hpp"
-#include "aki.hpp"
 #include "sql/database.hpp"
 #include "sql/identity.hpp"
 #include "sql/nickname.hpp"
@@ -32,6 +31,13 @@ IdentityDialog::IdentityDialog(QWidget* parent)
 {
     setAttribute(Qt::WA_DeleteOnClose);
     setupDialog();
+
+    _database = new Aki::Sql::Database("QSQLITE");
+    _database->setDatabaseName(Aki::databaseFile());
+    if (!_database->open()) {
+        qDebug() << "Unable to open database";
+    }
+
     if (identitySelector->count()) {
         slotIdentityActivated(identitySelector->currentIdentity());
     }
@@ -39,6 +45,7 @@ IdentityDialog::IdentityDialog(QWidget* parent)
 
 IdentityDialog::~IdentityDialog()
 {
+    delete _database;
 }
 
 void
@@ -46,7 +53,7 @@ IdentityDialog::createNewIdentity(const QString& name)
 {
 #if defined(Q_CC_GNU)
     Q_UNUSED(name)
-#warning "Fix this"
+#   warning "Fix this"
 #endif // defined(Q_CC_GCC)
     /*// Create a new identity.
     Aki::Sql::Identity* identity = Aki::SqlIdentity::newIdentity(name);
@@ -58,8 +65,8 @@ IdentityDialog::createNewIdentity(const QString& name)
 void
 IdentityDialog::setupActions()
 {
-    connect(identitySelector, SIGNAL(currentIndexChanged(Aki::SqlIdentity*)),
-            SLOT(slotIdentityActivated(Aki::SqlIdentity*)));
+    connect(identitySelector, SIGNAL(currentIndexChanged(Aki::Sql::Identity*)),
+            SLOT(slotIdentityActivated(Aki::Sql::Identity*)));
     connect(realNameLineEdit, SIGNAL(textEdited(QString)),
             SLOT(slotRealNameTextEdited(QString)));
     connect(addIdentityButton, SIGNAL(clicked(bool)),

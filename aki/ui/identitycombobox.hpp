@@ -37,7 +37,7 @@ class IdentityComboBox
     Q_OBJECT
 public:
     typedef QList<Aki::Sql::Identity*> List;
-    explicit IdentityComboBox(Aki::Sql::Database* database, QWidget* parent = 0);
+    explicit IdentityComboBox(QWidget* parent = 0);
     ~IdentityComboBox();
     void addIdentity(Aki::Sql::Identity* identity);
     Aki::Sql::Identity* currentIdentity() const;
@@ -46,6 +46,7 @@ public:
     Aki::Sql::Identity* identity(int index) const;
     int row(Aki::Sql::Identity* identity) const;
     void setCurrentIdentity(Aki::Sql::Identity* identity);
+    void setDatabase(Aki::Sql::Database* database);
     Aki::Sql::Identity* takeIdentity(int index);
 Q_SIGNALS:
     void identityActivated(Aki::Sql::Identity* identity);

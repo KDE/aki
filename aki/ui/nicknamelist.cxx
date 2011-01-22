@@ -26,11 +26,10 @@
 #include "ui/nicknamemodel.hpp"
 using namespace Aki;
 
-NicknameList::NicknameList(Aki::Sql::Database* database, QWidget* parent)
+NicknameList::NicknameList(QWidget* parent)
     : QListView(parent),
-    _database(database)
+    _database(0)
 {
-    Q_ASSERT(database);
     _model = new Aki::NicknameModel(this);
     setModel(_model);
 
@@ -203,6 +202,13 @@ void
 NicknameList::setCurrentRow(int row, QItemSelectionModel::SelectionFlags command)
 {
     selectionModel()->setCurrentIndex(_model->index(row), command);
+}
+
+void
+NicknameList::setDatabase(Aki::Sql::Database* database)
+{
+    Q_ASSERT(database);
+    _database = database;
 }
 
 void

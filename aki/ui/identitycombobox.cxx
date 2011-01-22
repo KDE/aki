@@ -24,11 +24,10 @@
 #include "ui/identitymodel.hpp"
 using namespace Aki;
 
-IdentityComboBox::IdentityComboBox(Aki::Sql::Database* database, QWidget* parent)
+IdentityComboBox::IdentityComboBox(QWidget* parent)
     : KComboBox(parent),
-    _database(database)
+    _database(0)
 {
-    Q_ASSERT(database);
     _model = new Aki::IdentityModel(this);
     setModel(_model);
 
@@ -119,6 +118,13 @@ void
 IdentityComboBox::setCurrentIdentity(Aki::Sql::Identity* identity)
 {
     setCurrentItem(identity->name());
+}
+
+void
+IdentityComboBox::setDatabase(Sql::Database* database)
+{
+    Q_ASSERT(database);
+    _database = database;
 }
 
 void
