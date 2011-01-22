@@ -19,29 +19,23 @@
  */
 
 #include "identitycombobox.hpp"
-#include "aki.hpp"
+#include "sql/database.hpp"
+#include "sql/identity.hpp"
 #include "ui/identitymodel.hpp"
-//#include "sql/database.hpp"
-#include "utils/sqlidentity.hpp"
 using namespace Aki;
 
-IdentityComboBox::IdentityComboBox(QWidget* parent)
-    : KComboBox(parent)
+IdentityComboBox::IdentityComboBox(Aki::Sql::Database* database, QWidget* parent)
+    : KComboBox(parent),
+    _database(database)
 {
-    /*QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
-    db.setDatabaseName(Aki::databaseFile());
-    Aki::Sql::Database::self()->open(db);
-    Aki::Sql::Database::self()->create<QSqlDatabase>();*/
-
-    //connect(Aki::Sql::Database::self(), SIGNAL(error(QSqlError)),
-    //        SLOT(error(QSqlError)));
-
+    Q_ASSERT(database);
     _model = new Aki::IdentityModel(this);
     setModel(_model);
 
-    QStringList list = Aki::SqlIdentity::identityNames();
-    foreach (const QString& identityName, list) {
-        addIdentity(Aki::SqlIdentity::findIdentity(identityName));
+    QList<Aki::Sql::Identity*> identities = _database->find<Aki::Sql::Identity>().result();
+
+    foreach (Aki::Sql::Identity* identity, identities) {
+        addIdentity(identity);
     }
 
     connect(this, SIGNAL(activated(int)),
@@ -54,16 +48,15 @@ IdentityComboBox::IdentityComboBox(QWidget* parent)
 
 IdentityComboBox::~IdentityComboBox()
 {
-    //Aki::Sql::Database::self()->close();
 }
 
 void
-IdentityComboBox::addIdentity(Aki::SqlIdentity* identity)
+IdentityComboBox::addIdentity(Aki::Sql::Identity* identity)
 {
     _model->addIdentity(identity);
 }
 
-Aki::SqlIdentity*
+Aki::Sql::Identity*
 IdentityComboBox::currentIdentity() const
 {
     return identity(currentIndex());
@@ -82,30 +75,30 @@ IdentityComboBox::findIdentities(const QString& name, Qt::MatchFlags flags)
     return list;
 }
 
-Aki::SqlIdentity*
+Aki::Sql::Identity*
 IdentityComboBox::identity(int index) const
 {
-    return _model->identities().value(index);
+    return _model->identities().value(index, 0);
 }
 
-Aki::SqlIdentity*
+Aki::Sql::Identity*
 IdentityComboBox::identityFromIndex(const QModelIndex& index) const
 {
     if (!index.isValid()) {
         return 0;
     }
 
-    return _model->identities().value(index.row());
+    return _model->identities().value(index.row(), 0);
 }
 
 QModelIndex
-IdentityComboBox::indexFromIdentity(Aki::SqlIdentity* identity) const
+IdentityComboBox::indexFromIdentity(Aki::Sql::Identity* identity) const
 {
     return _model->index(_model->identities().indexOf(identity));
 }
 
 void
-IdentityComboBox::insertIdentity(int row, Aki::SqlIdentity* identity)
+IdentityComboBox::insertIdentity(int row, Aki::Sql::Identity* identity)
 {
     Q_ASSERT(identity);
 
@@ -117,13 +110,13 @@ IdentityComboBox::insertIdentity(int row, Aki::SqlIdentity* identity)
 }
 
 int
-IdentityComboBox::row(Aki::SqlIdentity* identity) const
+IdentityComboBox::row(Aki::Sql::Identity* identity) const
 {
     return _model->identities().indexOf(identity);
 }
 
 void
-IdentityComboBox::setCurrentIdentity(Aki::SqlIdentity* identity)
+IdentityComboBox::setCurrentIdentity(Aki::Sql::Identity* identity)
 {
     setCurrentItem(identity->name());
 }
@@ -140,10 +133,10 @@ IdentityComboBox::slotCurrentIndexChanged(int index)
     emit currentIndexChanged(identity(index));
 }
 
-Aki::SqlIdentity*
+Aki::Sql::Identity*
 IdentityComboBox::takeIdentity(int index)
 {
-    Aki::SqlIdentity* identity = _model->takeIdentity(index);
+    Aki::Sql::Identity* identity = _model->takeIdentity(index);
     if (count()) {
         setCurrentIndex(0);
     } else {

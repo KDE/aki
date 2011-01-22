@@ -25,22 +25,26 @@
 
 namespace Aki
 {
-class SqlIdentity;
-class IdentityModel : public QAbstractListModel
+namespace Sql
+{
+class Identity;
+} // End of namespace Sql.
+class IdentityModel
+    : public QAbstractListModel
 {
     Q_OBJECT
 public:
     explicit IdentityModel(QObject* parent = 0);
     ~IdentityModel();
-    void addIdentity(Aki::SqlIdentity* identity);
+    void addIdentity(Aki::Sql::Identity* identity);
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
-    void insertIdentity(int row, Aki::SqlIdentity* identity);
-    QList<Aki::SqlIdentity*> identities() const;
-    void removeIdentity(Aki::SqlIdentity* identity);
+    void insertIdentity(int row, Aki::Sql::Identity* identity);
+    QList<Aki::Sql::Identity*> identities() const;
+    void removeIdentity(Aki::Sql::Identity* identity);
     virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
-    Aki::SqlIdentity* takeIdentity(int row);
+    Aki::Sql::Identity* takeIdentity(int row);
 private:
-    QList<Aki::SqlIdentity*> _identityList;
+    QList<Aki::Sql::Identity*> _identityList;
 }; // End of class IdentityModel.
 } // End of namespace Aki.
 

@@ -26,8 +26,14 @@
 
 namespace Aki
 {
-class IdentityDialog : public KDialog,
-                       private Ui::IdentityDialog
+namespace Sql
+{
+class Database;
+class Identity;
+} // End of namespace Sql.
+class IdentityDialog
+    : public KDialog,
+      private Ui::IdentityDialog
 {
     Q_OBJECT
 public:
@@ -41,7 +47,7 @@ private Q_SLOTS:
     void slotAwayNicknameTextEdited(const QString& nickname);
     void slotEditIdentityClicked();
     void slotEditNicknameClicked();
-    void slotIdentityActivated(Aki::SqlIdentity* identity);
+    void slotIdentityActivated(Aki::Sql::Identity* identity);
     void slotKickMessageTextEdited(const QString& message);
     void slotMarkLastPositionClicked(bool checked);
     void slotPartMessageTextEdited(const QString& message);
@@ -56,6 +62,8 @@ private:
     void setupActions();
     void setupDialog();
     void setupIcons();
+private:
+    Aki::Sql::Database* _database;
 }; // End of class IdentityDialog.
 } // End of namespace Aki.
 

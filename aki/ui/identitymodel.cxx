@@ -21,7 +21,7 @@
 #include "identitymodel.hpp"
 #include "aki.hpp"
 #include "debughelper.hpp"
-#include "utils/sqlidentity.hpp"
+#include "sql/identity.hpp"
 using namespace Aki;
 
 IdentityModel::IdentityModel(QObject* parent)
@@ -36,7 +36,7 @@ IdentityModel::~IdentityModel()
 }
 
 void
-IdentityModel::addIdentity(Aki::SqlIdentity* identity)
+IdentityModel::addIdentity(Aki::Sql::Identity* identity)
 {
     beginInsertRows(QModelIndex(), rowCount(), rowCount());
     _identityList.append(identity);
@@ -52,7 +52,7 @@ IdentityModel::data(const QModelIndex& index, int role) const
         return QVariant();
     }
 
-    Aki::SqlIdentity* identity = _identityList.value(index.row());
+    Aki::Sql::Identity* identity = _identityList.value(index.row());
     if (!identity) {
         DEBUG_TEXT("Uh oh invalid identity at row");
         return QVariant();
@@ -70,14 +70,14 @@ IdentityModel::data(const QModelIndex& index, int role) const
     return QVariant();
 }
 
-QList<Aki::SqlIdentity*>
+QList<Aki::Sql::Identity*>
 IdentityModel::identities() const
 {
     return _identityList;
 }
 
 void
-IdentityModel::insertIdentity(int row, Aki::SqlIdentity* identity)
+IdentityModel::insertIdentity(int row, Aki::Sql::Identity* identity)
 {
     if (!identity) {
         return;
@@ -99,7 +99,7 @@ IdentityModel::insertIdentity(int row, Aki::SqlIdentity* identity)
 }
 
 void
-IdentityModel::removeIdentity(Aki::SqlIdentity* identity)
+IdentityModel::removeIdentity(Aki::Sql::Identity* identity)
 {
     if (!identity) {
         return;
@@ -118,11 +118,11 @@ IdentityModel::rowCount(const QModelIndex& parent) const
     return _identityList.count();
 }
 
-Aki::SqlIdentity*
+Aki::Sql::Identity*
 IdentityModel::takeIdentity(int row)
 {
     beginRemoveRows(QModelIndex(), row, row);
-    Aki::SqlIdentity* identity = _identityList.takeAt(row);
+    Aki::Sql::Identity* identity = _identityList.takeAt(row);
     endInsertRows();
 
     return identity;

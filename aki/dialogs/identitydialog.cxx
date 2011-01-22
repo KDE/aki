@@ -20,9 +20,9 @@
 
 #include "identitydialog.hpp"
 #include "aki.hpp"
-#include "utils/database.hpp"
-#include "utils/sqlidentity.hpp"
-#include "utils/sqlnickname.hpp"
+#include "sql/database.hpp"
+#include "sql/identity.hpp"
+#include "sql/nickname.hpp"
 #include <KDE/KInputDialog>
 #include <KDE/KMessageBox>
 using namespace Aki;
@@ -44,11 +44,11 @@ IdentityDialog::~IdentityDialog()
 void
 IdentityDialog::createNewIdentity(const QString& name)
 {
-    // Create a new identity.
-    Aki::SqlIdentity* identity = Aki::SqlIdentity::newIdentity(name);
+    /*// Create a new identity.
+    Aki::Sql::Identity* identity = Aki::SqlIdentity::newIdentity(name);
     // Add the new identity to the combo box.
     identitySelector->addIdentity(identity);
-    identitySelector->setCurrentIdentity(identity);
+    identitySelector->setCurrentIdentity(identity);*/
 }
 
 void
@@ -147,8 +147,8 @@ IdentityDialog::slotAddNicknameClicked()
             // Re show this dialog.
             slotAddNicknameClicked();
         } else {
-            Aki::SqlNickname* nick = Aki::SqlNickname::newNickname(nickname, identitySelector->currentIdentity());
-            nicknameList->addNickname(nick);
+            //Aki::SqlNickname* nick = Aki::SqlNickname::newNickname(nickname, identitySelector->currentIdentity());
+            //nicknameList->addNickname(nick);
         }
     }
 }
@@ -156,31 +156,31 @@ IdentityDialog::slotAddNicknameClicked()
 void
 IdentityDialog::slotAwayMessagesClicked(bool checked)
 {
-    Aki::SqlIdentity* identity = identitySelector->currentIdentity();
-    identity->setEnableMessages(checked);
-    identity->save();
+    Aki::Sql::Identity* identity = identitySelector->currentIdentity();
+    identity->setMessagesEnabled(checked);
+    _database->update(identity);
 }
 
 void
 IdentityDialog::slotAwayMessageTextEdited(const QString& message)
 {
-    Aki::SqlIdentity* identity = identitySelector->currentIdentity();
+    Aki::Sql::Identity* identity = identitySelector->currentIdentity();
     identity->setAwayMessage(message);
-    identity->save();
+    _database->update(identity);
 }
 
 void
 IdentityDialog::slotAwayNicknameTextEdited(const QString& nickname)
 {
-    Aki::SqlIdentity* identity = identitySelector->currentIdentity();
+    Aki::Sql::Identity* identity = identitySelector->currentIdentity();
     identity->setAwayNickname(nickname);
-    identity->save();
+    _database->update(identity);
 }
 
 void
 IdentityDialog::slotEditIdentityClicked()
 {
-    Aki::SqlIdentity* currentIdentity = identitySelector->currentIdentity();
+    Aki::Sql::Identity* currentIdentity = identitySelector->currentIdentity();
     if (!currentIdentity) {
         return;
     }
@@ -198,7 +198,7 @@ IdentityDialog::slotEditIdentityClicked()
             slotEditIdentityClicked();
         } else {
             currentIdentity->setName(identity);
-            currentIdentity->save();
+            _database->update(currentIdentity);
         }
     }
 }
@@ -206,7 +206,7 @@ IdentityDialog::slotEditIdentityClicked()
 void
 IdentityDialog::slotEditNicknameClicked()
 {
-    Aki::SqlNickname* currentNickname = nicknameList->currentNickname();
+    /*Aki::Sql::Nickname* currentNickname = nicknameList->currentNickname();
     if (!currentNickname) {
         return;
     }
@@ -224,13 +224,13 @@ IdentityDialog::slotEditNicknameClicked()
             slotEditNicknameClicked();
         } else {
             currentNickname->setNickname(nickname);
-            currentNickname->save();
+            _database->update(currentNickname);
         }
-    }
+    }*/
 }
 
 void
-IdentityDialog::slotIdentityActivated(Aki::SqlIdentity* identity)
+IdentityDialog::slotIdentityActivated(Aki::Sql::Identity* identity)
 {
     if (!identity) {
         nicknameList->repopulateNicknames(0);
@@ -246,7 +246,7 @@ IdentityDialog::slotIdentityActivated(Aki::SqlIdentity* identity)
         return;
     }
 
-    nicknameList->repopulateNicknames(identity);
+    //nicknameList->repopulateNicknames(identity);
     realNameLineEdit->setText(identity->realName());
     markLastPositionCheckBox->setChecked(identity->isMarkLastPositionEnabled());
     awayNicknameLineEdit->setText(identity->awayNickname());
@@ -261,48 +261,47 @@ IdentityDialog::slotIdentityActivated(Aki::SqlIdentity* identity)
 void
 IdentityDialog::slotKickMessageTextEdited(const QString& message)
 {
-    Aki::SqlIdentity* identity = identitySelector->currentIdentity();
+    Aki::Sql::Identity* identity = identitySelector->currentIdentity();
     identity->setKickMessage(message);
-    identity->save();
+    _database->update(identity);
 }
 
 void
 IdentityDialog::slotMarkLastPositionClicked(bool checked)
 {
-    Aki::SqlIdentity* identity = identitySelector->currentIdentity();
-    identity->setMarkLastPosition(checked);
-    identity->save();
+    Aki::Sql::Identity* identity = identitySelector->currentIdentity();
+    identity->setMarkLastPositionEnabled(checked);
+    _database->update(identity);
 }
 
 void
 IdentityDialog::slotPartMessageTextEdited(const QString& message)
 {
-    Aki::SqlIdentity* identity = identitySelector->currentIdentity();
+    Aki::Sql::Identity* identity = identitySelector->currentIdentity();
     identity->setPartMessage(message);
-    identity->save();
+    _database->update(identity);
 }
 
 void
 IdentityDialog::slotQuitMessageTextEdited(const QString& message)
 {
-    kDebug() << message;
-    Aki::SqlIdentity* identity = identitySelector->currentIdentity();
+    Aki::Sql::Identity* identity = identitySelector->currentIdentity();
     identity->setQuitMessage(message);
-    identity->save();
+    _database->update(identity);
 }
 
 void
 IdentityDialog::slotRealNameTextEdited(const QString& name)
 {
-    Aki::SqlIdentity* identity = identitySelector->currentIdentity();
+    Aki::Sql::Identity* identity = identitySelector->currentIdentity();
     identity->setRealName(name);
-    identity->save();
+    _database->update(identity);
 }
 
 void
 IdentityDialog::slotRemoveIdentityClicked()
 {
-    Aki::SqlIdentity* currentIdentity = identitySelector->currentIdentity();
+    Aki::Sql::Identity* currentIdentity = identitySelector->currentIdentity();
     if (!currentIdentity) {
         return;
     }
@@ -313,7 +312,7 @@ IdentityDialog::slotRemoveIdentityClicked()
     switch (result) {
     case KMessageBox::Yes: {
         // Remove the identity.
-        currentIdentity->remove();
+        _database->remove(currentIdentity);
         // Take the identity from the identity combo box.
         delete identitySelector->takeIdentity(identitySelector->currentIndex());
         break;
@@ -324,7 +323,7 @@ IdentityDialog::slotRemoveIdentityClicked()
 void
 IdentityDialog::slotRemoveNicknameClicked()
 {
-    Aki::SqlNickname* currentNickname = nicknameList->currentNickname();
+    /*Aki::SqlNickname* currentNickname = nicknameList->currentNickname();
     if (!currentNickname) {
         return;
     }
@@ -344,13 +343,13 @@ IdentityDialog::slotRemoveNicknameClicked()
     default: {
         break;
     }
-    }
+    }*/
 }
 
 void
 IdentityDialog::slotReturnMessageTextEdited(const QString& message)
 {
-    Aki::SqlIdentity* identity = identitySelector->currentIdentity();
+    Aki::Sql::Identity* identity = identitySelector->currentIdentity();
     identity->setReturnMessage(message);
-    identity->save();
+    _database->update(identity);
 }

@@ -65,11 +65,11 @@ NetworkDialog::load()
         return;
     }
 
-    networkList->repopulateNetwork(identitySelector->currentIdentity());
+    /*networkList->repopulateNetwork(identitySelector->currentIdentity());
     Aki::SqlNetwork* network = networkList->currentNetwork();
     if (network) {
         loadNetwork(network);
-    }
+    }*/
 }
 
 void

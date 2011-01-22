@@ -25,33 +25,39 @@
 
 namespace Aki
 {
+namespace Sql
+{
+class Database;
+class Identity;
+} // End of namespace Sql.
 class IdentityModel;
-class SqlIdentity;
-class IdentityComboBox : public KComboBox
+class IdentityComboBox
+    : public KComboBox
 {
     Q_OBJECT
 public:
-    typedef QList<Aki::SqlIdentity*> List;
-    explicit IdentityComboBox(QWidget* parent = 0);
+    typedef QList<Aki::Sql::Identity*> List;
+    explicit IdentityComboBox(Aki::Sql::Database* database, QWidget* parent = 0);
     ~IdentityComboBox();
-    void addIdentity(Aki::SqlIdentity* identity);
-    Aki::SqlIdentity* currentIdentity() const;
+    void addIdentity(Aki::Sql::Identity* identity);
+    Aki::Sql::Identity* currentIdentity() const;
     Aki::IdentityComboBox::List findIdentities(const QString& name, Qt::MatchFlags flags);
-    void insertIdentity(int row, Aki::SqlIdentity* identity);
-    Aki::SqlIdentity* identity(int index) const;
-    int row(Aki::SqlIdentity* identity) const;
-    void setCurrentIdentity(Aki::SqlIdentity* identity);
-    Aki::SqlIdentity* takeIdentity(int index);
+    void insertIdentity(int row, Aki::Sql::Identity* identity);
+    Aki::Sql::Identity* identity(int index) const;
+    int row(Aki::Sql::Identity* identity) const;
+    void setCurrentIdentity(Aki::Sql::Identity* identity);
+    Aki::Sql::Identity* takeIdentity(int index);
 Q_SIGNALS:
-    void identityActivated(Aki::SqlIdentity* identity);
-    void currentIndexChanged(Aki::SqlIdentity* identity);
+    void identityActivated(Aki::Sql::Identity* identity);
+    void currentIndexChanged(Aki::Sql::Identity* identity);
 protected:
-    QModelIndex indexFromIdentity(Aki::SqlIdentity* identity) const;
-    Aki::SqlIdentity* identityFromIndex(const QModelIndex& index) const;
+    QModelIndex indexFromIdentity(Aki::Sql::Identity* identity) const;
+    Aki::Sql::Identity* identityFromIndex(const QModelIndex& index) const;
 private Q_SLOTS:
     void slotActivated(int index);
     void slotCurrentIndexChanged(int index);
 private:
+    Aki::Sql::Database* _database;
     Aki::IdentityModel* _model;
 }; // End of class IdentityComboBox.
 } // End of namespace Aki.
