@@ -21,14 +21,16 @@
 #include "nicknamelist.hpp"
 #include "aki.hpp"
 #include "debughelper.hpp"
+#include "sql/identity.hpp"
+#include "sql/nickname.hpp"
 #include "ui/nicknamemodel.hpp"
-#include "utils/sqlidentity.hpp"
-#include "utils/sqlnickname.hpp"
 using namespace Aki;
 
-NicknameList::NicknameList(QWidget* parent)
-    : QListView(parent)
+NicknameList::NicknameList(Aki::Sql::Database* database, QWidget* parent)
+    : QListView(parent),
+    _database(database)
 {
+    Q_ASSERT(database);
     _model = new Aki::NicknameModel(this);
     setModel(_model);
 
@@ -55,7 +57,7 @@ NicknameList::~NicknameList()
 }
 
 void
-NicknameList::addNickname(Aki::SqlNickname* nickname)
+NicknameList::addNickname(Aki::Sql::Nickname* nickname)
 {
     _model->addNickname(nickname);
 }
@@ -66,7 +68,7 @@ NicknameList::count() const
     return _model->rowCount();
 }
 
-Aki::SqlNickname*
+Aki::Sql::Nickname*
 NicknameList::currentNickname() const
 {
     QModelIndex index = selectionModel()->currentIndex();
@@ -102,13 +104,13 @@ NicknameList::findNicknames(const QString& name, Qt::MatchFlags flags) const
 }
 
 QModelIndex
-NicknameList::indexFromNickname(Aki::SqlNickname* nickname)
+NicknameList::indexFromNickname(Aki::Sql::Nickname* nickname)
 {
     return _model->index(_model->nicknames().indexOf(nickname));
 }
 
 void
-NicknameList::insertNickname(int row, Aki::SqlNickname* nickname)
+NicknameList::insertNickname(int row, Aki::Sql::Nickname* nickname)
 {
     Q_ASSERT(nickname);
 
@@ -119,13 +121,13 @@ NicknameList::insertNickname(int row, Aki::SqlNickname* nickname)
     _model->insertNickname(row, nickname);
 }
 
-Aki::SqlNickname*
+Aki::Sql::Nickname*
 NicknameList::nickname(int row) const
 {
     return nicknameFromIndex(_model->index(row));
 }
 
-Aki::SqlNickname*
+Aki::Sql::Nickname*
 NicknameList::nicknameFromIndex(const QModelIndex& index) const
 {
     if (!index.isValid()) {
@@ -136,10 +138,10 @@ NicknameList::nicknameFromIndex(const QModelIndex& index) const
 }
 
 void
-NicknameList::repopulateNicknames(Aki::SqlIdentity* identity)
+NicknameList::repopulateNicknames(Aki::Sql::Identity* identity)
 {
     DEBUG_FUNC_NAME;
-    foreach (Aki::SqlNickname* nickname, _model->nicknames()) {
+    foreach (Aki::Sql::Nickname* nickname, _model->nicknames()) {
         DEBUG_TEXT2("Removing Nickname: %1", nickname->nickname());
         _model->removeNickname(nickname);
     }
@@ -148,20 +150,20 @@ NicknameList::repopulateNicknames(Aki::SqlIdentity* identity)
         return;
     }
 
-    Aki::SqlNickname::List list = Aki::SqlNickname::nicknamesForIdentity(identity);
-    if (list.isEmpty()) {
+    QList<Aki::Sql::Nickname*> nicknames = _database->find<Aki::Sql::Nickname>().result();
+    if (nicknames.isEmpty()) {
         DEBUG_TEXT2("List is empty for Identity: %1", identity->name());
         return;
     }
 
-    foreach (Aki::SqlNickname* nickname, list) {
+    foreach (Aki::Sql::Nickname* nickname, nicknames) {
         DEBUG_TEXT2("Adding new Nickname: %1", nickname->nickname());
         addNickname(nickname);
     }
 }
 
 int
-NicknameList::row(Aki::SqlNickname* nickname) const
+NicknameList::row(Aki::Sql::Nickname* nickname) const
 {
     return _model->nicknames().indexOf(nickname);
 }
@@ -180,13 +182,13 @@ NicknameList::selectedNicknames() const
 }
 
 void
-NicknameList::setCurrentNickname(Aki::SqlNickname* nickname)
+NicknameList::setCurrentNickname(Aki::Sql::Nickname* nickname)
 {
     setCurrentNickname(nickname, QItemSelectionModel::ClearAndSelect);
 }
 
 void
-NicknameList::setCurrentNickname(Aki::SqlNickname* nickname, QItemSelectionModel::SelectionFlags command)
+NicknameList::setCurrentNickname(Aki::Sql::Nickname* nickname, QItemSelectionModel::SelectionFlags command)
 {
     selectionModel()->setCurrentIndex(indexFromNickname(nickname), command);
 }
@@ -225,7 +227,7 @@ void
 NicknameList::slotItemCurrentChanged(const QModelIndex& current, const QModelIndex& previous)
 {
     QPersistentModelIndex persistentCurrent = current;
-    Aki::SqlNickname* currentNickname = nickname(persistentCurrent.row());
+    Aki::Sql::Nickname* currentNickname = nickname(persistentCurrent.row());
     emit currentNicknameChanged(currentNickname, nickname(previous.row()));
     emit nicknameCurrentRowChanged(persistentCurrent.row());
 }
@@ -248,7 +250,7 @@ NicknameList::slotItemPressed(const QModelIndex& index)
     emit nicknamePressed(nicknameFromIndex(index));
 }
 
-Aki::SqlNickname*
+Aki::Sql::Nickname*
 NicknameList::takeNickname(int row)
 {
     return _model->takeNickname(row);

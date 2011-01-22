@@ -25,45 +25,49 @@
 
 namespace Aki
 {
+namespace Sql
+{
+class Database;
+class Identity;
+class Nickname;
+} // End of namespace Sql.
 class NicknameModel;
-class SqlIdentity;
-class SqlNickname;
 class NicknameList : public QListView
 {
     Q_OBJECT
 public:
-    typedef QList<Aki::SqlNickname*> List;
-    explicit NicknameList(QWidget* parent = 0);
+    typedef QList<Aki::Sql::Nickname*> List;
+    explicit NicknameList(Aki::Sql::Database* database, QWidget* parent = 0);
     ~NicknameList();
-    void addNickname(Aki::SqlNickname* nickname);
+    void addNickname(Aki::Sql::Nickname* nickname);
     int count() const;
-    Aki::SqlNickname* currentNickname() const;
+    Aki::Sql::Nickname* currentNickname() const;
     int currentRow() const;
     Aki::NicknameList::List findNicknames(const QString& name, Qt::MatchFlags flags) const;
-    void insertNickname(int row, Aki::SqlNickname* nickname);
-    Aki::SqlNickname* nickname(int row) const;
-    int row(Aki::SqlNickname* nickname) const;
+    void insertNickname(int row, Aki::Sql::Nickname* nickname);
+    Aki::Sql::Nickname* nickname(int row) const;
+    int row(Aki::Sql::Nickname* nickname) const;
     Aki::NicknameList::List selectedNicknames() const;
-    void setCurrentNickname(Aki::SqlNickname* nickname);
-    void setCurrentNickname(Aki::SqlNickname* nickname, QItemSelectionModel::SelectionFlags command);
+    void setCurrentNickname(Aki::Sql::Nickname* nickname);
+    void setCurrentNickname(Aki::Sql::Nickname* nickname, QItemSelectionModel::SelectionFlags command);
     void setCurrentRow(int row);
     void setCurrentRow(int row, QItemSelectionModel::SelectionFlags command);
-    Aki::SqlNickname* takeNickname(int row);
+    Aki::Sql::Nickname* takeNickname(int row);
 public Q_SLOTS:
-    void repopulateNicknames(Aki::SqlIdentity* identity);
+    void repopulateNicknames(Aki::Sql::Identity* identity);
 Q_SIGNALS:
-    void currentNicknameChanged(Aki::SqlNickname* current, Aki::SqlNickname* previous);
-    void nicknameActivated(Aki::SqlNickname* nickname);
-    void nicknameChanged(Aki::SqlNickname* nickname);
-    void nicknameClicked(Aki::SqlNickname* nickname);
+    void currentNicknameChanged(Aki::Sql::Nickname* current, Aki::Sql::Nickname* previous);
+    void nicknameActivated(Aki::Sql::Nickname* nickname);
+    void nicknameChanged(Aki::Sql::Nickname* nickname);
+    void nicknameClicked(Aki::Sql::Nickname* nickname);
     void nicknameCurrentRowChanged(int row);
-    void nicknameDoubleClicked(Aki::SqlNickname* nickname);
-    void nicknameEntered(Aki::SqlNickname* nickname);
-    void nicknamePressed(Aki::SqlNickname* nickname);
+    void nicknameDoubleClicked(Aki::Sql::Nickname* nickname);
+    void nicknameEntered(Aki::Sql::Nickname* nickname);
+    void nicknamePressed(Aki::Sql::Nickname* nickname);
     void nicknameSelectionChanged();
 protected:
-    QModelIndex indexFromNickname(Aki::SqlNickname* nickname);
-    Aki::SqlNickname* nicknameFromIndex(const QModelIndex& index) const;
+    QModelIndex indexFromNickname(Aki::Sql::Nickname* nickname);
+    Aki::Sql::Nickname* nicknameFromIndex(const QModelIndex& index) const;
 private Q_SLOTS:
     void slotItemActivated(const QModelIndex& index);
     void slotItemClicked(const QModelIndex& index);
@@ -74,6 +78,7 @@ private Q_SLOTS:
     void slotItemPressed(const QModelIndex& index);
 private:
     Aki::NicknameModel* _model;
+    Aki::Sql::Database* _database;
 }; // End of class NicknameList.
 } // End of namespace Aki.
 

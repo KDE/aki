@@ -44,6 +44,10 @@ IdentityDialog::~IdentityDialog()
 void
 IdentityDialog::createNewIdentity(const QString& name)
 {
+#if defined(Q_CC_GNU)
+    Q_UNUSED(name)
+#warning "Fix this"
+#endif // defined(Q_CC_GCC)
     /*// Create a new identity.
     Aki::Sql::Identity* identity = Aki::SqlIdentity::newIdentity(name);
     // Add the new identity to the combo box.
@@ -147,8 +151,11 @@ IdentityDialog::slotAddNicknameClicked()
             // Re show this dialog.
             slotAddNicknameClicked();
         } else {
-            //Aki::SqlNickname* nick = Aki::SqlNickname::newNickname(nickname, identitySelector->currentIdentity());
-            //nicknameList->addNickname(nick);
+#if defined(Q_CC_GNU)
+#   warning "Fix this"
+#endif // defined(Q_CC_GNU)
+            /*Aki::Sql::Nickname* nick = Aki::SqlNickname::newNickname(nickname, identitySelector->currentIdentity());
+            nicknameList->addNickname(nick);*/
         }
     }
 }
@@ -206,7 +213,7 @@ IdentityDialog::slotEditIdentityClicked()
 void
 IdentityDialog::slotEditNicknameClicked()
 {
-    /*Aki::Sql::Nickname* currentNickname = nicknameList->currentNickname();
+    Aki::Sql::Nickname* currentNickname = nicknameList->currentNickname();
     if (!currentNickname) {
         return;
     }
@@ -226,7 +233,7 @@ IdentityDialog::slotEditNicknameClicked()
             currentNickname->setNickname(nickname);
             _database->update(currentNickname);
         }
-    }*/
+    }
 }
 
 void
@@ -246,7 +253,7 @@ IdentityDialog::slotIdentityActivated(Aki::Sql::Identity* identity)
         return;
     }
 
-    //nicknameList->repopulateNicknames(identity);
+    nicknameList->repopulateNicknames(identity);
     realNameLineEdit->setText(identity->realName());
     markLastPositionCheckBox->setChecked(identity->isMarkLastPositionEnabled());
     awayNicknameLineEdit->setText(identity->awayNickname());
@@ -323,7 +330,7 @@ IdentityDialog::slotRemoveIdentityClicked()
 void
 IdentityDialog::slotRemoveNicknameClicked()
 {
-    /*Aki::SqlNickname* currentNickname = nicknameList->currentNickname();
+    Aki::Sql::Nickname* currentNickname = nicknameList->currentNickname();
     if (!currentNickname) {
         return;
     }
@@ -335,7 +342,7 @@ IdentityDialog::slotRemoveNicknameClicked()
     switch (result) {
     case KMessageBox::Yes: {
         // Remove the nickname from the identity.
-        currentNickname->remove();
+        _database->remove(currentNickname);
         // Take the nickname from the nickname list.
         delete nicknameList->takeNickname(nicknameList->row(currentNickname));
         break;
@@ -343,7 +350,7 @@ IdentityDialog::slotRemoveNicknameClicked()
     default: {
         break;
     }
-    }*/
+    }
 }
 
 void

@@ -19,9 +19,8 @@
  */
 
 #include "nicknamemodel.hpp"
-#include "aki.hpp"
 #include "debughelper.hpp"
-#include "utils/sqlnickname.hpp"
+#include "sql/nickname.hpp"
 using namespace Aki;
 
 NicknameModel::NicknameModel(QObject* parent)
@@ -36,7 +35,7 @@ NicknameModel::~NicknameModel()
 }
 
 void
-NicknameModel::addNickname(Aki::SqlNickname* nickname)
+NicknameModel::addNickname(Aki::Sql::Nickname* nickname)
 {
     beginInsertRows(QModelIndex(), rowCount(), rowCount());
     _nicknameList.append(nickname);
@@ -52,7 +51,7 @@ NicknameModel::data(const QModelIndex& index, int role) const
         return QVariant();
     }
 
-    Aki::SqlNickname* nickname = _nicknameList.at(index.row());
+    Aki::Sql::Nickname* nickname = _nicknameList.at(index.row());
     if (!nickname) {
         DEBUG_TEXT("Uh oh invalid nickname for row")
         return QVariant();
@@ -71,7 +70,7 @@ NicknameModel::data(const QModelIndex& index, int role) const
 }
 
 void
-NicknameModel::insertNickname(int row, Aki::SqlNickname* nickname)
+NicknameModel::insertNickname(int row, Aki::Sql::Nickname* nickname)
 {
     if (!nickname) {
         return;
@@ -92,14 +91,14 @@ NicknameModel::insertNickname(int row, Aki::SqlNickname* nickname)
     endInsertRows();
 }
 
-QList<Aki::SqlNickname*>
+QList<Aki::Sql::Nickname*>
 NicknameModel::nicknames() const
 {
     return _nicknameList;
 }
 
 void
-NicknameModel::removeNickname(Aki::SqlNickname* nickname)
+NicknameModel::removeNickname(Aki::Sql::Nickname* nickname)
 {
     if (!nickname) {
         return;
@@ -121,11 +120,11 @@ NicknameModel::rowCount(const QModelIndex& parent) const
     return _nicknameList.count();
 }
 
-Aki::SqlNickname*
+Aki::Sql::Nickname*
 NicknameModel::takeNickname(int row)
 {
     beginRemoveRows(QModelIndex(), row, row);
-    Aki::SqlNickname* nickname = _nicknameList.takeAt(row);
+    Aki::Sql::Nickname* nickname = _nicknameList.takeAt(row);
     endRemoveRows();
     return nickname;
 }

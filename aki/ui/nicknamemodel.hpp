@@ -25,22 +25,26 @@
 
 namespace Aki
 {
-class SqlNickname;
-class NicknameModel : public QAbstractListModel
+namespace Sql
+{
+class Nickname;
+} // End of namespace Sql.
+class NicknameModel
+    : public QAbstractListModel
 {
     Q_OBJECT
 public:
     explicit NicknameModel(QObject* parent = 0);
     ~NicknameModel();
-    void addNickname(Aki::SqlNickname* nickname);
+    void addNickname(Aki::Sql::Nickname* nickname);
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
-    void insertNickname(int row, Aki::SqlNickname* nickname);
-    QList<Aki::SqlNickname*> nicknames() const;
-    void removeNickname(Aki::SqlNickname* nickname);
+    void insertNickname(int row, Aki::Sql::Nickname* nickname);
+    QList<Aki::Sql::Nickname*> nicknames() const;
+    void removeNickname(Aki::Sql::Nickname* nickname);
     virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
-    Aki::SqlNickname* takeNickname(int row);
+    Aki::Sql::Nickname* takeNickname(int row);
 private:
-    QList<Aki::SqlNickname*> _nicknameList;
+    QList<Aki::Sql::Nickname*> _nicknameList;
 }; // End of class NicknameModel.
 } // End of namespace Aki.
 
