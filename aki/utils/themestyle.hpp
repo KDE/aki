@@ -33,18 +33,18 @@ public:
     typedef QHash<QString,QString> VariantStyles;
     explicit ThemeStyle(const QString& name, QObject* parent = 0);
     ~ThemeStyle();
-    QString baseHref() const;
+    const QString& baseHref() const;
     bool isValid() const;
-    QString footerHtml() const;
-    QString headerHtml() const;
-    QString incomingContentHtml() const;
-    QString incomingNextContentHtml() const;
-    QString outgoingContentHtml() const;
-    QString outgoingNextContentHtml() const;
+    const QString& footerHtml() const;
+    const QString& headerHtml() const;
+    const QString& incomingContentHtml() const;
+    const QString& incomingNextContentHtml() const;
+    const QString& outgoingContentHtml() const;
+    const QString& outgoingNextContentHtml() const;
     void reloadTheme();
-    QString statusHtml() const;
-    QString styleName() const;
-    Aki::ThemeStyle::VariantStyles variants() const;
+    const QString& statusHtml() const;
+    const QString& styleName() const;
+    const Aki::ThemeStyle::VariantStyles& variants() const;
 private:
     enum DirectionMethod
     {

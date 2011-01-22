@@ -28,12 +28,6 @@
 #include <QtCore/QTextStream>
 using namespace Aki;
 
-bool
-isNullOrEmpty(const QString& str)
-{
-    return str.isEmpty() || str.isNull();
-}
-
 ThemeStyle::ThemeStyle(const QString& name, QObject* parent)
     : QObject(parent),
     _incomingContentHtml(QString()),
@@ -53,7 +47,7 @@ ThemeStyle::~ThemeStyle()
 {
 }
 
-QString
+const QString&
 ThemeStyle::baseHref() const
 {
     return _baseHref;
@@ -71,13 +65,13 @@ ThemeStyle::directory(const QString& htmlFile, ThemeStyle::DirectionMethod direc
     return baseHref() + htmlFile;
 }
 
-QString
+const QString&
 ThemeStyle::footerHtml() const
 {
     return _footerHtml;
 }
 
-QString
+const QString&
 ThemeStyle::headerHtml() const
 {
     return _headerHtml;
@@ -93,16 +87,16 @@ ThemeStyle::loadStyle(const QString& name)
     reloadTheme();
 }
 
-QString
+const QString&
 ThemeStyle::incomingContentHtml() const
 {
     return _incomingContentHtml;
 }
 
-QString
+const QString&
 ThemeStyle::incomingNextContentHtml() const
 {
-    if (isNullOrEmpty(_incomingNextContentHtml)) {
+    if (_incomingNextContentHtml.isEmpty()) {
         return incomingContentHtml();
     }
 
@@ -112,27 +106,27 @@ ThemeStyle::incomingNextContentHtml() const
 bool
 ThemeStyle::isValid() const
 {
-    return !(isNullOrEmpty(_statusHtml) &&
-             isNullOrEmpty(_incomingNextContentHtml) &&
-             isNullOrEmpty(_incomingContentHtml) &&
-             isNullOrEmpty(_outgoingNextContentHtml) &&
-             isNullOrEmpty(_outgoingContentHtml));
+    return !(_statusHtml.isEmpty() &&
+             _incomingNextContentHtml.isEmpty() &&
+             _incomingContentHtml.isEmpty() &&
+             _outgoingNextContentHtml.isEmpty() &&
+             _outgoingContentHtml.isEmpty());
 }
 
-QString
+const QString&
 ThemeStyle::outgoingContentHtml() const
 {
-    if (isNullOrEmpty(_outgoingContentHtml)) {
+    if (_outgoingContentHtml.isEmpty()) {
         return incomingContentHtml();
     }
 
     return _outgoingContentHtml;
 }
 
-QString
+const QString&
 ThemeStyle::outgoingNextContentHtml() const
 {
-    if (isNullOrEmpty(_outgoingNextContentHtml)) {
+    if (_outgoingNextContentHtml.isEmpty()) {
         return outgoingContentHtml();
     }
 
@@ -196,19 +190,19 @@ ThemeStyle::reloadTheme()
     readVariants();
 }
 
-QString
+const QString&
 ThemeStyle::statusHtml() const
 {
     return _statusHtml;
 }
 
-QString
+const QString&
 ThemeStyle::styleName() const
 {
     return _styleName;
 }
 
-Aki::ThemeStyle::VariantStyles
+const Aki::ThemeStyle::VariantStyles&
 ThemeStyle::variants() const
 {
     return _variants;
