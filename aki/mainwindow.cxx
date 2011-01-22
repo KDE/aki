@@ -122,7 +122,10 @@ AkiWindow::createAction(const QString& actionName, const QString& description, c
 {
     KAction* action = new KAction(icon, description, this);
     actionCollection()->addAction(actionName, action);
-    connect(action, SIGNAL(triggered(bool)), slot);
+    if (slot == 0) {
+    } else {
+        connect(action, SIGNAL(triggered()), slot);
+    }
 }
 
 void

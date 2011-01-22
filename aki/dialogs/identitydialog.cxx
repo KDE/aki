@@ -24,19 +24,29 @@
 #include "sql/nickname.hpp"
 #include <KDE/KInputDialog>
 #include <KDE/KMessageBox>
+#include <KDE/KUser>
 using namespace Aki;
 
 IdentityDialog::IdentityDialog(QWidget* parent)
     : KDialog(parent)
 {
     setAttribute(Qt::WA_DeleteOnClose);
-    setupDialog();
 
     _database = new Aki::Sql::Database("QSQLITE");
     _database->setDatabaseName(Aki::databaseFile());
     if (!_database->open()) {
         qDebug() << "Unable to open database";
+    } else {
+        qDebug() << "Database successfully opened";
     }
+
+    if (!_database->create<Aki::Sql::Identity>()) {
+        qDebug() << "Unable to create table";
+    } else {
+        qDebug() << "Successfully created table";
+    }
+
+    setupDialog();
 
     if (identitySelector->count()) {
         slotIdentityActivated(identitySelector->currentIdentity());
@@ -51,15 +61,44 @@ IdentityDialog::~IdentityDialog()
 void
 IdentityDialog::createNewIdentity(const QString& name)
 {
-#if defined(Q_CC_GNU)
-    Q_UNUSED(name)
-#   warning "Fix this"
-#endif // defined(Q_CC_GCC)
-    /*// Create a new identity.
-    Aki::Sql::Identity* identity = Aki::SqlIdentity::newIdentity(name);
-    // Add the new identity to the combo box.
-    identitySelector->addIdentity(identity);
-    identitySelector->setCurrentIdentity(identity);*/
+    KUser user(KUser::UseRealUserID);
+
+    QString tmp;
+    if (user.property(KUser::FullName).isNull()) {
+        tmp = "Aki";
+    } else {
+        tmp = user.property(KUser::FullName).toString();
+    }
+
+    _database->transaction();
+    // Create a new identity.
+    Aki::Sql::Identity* identity = new Aki::Sql::Identity;
+    identity->setAwayMessage("I'm now away.");
+    identity->setAwayNickname(user.loginName() + "|tmp");
+    identity->setKickMessage(QString());
+    identity->setMarkLastPositionEnabled(false);
+    identity->setMessagesEnabled(false);
+    identity->setName(name);
+    identity->setPartMessage("Aki IRC Client %v");
+    identity->setQuitMessage("Aki IRC Client %v");
+    identity->setRealName(user.property(KUser::FullName).toString());
+    identity->setReturnMessage("I'm now back");
+
+    if (_database->add(identity)) {
+        qDebug() << "Added identity: " << name;
+        if (_database->commit()) {
+            qDebug() << "Commit was successful on: " << name;
+            identitySelector->addIdentity(identity);
+            identitySelector->setCurrentIdentity(identity);
+        }
+    } else {
+        qDebug() << "Unable to Add new identity: " << name;
+        if (!_database->rollback()) {
+            qDebug() << "Unable to rollback: " << name;
+        } else {
+            qDebug() << "Successfully rollbacked data";
+        }
+    }
 }
 
 void
