@@ -50,8 +50,8 @@ public:
     Aki::Sql::Query<T>& offset(int count);
     Aki::Sql::Query<T>& orderBy(const QString& field);
     Aki::Sql::Query<T>& orderBy(const QString& field, Qt::SortOrder order);
-    QList<QSharedPointer<T> > result();
-    QList<QSharedPointer<T> > result() const;
+    QList<T*> result();
+    QList<T*> result() const;
     Aki::Sql::Query<T>& where(const QString& condition);
 private:
     QString _sql;
@@ -173,10 +173,10 @@ Query<T>::orderBy(const QString& field, Qt::SortOrder order)
     return *this;
 }
 
-template<typename T> QList<QSharedPointer<T> >
+template<typename T> QList<T*>
 Query<T>::result()
 {
-    QList<QSharedPointer<T> > results;
+    QList<T*> results;
     _query.prepare(_sql);
 
     QMapIterator<QString, QVariant> i(_placeHolders);
@@ -200,7 +200,7 @@ Query<T>::result()
                 }
             }
 
-            results.append(QSharedPointer<T>(res));
+            results.append(res);
         }
     } else {
         qDebug() << _query.lastError().text();
@@ -209,7 +209,7 @@ Query<T>::result()
     return results;
 }
 
-template<typename T> QList<QSharedPointer<T> >
+template<typename T> QList<T*>
 Query<T>::result() const
 {
     return result();
