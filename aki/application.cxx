@@ -20,11 +20,13 @@
 
 #include "application.hpp"
 #include "mainwindow.hpp"
+#include "dialogs/welcomedialog.hpp"
 #include "utils/indicationsystem.hpp"
 #include <KDE/KCmdLineArgs>
 #include <KDE/KGlobal>
 #include <KDE/KStandardDirs>
 #include <KDE/KWindowSystem>
+#include <KMessageBox>
 using namespace Aki;
 
 Application::Application()
@@ -42,14 +44,16 @@ int Application::newInstance()
     KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
 
     if (!_mainWindow) {
-        const QString db = KGlobal::dirs()->locate("data", "aki/akidatabase.db");
-        if (db.isEmpty() || db.isNull()) {
-            // Welcome dialog
-        }
-
+        qDebug() << "Main Window";
         _mainWindow = new Aki::AkiWindow;
         _mainWindow->show();
         Aki::IndicationSystem::self();
+
+        const QString db = KGlobal::dirs()->locate("data", "aki/akidatabase.db");
+        if (db.isEmpty()) {
+            Aki::WelcomeDialog dlg;
+            dlg.exec();
+        }
     }
 
     KWindowSystem::forceActiveWindow(_mainWindow->winId());
