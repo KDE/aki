@@ -18,31 +18,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-#include "welcomedialog.hpp"
-#include "aki.hpp"
-#include "welcomedialogpages/introwelcomepage.hpp"
-#include "welcomedialogpages/serverwelcomepage.hpp"
-using namespace Aki;
+#ifndef AKI_INTROWELCOMEPAGE_HPP
+#define AKI_INTROWELCOMEPAGE_HPP
 
-WelcomeDialog::WelcomeDialog(QWidget* parent)
-    : KAssistantDialog(parent)
+#include <QtGui/QWidget>
+
+namespace Aki
 {
-    showButton(KAssistantDialog::Help, false);
-    setCaption(i18n("IRC Setup"));
-
-    _introPage = addPage(new IntroWelcomePage, i18n("Welcome to Aki"));
-    _serverPage = addPage(new ServerWelcomePage, i18n("Setup Server"));
-
-    connect(this, SIGNAL(user1Clicked()),
-            SLOT(finishClicked()));
-}
-
-WelcomeDialog::~WelcomeDialog()
+class IntroWelcomePage
+    : public QWidget
 {
-}
+    Q_OBJECT
+public:
+    explicit IntroWelcomePage(QWidget* parent = 0);
+    ~IntroWelcomePage();
+}; // End of class IntroWelcomePage.
+} // End of namespace Aki.
 
-void
-WelcomeDialog::finishClicked()
-{
-    //qobject_cast<Aki::ServerWelcomePage*>(_serverPage->widget())->save();
-}
+#endif // AKI_INTROWELCOMEPAGE_HPP

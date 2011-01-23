@@ -18,31 +18,34 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-#include "welcomedialog.hpp"
-#include "aki.hpp"
-#include "welcomedialogpages/introwelcomepage.hpp"
-#include "welcomedialogpages/serverwelcomepage.hpp"
+#include "introwelcomepage.hpp"
+#include <QtGui/QGridLayout>
+#include <QtGui/QLabel>
+#include <QtGui/QSpacerItem>
+#include <KDE/KIcon>
 using namespace Aki;
 
-WelcomeDialog::WelcomeDialog(QWidget* parent)
-    : KAssistantDialog(parent)
+IntroWelcomePage::IntroWelcomePage(QWidget* parent)
+    : QWidget(parent)
 {
-    showButton(KAssistantDialog::Help, false);
-    setCaption(i18n("IRC Setup"));
+    QGridLayout* mainLayout = new QGridLayout;
+    setLayout(mainLayout);
 
-    _introPage = addPage(new IntroWelcomePage, i18n("Welcome to Aki"));
-    _serverPage = addPage(new ServerWelcomePage, i18n("Setup Server"));
+    QLabel* label = new QLabel;
+    mainLayout->addWidget(label, 0, 0, 1, 2);
+    label->setWordWrap(true);
 
-    connect(this, SIGNAL(user1Clicked()),
-            SLOT(finishClicked()));
+    QSpacerItem* horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+    mainLayout->addItem(horizontalSpacer, 1, 0, 1, 1);
+
+    QLabel* akiIcon = new QLabel;
+    mainLayout->addWidget(akiIcon, 1, 1, 1, 1);
+
+    KIcon icon("aki");
+    QPixmap pixmap(icon.pixmap(128, 128));
+    akiIcon->setPixmap(pixmap);
 }
 
-WelcomeDialog::~WelcomeDialog()
+IntroWelcomePage::~IntroWelcomePage()
 {
-}
-
-void
-WelcomeDialog::finishClicked()
-{
-    //qobject_cast<Aki::ServerWelcomePage*>(_serverPage->widget())->save();
 }

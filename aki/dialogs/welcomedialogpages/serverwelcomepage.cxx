@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010  Keith Rusler <xzekecomax@gmail.com>
+ * Copyright 2009-2011  Keith Rusler <xzekecomax@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -47,15 +47,15 @@ ServerWelcomePage::ServerWelcomePage(QWidget* parent)
 
     _networkName = new KLineEdit;
     label->setBuddy(_networkName);
-    mainLayout->setWidget(1, QFormLayout::FieldRole, _networkName);
+    mainLayout->setWidget(0, QFormLayout::FieldRole, _networkName);
 
     // Create the TabWidget for the dialogue.
     KTabWidget* serverTabWidget = new KTabWidget;
-    mainLayout->setWidget(2, QFormLayout::SpanningRole, serverTabWidget);
+    mainLayout->setWidget(1, QFormLayout::SpanningRole, serverTabWidget);
 
     // Create the first page for it called the Servers Page.
     QWidget* serversPage = new QWidget;
-    serverTabWidget->addTab(serverTabWidget, i18n("Servers"));
+    serverTabWidget->addTab(serversPage, i18n("Servers"));
 
     QGridLayout* serversPageLayout = new QGridLayout;
     serversPage->setLayout(serversPageLayout);
