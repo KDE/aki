@@ -57,7 +57,7 @@ NetworkAddressList::~NetworkAddressList()
 }
 
 void
-NetworkAddressList::addNetworkAddress(Aki::SqlAddress* address)
+NetworkAddressList::addNetworkAddress(Aki::Sql::Address* address)
 {
     insertNetworkAddress(count(), address);
 }
@@ -68,7 +68,7 @@ NetworkAddressList::count() const
     return model()->rowCount();
 }
 
-Aki::SqlAddress*
+Aki::Sql::Address*
 NetworkAddressList::currentNetworkAddress() const
 {
     QModelIndex index = selectionModel()->currentIndex();
@@ -103,13 +103,13 @@ NetworkAddressList::findItems(const QString& name, Qt::MatchFlags flags) const
 }
 
 QModelIndex
-NetworkAddressList::indexFromNetworkAddress(Aki::SqlAddress* address)
+NetworkAddressList::indexFromNetworkAddress(Aki::Sql::Address* address)
 {
     return _model->index(_model->addresses().indexOf(address));
 }
 
 void
-NetworkAddressList::insertNetworkAddress(int row, Aki::SqlAddress* address)
+NetworkAddressList::insertNetworkAddress(int row, Aki::Sql::Address* address)
 {
     Q_ASSERT(address);
 
@@ -120,13 +120,13 @@ NetworkAddressList::insertNetworkAddress(int row, Aki::SqlAddress* address)
     _model->insertAddress(row, address);
 }
 
-Aki::SqlAddress*
+Aki::Sql::Address*
 NetworkAddressList::networkAddress(int row) const
 {
     return networkAddressFromIndex(_model->index(row));
 }
 
-Aki::SqlAddress*
+Aki::Sql::Address*
 NetworkAddressList::networkAddressFromIndex(const QModelIndex& index) const
 {
     if (!index.isValid()) {
@@ -137,10 +137,10 @@ NetworkAddressList::networkAddressFromIndex(const QModelIndex& index) const
 }
 
 void
-NetworkAddressList::repopulateNetworkAddresses(Aki::SqlNetwork* network)
+NetworkAddressList::repopulateNetworkAddresses(Aki::Sql::Server* network)
 {
-    DEBUG_FUNC_NAME;
-    foreach(Aki::SqlAddress* address, _model->addresses()) {
+    /*DEBUG_FUNC_NAME;
+    foreach(Aki::Sql::Address* address, _model->addresses()) {
         DEBUG_TEXT2("Removing Address: %1", address->address());
         _model->removeAddress(address);
     }
@@ -149,24 +149,24 @@ NetworkAddressList::repopulateNetworkAddresses(Aki::SqlNetwork* network)
         return;
     }
 
-    Aki::SqlAddress::List list = Aki::SqlAddress::addressListForServer(network);
+    Aki::Sql::Address::List list;// = Aki::Sql::Address::addressListForServer(network);
     if (list.isEmpty()) {
         DEBUG_TEXT2("List is empty for Network: %1", network->name());
         return;
     }
 
-    foreach (Aki::SqlAddress* address, list) {
+    foreach (Aki::Sql::Address* address, list) {
         DEBUG_TEXT2("Adding new Address: %1", address->address());
         addNetworkAddress(address);
     }
 
     if (count()) {
         setCurrentRow(0);
-    }
+    }*/
 }
 
 int
-NetworkAddressList::row(Aki::SqlAddress* address) const
+NetworkAddressList::row(Aki::Sql::Address* address) const
 {
     return _model->addresses().indexOf(address);
 }
@@ -185,14 +185,14 @@ NetworkAddressList::selectedNetworkAddresses() const
 }
 
 void
-NetworkAddressList::setCurrentNetworkAddress(Aki::SqlAddress* address,
+NetworkAddressList::setCurrentNetworkAddress(Aki::Sql::Address* address,
                                              QItemSelectionModel::SelectionFlags command)
 {
     selectionModel()->setCurrentIndex(indexFromNetworkAddress(address), command);
 }
 
 void
-NetworkAddressList::setCurrentNetworkAddress(Aki::SqlAddress* address)
+NetworkAddressList::setCurrentNetworkAddress(Aki::Sql::Address* address)
 {
     setCurrentNetworkAddress(address, QItemSelectionModel::ClearAndSelect);
 }
@@ -209,7 +209,7 @@ NetworkAddressList::setCurrentRow(int row)
     setCurrentRow(row, QItemSelectionModel::ClearAndSelect);
 }
 
-Aki::SqlAddress*
+Aki::Sql::Address*
 NetworkAddressList::takeNetworkAddress(int row)
 {
     return _model->takeAddress(row);
@@ -237,7 +237,7 @@ void
 NetworkAddressList::slotItemCurrentChanged(const QModelIndex& current, const QModelIndex& previous)
 {
     QPersistentModelIndex persistentCurrent = current;
-    Aki::SqlAddress* currentAddress = networkAddress(persistentCurrent.row());
+    Aki::Sql::Address* currentAddress = networkAddress(persistentCurrent.row());
     emit currentNetworkAddressChanged(currentAddress, networkAddress(previous.row()));
     emit networkAddressCurrentRowChanged(persistentCurrent.row());
 }

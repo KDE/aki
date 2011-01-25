@@ -25,41 +25,45 @@
 
 namespace Aki
 {
+namespace Sql
+{
+class Address;
+class Server;
+} // End of namespace Sql.
 class AddressModel;
-class SqlAddress;
-class SqlNetwork;
-class NetworkAddressList : public QListView
+class NetworkAddressList
+    : public QListView
 {
     Q_OBJECT
 public:
-    typedef QList<Aki::SqlAddress*> List;
+    typedef QList<Aki::Sql::Address*> List;
     explicit NetworkAddressList(QWidget* parent = 0);
     ~NetworkAddressList();
-    void addNetworkAddress(Aki::SqlAddress* address);
+    void addNetworkAddress(Aki::Sql::Address* address);
     int count() const;
-    Aki::SqlAddress* currentNetworkAddress() const;
+    Aki::Sql::Address* currentNetworkAddress() const;
     int currentRow() const;
     Aki::NetworkAddressList::List findItems(const QString& name, Qt::MatchFlags flags) const;
-    void insertNetworkAddress(int row, Aki::SqlAddress* network);
-    Aki::SqlAddress* networkAddress(int row) const;
-    int row(Aki::SqlAddress* address) const;
+    void insertNetworkAddress(int row, Aki::Sql::Address* network);
+    Aki::Sql::Address* networkAddress(int row) const;
+    int row(Aki::Sql::Address* address) const;
     Aki::NetworkAddressList::List selectedNetworkAddresses() const;
-    void setCurrentNetworkAddress(Aki::SqlAddress* address, QItemSelectionModel::SelectionFlags command);
-    void setCurrentNetworkAddress(Aki::SqlAddress* address);
+    void setCurrentNetworkAddress(Aki::Sql::Address* address, QItemSelectionModel::SelectionFlags command);
+    void setCurrentNetworkAddress(Aki::Sql::Address* address);
     void setCurrentRow(int row, QItemSelectionModel::SelectionFlags command);
     void setCurrentRow(int row);
-    Aki::SqlAddress* takeNetworkAddress(int row);
+    Aki::Sql::Address* takeNetworkAddress(int row);
 public Q_SLOTS:
-    void repopulateNetworkAddresses(Aki::SqlNetwork* network);
+    void repopulateNetworkAddresses(Aki::Sql::Server* network);
 Q_SIGNALS:
-    void currentNetworkAddressChanged(Aki::SqlAddress* current, Aki::SqlAddress* previous);
-    void networkAddressActivated(Aki::SqlAddress* address);
-    void networkAddressChanged(Aki::SqlAddress* address);
-    void networkAddressClicked(Aki::SqlAddress* address);
+    void currentNetworkAddressChanged(Aki::Sql::Address* current, Aki::Sql::Address* previous);
+    void networkAddressActivated(Aki::Sql::Address* address);
+    void networkAddressChanged(Aki::Sql::Address* address);
+    void networkAddressClicked(Aki::Sql::Address* address);
     void networkAddressCurrentRowChanged(int row);
-    void networkAddressDoubleClicked(Aki::SqlAddress* address);
-    void networkAddressEntered(Aki::SqlAddress* address);
-    void networkAddressPressed(Aki::SqlAddress* address);
+    void networkAddressDoubleClicked(Aki::Sql::Address* address);
+    void networkAddressEntered(Aki::Sql::Address* address);
+    void networkAddressPressed(Aki::Sql::Address* address);
     void networkAddressSelectionChanged();
 private Q_SLOTS:
     void slotItemActivated(const QModelIndex& index);
@@ -70,8 +74,8 @@ private Q_SLOTS:
     void slotItemEntered(const QModelIndex& index);
     void slotItemPressed(const QModelIndex& index);
 protected:
-    Aki::SqlAddress* networkAddressFromIndex(const QModelIndex& index) const;
-    QModelIndex indexFromNetworkAddress(Aki::SqlAddress* address);
+    Aki::Sql::Address* networkAddressFromIndex(const QModelIndex& index) const;
+    QModelIndex indexFromNetworkAddress(Aki::Sql::Address* address);
 private:
     Aki::AddressModel* _model;
 }; // End of class NetworkAddressList.
