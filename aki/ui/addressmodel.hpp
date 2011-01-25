@@ -25,23 +25,27 @@
 
 namespace Aki
 {
-class SqlAddress;
-class AddressModel : public QAbstractListModel
+namespace Sql
+{
+class Address;
+} // End of namespace Sql.
+class AddressModel
+    : public QAbstractListModel
 {
     Q_OBJECT
 public:
     explicit AddressModel(QObject* parent = 0);
     ~AddressModel();
-    void addAddress(Aki::SqlAddress* address);
-    QList<Aki::SqlAddress*> addresses() const;
+    void addAddress(Aki::Sql::Address* address);
+    const QList<Aki::Sql::Address*>& addresses() const;
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
     virtual Qt::ItemFlags flags(const QModelIndex& index) const;
-    void insertAddress(int row, Aki::SqlAddress* address);
-    void removeAddress(Aki::SqlAddress* address);
+    void insertAddress(int row, Aki::Sql::Address* address);
+    void removeAddress(Aki::Sql::Address* address);
     virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
-    Aki::SqlAddress* takeAddress(int row);
+    Aki::Sql::Address* takeAddress(int row);
 private:
-    QList<Aki::SqlAddress*> _addressList;
+    QList<Aki::Sql::Address*> _addressList;
 }; // End of class AddressModel.
 } // End of namespace Aki.
 

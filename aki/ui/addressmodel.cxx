@@ -19,9 +19,8 @@
  */
 
 #include "addressmodel.hpp"
-#include "aki.hpp"
 #include "debughelper.hpp"
-#include "utils/sqladdress.hpp"
+#include "sql/address.hpp"
 #include <KDE/KIcon>
 using namespace Aki;
 
@@ -37,14 +36,14 @@ AddressModel::~AddressModel()
 }
 
 void
-AddressModel::addAddress(Aki::SqlAddress* address)
+AddressModel::addAddress(Aki::Sql::Address* address)
 {
     beginInsertRows(QModelIndex(), rowCount(), rowCount());
     _addressList.append(address);
     endInsertRows();
 }
 
-QList<Aki::SqlAddress*>
+const QList<Aki::Sql::Address*>&
 AddressModel::addresses() const
 {
     return _addressList;
@@ -59,7 +58,7 @@ AddressModel::data(const QModelIndex& index, int role) const
         return QVariant();
     }
 
-    Aki::SqlAddress* address = _addressList.at(index.row());
+    Aki::Sql::Address* address = _addressList.at(index.row());
     if (!address) {
         DEBUG_TEXT("Uh oh invalid address for row");
         return QVariant();
@@ -91,7 +90,7 @@ AddressModel::flags(const QModelIndex& index) const
 }
 
 void
-AddressModel::insertAddress(int row, Aki::SqlAddress* address)
+AddressModel::insertAddress(int row, Aki::Sql::Address* address)
 {
     if (!address) {
         return;
@@ -113,7 +112,7 @@ AddressModel::insertAddress(int row, Aki::SqlAddress* address)
 }
 
 void
-AddressModel::removeAddress(Aki::SqlAddress* address)
+AddressModel::removeAddress(Aki::Sql::Address* address)
 {
     if (!address) {
         return;
@@ -135,11 +134,11 @@ AddressModel::rowCount(const QModelIndex& parent) const
     return _addressList.count();
 }
 
-Aki::SqlAddress*
+Aki::Sql::Address*
 AddressModel::takeAddress(int row)
 {
     beginRemoveRows(QModelIndex(), row, row);
-    Aki::SqlAddress* address = _addressList.takeAt(row);
+    Aki::Sql::Address* address = _addressList.takeAt(row);
     endRemoveRows();
 
     return address;
