@@ -74,49 +74,37 @@ Address::port() const
 void
 Address::setAddress(const QString& address)
 {
-    if (_d->address != address) {
-        _d->address = address;
-    }
+    _d->address = address;
 }
 
 void
 Address::setAddressServer(int addressServer)
 {
-    if (_d->addressServer != addressServer) {
-        _d->addressServer = addressServer;
-    }
+    _d->addressServer = addressServer;
 }
 
 void
 Address::setId(int id)
 {
-    if (_d->id != id) {
-        _d->id = id;
-    }
+    _d->id = id;
 }
 
 void
 Address::setPassword(const QString& password)
 {
-    if (_d->password == password) {
-        _d->password = password;
-    }
+    _d->password = password;
 }
 
 void
 Address::setPort(unsigned int port)
 {
-    if (_d->port != port) {
-        _d->port = port;
-    }
+    _d->port = port;
 }
 
 void
 Address::setSsl(bool enable)
 {
-    if (_d->isSsl == enable) {
-        _d->isSsl = enable;
-    }
+    _d->isSsl = enable;
 }
 
 #include "sql/address.moc"
