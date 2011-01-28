@@ -71,8 +71,12 @@ AddressModel::data(const QModelIndex& index, int role) const
     case Qt::DecorationRole: {
         if (address->isSslEnabled()) {
             return KIcon("document-encrypt");
+        } else {
+            return QVariant();
         }
+    default: {
         return QVariant();
+    }
     }
     }
 
