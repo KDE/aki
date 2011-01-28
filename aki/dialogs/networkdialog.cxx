@@ -48,14 +48,14 @@ NetworkDialog::~NetworkDialog()
 void
 NetworkDialog::createNewNetwork(const QString& name)
 {
-    // Get the current Identity name.
+    /*// Get the current Identity name.
     const QString identityName = identitySelector->currentText();
     // Get the current identity for the name.
     QScopedPointer<Aki::SqlIdentity> identity(Aki::SqlIdentity::findIdentity(identityName));
     // Get the new server.
     Aki::SqlNetwork* server = Aki::SqlNetwork::newNetwork(name, identity.data());
     // Append it to the network list.
-    networkList->addNetwork(server);
+    networkList->addNetwork(server);*/
 }
 
 void
@@ -77,7 +77,7 @@ NetworkDialog::loadNetwork(Aki::SqlNetwork* network)
 {
     Q_ASSERT(network);
 
-    autoReconnectGroupBox->setChecked(network->isAutoReconnectEnabled());
+    /*autoReconnectGroupBox->setChecked(network->isAutoReconnectEnabled());
     retryAttemptsSpinBox->setValue(network->retryAttemptCount());
     retryIntervalSpinBox->setValue(network->retryInterval());
     connectOnStartupCheckBox->setChecked(network->isConnectOnStartupEnabled());
@@ -87,13 +87,13 @@ NetworkDialog::loadNetwork(Aki::SqlNetwork* network)
     encodingComboBox->setCurrentItem(network->encoding());
     autoIdentifyGroupBox->setChecked(network->isAutoIdentifyEnabled());
     serviceNameLineEdit->setText(network->serviceName());
-    servicePasswordLineEdit->setText(network->servicePassword());
+    servicePasswordLineEdit->setText(network->servicePassword());*/
 }
 
 void
 NetworkDialog::setupActions()
 {
-    connect(identitySelector, SIGNAL(identityActivated(Aki::SqlIdentity*)),
+    /*connect(identitySelector, SIGNAL(identityActivated(Aki::SqlIdentity*)),
             networkList, SLOT(repopulateNetwork(Aki::SqlIdentity*)));
     connect(networkList, SIGNAL(networkCurrentRowChanged(int)),
             SLOT(slotNetworkCurrentRowChanged(int)));
@@ -136,7 +136,7 @@ NetworkDialog::setupActions()
     connect(servicePasswordLineEdit, SIGNAL(textEdited(QString)),
             SLOT(slotServicePasswordTextEdited(QString)));
     connect(autoIdentifyGroupBox, SIGNAL(clicked(bool)),
-            SLOT(slotAutoIdentifiedClicked(bool)));
+            SLOT(slotAutoIdentifiedClicked(bool)));*/
 }
 
 void
@@ -186,7 +186,7 @@ NetworkDialog::setupIcons()
 void
 NetworkDialog::slotAddAddressClicked()
 {
-    if (!networkList->currentNetwork()) {
+    /*if (!networkList->currentNetwork()) {
         return;
     }
 
@@ -214,13 +214,13 @@ NetworkDialog::slotAddAddressClicked()
     default: {
         break;
     }
-    }
+    }*/
 }
 
 void
 NetworkDialog::slotAddChannelClicked()
 {
-    if (!networkList->currentNetwork()) {
+    /*if (!networkList->currentNetwork()) {
         return;
     }
 
@@ -245,13 +245,13 @@ NetworkDialog::slotAddChannelClicked()
     default: {
         break;
     }
-    }
+    }*/
 }
 
 void
 NetworkDialog::slotAddNetworkClicked()
 {
-    bool ok;
+    /*bool ok;
     const QString network = KInputDialog::getText(i18n("Add New Network"), i18n("Enter a new network name."),
                                                   QString(), &ok, this);
     // Check to see if the network already exists.
@@ -265,61 +265,61 @@ NetworkDialog::slotAddNetworkClicked()
         } else {
             createNewNetwork(network);
         }
-    }
+    }*/
 }
 
 void
 NetworkDialog::slotAutoIdentifiedClicked(bool checked)
 {
-    Aki::SqlNetwork* server = networkList->currentNetwork();
+    /*Aki::SqlNetwork* server = networkList->currentNetwork();
     server->setAutoIdentity(checked);
-    server->save();
+    server->save();*/
 }
 
 void
 NetworkDialog::slotAutoJoinChannelsClicked(bool checked)
 {
-    Aki::SqlNetwork* server = networkList->currentNetwork();
+    /*Aki::SqlNetwork* server = networkList->currentNetwork();
     server->setAutoJoinChannels(checked);
-    server->save();
+    server->save();*/
 }
 
 void
 NetworkDialog::slotAutoReconnectClicked(bool checked)
 {
-    Aki::SqlNetwork* server = networkList->currentNetwork();
+    /*Aki::SqlNetwork* server = networkList->currentNetwork();
     server->setAutoReconnect(checked);
-    server->save();
+    server->save();*/
 }
 
 void
 NetworkDialog::slotConnectOnStartupClicked(bool checked)
 {
-    Aki::SqlNetwork* server = networkList->currentNetwork();
+    /*Aki::SqlNetwork* server = networkList->currentNetwork();
     server->setConnectOnStartup(checked);
-    server->save();
+    server->save();*/
 }
 
 void
 NetworkDialog::slotConnectToRandomServersClicked(bool checked)
 {
-    Aki::SqlNetwork* server = networkList->currentNetwork();
+    /*Aki::SqlNetwork* server = networkList->currentNetwork();
     server->setConnectToRandomServer(checked);
-    server->save();
+    server->save();*/
 }
 
 void
 NetworkDialog::slotCustomEncodingClicked(bool checked)
 {
-    Aki::SqlNetwork* server = networkList->currentNetwork();
+    /*Aki::Sql::Server* server = networkList->currentNetwork();
     server->setDefaultEncoding(!checked);
-    server->save();
+    server->save();*/
 }
 
 void NetworkDialog::slotEditAddressClicked()
 {
-    // Get the current address.
-    Aki::SqlAddress* currentAddress = networkAddressList->currentNetworkAddress();
+    /*// Get the current address.
+    Aki::Sql::Address* currentAddress = networkAddressList->currentNetworkAddress();
 
     // Can we safely remove this check?
     if (!currentAddress) {
@@ -344,12 +344,12 @@ void NetworkDialog::slotEditAddressClicked()
     default: {
         break;
     }
-    }
+    }*/
 }
 
 void NetworkDialog::slotEditChannelClicked()
 {
-    // Get the current channel.
+    /*// Get the current channel.
     Aki::SqlChannel* currentChannel = networkChannelList->currentNetworkChannel();
 
     // Can we safely remove this check?
@@ -371,13 +371,13 @@ void NetworkDialog::slotEditChannelClicked()
     default: {
         break;
     }
-    }
+    }*/
 }
 
 void
 NetworkDialog::slotEditNetworkClicked()
 {
-    bool ok;
+    /*bool ok;
     // Get the current network.
     Aki::SqlNetwork* currentNetwork = networkList->currentNetwork();
 
@@ -402,31 +402,31 @@ NetworkDialog::slotEditNetworkClicked()
             // Save it to the database.
             currentNetwork->save();
         }
-    }
+    }*/
 }
 
 void
 NetworkDialog::slotEncodingActivated(const QString& encoding)
 {
-    Aki::SqlNetwork* server = networkList->currentNetwork();
+    /*Aki::SqlNetwork* server = networkList->currentNetwork();
     server->setEncoding(encoding.toLatin1());
-    server->save();
+    server->save();*/
 }
 
 void
-NetworkDialog::slotIdentityActivated(SqlIdentity* identity)
+NetworkDialog::slotIdentityActivated(Aki::Sql::Identity* identity)
 {
-    if (!identity) {
+    /*if (!identity) {
         return;
     }
 
-    networkList->setCurrentRow(0);
+    networkList->setCurrentRow(0);*/
 }
 
 void
 NetworkDialog::slotNetworkCurrentRowChanged(int currentRow)
 {
-    Aki::SqlNetwork* network = networkList->item(currentRow);
+    /*Aki::SqlNetwork* network = networkList->item(currentRow);
     if (!network) {
         return;
     }
@@ -436,14 +436,14 @@ NetworkDialog::slotNetworkCurrentRowChanged(int currentRow)
     networkAddressList->repopulateNetworkAddresses(networkList->item(currentRow));
     networkAddressList->setCurrentRow(0);
     networkChannelList->repopulateNetworkChannels(networkList->item(currentRow));
-    networkChannelList->setCurrentRow(0);
+    networkChannelList->setCurrentRow(0);*/
 }
 
 void
 NetworkDialog::slotRemoveAddressClicked()
 {
-    // Get the current address.
-    Aki::SqlAddress* currentAddress = networkAddressList->currentNetworkAddress();
+    /*// Get the current address.
+    Aki::Sql::Address* currentAddress = networkAddressList->currentNetworkAddress();
 
     // Can we safely remove this check?
     if (!currentAddress) {
@@ -461,7 +461,7 @@ NetworkDialog::slotRemoveAddressClicked()
         delete networkAddressList->takeNetworkAddress(networkAddressList->row(currentAddress));
         break;
     }
-    }
+    }*/
 }
 
 void
@@ -473,7 +473,7 @@ NetworkDialog::slotRemoveChannelClicked()
 void
 NetworkDialog::slotRemoveNetworkClicked()
 {
-    // Get the current network.
+    /*// Get the current network.
     Aki::SqlNetwork* currentNetwork = networkList->currentNetwork();
 
     // Can we safely remove this check?
@@ -492,37 +492,37 @@ NetworkDialog::slotRemoveNetworkClicked()
         delete networkList->takeNetwork(networkList->row(currentNetwork));
         break;
     }
-    }
+    }*/
 }
 
 void
 NetworkDialog::slotRetryAttemptsValueChanged(int count)
 {
-    Aki::SqlNetwork* server = networkList->currentNetwork();
+    /*Aki::SqlNetwork* server = networkList->currentNetwork();
     server->setRetryAttempts(count);
-    server->save();
+    server->save();*/
 }
 
 void
 NetworkDialog::slotRetryIntervalValueChanged(int seconds)
 {
-    Aki::SqlNetwork* server = networkList->currentNetwork();
+    /*Aki::SqlNetwork* server = networkList->currentNetwork();
     server->setRetryInterval(seconds);
-    server->save();
+    server->save();*/
 }
 
 void
 NetworkDialog::slotServiceNameTextEdited(const QString& name)
 {
-    Aki::SqlNetwork* server = networkList->currentNetwork();
+    /*Aki::SqlNetwork* server = networkList->currentNetwork();
     server->setServiceName(name);
-    server->save();
+    server->save();*/
 }
 
 void
 NetworkDialog::slotServicePasswordTextEdited(const QString& password)
 {
-    Aki::SqlNetwork* server = networkList->currentNetwork();
+    /*Aki::SqlNetwork* server = networkList->currentNetwork();
     server->setServicePassword(password);
-    server->save();
+    server->save();*/
 }

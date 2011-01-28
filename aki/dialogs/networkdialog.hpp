@@ -26,7 +26,10 @@
 
 namespace Aki
 {
-class SqlIdentity;
+namespace Sql
+{
+class Identity;
+} // End of namespace Sql.
 class NetworkDialog : public KDialog,
                       private Ui::NetworkDialog
 {
@@ -48,7 +51,7 @@ private Q_SLOTS:
     void slotEditChannelClicked();
     void slotEditNetworkClicked();
     void slotEncodingActivated(const QString& encoding);
-    void slotIdentityActivated(Aki::SqlIdentity* identity);
+    void slotIdentityActivated(Aki::Sql::Identity* identity);
     void slotNetworkCurrentRowChanged(int currentRow);
     void slotRemoveAddressClicked();
     void slotRemoveChannelClicked();
