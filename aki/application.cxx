@@ -26,7 +26,6 @@
 #include <KDE/KGlobal>
 #include <KDE/KStandardDirs>
 #include <KDE/KWindowSystem>
-#include <KMessageBox>
 using namespace Aki;
 
 Application::Application()
@@ -44,7 +43,6 @@ int Application::newInstance()
     KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
 
     if (!_mainWindow) {
-        qDebug() << "Main Window";
         _mainWindow = new Aki::AkiWindow;
         _mainWindow->show();
         Aki::IndicationSystem::self();
