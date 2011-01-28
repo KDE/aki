@@ -1,6 +1,7 @@
 set(aki_ui_SRCS
     ui/addresslist.cxx
     ui/addressmodel.cxx
+    ui/addresswidget.cxx
     ui/channelmodel.cxx
     ui/chatview.cxx
     ui/identitycombobox.cxx
