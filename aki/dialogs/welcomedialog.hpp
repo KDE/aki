@@ -25,6 +25,10 @@
 
 namespace Aki
 {
+namespace Sql
+{
+class Database;
+} // End of namespace Sql.
 class WelcomeDialog
     : public KAssistantDialog
 {
@@ -36,7 +40,9 @@ private Q_SLOTS:
     void finishClicked();
 private:
     KPageWidgetItem* _introPage;
+    KPageWidgetItem* _identityPage;
     KPageWidgetItem* _serverPage;
+    Aki::Sql::Database* _database;
 }; // End of class WelcomeDialog.
 } // End of namespace Aki.
 

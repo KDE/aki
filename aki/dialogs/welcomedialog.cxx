@@ -20,29 +20,45 @@
 
 #include "welcomedialog.hpp"
 #include "aki.hpp"
+#include "sql/database.hpp"
+#include "welcomedialogpages/identitywelcomepage.hpp"
 #include "welcomedialogpages/introwelcomepage.hpp"
 #include "welcomedialogpages/serverwelcomepage.hpp"
+#include <KDE/KMessageBox>
 using namespace Aki;
 
 WelcomeDialog::WelcomeDialog(QWidget* parent)
     : KAssistantDialog(parent)
 {
+    _database = new Aki::Sql::Database("QSQLITE");
+    //_database->setDatabaseName(Aki::databaseFile());
+    if (!_database->open()) {
+        KMessageBox::error(this, i18n("Unable to open database file.\nSettings will not be saved."),
+                           i18n("Unable to open database."));
+    }
+
     showButton(KAssistantDialog::Help, false);
     setCaption(i18n("IRC Setup"));
 
     _introPage = addPage(new IntroWelcomePage, i18n("Welcome to Aki"));
-    _serverPage = addPage(new ServerWelcomePage, i18n("Setup Server"));
+    _identityPage = addPage(new IdentityWelcomePage(_database), i18n("Setup Identity"));
+    _serverPage = addPage(new ServerWelcomePage(_database), i18n("Setup Server"));
 
-    connect(this, SIGNAL(user1Clicked()),
-            SLOT(finishClicked()));
+    if (_database->isOpen()) {
+        connect(this, SIGNAL(user1Clicked()),
+                SLOT(finishClicked()));
+    }
 }
 
 WelcomeDialog::~WelcomeDialog()
 {
+    _database->close();
+    delete _database;
 }
 
 void
 WelcomeDialog::finishClicked()
 {
     //qobject_cast<Aki::ServerWelcomePage*>(_serverPage->widget())->save();
+    //qobject_cast<Aki::IdentityWelcomePage*>(_serverPage->widget())->save();
 }
