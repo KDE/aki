@@ -102,16 +102,12 @@ Database::isOpen() const
 Aki::Sql::MetaTable
 Database::metaTable(const Aki::Sql::Table* table)
 {
-    DEBUG_FUNC_NAME;
-
     foreach (Aki::Sql::MetaTable metaTable, Aki::Sql::DatabasePrivate::tableList) {
         if (table->metaObject()->className() == metaTable.name()) {
-            DEBUG_TEXT2("Found table %1", metaTable.name());
             return metaTable;
         }
     }
 
-    DEBUG_TEXT2("Unable to find table: %1", table->metaObject()->className());
     return Aki::Sql::MetaTable();
 }
 
