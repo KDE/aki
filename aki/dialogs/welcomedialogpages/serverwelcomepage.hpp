@@ -30,17 +30,20 @@ namespace Aki
 namespace Sql
 {
 class Database;
+class Identity;
 class Server;
 } // End of namespace Sql.
+class AddressWidget;
 class ServerWelcomePage
     : public QWidget
 {
     Q_OBJECT
 public:
-    explicit ServerWelcomePage(QWidget* parent = 0);
+    explicit ServerWelcomePage(Aki::Sql::Database* database, QWidget* parent = 0);
     ~ServerWelcomePage();
     void loadNewServer();
     void save();
+    void setIdentity(Aki::Sql::Identity* identity);
 private Q_SLOTS:
     void slotAuthenticationBoxClicked(bool clicked);
     void slotChannelsListWidgetChanged();
@@ -53,10 +56,11 @@ private:
     KLineEdit* _networkName;
     KLineEdit* _serviceName;
     KLineEdit* _servicePassword;
-    KEditListWidget* _serversListWidget;
+    Aki::AddressWidget* _addressListWidget;
     KEditListWidget* _channelsListWidget;
     Aki::Sql::Database* _database;
     Aki::Sql::Server* _server;
+    Aki::Sql::Identity* _identity;
 }; // End of class ServerWelcomePage.
 } // End of namespace Aki.
 

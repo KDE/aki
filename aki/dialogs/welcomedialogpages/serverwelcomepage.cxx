@@ -23,7 +23,9 @@
 #include "sql/address.hpp"
 #include "sql/channel.hpp"
 #include "sql/database.hpp"
+#include "sql/identity.hpp"
 #include "sql/server.hpp"
+#include "ui/addresswidget.hpp"
 #include <QtGui/QFormLayout>
 #include <QtGui/QGridLayout>
 #include <QtGui/QGroupBox>
@@ -34,10 +36,20 @@
 #include <KDE/KTabWidget>
 using namespace Aki;
 
-ServerWelcomePage::ServerWelcomePage(QWidget* parent)
+ServerWelcomePage::ServerWelcomePage(Aki::Sql::Database* database, QWidget* parent)
     : QWidget(parent),
-    _database(0)
+    _channels(QStringList()),
+    _addresses(QStringList()),
+    _database(database),
+    _server(0),
+    _identity(0)
 {
+    Q_ASSERT(database);
+
+    _database->create<Aki::Sql::Server>();
+    _database->create<Aki::Sql::Address>();
+    _database->create<Aki::Sql::Channel>();
+
     QFormLayout* mainLayout = new QFormLayout;
     setLayout(mainLayout);
 
@@ -47,6 +59,7 @@ ServerWelcomePage::ServerWelcomePage(QWidget* parent)
 
     _networkName = new KLineEdit;
     label->setBuddy(_networkName);
+    _networkName->setText("Freenode");
     mainLayout->setWidget(0, QFormLayout::FieldRole, _networkName);
 
     // Create the TabWidget for the dialogue.
@@ -60,20 +73,23 @@ ServerWelcomePage::ServerWelcomePage(QWidget* parent)
     QGridLayout* serversPageLayout = new QGridLayout;
     serversPage->setLayout(serversPageLayout);
 
-    _serversListWidget = new KEditListWidget;
-    serversPageLayout->addWidget(_serversListWidget, 0, 0, 1, 1);
-    connect(_serversListWidget, SIGNAL(changed()),
-            SLOT(slotServersListWidgetChanged()));
+    _addressListWidget = new Aki::AddressWidget;
+    serversPageLayout->addWidget(_addressListWidget, 0, 0, 1, 1);
+    //_addressListWidget->setItems(QStringList() << "chat.freenode.net/6667");
+    //connect(_addressListWidget, SIGNAL(changed()),
+    //        SLOT(slotServersListWidgetChanged()));
     // End of the first page (Servers Page).
 
     // Create the second page for it called the Channels Page.
     QWidget* channelsPage = new QWidget;
     serverTabWidget->addTab(channelsPage, i18n("Channels"));
+
     QGridLayout* channelsPageLayout = new QGridLayout;
     channelsPage->setLayout(channelsPageLayout);
 
     _channelsListWidget = new KEditListWidget;
     channelsPageLayout->addWidget(_channelsListWidget, 0, 0, 1, 1);
+    _channelsListWidget->setItems(QStringList() << "#akiirc");
     connect(_channelsListWidget, SIGNAL(changed()),
             SLOT(slotChannelsListWidgetChanged()));
     // End of the second page (Channels Page).
@@ -102,6 +118,8 @@ ServerWelcomePage::ServerWelcomePage(QWidget* parent)
     _serviceName = new KLineEdit;
     label2->setBuddy(_serviceName);
     authenticationBoxLayout->setWidget(0, QFormLayout::FieldRole, _serviceName);
+    _serviceName->setClearButtonShown(true);
+    _serviceName->setText("nickserv");
     connect(_serviceName, SIGNAL(textEdited(QString)),
             SLOT(slotServiceNameTextEdited(QString)));
 
@@ -112,14 +130,13 @@ ServerWelcomePage::ServerWelcomePage(QWidget* parent)
     _servicePassword = new KLineEdit;
     label3->setBuddy(_servicePassword);
     authenticationBoxLayout->setWidget(1, QFormLayout::FieldRole, _servicePassword);
+    _servicePassword->setClearButtonShown(true);
     connect(_servicePassword, SIGNAL(textEdited(QString)),
             SLOT(slotServicePasswordTextEdited(QString)));
 
     QSpacerItem* authenticationBoxSpacer = new QSpacerItem(20, 158, QSizePolicy::Minimum);
     authenticationPageLayout->addItem(authenticationBoxSpacer, 1, 0, 1, 1);
     // End of the last page (Authentication page).
-
-    _server = new Aki::Sql::Server(this);
 
     loadNewServer();
 }
@@ -131,21 +148,27 @@ ServerWelcomePage::~ServerWelcomePage()
 void
 ServerWelcomePage::loadNewServer()
 {
+    _server = new Aki::Sql::Server(this);
 }
 
 void
 ServerWelcomePage::save()
 {
-    _server->setAutoJoinChannels(true);
-    _server->setAutoReconnect(true);
-    _server->setConnectOnStartup(true);
-    _server->setConnectToRandomServer(false);
-    _server->setDefaultEncoding("UTF-8");
-    _server->setEncoding("UTF-8");
-    _server->setRetryAttemptCount(10);
-    _server->setRetryInterval(5);
+    Q_ASSERT(_identity);
 
-    if (!_database->add(_server)) {
+    _server->setServerIdentity(_identity->id());
+    if (_database->transaction()) {
+        if (!_database->add(_server)) {
+            if (!_database->rollback()) {
+                qDebug() << "Unable to rollback Server data";
+            }
+        } else {
+            if (!_database->commit()) {
+                qDebug() << "Unable to commit Server data";
+            }
+        }
+    } else {
+        qDebug() << "Unable to start Server transaction";
         return;
     }
 
@@ -163,14 +186,47 @@ ServerWelcomePage::save()
         }
 
         tmp->setAddressServer(_server->id());
+
+        if (_database->transaction()) {
+            if (!_database->add(tmp.data())) {
+                if (!_database->rollback()) {
+                    qDebug() << "Unable to rollback Address data";
+                }
+            } else {
+                if (!_database->commit()) {
+                    qDebug() << "Unable to commit Address data";
+                }
+            }
+        } else {
+            qDebug() << "Unable to start Address transaction";
+        }
     }
 
     foreach (const QString& channel, _channels) {
         QScopedPointer<Aki::Sql::Channel> tmp(new Aki::Sql::Channel);
         tmp->setName(channel);
         tmp->setChannelServer(_server->id());
-        _database->add(tmp.data());
+
+        if (_database->transaction()) {
+            if (!_database->add(tmp.data())) {
+                if (!_database->rollback()) {
+                    qDebug() << "Unable to rollback Channel data";
+                }
+            } else {
+                if (!_database->commit()) {
+                    qDebug() << "Unable to commit Channel data";
+                }
+            }
+        } else {
+            qDebug() << "Unable to start Channel transaction";
+        }
     }
+}
+
+void
+ServerWelcomePage::setIdentity(Aki::Sql::Identity* identity)
+{
+    _identity = identity;
 }
 
 void
@@ -188,7 +244,7 @@ ServerWelcomePage::slotChannelsListWidgetChanged()
 void
 ServerWelcomePage::slotServersListWidgetChanged()
 {
-    _addresses = _serversListWidget->items();
+    //_addresses = _addressListWidget->items();
 }
 
 void
