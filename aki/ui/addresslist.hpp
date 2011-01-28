@@ -64,6 +64,7 @@ Q_SIGNALS:
     void addressChanged(Aki::Sql::Address* address);
     void addressClicked(Aki::Sql::Address* address);
     void addressCurrentRowChanged(int row);
+    void addressDoubleClicked(Aki::Sql::Address* address);
     void addressEntered(Aki::Sql::Address* address);
     void addressPressed(Aki::Sql::Address* address);
     void addressSelectionChanged();
@@ -71,6 +72,14 @@ Q_SIGNALS:
 protected:
     Aki::Sql::Address* addressFromIndex(const QModelIndex& index) const;
     QModelIndex indexFromAddress(Aki::Sql::Address* address);
+private Q_SLOTS:
+    void slotItemActivated(const QModelIndex& index);
+    void slotItemChanged(const QModelIndex& index);
+    void slotItemClicked(const QModelIndex& index);
+    void slotItemCurrentChanged(const QModelIndex& current, const QModelIndex& previous);
+    void slotItemDoubleClicked(const QModelIndex& index);
+    void slotItemEntered(const QModelIndex& index);
+    void slotItemPressed(const QModelIndex& index);
 private:
     Aki::AddressModel* _model;
     Aki::Sql::Database* _database;

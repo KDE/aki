@@ -32,6 +32,23 @@ AddressList::AddressList(QWidget* parent)
 {
     _model = new Aki::AddressModel(this);
     setModel(_model);
+
+    connect(this, SIGNAL(activated(QModelIndex)),
+            SLOT(slotItemActivated(QModelIndex)));
+    connect(_model, SIGNAL(dataChanged(QModelIndex,QModelIndex)),
+            SLOT(slotItemChanged(QModelIndex)));
+    connect(this, SIGNAL(clicked(QModelIndex)),
+            SLOT(slotItemClicked(QModelIndex)));
+    connect(this, SIGNAL(doubleClicked(QModelIndex)),
+            SLOT(slotItemDoubleClicked(QModelIndex)));
+    connect(this, SIGNAL(entered(QModelIndex)),
+            SLOT(slotItemEntered(QModelIndex)));
+    connect(this, SIGNAL(pressed(QModelIndex)),
+            SLOT(slotItemPressed(QModelIndex)));
+    connect(selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
+            SLOT(slotItemCurrentChanged(QModelIndex,QModelIndex)));
+    connect(selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
+            SIGNAL(addressSelectionChanged()));
 }
 
 AddressList::~AddressList()
@@ -193,6 +210,51 @@ AddressList::setDatabase(Aki::Sql::Database* database)
 {
     Q_ASSERT(database);
     _database = database;
+}
+
+void
+AddressList::slotItemActivated(const QModelIndex& index)
+{
+    emit addressActivated(addressFromIndex(index));
+}
+
+void
+AddressList::slotItemChanged(const QModelIndex& index)
+{
+    emit addressChanged(addressFromIndex(index));
+}
+
+void
+AddressList::slotItemClicked(const QModelIndex& index)
+{
+    emit addressClicked(addressFromIndex(index));
+}
+
+void
+AddressList::slotItemCurrentChanged(const QModelIndex& current, const QModelIndex& previous)
+{
+    QPersistentModelIndex persistentCurrent = current;
+    Aki::Sql::Address* currentAddress = address(persistentCurrent.row());
+    emit currentAddressChanged(currentAddress, address(previous.row()));
+    emit addressCurrentRowChanged(persistentCurrent.row());
+}
+
+void
+AddressList::slotItemDoubleClicked(const QModelIndex& index)
+{
+    emit addressDoubleClicked(addressFromIndex(index));
+}
+
+void
+AddressList::slotItemEntered(const QModelIndex& index)
+{
+    emit addressEntered(addressFromIndex(index));
+}
+
+void
+AddressList::slotItemPressed(const QModelIndex& index)
+{
+    emit addressPressed(addressFromIndex(index));
 }
 
 Aki::Sql::Address*
