@@ -71,6 +71,12 @@ Address::port() const
     return _d->port;
 }
 
+int
+Address::position() const
+{
+    return _d->position;
+}
+
 void
 Address::setAddress(const QString& address)
 {
@@ -99,6 +105,12 @@ void
 Address::setPort(unsigned int port)
 {
     _d->port = port;
+}
+
+void
+Address::setPosition(int position)
+{
+    _d->position = position;
 }
 
 void

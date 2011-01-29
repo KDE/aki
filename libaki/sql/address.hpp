@@ -39,6 +39,7 @@ class LIBAKI_EXPORT Address
     Q_CLASSINFO("port", "NULL=false")
     Q_CLASSINFO("password", "LENGTH=0,NULL=true")
     Q_CLASSINFO("ssl", "NULL=false")
+    Q_CLASSINFO("position", "NULL=false")
     Q_CLASSINFO("addressServer","FOREIGN_KEY=Server;id,NULL=false")
     /**
      * This property holds the @p id of the row when it was commited.<br>
@@ -65,6 +66,10 @@ class LIBAKI_EXPORT Address
      * The default value is an empty QString.
      */
     Q_PROPERTY(QString password READ password WRITE setPassword)
+    /**
+     * This property holds the @p position for the order of the addresses.
+     */
+    Q_PROPERTY(int position READ position WRITE setPosition)
     /**
      * This property holds the @p ssl state of whether to connect using SSL or not.
      *
@@ -120,6 +125,12 @@ public:
      */
     unsigned int port() const;
     /**
+     * Gets the position of the address in the list.
+     *
+     * @return Address position.
+     */
+    int position() const;
+    /**
      * Sets the @p address for to be able to connect to.
      * @note Cannot be nulled.
      *
@@ -140,6 +151,13 @@ public:
      * @param port Port number for this address.
      */
     void setPort(unsigned int port);
+    /**
+     * Sets the @p position for this address in the order it will
+     * be used.
+     *
+     * @param position Position of the address.
+     */
+    void setPosition(int position);
     /**
      * Sets the SSL state for this address.
      *
