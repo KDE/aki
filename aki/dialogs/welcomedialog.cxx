@@ -33,8 +33,8 @@ WelcomeDialog::WelcomeDialog(QWidget* parent)
     _database = new Aki::Sql::Database("QSQLITE");
     //_database->setDatabaseName(Aki::databaseFile());
     if (!_database->open()) {
-        KMessageBox::error(this, i18n("Unable to open database file.\nSettings will not be saved."),
-                           i18n("Unable to open database."));
+        //KMessageBox::error(this, i18n("Unable to open database file.\nSettings will not be saved."),
+                           //i18n("Unable to open database."));
     }
 
     showButton(KAssistantDialog::Help, false);
