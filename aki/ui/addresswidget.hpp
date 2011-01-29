@@ -52,6 +52,7 @@ public:
     void setCurrentRow(int row);
     Aki::Sql::Address* takeAddress(int row);
 private Q_SLOTS:
+    void slotAddressListClicked(Aki::Sql::Address* address);
     void slotAddClicked();
     void slotEditClicked();
     void slotMoveUpClicked();

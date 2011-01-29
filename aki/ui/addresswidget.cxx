@@ -39,6 +39,8 @@ AddressWidget::AddressWidget(QWidget* parent)
 
     _addressList = new Aki::AddressList;
     mainLayout->addWidget(_addressList);
+    connect(_addressList, SIGNAL(addressClicked(Aki::Sql::Address*)),
+            SLOT(slotAddressListClicked(Aki::Sql::Address*)));
 
     QVBoxLayout* buttonLayout = new QVBoxLayout;
     mainLayout->addLayout(buttonLayout);
@@ -54,21 +56,29 @@ AddressWidget::AddressWidget(QWidget* parent)
     buttonLayout->addWidget(_removeButton);
     _removeButton->setIcon(KIcon("list-remove"));
     _removeButton->setText(i18n("Remove"));
+    connect(_removeButton, SIGNAL(clicked(bool)),
+            SLOT(slotRemoveClicked()));
 
     _editButton = new KPushButton;
     buttonLayout->addWidget(_editButton);
     _editButton->setIcon(KIcon("edit-rename"));
     _editButton->setText(i18n("Edit"));
+    connect(_editButton, SIGNAL(clicked(bool)),
+            SLOT(slotEditClicked()));
 
     _moveUpButton = new KPushButton;
     buttonLayout->addWidget(_moveUpButton);
     _moveUpButton->setIcon(KIcon("arrow-up"));
     _moveUpButton->setText(i18n("Move Up"));
+    connect(_moveUpButton, SIGNAL(clicked(bool)),
+            SLOT(slotMoveUpClicked()));
 
     _moveDownButton = new KPushButton;
     buttonLayout->addWidget(_moveDownButton);
     _moveDownButton->setIcon(KIcon("arrow-down"));
     _moveDownButton->setText(i18n("Move Down"));
+    connect(_moveDownButton, SIGNAL(clicked(bool)),
+            SLOT(slotMoveDownClicked()));
 
     buttonLayout->addSpacerItem(new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding));
 }
@@ -80,6 +90,7 @@ AddressWidget::~AddressWidget()
 void
 AddressWidget::addAddress(const QString& address)
 {
+    Q_UNUSED(address)
     Aki::Sql::Address* tmp = new Aki::Sql::Address;
     addAddress(tmp);
 }
@@ -93,20 +104,19 @@ AddressWidget::addAddress(Aki::Sql::Address* address)
 Aki::Sql::Address*
 AddressWidget::address(int index)
 {
-    Q_UNUSED(index)
-    return 0;
+    return _addressList->address(index);
 }
 
 int
 AddressWidget::count() const
 {
-    return -1;
+    return _addressList->count();
 }
 
 Aki::Sql::Address*
 AddressWidget::currentAddress() const
 {
-    return 0;
+    return _addressList->currentAddress();
 }
 
 void
@@ -119,33 +129,31 @@ AddressWidget::insertAddress(int row, const QString& address)
 void
 AddressWidget::insertAddress(int row, Aki::Sql::Address* address)
 {
-    Q_UNUSED(row)
-    Q_UNUSED(address)
+    _addressList->insertAddress(row, address);
 }
 
 void
 AddressWidget::removeAddress(Aki::Sql::Address* address)
 {
-    Q_UNUSED(address)
+    _addressList->removeAddress(_addressList->row(address));
 }
 
 int
 AddressWidget::row(Aki::Sql::Address* address)
 {
-    Q_UNUSED(address)
-    return -1;
+    return _addressList->row(address);
 }
 
 void
 AddressWidget::setCurrentAddress(Aki::Sql::Address* address)
 {
-    Q_UNUSED(address)
+    _addressList->setCurrentAddress(address);
 }
 
 void
 AddressWidget::setCurrentRow(int row)
 {
-    Q_UNUSED(row)
+    _addressList->setCurrentRow(row);
 }
 
 void
@@ -158,14 +166,21 @@ AddressWidget::slotAddClicked()
         Aki::Sql::Address* address = new Aki::Sql::Address;
         if (!address || addressDialog.address().isEmpty()) {
             delete address;
-            KMessageBox::error(this, i18n("Empty address given"), i18n("Empty address"));
+            KMessageBox::error(this, i18n("Empty address given."), i18n("Empty address"));
+            return;
+        }
+
+        if (!_addressList->findItems(address->address(), Qt::MatchExactly).isEmpty()) {
+            delete address;
+            KMessageBox::error(this, i18n("Address already exists, please enter a different address"),
+                               i18n("Address already in use."));
             return;
         }
 
         address->setAddress(addressDialog.address());
         address->setPassword(addressDialog.password());
         address->setPort(addressDialog.port());
-        qDebug() << addressDialog.isSslEnabled();
+        address->setPosition(count());
         address->setSsl(addressDialog.isSslEnabled());
 
         addAddress(address);
@@ -178,18 +193,135 @@ AddressWidget::slotAddClicked()
 }
 
 void
+AddressWidget::slotAddressListClicked(Aki::Sql::Address* address)
+{
+    if (!address) {
+        return;
+    }
+
+    _editButton->setEnabled(true);
+    _removeButton->setEnabled(true);
+
+    const int count = this->count() - 1;
+    const int row = _addressList->row(address);
+
+    if (this->count() == 1) {
+        _moveDownButton->setDisabled(true);
+        _moveUpButton->setDisabled(true);
+    } else if (count == row) {
+        _moveDownButton->setDisabled(true);
+        _moveUpButton->setEnabled(true);
+    } else if (row == 0) {
+        _moveDownButton->setEnabled(true);
+        _moveUpButton->setDisabled(true);
+    } else {
+        _moveDownButton->setEnabled(true);
+        _moveUpButton->setEnabled(true);
+    }
+}
+
+void
 AddressWidget::slotEditClicked()
 {
+    // Get the current address.
+    Aki::Sql::Address* currentAddress = _addressList->currentAddress();
+
+    // Can we safely remove this check?
+    if (!currentAddress) {
+        return;
+    }
+
+    Aki::AddressDialog dialog;
+    dialog.setAddress(currentAddress->address());
+    dialog.setPassword(currentAddress->password());
+    dialog.setPort(currentAddress->port());
+    dialog.setSsl(currentAddress->isSslEnabled());
+
+    switch (dialog.exec()) {
+    case QDialog::Accepted: {
+        if (currentAddress->address() == dialog.address() &&
+            currentAddress->password() == dialog.password() &&
+            currentAddress->port() == dialog.port() &&
+            currentAddress->isSslEnabled() == dialog.isSslEnabled()) {
+            return;
+        }
+
+        if (currentAddress->address() != dialog.address()) {
+            if (!_addressList->findItems(dialog.address(), Qt::MatchExactly).isEmpty()) {
+                KMessageBox::error(this, i18n("Address already exists, please enter a different address"),
+                                   i18n("Address already in use."));
+                return;
+            }
+        }
+
+        currentAddress->setAddress(dialog.address());
+        currentAddress->setPassword(dialog.password());
+        currentAddress->setPort(dialog.port());
+        currentAddress->setSsl(dialog.isSslEnabled());
+        return;
+    }
+    default: {
+        break;
+    }
+    }
 }
 
 void
 AddressWidget::slotMoveDownClicked()
 {
+    Aki::Sql::Address* current = _addressList->currentAddress();
+    const int currentIndex = _addressList->row(current);
+
+    Aki::Sql::Address* next = _addressList->address(currentIndex + 1);
+    if (!next) {
+        return;
+    }
+    const int nextIndex = _addressList->row(next);
+
+    Aki::Sql::Address* tmp = _addressList->takeAddress(nextIndex);
+
+    tmp->setPosition(currentIndex);
+    _addressList->insertAddress(currentIndex, tmp);
+
+    current->setPosition(nextIndex);
+    _addressList->insertAddress(nextIndex, current);
+
+    if ((nextIndex) == (count() - 1)) {
+        _moveDownButton->setDisabled(true);
+        _moveUpButton->setEnabled(true);
+    } else {
+        _moveDownButton->setEnabled(true);
+        _moveUpButton->setEnabled(true);
+    }
 }
 
 void
 AddressWidget::slotMoveUpClicked()
 {
+    Aki::Sql::Address* current = _addressList->currentAddress();
+    const int currentIndex = _addressList->row(current);
+
+    Aki::Sql::Address* previous = _addressList->address(currentIndex - 1);
+    if (!previous) {
+        return;
+    }
+    const int previousIndex = _addressList->row(previous);
+
+    Aki::Sql::Address* tmp = _addressList->takeAddress(previousIndex);
+
+    current->setPosition(previousIndex);
+    _addressList->insertAddress(previousIndex, current);
+
+    tmp->setPosition(currentIndex);
+    _addressList->insertAddress(currentIndex, tmp);
+
+    if ((previousIndex) == 0) {
+        _moveDownButton->setEnabled(true);
+        _moveUpButton->setDisabled(true);
+    } else {
+        _moveDownButton->setEnabled(true);
+        _moveUpButton->setEnabled(true);
+    }
 }
 
 void
@@ -200,6 +332,5 @@ AddressWidget::slotRemoveClicked()
 Aki::Sql::Address*
 AddressWidget::takeAddress(int row)
 {
-    Q_UNUSED(row)
-    return 0;
+    return _addressList->takeAddress(row);
 }
