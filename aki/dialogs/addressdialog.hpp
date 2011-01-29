@@ -40,7 +40,7 @@ public:
     void setPassword(const QString& name);
     QString password() const;
     void setPort(quint16 port);
-    int port() const;
+    unsigned int port() const;
     void setSsl(bool enabled);
     bool isSslEnabled() const;
 private:

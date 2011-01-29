@@ -99,7 +99,7 @@ AddressDialog::password() const
     return _serverPasswordLineEdit->text();
 }
 
-int
+unsigned int
 AddressDialog::port() const
 {
     return _serverPortSpinBox->value();
