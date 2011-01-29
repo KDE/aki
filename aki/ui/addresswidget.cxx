@@ -138,6 +138,14 @@ AddressWidget::removeAddress(Aki::Sql::Address* address)
     _addressList->removeAddress(_addressList->row(address));
 }
 
+void
+AddressWidget::reorderPosition(int current)
+{
+    for (int i = current, c = count(); i < c; ++i) {
+        _addressList->address(i)->setPosition(i);
+    }
+}
+
 int
 AddressWidget::row(Aki::Sql::Address* address)
 {
@@ -170,18 +178,18 @@ AddressWidget::slotAddClicked()
             return;
         }
 
-        if (!_addressList->findItems(address->address(), Qt::MatchExactly).isEmpty()) {
-            delete address;
-            KMessageBox::error(this, i18n("Address already exists, please enter a different address"),
-                               i18n("Address already in use."));
-            return;
-        }
-
         address->setAddress(addressDialog.address());
         address->setPassword(addressDialog.password());
         address->setPort(addressDialog.port());
         address->setPosition(count());
         address->setSsl(addressDialog.isSslEnabled());
+
+        if (!_addressList->findItems(address->address() + ':' + QString::number(address->port()), Qt::MatchExactly).isEmpty()) {
+            delete address;
+            KMessageBox::error(this, i18n("Address already exists, please enter a different address"),
+                               i18n("Address already in use."));
+            return;
+        }
 
         addAddress(address);
         break;
@@ -327,6 +335,29 @@ AddressWidget::slotMoveUpClicked()
 void
 AddressWidget::slotRemoveClicked()
 {
+    Aki::Sql::Address* current = _addressList->currentAddress();
+    if (!current) {
+        return;
+    }
+
+    int result = KMessageBox::warningYesNo(this, i18n("Are you sure you want to remove the server:\n%1", current->address()),
+                                           i18n("Remove server"));
+    switch (result) {
+    case KMessageBox::Yes: {
+        const int position = _addressList->row(current);
+        if (position == (count() - 1)) {
+            removeAddress(current);
+        } else {
+            removeAddress(current);
+            reorderPosition(position);
+        }
+        break;
+    }
+    case KMessageBox::No:
+    default: {
+        return;
+    }
+    }
 }
 
 Aki::Sql::Address*

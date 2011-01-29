@@ -59,6 +59,8 @@ private Q_SLOTS:
     void slotMoveDownClicked();
     void slotRemoveClicked();
 private:
+    void reorderPosition(int current);
+private:
     Aki::AddressList* _addressList;
     KPushButton* _addButton;
     KPushButton* _removeButton;

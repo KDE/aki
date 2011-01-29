@@ -52,15 +52,12 @@ AddressModel::addresses() const
 QVariant
 AddressModel::data(const QModelIndex& index, int role) const
 {
-    DEBUG_FUNC_NAME;
     if (!index.isValid()) {
-        DEBUG_TEXT("Index is invalid so ignoring data call");
         return QVariant();
     }
 
     Aki::Sql::Address* address = _addressList.at(index.row());
     if (!address) {
-        DEBUG_TEXT("Uh oh invalid address for row");
         return QVariant();
     }
 
