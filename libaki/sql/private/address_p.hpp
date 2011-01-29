@@ -38,6 +38,7 @@ public:
     quint16 port;
     int id;
     int addressServer;
+    int position;
     bool isSsl;
 private:
     AKI_DECLARE_PUBLIC(Address)

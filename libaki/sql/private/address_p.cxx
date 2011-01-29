@@ -28,6 +28,7 @@ AddressPrivate::AddressPrivate(Aki::Sql::Address* qq)
     port(6667),
     id(-1),
     addressServer(-1),
+    position(-1),
     isSsl(false),
     _q(qq)
 {
