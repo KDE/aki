@@ -41,12 +41,15 @@ AddressWidget::AddressWidget(QWidget* parent)
     mainLayout->addWidget(_addressList);
     connect(_addressList, SIGNAL(addressClicked(Aki::Sql::Address*)),
             SLOT(slotAddressListClicked(Aki::Sql::Address*)));
+    connect(_addressList, SIGNAL(addressCurrentRowChanged(int)),
+            SLOT(slotAddressCurrentRowChanged(int)));
 
     QVBoxLayout* buttonLayout = new QVBoxLayout;
     mainLayout->addLayout(buttonLayout);
 
     _addButton = new KPushButton;
     buttonLayout->addWidget(_addButton);
+    _addButton->setEnabled(true);
     _addButton->setIcon(KIcon("list-add"));
     _addButton->setText(i18n("Add"));
     connect(_addButton, SIGNAL(clicked(bool)),
@@ -54,6 +57,7 @@ AddressWidget::AddressWidget(QWidget* parent)
 
     _removeButton = new KPushButton;
     buttonLayout->addWidget(_removeButton);
+    _removeButton->setDisabled(true);
     _removeButton->setIcon(KIcon("list-remove"));
     _removeButton->setText(i18n("Remove"));
     connect(_removeButton, SIGNAL(clicked(bool)),
@@ -61,6 +65,7 @@ AddressWidget::AddressWidget(QWidget* parent)
 
     _editButton = new KPushButton;
     buttonLayout->addWidget(_editButton);
+    _editButton->setDisabled(true);
     _editButton->setIcon(KIcon("edit-rename"));
     _editButton->setText(i18n("Edit"));
     connect(_editButton, SIGNAL(clicked(bool)),
@@ -68,6 +73,7 @@ AddressWidget::AddressWidget(QWidget* parent)
 
     _moveUpButton = new KPushButton;
     buttonLayout->addWidget(_moveUpButton);
+    _moveUpButton->setDisabled(true);
     _moveUpButton->setIcon(KIcon("arrow-up"));
     _moveUpButton->setText(i18n("Move Up"));
     connect(_moveUpButton, SIGNAL(clicked(bool)),
@@ -75,6 +81,7 @@ AddressWidget::AddressWidget(QWidget* parent)
 
     _moveDownButton = new KPushButton;
     buttonLayout->addWidget(_moveDownButton);
+    _moveDownButton->setDisabled(true);
     _moveDownButton->setIcon(KIcon("arrow-down"));
     _moveDownButton->setText(i18n("Move Down"));
     connect(_moveDownButton, SIGNAL(clicked(bool)),
@@ -192,12 +199,46 @@ AddressWidget::slotAddClicked()
         }
 
         addAddress(address);
+
+        if (count() == 1) {
+            setCurrentRow(0);
+            slotAddressCurrentCurrentRowChanged(0);
+            _removeButton->setEnabled(true);
+        } else if (count() > 1) {
+            _moveDownButton->setDisabled(true);
+            _moveUpButton->setEnabled(true);
+        }
         break;
     }
     default: {
         break;
     }
     }
+}
+
+void
+AddressWidget::slotAddressCurrentCurrentRowChanged(int row)
+{
+    const Aki::Sql::Address* current = _addressList->address(row);
+    if (!current) {
+        return;
+    }
+
+    if (count() == 1) {
+        _moveDownButton->setDisabled(true);
+        _moveUpButton->setDisabled(true);
+    } else if (row == (count() - 1)) {
+        _moveDownButton->setDisabled(true);
+        _moveUpButton->setEnabled(true);
+    } else if (row == 0) {
+        _moveDownButton->setEnabled(false);
+        _moveUpButton->setDisabled(true);
+    } else {
+        _moveDownButton->setEnabled(true);
+        _moveUpButton->setDisabled(true);
+    }
+
+    _editButton->setEnabled(true);
 }
 
 void
@@ -350,6 +391,13 @@ AddressWidget::slotRemoveClicked()
         } else {
             removeAddress(current);
             reorderPosition(position);
+        }
+
+        if (count() == 0) {
+            _editButton->setDisabled(true);
+            _moveDownButton->setDisabled(true);
+            _moveUpButton->setDisabled(true);
+            _removeButton->setDisabled(true);
         }
         break;
     }
