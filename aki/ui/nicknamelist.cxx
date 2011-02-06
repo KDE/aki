@@ -20,7 +20,6 @@
 
 #include "nicknamelist.hpp"
 #include "aki.hpp"
-#include "debughelper.hpp"
 #include "sql/identity.hpp"
 #include "sql/nickname.hpp"
 #include "ui/nicknamemodel.hpp"
@@ -139,9 +138,7 @@ NicknameList::nicknameFromIndex(const QModelIndex& index) const
 void
 NicknameList::repopulateNicknames(Aki::Sql::Identity* identity)
 {
-    DEBUG_FUNC_NAME;
     foreach (Aki::Sql::Nickname* nickname, _model->nicknames()) {
-        DEBUG_TEXT2("Removing Nickname: %1", nickname->nickname());
         _model->removeNickname(nickname);
     }
 
@@ -151,12 +148,10 @@ NicknameList::repopulateNicknames(Aki::Sql::Identity* identity)
 
     QList<Aki::Sql::Nickname*> nicknames = _database->find<Aki::Sql::Nickname>().result();
     if (nicknames.isEmpty()) {
-        DEBUG_TEXT2("List is empty for Identity: %1", identity->name());
         return;
     }
 
     foreach (Aki::Sql::Nickname* nickname, nicknames) {
-        DEBUG_TEXT2("Adding new Nickname: %1", nickname->nickname());
         addNickname(nickname);
     }
 }
