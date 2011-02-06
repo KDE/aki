@@ -20,7 +20,6 @@
 
 #include "identitymodel.hpp"
 #include "aki.hpp"
-#include "debughelper.hpp"
 #include "sql/identity.hpp"
 using namespace Aki;
 
@@ -46,15 +45,12 @@ IdentityModel::addIdentity(Aki::Sql::Identity* identity)
 QVariant
 IdentityModel::data(const QModelIndex& index, int role) const
 {
-    DEBUG_FUNC_NAME;
     if (!index.isValid()) {
-        DEBUG_TEXT("Index is invalid so ignoring data call");
         return QVariant();
     }
 
     Aki::Sql::Identity* identity = _identityList.value(index.row());
     if (!identity) {
-        DEBUG_TEXT("Uh oh invalid identity at row");
         return QVariant();
     }
 
