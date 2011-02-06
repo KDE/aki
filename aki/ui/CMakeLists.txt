@@ -12,6 +12,7 @@ set(aki_ui_SRCS
     ui/networkmodel.cxx
     ui/nicknamelist.cxx
     ui/nicknamemodel.cxx
+    ui/servermodel.cxx
     ui/systemtray.cxx
     ui/userlist.cxx
     ui/userlistdelegate.cxx
