@@ -39,7 +39,7 @@ public:
     void addNickname(Aki::Sql::Nickname* nickname);
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
     void insertNickname(int row, Aki::Sql::Nickname* nickname);
-    QList<Aki::Sql::Nickname*> nicknames() const;
+    const QList<Aki::Sql::Nickname*>& nicknames() const;
     void removeNickname(Aki::Sql::Nickname* nickname);
     virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
     Aki::Sql::Nickname* takeNickname(int row);
