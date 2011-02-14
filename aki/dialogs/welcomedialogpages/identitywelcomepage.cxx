@@ -20,6 +20,8 @@
 
 #include "identitywelcomepage.hpp"
 #include "sql/identity.hpp"
+#include "sql/nickname.hpp"
+#include "ui/nicknamewidget.hpp"
 #include <QtGui/QCheckBox>
 #include <QtGui/QFormLayout>
 #include <QtGui/QGridLayout>
@@ -30,7 +32,6 @@
 #include <KDE/KLineEdit>
 #include <KDE/KTabWidget>
 #include <KDE/KUser>
-#include <sql/nickname.hpp>
 using namespace Aki;
 
 IdentityWelcomePage::IdentityWelcomePage(Aki::Sql::Database* database, QWidget* parent)
@@ -47,48 +48,62 @@ IdentityWelcomePage::IdentityWelcomePage(Aki::Sql::Database* database, QWidget* 
     QGridLayout* mainLayout = new QGridLayout;
     setLayout(mainLayout);
 
+    // Create the tab widget for the dialogue.
     KTabWidget* identityTabs = new KTabWidget;
     mainLayout->addWidget(identityTabs, 0, 0, 1, 1);
 
-    QWidget* generalTab = new QWidget;
-    identityTabs->addTab(generalTab, i18n("General"));
+    // Create the first page for it called General Page.
+    QWidget* generalPage = new QWidget;
+    identityTabs->addTab(generalPage, i18n("General"));
 
-    QFormLayout* generalTabLayout = new QFormLayout;
-    generalTab->setLayout(generalTabLayout);
+    QGridLayout* generalPageLayout = new QGridLayout;
+    generalPage->setLayout(generalPageLayout);
 
     QLabel* realNameLabel = new QLabel;
-    generalTabLayout->setWidget(0, QFormLayout::LabelRole, realNameLabel);
+    generalPageLayout->addWidget(realNameLabel, 0, 0, 1, 1);
     realNameLabel->setText(i18n("Real Name:"));
 
     _realName = new KLineEdit;
-    generalTabLayout->setWidget(0, QFormLayout::FieldRole, _realName);
+    generalPageLayout->addWidget(_realName, 0, 1, 1, 1);
     realNameLabel->setBuddy(_realName);
     _realName->setClearButtonShown(true);
     _realName->setText(user.property(KUser::FullName).toString());
     connect(_realName, SIGNAL(textEdited(QString)),
             SLOT(slotRealNameTextEdited(QString)));
 
-    _nicknameListBox = new KEditListBox;
-    generalTabLayout->setWidget(1, QFormLayout::SpanningRole, _nicknameListBox);
-    _nicknameListBox->setItems(QStringList() << user.loginName() << user.loginName() + '_'
-                               << user.loginName() + "__");
-    connect(_nicknameListBox, SIGNAL(changed()),
-            SLOT(slotNicknameListBoxChanged()));
+    const QString userName = user.loginName();
 
-    QWidget* awayTab = new QWidget;
-    identityTabs->addTab(awayTab, i18n("Away"));
+    _nicknameList = new Aki::NicknameWidget;
+    generalPageLayout->addWidget(_nicknameList, 1, 0, 1, 2);
 
-    QGridLayout* awayTabLayout = new QGridLayout;
-    awayTab->setLayout(awayTabLayout);
+    Aki::Sql::Nickname* nickname = new Aki::Sql::Nickname;
+    nickname->setNickname(userName);
+    _nicknameList->addNickname(nickname);
+
+    nickname = new Aki::Sql::Nickname;
+    nickname->setNickname(userName + '_');
+    _nicknameList->addNickname(nickname);
+
+    nickname = new Aki::Sql::Nickname;
+    nickname->setNickname(userName + "__");
+    _nicknameList->addNickname(nickname);
+    // End of the first page (General Page).
+
+    // Create the second page for it called Away Page.
+    QWidget* awayPage = new QWidget;
+    identityTabs->addTab(awayPage, i18n("Away"));
+
+    QGridLayout* awayPageLayout = new QGridLayout;
+    awayPage->setLayout(awayPageLayout);
 
     QCheckBox* markLastPositionCheckBox = new QCheckBox;
-    awayTabLayout->addWidget(markLastPositionCheckBox, 0, 0, 1, 1);
+    awayPageLayout->addWidget(markLastPositionCheckBox, 0, 0, 1, 1);
     markLastPositionCheckBox->setText(i18n("Mark last position when away"));
     connect(markLastPositionCheckBox, SIGNAL(clicked(bool)),
             SLOT(slotMarkLastPositionClicked(bool)));
 
     _awayMessagesGroupBox = new QGroupBox;
-    awayTabLayout->addWidget(_awayMessagesGroupBox, 1, 0, 1, 1);
+    awayPageLayout->addWidget(_awayMessagesGroupBox, 1, 0, 1, 1);
     _awayMessagesGroupBox->setCheckable(true);
     _awayMessagesGroupBox->setChecked(true);
     _awayMessagesGroupBox->setTitle(i18n("Away Messages"));
@@ -104,8 +119,9 @@ IdentityWelcomePage::IdentityWelcomePage(Aki::Sql::Database* database, QWidget* 
 
     _awayMessage = new KLineEdit;
     awayMessagesLayout->setWidget(0, QFormLayout::FieldRole, _awayMessage);
+    awayMessageLabel->setBuddy(_awayMessage);
     _awayMessage->setClearButtonShown(true);
-    _awayMessage->setText(i18n("Aki IRC Client %v"));
+    _awayMessage->setText("Aki IRC Client %v");
     connect(_awayMessage, SIGNAL(textEdited(QString)),
             SLOT(slotAwayMessageTextEdited(QString)));
 
@@ -115,10 +131,15 @@ IdentityWelcomePage::IdentityWelcomePage(Aki::Sql::Database* database, QWidget* 
 
     _returnMessage = new KLineEdit;
     awayMessagesLayout->setWidget(1, QFormLayout::FieldRole, _returnMessage);
+    returnMessageLabel->setBuddy(_returnMessage);
     _returnMessage->setClearButtonShown(true);
-    _returnMessage->setText(i18n("Aki IRC Client %v"));
+    _returnMessage->setText(_awayMessage->text());
     connect(_returnMessage, SIGNAL(textEdited(QString)),
             SLOT(slotReturnMessageTextEdited(QString)));
+
+    QSpacerItem* awayPageSpacer = new QSpacerItem(20, 158, QSizePolicy::Minimum);
+    awayPageLayout->addItem(awayPageSpacer, 2, 0, 1, 1);
+    // End of the second page (Away Page).
 
     loadNewIdentity();
 }
@@ -145,8 +166,8 @@ IdentityWelcomePage::loadNewIdentity()
     _identity->setMarkLastPositionEnabled(false);
     _identity->setMessagesEnabled(true);
     _identity->setName(i18n("Default Identity"));
-    _identity->setPartMessage(i18n("Aki IRC Client %v"));
-    _identity->setQuitMessage(i18n("Aki IRC Client %v"));
+    _identity->setPartMessage("Aki IRC Client %v");
+    _identity->setQuitMessage("Aki IRC Client %v");
     _identity->setRealName(user.property(KUser::FullName).toString());
     _identity->setReturnMessage("I'm now back.");
 }
@@ -205,12 +226,6 @@ void
 IdentityWelcomePage::slotMarkLastPositionClicked(bool clicked)
 {
     _identity->setMarkLastPositionEnabled(clicked);
-}
-
-void
-IdentityWelcomePage::slotNicknameListBoxChanged()
-{
-    _nicknames = _nicknameListBox->items();
 }
 
 void

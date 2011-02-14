@@ -33,6 +33,7 @@ namespace Sql
 class Database;
 class Identity;
 } // End of namespace Sql.
+class NicknameWidget;
 class IdentityWelcomePage
     : public QWidget
 {
@@ -47,7 +48,6 @@ private Q_SLOTS:
     void slotAwayMessagesClicked(bool clicked);
     void slotAwayMessageTextEdited(const QString& message);
     void slotMarkLastPositionClicked(bool clicked);
-    void slotNicknameListBoxChanged();
     void slotRealNameTextEdited(const QString& name);
     void slotReturnMessageTextEdited(const QString& message);
 private:
@@ -56,7 +56,7 @@ private:
     KLineEdit* _realName;
     KLineEdit* _awayMessage;
     KLineEdit* _returnMessage;
-    KEditListBox* _nicknameListBox;
+    Aki::NicknameWidget* _nicknameList;
     QGroupBox* _awayMessagesGroupBox;
     QStringList _nicknames;
 }; // End of class IdentityWelcomePage.
