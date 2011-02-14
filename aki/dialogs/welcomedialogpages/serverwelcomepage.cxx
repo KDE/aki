@@ -50,21 +50,21 @@ ServerWelcomePage::ServerWelcomePage(Aki::Sql::Database* database, QWidget* pare
     _database->create<Aki::Sql::Address>();
     _database->create<Aki::Sql::Channel>();
 
-    QFormLayout* mainLayout = new QFormLayout;
+    QGridLayout* mainLayout = new QGridLayout;
     setLayout(mainLayout);
 
     QLabel* label = new QLabel;
     label->setText(i18n("Network Name:"));
-    mainLayout->setWidget(0, QFormLayout::LabelRole, label);
+    mainLayout->addWidget(label, 0, 0, 1, 1);
 
     _networkName = new KLineEdit;
     label->setBuddy(_networkName);
     _networkName->setText("Freenode");
-    mainLayout->setWidget(0, QFormLayout::FieldRole, _networkName);
+    mainLayout->addWidget(_networkName, 0, 1, 1, 1);
 
     // Create the TabWidget for the dialogue.
     KTabWidget* serverTabWidget = new KTabWidget;
-    mainLayout->setWidget(1, QFormLayout::SpanningRole, serverTabWidget);
+    mainLayout->addWidget(serverTabWidget, 1, 0, 1, 2);
 
     // Create the first page for it called the Servers Page.
     QWidget* serversPage = new QWidget;
@@ -73,11 +73,14 @@ ServerWelcomePage::ServerWelcomePage(Aki::Sql::Database* database, QWidget* pare
     QGridLayout* serversPageLayout = new QGridLayout;
     serversPage->setLayout(serversPageLayout);
 
+    Aki::Sql::Address* address = new Aki::Sql::Address;
+    address->setAddress("chat.freenode.net");
+    address->setPort(7000);
+    address->setSsl(true);
+
     _addressListWidget = new Aki::AddressWidget;
     serversPageLayout->addWidget(_addressListWidget, 0, 0, 1, 1);
-    //_addressListWidget->setItems(QStringList() << "chat.freenode.net/6667");
-    //connect(_addressListWidget, SIGNAL(changed()),
-    //        SLOT(slotServersListWidgetChanged()));
+    _addressListWidget->addAddress(address);
     // End of the first page (Servers Page).
 
     // Create the second page for it called the Channels Page.
@@ -172,23 +175,12 @@ ServerWelcomePage::save()
         return;
     }
 
-    foreach (const QString& address, _addresses) {
-        QScopedPointer<Aki::Sql::Address> tmp(new Aki::Sql::Address);
-        if (address.contains("/")) {
-            const QStringList split = address.split("/", QString::SkipEmptyParts);
-            tmp->setAddress(split.at(0));
-            bool ok = false;
-            quint16 port = split.at(1).toUShort(&ok);
-            tmp->setPort(ok ? port : 6667);
-        } else {
-            tmp->setAddress(address);
-            tmp->setPort(6667);
-        }
-
+    for (int i = 0, c = _addressListWidget->count(); i < c; ++i) {
+        Aki::Sql::Address* tmp = _addressListWidget->address(i);
         tmp->setAddressServer(_server->id());
 
         if (_database->transaction()) {
-            if (!_database->add(tmp.data())) {
+            if (!_database->add(tmp)) {
                 if (!_database->rollback()) {
                     qDebug() << "Unable to rollback Address data";
                 }
@@ -239,12 +231,6 @@ void
 ServerWelcomePage::slotChannelsListWidgetChanged()
 {
     _channels = _channelsListWidget->items();
-}
-
-void
-ServerWelcomePage::slotServersListWidgetChanged()
-{
-    //_addresses = _addressListWidget->items();
 }
 
 void

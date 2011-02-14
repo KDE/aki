@@ -47,7 +47,6 @@ public:
 private Q_SLOTS:
     void slotAuthenticationBoxClicked(bool clicked);
     void slotChannelsListWidgetChanged();
-    void slotServersListWidgetChanged();
     void slotServiceNameTextEdited(const QString& text);
     void slotServicePasswordTextEdited(const QString& text);
 private:
