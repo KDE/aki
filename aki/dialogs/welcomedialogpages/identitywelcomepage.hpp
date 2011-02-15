@@ -41,7 +41,7 @@ class IdentityWelcomePage
 public:
     explicit IdentityWelcomePage(Aki::Sql::Database* database, QWidget* parent = 0);
     ~IdentityWelcomePage();
-    const Aki::Sql::Identity* identity() const;
+    Aki::Sql::Identity* identity() const;
     void loadNewIdentity();
     void save();
 private Q_SLOTS:

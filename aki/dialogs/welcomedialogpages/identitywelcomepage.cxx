@@ -75,6 +75,7 @@ IdentityWelcomePage::IdentityWelcomePage(Aki::Sql::Database* database, QWidget* 
 
     _nicknameList = new Aki::NicknameWidget;
     generalPageLayout->addWidget(_nicknameList, 1, 0, 1, 2);
+    _nicknameList->setDatabase(_database);
 
     Aki::Sql::Nickname* nickname = new Aki::Sql::Nickname;
     nickname->setNickname(userName);
@@ -148,7 +149,7 @@ IdentityWelcomePage::~IdentityWelcomePage()
 {
 }
 
-const Aki::Sql::Identity*
+Aki::Sql::Identity*
 IdentityWelcomePage::identity() const
 {
     return _identity;
@@ -190,22 +191,23 @@ IdentityWelcomePage::save()
         return;
     }
 
-    foreach (const QString& nickname, _nicknames) {
-        QScopedPointer<Aki::Sql::Nickname> tmp(new Aki::Sql::Nickname);
-        tmp->setNickname(nickname);
-        tmp->setNicknameIdentity(_identity->id());
-        if (_database->transaction()) {
-            if (!_database->add(tmp.data())) {
-                if (!_database->rollback()) {
-                    qDebug() << "Unable to rollback Nickname data";
+    for (int i = 0, c = _nicknameList->count(); i < c; ++i) {
+        Aki::Sql::Nickname* nickname = _nicknameList->nickname(i);
+        if (nickname) {
+            nickname->setNicknameIdentity(_identity->id());
+            if (_database->transaction()) {
+                if (!_database->add(nickname)) {
+                    if (!_database->rollback()) {
+                        qDebug() << "Unable to rollback Nickname data";
+                    }
+                } else {
+                    if (!_database->commit()) {
+                        qDebug() << "Unable to commit Nickname data";
+                    }
                 }
             } else {
-                if (!_database->commit()) {
-                    qDebug() << "Unable to commit Nickname data";
-                }
+                qDebug() << "Unable to start transaction";
             }
-        } else {
-            qDebug() << "Unable to start transaction";
         }
     }
 }
