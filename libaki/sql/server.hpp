@@ -29,6 +29,7 @@ namespace Aki
 {
 namespace Sql
 {
+class ServerPrivate;
 /**
  * Server information about a row in the Server SQL table. Determines all the settings
  * for a single given row.
@@ -312,6 +313,8 @@ public:
      * @param password Service password for your username.
      */
     void setServicePassword(const QString& password);
+private:
+    QSharedDataPointer<Aki::Sql::ServerPrivate> _d;
 }; // End of class Server.
 } // End of namespace Sql.
 } // End of namespace Aki.

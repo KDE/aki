@@ -19,13 +19,15 @@
  */
 
 #include "server.hpp"
+#include "private/server_p.hpp"
 using namespace Aki;
 using namespace Sql;
 
 AKI_REGISTER_SQL_TABLE(Aki::Sql::Server, server)
 
 Server::Server(QObject* parent)
-    : Aki::Sql::Table(parent)
+    : Aki::Sql::Table(parent),
+    _d(new Aki::Sql::ServerPrivate)
 {
 }
 
@@ -36,169 +38,169 @@ Server::~Server()
 QString
 Server::defaultEncoding() const
 {
-    return QString();
+    return _d->defaultEncoding;
 }
 
 QString
 Server::encoding() const
 {
-    return QString();
+    return _d->encoding;
 }
 
 int
 Server::id() const
 {
-    return 0;
+    return _d->id;
 }
 
 bool
 Server::isAutoIdentify() const
 {
-    return false;
+    return _d->isAutoIdentify;
 }
 
 bool
 Server::isAutoJoinChannels() const
 {
-    return false;
+    return _d->isAutoJoinChannels;
 }
 
 bool
 Server::isAutoReconnect() const
 {
-    return false;
+    return _d->isAutoReconnect;
 }
 
 bool
 Server::isConnectOnStartup() const
 {
-    return false;
+    return _d->isConnectOnStartup;
 }
 
 bool
 Server::isConnectToRandomServer() const
 {
-    return false;
+    return _d->isConnectToRandomServer;
 }
 
 QString
 Server::name() const
 {
-    return QString();
+    return _d->name;
 }
 
 int
 Server::retryAttemptCount() const
 {
-    return 0;
+    return _d->retryAttemptCount;
 }
 
 int
 Server::retryInterval() const
 {
-    return 0;
+    return _d->retryInterval;
 }
 
 int
 Server::serverIdentity() const
 {
-    return 0;
+    return _d->serverIdentity;
 }
 
 QString
 Server::serviceName() const
 {
-    return QString();
+    return _d->serviceName;
 }
 
 QString
 Server::servicePassword() const
 {
-    return QString();
+    return _d->servicePassword;
 }
 
 void
 Server::setAutoIdentify(bool enable)
 {
-    Q_UNUSED(enable);
+    _d->isAutoIdentify = enable;
 }
 
 void
 Server::setAutoJoinChannels(bool enable)
 {
-    Q_UNUSED(enable);
+    _d->isAutoJoinChannels = enable;
 }
 
 void
 Server::setAutoReconnect(bool enable)
 {
-    Q_UNUSED(enable);
+    _d->isAutoReconnect = enable;
 }
 
 void
 Server::setConnectOnStartup(bool enable)
 {
-    Q_UNUSED(enable);
+    _d->isConnectOnStartup = enable;
 }
 
 void
 Server::setConnectToRandomServer(bool enable)
 {
-    Q_UNUSED(enable);
+    _d->isConnectToRandomServer = enable;
 }
 
 void
 Server::setDefaultEncoding(const QString& encoding)
 {
-    Q_UNUSED(encoding);
+    _d->defaultEncoding = encoding;
 }
 
 void
 Server::setEncoding(const QString& encoding)
 {
-    Q_UNUSED(encoding);
+    _d->encoding = encoding;
 }
 
 void
 Server::setId(int id)
 {
-    Q_UNUSED(id)
+    _d->id = id;
 }
 
 void
 Server::setName(const QString& name)
 {
-    Q_UNUSED(name)
+    _d->name = name;
 }
 
 void
 Server::setRetryAttemptCount(int count)
 {
-    Q_UNUSED(count)
+    _d->retryAttemptCount = count;
 }
 
 void
 Server::setRetryInterval(int seconds)
 {
-    Q_UNUSED(seconds)
+    _d->retryInterval = seconds;
 }
 
 void
 Server::setServerIdentity(int id)
 {
-    Q_UNUSED(id)
+    _d->serverIdentity = id;
 }
 
 void
 Server::setServiceName(const QString& name)
 {
-    Q_UNUSED(name)
+    _d->serviceName = name;
 }
 
 void
 Server::setServicePassword(const QString& password)
 {
-    Q_UNUSED(password)
+    _d->servicePassword = password;
 }
 
 #include "sql/server.moc"
