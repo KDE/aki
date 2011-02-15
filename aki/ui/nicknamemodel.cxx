@@ -48,7 +48,7 @@ NicknameModel::data(const QModelIndex& index, int role) const
         return QVariant();
     }
 
-    Aki::Sql::Nickname* nickname = _nicknameList.at(index.row());
+    const Aki::Sql::Nickname* nickname = _nicknameList.at(index.row());
     if (!nickname) {
         return QVariant();
     }
@@ -58,11 +58,21 @@ NicknameModel::data(const QModelIndex& index, int role) const
         return nickname->nickname();
     }
     default: {
-        break;
+        return QVariant();
     }
     }
 
     return QVariant();
+}
+
+Qt::ItemFlags
+NicknameModel::flags(const QModelIndex& index) const
+{
+    if (!index.isValid()) {
+        return Qt::NoItemFlags;
+    }
+
+    return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
 }
 
 void
@@ -72,10 +82,10 @@ NicknameModel::insertNickname(int row, Aki::Sql::Nickname* nickname)
         return;
     }
 
-    if (row > rowCount()) {
+    if (row >= rowCount()) {
         addNickname(nickname);
         return;
-    } else if (row < 0) {
+    } else if (row <= 0) {
         beginInsertRows(QModelIndex(), 0, 0);
         _nicknameList.prepend(nickname);
         endInsertRows();
@@ -93,26 +103,9 @@ NicknameModel::nicknames() const
     return _nicknameList;
 }
 
-void
-NicknameModel::removeNickname(Aki::Sql::Nickname* nickname)
-{
-    if (!nickname) {
-        return;
-    }
-
-    const int row = _nicknameList.indexOf(nickname);
-    beginRemoveRows(QModelIndex(), row, row);
-    delete takeNickname(row);
-    endRemoveRows();
-}
-
 int
-NicknameModel::rowCount(const QModelIndex& parent) const
+NicknameModel::rowCount(const QModelIndex&) const
 {
-    if (parent.isValid()) {
-        return 0;
-    }
-
     return _nicknameList.count();
 }
 
@@ -122,5 +115,6 @@ NicknameModel::takeNickname(int row)
     beginRemoveRows(QModelIndex(), row, row);
     Aki::Sql::Nickname* nickname = _nicknameList.takeAt(row);
     endRemoveRows();
+
     return nickname;
 }
