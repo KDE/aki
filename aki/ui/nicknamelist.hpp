@@ -32,7 +32,8 @@ class Identity;
 class Nickname;
 } // End of namespace Sql.
 class NicknameModel;
-class NicknameList : public QListView
+class NicknameList
+    : public QListView
 {
     Q_OBJECT
 public:
@@ -46,12 +47,12 @@ public:
     Aki::NicknameList::List findNicknames(const QString& name, Qt::MatchFlags flags) const;
     void insertNickname(int row, Aki::Sql::Nickname* nickname);
     Aki::Sql::Nickname* nickname(int row) const;
+    void removeNickname(int row);
     int row(Aki::Sql::Nickname* nickname) const;
     Aki::NicknameList::List selectedNicknames() const;
-    void setCurrentNickname(Aki::Sql::Nickname* nickname);
-    void setCurrentNickname(Aki::Sql::Nickname* nickname, QItemSelectionModel::SelectionFlags command);
-    void setCurrentRow(int row);
-    void setCurrentRow(int row, QItemSelectionModel::SelectionFlags command);
+    void setCurrentNickname(Aki::Sql::Nickname* nickname,
+                            QItemSelectionModel::SelectionFlags command = QItemSelectionModel::ClearAndSelect);
+    void setCurrentRow(int row, QItemSelectionModel::SelectionFlags command = QItemSelectionModel::ClearAndSelect);
     void setDatabase(Aki::Sql::Database* database);
     Aki::Sql::Nickname* takeNickname(int row);
 public Q_SLOTS:

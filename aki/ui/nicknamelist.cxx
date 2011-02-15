@@ -57,7 +57,7 @@ NicknameList::~NicknameList()
 void
 NicknameList::addNickname(Aki::Sql::Nickname* nickname)
 {
-    _model->addNickname(nickname);
+    insertNickname(count(), nickname);
 }
 
 int
@@ -93,9 +93,9 @@ NicknameList::findNicknames(const QString& name, Qt::MatchFlags flags) const
 {
     Aki::NicknameList::List list;
 
-    QModelIndexList indexes = _model->match(_model->index(0), Qt::DisplayRole, name, -1, flags);
-    for (int i = 0; i < indexes.size(); ++i) {
-        list.append(nicknameFromIndex(indexes.at(i)));
+    const QModelIndexList indexes = _model->match(_model->index(0), Qt::DisplayRole, name, -1, flags);
+    foreach (const QModelIndex& index, indexes) {
+        list.append(nicknameFromIndex(index));
     }
 
     return list;
@@ -136,22 +136,25 @@ NicknameList::nicknameFromIndex(const QModelIndex& index) const
 }
 
 void
+NicknameList::removeNickname(int row)
+{
+    delete takeNickname(row);
+}
+
+void
 NicknameList::repopulateNicknames(Aki::Sql::Identity* identity)
 {
-    foreach (Aki::Sql::Nickname* nickname, _model->nicknames()) {
-        _model->removeNickname(nickname);
+    Q_ASSERT(identity);
+
+    for (int i = 0, c = count(); i < c; ++i) {
+        removeNickname(i);
     }
 
-    if (!identity) {
-        return;
-    }
+    const Aki::NicknameList::List list = _database->find<Aki::Sql::Nickname>()
+        .where("nicknameIdentity = :nicknameIdentity").bind("nicknameIdentity", identity->id())
+        .result();
 
-    QList<Aki::Sql::Nickname*> nicknames = _database->find<Aki::Sql::Nickname>().result();
-    if (nicknames.isEmpty()) {
-        return;
-    }
-
-    foreach (Aki::Sql::Nickname* nickname, nicknames) {
+    foreach (Aki::Sql::Nickname* nickname, list) {
         addNickname(nickname);
     }
 }
@@ -176,21 +179,9 @@ NicknameList::selectedNicknames() const
 }
 
 void
-NicknameList::setCurrentNickname(Aki::Sql::Nickname* nickname)
-{
-    setCurrentNickname(nickname, QItemSelectionModel::ClearAndSelect);
-}
-
-void
 NicknameList::setCurrentNickname(Aki::Sql::Nickname* nickname, QItemSelectionModel::SelectionFlags command)
 {
     selectionModel()->setCurrentIndex(indexFromNickname(nickname), command);
-}
-
-void
-NicknameList::setCurrentRow(int row)
-{
-    setCurrentRow(row, QItemSelectionModel::ClearAndSelect);
 }
 
 void
