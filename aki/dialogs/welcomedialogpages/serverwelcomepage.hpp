@@ -34,6 +34,7 @@ class Identity;
 class Server;
 } // End of namespace Sql.
 class AddressWidget;
+class ChannelWidget;
 class ServerWelcomePage
     : public QWidget
 {
@@ -46,7 +47,6 @@ public:
     void setIdentity(Aki::Sql::Identity* identity);
 private Q_SLOTS:
     void slotAuthenticationBoxClicked(bool clicked);
-    void slotChannelsListWidgetChanged();
     void slotServiceNameTextEdited(const QString& text);
     void slotServicePasswordTextEdited(const QString& text);
 private:
@@ -56,7 +56,7 @@ private:
     KLineEdit* _serviceName;
     KLineEdit* _servicePassword;
     Aki::AddressWidget* _addressListWidget;
-    KEditListWidget* _channelsListWidget;
+    Aki::ChannelWidget* _channelListWidget;
     Aki::Sql::Database* _database;
     Aki::Sql::Server* _server;
     Aki::Sql::Identity* _identity;

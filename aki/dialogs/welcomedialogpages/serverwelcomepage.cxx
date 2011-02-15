@@ -26,6 +26,7 @@
 #include "sql/identity.hpp"
 #include "sql/server.hpp"
 #include "ui/addresswidget.hpp"
+#include "ui/channelwidget.hpp"
 #include <QtGui/QFormLayout>
 #include <QtGui/QGridLayout>
 #include <QtGui/QGroupBox>
@@ -80,6 +81,7 @@ ServerWelcomePage::ServerWelcomePage(Aki::Sql::Database* database, QWidget* pare
 
     _addressListWidget = new Aki::AddressWidget;
     serversPageLayout->addWidget(_addressListWidget, 0, 0, 1, 1);
+    _addressListWidget->setDatabase(_database);
     _addressListWidget->addAddress(address);
     // End of the first page (Servers Page).
 
@@ -90,11 +92,9 @@ ServerWelcomePage::ServerWelcomePage(Aki::Sql::Database* database, QWidget* pare
     QGridLayout* channelsPageLayout = new QGridLayout;
     channelsPage->setLayout(channelsPageLayout);
 
-    _channelsListWidget = new KEditListWidget;
-    channelsPageLayout->addWidget(_channelsListWidget, 0, 0, 1, 1);
-    _channelsListWidget->setItems(QStringList() << "#akiirc");
-    connect(_channelsListWidget, SIGNAL(changed()),
-            SLOT(slotChannelsListWidgetChanged()));
+    _channelListWidget = new Aki::ChannelWidget;
+    channelsPageLayout->addWidget(_channelListWidget, 0, 0, 1, 1);
+    _channelListWidget->setDatabase(database);
     // End of the second page (Channels Page).
 
     // Create the last page for it called the Authentication Page.
@@ -159,6 +159,7 @@ ServerWelcomePage::save()
 {
     Q_ASSERT(_identity);
 
+    _server->setName(_networkName->text());
     _server->setServerIdentity(_identity->id());
     if (_database->transaction()) {
         if (!_database->add(_server)) {
@@ -194,23 +195,24 @@ ServerWelcomePage::save()
         }
     }
 
-    foreach (const QString& channel, _channels) {
-        QScopedPointer<Aki::Sql::Channel> tmp(new Aki::Sql::Channel);
-        tmp->setName(channel);
-        tmp->setChannelServer(_server->id());
+    for (int i = 0, c = _channelListWidget->count(); i < c; ++i) {
+        Aki::Sql::Channel* channel = _channelListWidget->channel(i);
+        if (channel) {
+            channel->setChannelServer(_server->id());
 
-        if (_database->transaction()) {
-            if (!_database->add(tmp.data())) {
-                if (!_database->rollback()) {
-                    qDebug() << "Unable to rollback Channel data";
+            if (_database->transaction()) {
+                if (!_database->add(channel)) {
+                    if (!_database->rollback()) {
+                        qDebug() << "Unable to rollback Channel data";
+                    }
+                } else {
+                    if (!_database->commit()) {
+                        qDebug() << "Unable to commit Channel data";
+                    }
                 }
             } else {
-                if (!_database->commit()) {
-                    qDebug() << "Unable to commit Channel data";
-                }
+                qDebug() << "Unable to start Channel transaction";
             }
-        } else {
-            qDebug() << "Unable to start Channel transaction";
         }
     }
 }
@@ -225,12 +227,6 @@ void
 ServerWelcomePage::slotAuthenticationBoxClicked(bool clicked)
 {
     _server->setAutoIdentify(clicked);
-}
-
-void
-ServerWelcomePage::slotChannelsListWidgetChanged()
-{
-    _channels = _channelsListWidget->items();
 }
 
 void
