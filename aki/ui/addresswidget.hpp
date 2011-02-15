@@ -30,6 +30,8 @@ namespace Aki
 namespace Sql
 {
 class Address;
+class Database;
+class Server;
 } // End of namespace Sql.
 class AddressList;
 class AddressWidget
@@ -50,10 +52,13 @@ public:
     int row(Aki::Sql::Address* address);
     void setCurrentAddress(Aki::Sql::Address* address);
     void setCurrentRow(int row);
+    void setDatabase(Aki::Sql::Database* database);
     Aki::Sql::Address* takeAddress(int row);
+public Q_SLOTS:
+    void repopulateAddresses(Aki::Sql::Server* server);
 private Q_SLOTS:
     void slotAddClicked();
-    void slotAddressCurrentCurrentRowChanged(int row);
+    void slotAddressCurrentRowChanged(int row);
     void slotAddressListClicked(Aki::Sql::Address* address);
     void slotEditClicked();
     void slotMoveUpClicked();

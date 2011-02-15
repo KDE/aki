@@ -22,6 +22,8 @@
 #include "addresswidget.hpp"
 #include "dialogs/addressdialog.hpp"
 #include "sql/address.hpp"
+#include "sql/database.hpp"
+#include "sql/server.hpp"
 #include "ui/addresslist.hpp"
 #include <QtGui/QHBoxLayout>
 #include <QtGui/QSpacerItem>
@@ -153,6 +155,12 @@ AddressWidget::reorderPosition(int current)
     }
 }
 
+void
+AddressWidget::repopulateAddresses(Aki::Sql::Server* server)
+{
+    _addressList->repopulateAddresses(server);
+}
+
 int
 AddressWidget::row(Aki::Sql::Address* address)
 {
@@ -169,6 +177,12 @@ void
 AddressWidget::setCurrentRow(int row)
 {
     _addressList->setCurrentRow(row);
+}
+
+void
+AddressWidget::setDatabase(Aki::Sql::Database* database)
+{
+    _addressList->setDatabase(database);
 }
 
 void
@@ -191,7 +205,7 @@ AddressWidget::slotAddClicked()
         address->setPosition(count());
         address->setSsl(addressDialog.isSslEnabled());
 
-        if (!_addressList->findItems(address->address() + ':' + QString::number(address->port()), Qt::MatchExactly).isEmpty()) {
+        if (!_addressList->findAddresses(address->address() + ':' + QString::number(address->port()), Qt::MatchExactly).isEmpty()) {
             delete address;
             KMessageBox::error(this, i18n("Address already exists, please enter a different address"),
                                i18n("Address already in use."));
@@ -202,7 +216,7 @@ AddressWidget::slotAddClicked()
 
         if (count() == 1) {
             setCurrentRow(0);
-            slotAddressCurrentCurrentRowChanged(0);
+            slotAddressCurrentRowChanged(0);
             _removeButton->setEnabled(true);
         } else if (count() > 1) {
             _moveDownButton->setDisabled(true);
@@ -217,7 +231,7 @@ AddressWidget::slotAddClicked()
 }
 
 void
-AddressWidget::slotAddressCurrentCurrentRowChanged(int row)
+AddressWidget::slotAddressCurrentRowChanged(int row)
 {
     const Aki::Sql::Address* current = _addressList->address(row);
     if (!current) {
@@ -231,7 +245,7 @@ AddressWidget::slotAddressCurrentCurrentRowChanged(int row)
         _moveDownButton->setDisabled(true);
         _moveUpButton->setEnabled(true);
     } else if (row == 0) {
-        _moveDownButton->setEnabled(false);
+        _moveDownButton->setEnabled(true);
         _moveUpButton->setDisabled(true);
     } else {
         _moveDownButton->setEnabled(true);
@@ -296,7 +310,7 @@ AddressWidget::slotEditClicked()
         }
 
         if (currentAddress->address() != dialog.address()) {
-            if (!_addressList->findItems(dialog.address(), Qt::MatchExactly).isEmpty()) {
+            if (!_addressList->findAddresses(dialog.address(), Qt::MatchExactly).isEmpty()) {
                 KMessageBox::error(this, i18n("Address already exists, please enter a different address"),
                                    i18n("Address already in use."));
                 return;
@@ -381,7 +395,7 @@ AddressWidget::slotRemoveClicked()
         return;
     }
 
-    int result = KMessageBox::warningYesNo(this, i18n("Are you sure you want to remove the server:\n%1", current->address()),
+    int result = KMessageBox::warningYesNo(this, i18n("Are you sure you want to remove the server\n\"%1\"?", current->address()),
                                            i18n("Remove server"));
     switch (result) {
     case KMessageBox::Yes: {
