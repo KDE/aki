@@ -46,15 +46,13 @@ public:
     int count() const;
     Aki::Sql::Address* currentAddress() const;
     int currentRow() const;
-    Aki::AddressList::List findItems(const QString& name, Qt::MatchFlags flags) const;
+    Aki::AddressList::List findAddresses(const QString& name, Qt::MatchFlags flags) const;
     void insertAddress(int row, Aki::Sql::Address* address);
     void removeAddress(int row);
     int row(Aki::Sql::Address* address) const;
     Aki::AddressList::List selectedAddresses() const;
-    void setCurrentAddress(Aki::Sql::Address* address, QItemSelectionModel::SelectionFlags command);
-    void setCurrentAddress(Aki::Sql::Address* address);
-    void setCurrentRow(int row, QItemSelectionModel::SelectionFlags command);
-    void setCurrentRow(int row);
+    void setCurrentAddress(Aki::Sql::Address* address, QItemSelectionModel::SelectionFlags command = QItemSelectionModel::ClearAndSelect);
+    void setCurrentRow(int row, QItemSelectionModel::SelectionFlags command = QItemSelectionModel::ClearAndSelect);
     void setDatabase(Aki::Sql::Database* database);
     Aki::Sql::Address* takeAddress(int row);
 public Q_SLOTS:

@@ -107,7 +107,7 @@ AddressList::currentRow() const
 }
 
 Aki::AddressList::List
-AddressList::findItems(const QString& name, Qt::MatchFlags flags) const
+AddressList::findAddresses(const QString& name, Qt::MatchFlags flags) const
 {
     Aki::AddressList::List list;
 
@@ -140,8 +140,7 @@ AddressList::insertAddress(int row, Aki::Sql::Address* address)
 void
 AddressList::removeAddress(int row)
 {
-    Aki::Sql::Address* address = takeAddress(row);
-    delete address;
+    delete takeAddress(row);
 }
 
 void
@@ -188,21 +187,9 @@ AddressList::setCurrentAddress(Aki::Sql::Address* address, QItemSelectionModel::
 }
 
 void
-AddressList::setCurrentAddress(Aki::Sql::Address* address)
-{
-    setCurrentAddress(address, QItemSelectionModel::ClearAndSelect);
-}
-
-void
 AddressList::setCurrentRow(int row, QItemSelectionModel::SelectionFlags command)
 {
     selectionModel()->setCurrentIndex(_model->index(row), command);
-}
-
-void
-AddressList::setCurrentRow(int row)
-{
-    setCurrentRow(row, QItemSelectionModel::ClearAndSelect);
 }
 
 void
