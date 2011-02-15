@@ -7,5 +7,6 @@ set(akicore_sqlprivate_SRCS
     sql/private/metatable_p.cxx
     sql/private/nickname_p.cxx
     sql/private/query_p.cxx
+    sql/private/server_p.cxx
     sql/private/table_p.cxx
 )
