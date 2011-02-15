@@ -38,37 +38,37 @@ Nickname::~Nickname()
 int
 Nickname::id() const
 {
-    return 0;
+    return _d->id;
 }
 
 QString
 Nickname::nickname() const
 {
-    return QString();
+    return _d->nickname;
 }
 
 int
 Nickname::nicknameIdentity() const
 {
-    return 0;
+    return _d->nicknameIdentity;
 }
 
 void
 Nickname::setId(int id)
 {
-    Q_UNUSED(id)
+    _d->id = id;
 }
 
 void
 Nickname::setNickname(const QString& nickname)
 {
-    Q_UNUSED(nickname)
+    _d->nickname = nickname;
 }
 
 void
 Nickname::setNicknameIdentity(int id)
 {
-    Q_UNUSED(id)
+    _d->nicknameIdentity = id;
 }
 
 #include "sql/nickname.moc"
