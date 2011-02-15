@@ -19,30 +19,30 @@
  */
 
 #include "channelmodel.hpp"
-#include "aki.hpp"
-#include "debughelper.hpp"
-#include "utils/sqlchannel.hpp"
+#include "sql/channel.hpp"
 #include <KDE/KIcon>
 using namespace Aki;
 
 ChannelModel::ChannelModel(QObject* parent)
     : QAbstractListModel(parent)
 {
+    _channelList.clear();
 }
 
 ChannelModel::~ChannelModel()
 {
+    qDeleteAll(_channelList);
 }
 
 void
-ChannelModel::addChannel(Aki::SqlChannel* channel)
+ChannelModel::addChannel(Aki::Sql::Channel* channel)
 {
     beginInsertRows(QModelIndex(), rowCount(), rowCount());
     _channelList.append(channel);
     endInsertRows();
 }
 
-QList<Aki::SqlChannel*>
+const QList<Aki::Sql::Channel*>&
 ChannelModel::channels() const
 {
     return _channelList;
@@ -51,41 +51,55 @@ ChannelModel::channels() const
 QVariant
 ChannelModel::data(const QModelIndex& index, int role) const
 {
-    DEBUG_FUNC_NAME;
     if (!index.isValid()) {
-        DEBUG_TEXT("Index is invalid so ignoring data call");
         return QVariant();
     }
 
-    Aki::SqlChannel* channel = _channelList.at(index.row());
+    const Aki::Sql::Channel* channel = _channelList.at(index.row());
     if (!channel) {
-        DEBUG_TEXT("Uh oh invalid server for row");
         return QVariant();
     }
 
     switch (role) {
     case Qt::DisplayRole: {
-        return channel->channel();
+        return channel->name();
+    }
+    case Qt::DecorationRole: {
+        if (!channel->password().isEmpty()) {
+            return KIcon("document-encrypt");
+        } else {
+            return QVariant();
+        }
     }
     default: {
-        break;
+        return QVariant();
     }
     }
 
     return QVariant();
 }
 
+Qt::ItemFlags
+ChannelModel::flags(const QModelIndex& index) const
+{
+    if (!index.isValid()) {
+        return Qt::NoItemFlags;
+    }
+
+    return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+}
+
 void
-ChannelModel::insertChannel(int row, Aki::SqlChannel* channel)
+ChannelModel::insertChannel(int row, Aki::Sql::Channel* channel)
 {
     if (!channel) {
         return;
     }
 
-    if (row > rowCount()) {
+    if (row >= rowCount()) {
         addChannel(channel);
         return;
-    } else if (row < 0) {
+    } else if (row <= 0) {
         beginInsertRows(QModelIndex(), 0, 0);
         _channelList.prepend(channel);
         endInsertRows();
@@ -97,35 +111,14 @@ ChannelModel::insertChannel(int row, Aki::SqlChannel* channel)
     endInsertRows();
 }
 
-void
-ChannelModel::removeChannel(Aki::SqlChannel* channel)
-{
-    if (!channel) {
-        return;
-    }
-
-    const int row = _channelList.indexOf(channel);
-    beginRemoveRows(QModelIndex(), row, row);
-    delete takeChannel(row);
-    endRemoveRows();
-}
-
 int
-ChannelModel::rowCount(const QModelIndex& parent) const
+ChannelModel::rowCount(const QModelIndex&) const
 {
-    if (parent.isValid()) {
-        return 0;
-    }
-
     return _channelList.count();
 }
 
-Aki::SqlChannel*
+Aki::Sql::Channel*
 ChannelModel::takeChannel(int row)
 {
-    beginRemoveRows(QModelIndex(), row, row);
-    Aki::SqlChannel* channel = _channelList.takeAt(row);
-    endRemoveRows();
-
-    return channel;
+    return _channelList.takeAt(row);
 }

@@ -2,7 +2,9 @@ set(aki_ui_SRCS
     ui/addresslist.cxx
     ui/addressmodel.cxx
     ui/addresswidget.cxx
+    ui/channellist.cxx
     ui/channelmodel.cxx
+    ui/channelwidget.cxx
     ui/chatview.cxx
     ui/identitycombobox.cxx
     ui/identitymodel.cxx
@@ -12,8 +14,10 @@ set(aki_ui_SRCS
     ui/networkmodel.cxx
     ui/nicknamelist.cxx
     ui/nicknamemodel.cxx
+    ui/nicknamewidget.cxx
     ui/serverlist.cxx
     ui/servermodel.cxx
+    ui/serverwidget.cxx
     ui/systemtray.cxx
     ui/userlist.cxx
     ui/userlistdelegate.cxx
