@@ -25,45 +25,48 @@
 
 namespace Aki
 {
+namespace Sql
+{
+class Channel;
+class Server;
+}
 class ChannelModel;
-class SqlChannel;
-class SqlNetwork;
 class NetworkChannelList : public QListView
 {
     Q_OBJECT
 public:
-    typedef QList<Aki::SqlChannel*> List;
+    typedef QList<Aki::Sql::Channel*> List;
     explicit NetworkChannelList(QWidget* parent = 0);
     ~NetworkChannelList();
-    void addNetworkChannel(Aki::SqlChannel* channel);
+    void addNetworkChannel(Aki::Sql::Channel* channel);
     int count() const;
-    Aki::SqlChannel* currentNetworkChannel() const;
+    Aki::Sql::Channel* currentNetworkChannel() const;
     int currentRow() const;
     Aki::NetworkChannelList::List findItems(const QString& name, Qt::MatchFlags flags) const;
-    void insertNetworkChannel(int row, Aki::SqlChannel* channel);
-    Aki::SqlChannel* networkChannel(int row) const;
-    int row(Aki::SqlChannel* channel) const;
+    void insertNetworkChannel(int row, Aki::Sql::Channel* channel);
+    Aki::Sql::Channel* networkChannel(int row) const;
+    int row(Aki::Sql::Channel* channel) const;
     Aki::NetworkChannelList::List selectedNetworkChannels() const;
-    void setCurrentNetworkChannel(Aki::SqlChannel* channel, QItemSelectionModel::SelectionFlags command);
-    void setCurrentNetworkChannel(Aki::SqlChannel* channel);
+    void setCurrentNetworkChannel(Aki::Sql::Channel* channel, QItemSelectionModel::SelectionFlags command);
+    void setCurrentNetworkChannel(Aki::Sql::Channel* channel);
     void setCurrentRow(int row, QItemSelectionModel::SelectionFlags command);
     void setCurrentRow(int row);
-    Aki::SqlChannel* takeNetworkChannel(int row);
+    Aki::Sql::Channel* takeNetworkChannel(int row);
 public Q_SLOTS:
-    void repopulateNetworkChannels(Aki::SqlNetwork* network);
+    void repopulateNetworkChannels(Aki::Sql::Server* network);
 Q_SIGNALS:
-    void currentNetworkChannelChanged(Aki::SqlChannel* current, Aki::SqlChannel* previous);
-    void networkChannelActivated(Aki::SqlChannel* channel);
-    void networkChannelChanged(Aki::SqlChannel* channel);
-    void networkChannelClicked(Aki::SqlChannel* channel);
+    void currentNetworkChannelChanged(Aki::Sql::Channel* current, Aki::Sql::Channel* previous);
+    void networkChannelActivated(Aki::Sql::Channel* channel);
+    void networkChannelChanged(Aki::Sql::Channel* channel);
+    void networkChannelClicked(Aki::Sql::Channel* channel);
     void networkChannelCurrentRowChanged(int row);
-    void networkChannelDoubleClicked(Aki::SqlChannel* channel);
-    void networkChannelEntered(Aki::SqlChannel* channel);
-    void networkChannelPressed(Aki::SqlChannel* channel);
+    void networkChannelDoubleClicked(Aki::Sql::Channel* channel);
+    void networkChannelEntered(Aki::Sql::Channel* channel);
+    void networkChannelPressed(Aki::Sql::Channel* channel);
     void networkChannelSelectionChanged();
 protected:
-    QModelIndex indexFromNetworkChannel(Aki::SqlChannel* channel);
-    Aki::SqlChannel* networkChannelFromIndex(const QModelIndex& index) const;
+    QModelIndex indexFromNetworkChannel(Aki::Sql::Channel* channel);
+    Aki::Sql::Channel* networkChannelFromIndex(const QModelIndex& index) const;
 private:
     Aki::ChannelModel* _model;
 }; // End of class NetworkChannelList.

@@ -45,15 +45,12 @@ NetworkModel::addNetwork(Aki::SqlNetwork* network)
 QVariant
 NetworkModel::data(const QModelIndex& index, int role) const
 {
-    DEBUG_FUNC_NAME;
     if (!index.isValid()) {
-        DEBUG_TEXT("Index is invalid so ignoring data call");
         return QVariant();
     }
 
-    Aki::SqlNetwork* server = _networkList.at(index.row());
+    const Aki::SqlNetwork* server = _networkList.at(index.row());
     if (!server) {
-        DEBUG_TEXT("Uh oh invalid server for row");
         return QVariant();
     }
 

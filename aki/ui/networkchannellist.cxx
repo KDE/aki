@@ -21,6 +21,8 @@
 #include "networkchannellist.hpp"
 #include "aki.hpp"
 #include "debughelper.hpp"
+#include "sql/channel.hpp"
+#include "sql/server.hpp"
 #include "ui/channelmodel.hpp"
 #include "utils/sqlchannel.hpp"
 #include "utils/sqlnetwork.hpp"
@@ -57,7 +59,7 @@ NetworkChannelList::~NetworkChannelList()
 }
 
 void
-NetworkChannelList::addNetworkChannel(Aki::SqlChannel* channel)
+NetworkChannelList::addNetworkChannel(Aki::Sql::Channel* channel)
 {
     _model->addChannel(channel);
 }
@@ -68,7 +70,7 @@ NetworkChannelList::count() const
     return _model->rowCount();
 }
 
-Aki::SqlChannel*
+Aki::Sql::Channel*
 NetworkChannelList::currentNetworkChannel() const
 {
     QModelIndex index = selectionModel()->currentIndex();
@@ -104,13 +106,13 @@ NetworkChannelList::findItems(const QString& name, Qt::MatchFlags flags) const
 }
 
 QModelIndex
-NetworkChannelList::indexFromNetworkChannel(Aki::SqlChannel* channel)
+NetworkChannelList::indexFromNetworkChannel(Aki::Sql::Channel* channel)
 {
     return _model->index(_model->channels().indexOf(channel));
 }
 
 void
-NetworkChannelList::insertNetworkChannel(int row, Aki::SqlChannel* channel)
+NetworkChannelList::insertNetworkChannel(int row, Aki::Sql::Channel* channel)
 {
     Q_ASSERT(channel);
 
@@ -121,13 +123,13 @@ NetworkChannelList::insertNetworkChannel(int row, Aki::SqlChannel* channel)
     _model->insertChannel(row, channel);
 }
 
-Aki::SqlChannel*
+Aki::Sql::Channel*
 NetworkChannelList::networkChannel(int row) const
 {
     return networkChannelFromIndex(_model->index(row));
 }
 
-Aki::SqlChannel*
+Aki::Sql::Channel*
 NetworkChannelList::networkChannelFromIndex(const QModelIndex& index) const
 {
     if (!index.isValid()) {
@@ -138,32 +140,32 @@ NetworkChannelList::networkChannelFromIndex(const QModelIndex& index) const
 }
 
 void
-NetworkChannelList::repopulateNetworkChannels(Aki::SqlNetwork* network)
+NetworkChannelList::repopulateNetworkChannels(Aki::Sql::Server* network)
 {
     DEBUG_FUNC_NAME;
-    foreach (Aki::SqlChannel* channel, _model->channels()) {
-        DEBUG_TEXT2("Removing Channel: %1", channel->channel());
-        _model->removeChannel(channel);
+    foreach (Aki::Sql::Channel* channel, _model->channels()) {
+        DEBUG_TEXT2("Removing Channel: %1", channel->name());
+        //_model->removeChannel(channel);
     }
 
     if (!network) {
         return;
     }
 
-    Aki::SqlChannel::List list = Aki::SqlChannel::channelListForServer(network);
+    /*Aki::Sql::Channel::List list = Aki::Sql::Channel::channelListForServer(network);
     if (list.isEmpty()) {
         DEBUG_TEXT2("List is empty for Network: %1", network->name());
         return;
     }
 
-    foreach (Aki::SqlChannel* channel, list) {
+    foreach (Aki::Sql::Channel* channel, list) {
         DEBUG_TEXT2("Adding new Channel: %1", channel->channel());
         addNetworkChannel(channel);
-    }
+    }*/
 }
 
 int
-NetworkChannelList::row(Aki::SqlChannel* channel) const
+NetworkChannelList::row(Aki::Sql::Channel* channel) const
 {
     return _model->channels().indexOf(channel);
 }
@@ -182,13 +184,13 @@ NetworkChannelList::selectedNetworkChannels() const
 }
 
 void
-NetworkChannelList::setCurrentNetworkChannel(Aki::SqlChannel* channel, QItemSelectionModel::SelectionFlags command)
+NetworkChannelList::setCurrentNetworkChannel(Aki::Sql::Channel* channel, QItemSelectionModel::SelectionFlags command)
 {
     selectionModel()->setCurrentIndex(indexFromNetworkChannel(channel), command);
 }
 
 void
-NetworkChannelList::setCurrentNetworkChannel(Aki::SqlChannel* channel)
+NetworkChannelList::setCurrentNetworkChannel(Aki::Sql::Channel* channel)
 {
     setCurrentNetworkChannel(channel, QItemSelectionModel::ClearAndSelect);
 }
@@ -205,7 +207,7 @@ NetworkChannelList::setCurrentRow(int row)
     setCurrentRow(row, QItemSelectionModel::ClearAndSelect);
 }
 
-Aki::SqlChannel*
+Aki::Sql::Channel*
 NetworkChannelList::takeNetworkChannel(int row)
 {
     return _model->takeChannel(row);
