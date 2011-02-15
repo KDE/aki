@@ -31,10 +31,10 @@ WelcomeDialog::WelcomeDialog(QWidget* parent)
     : KAssistantDialog(parent)
 {
     _database = new Aki::Sql::Database("QSQLITE");
-    //_database->setDatabaseName(Aki::databaseFile());
+    _database->setDatabaseName(Aki::databaseFile());
     if (!_database->open()) {
-        //KMessageBox::error(this, i18n("Unable to open database file.\nSettings will not be saved."),
-                           //i18n("Unable to open database."));
+        KMessageBox::error(this, i18n("Unable to open database file.\nSettings will not be saved."),
+                           i18n("Unable to open database."));
     }
 
     showButton(KAssistantDialog::Help, false);
@@ -59,6 +59,12 @@ WelcomeDialog::~WelcomeDialog()
 void
 WelcomeDialog::finishClicked()
 {
-    //qobject_cast<Aki::ServerWelcomePage*>(_serverPage->widget())->save();
-    //qobject_cast<Aki::IdentityWelcomePage*>(_serverPage->widget())->save();
+    Aki::IdentityWelcomePage* identityPage = qobject_cast<Aki::IdentityWelcomePage*>(_identityPage->widget());
+    Q_ASSERT(identityPage);
+    Aki::ServerWelcomePage* serverPage = qobject_cast<Aki::ServerWelcomePage*>(_serverPage->widget());
+    Q_ASSERT(serverPage);
+
+    identityPage->save();
+    serverPage->setIdentity(identityPage->identity());
+    serverPage->save();
 }
