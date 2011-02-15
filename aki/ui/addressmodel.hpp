@@ -61,12 +61,12 @@ public:
     const QList<Aki::Sql::Address*>& addresses() const;
     /**
      * Gets the data stored under the given @p role for the item referred to by the @p index.
-     * @note If you do not have a value to return return an invalid QVariant instead of returning 0.
+     * @note If you do not have a value to return, return an invalid QVariant instead of returning 0.
      *
      * @param index Index of the item to get the value of.
-     * @param role Model role to get the value of the item at the @param index.
+     * @param role Model role to get the value of the item at the @p index.
      *
-     * @return Data for the given @p role of the item at @p index. QVariant() is no value is to be used.
+     * @return Data for the given @p role of the item at @p index. QVariant() if no value is to be returned.
      */
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
     /**
@@ -86,12 +86,6 @@ public:
      * @param address Server address.
      */
     void insertAddress(int row, Aki::Sql::Address* address);
-    /**
-     * Removed the @p address from the model and deletes it. The @p address will be invalid after it returns.
-     *
-     * @param address Server address.
-     */
-    void removeAddress(Aki::Sql::Address* address);
     /**
      * Gets the number of items in the model.
      *

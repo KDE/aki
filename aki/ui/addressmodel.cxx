@@ -56,7 +56,7 @@ AddressModel::data(const QModelIndex& index, int role) const
         return QVariant();
     }
 
-    Aki::Sql::Address* address = _addressList.at(index.row());
+    const Aki::Sql::Address* address = _addressList.at(index.row());
     if (!address) {
         return QVariant();
     }
@@ -110,19 +110,6 @@ AddressModel::insertAddress(int row, Aki::Sql::Address* address)
     beginInsertRows(QModelIndex(), row, row);
     _addressList.insert(row, address);
     endInsertRows();
-}
-
-void
-AddressModel::removeAddress(Aki::Sql::Address* address)
-{
-    if (!address) {
-        return;
-    }
-
-    const int row = _addressList.indexOf(address);
-    beginRemoveRows(QModelIndex(), row, row);
-    delete takeAddress(row);
-    endRemoveRows();
 }
 
 int
