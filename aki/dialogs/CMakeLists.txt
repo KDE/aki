@@ -9,6 +9,7 @@ set (aki_dialogs_SRCS
     dialogs/identitydialog.cxx
     dialogs/networkdialog.cxx
     dialogs/quickconnectiondialog.cxx
+    dialogs/serverlistdialog.cxx
     dialogs/welcomedialog.cxx
     ${aki_dialogs_configdialogpages_SRCS}
     ${aki_dialogs_welcomedialoggpages_SRCS}

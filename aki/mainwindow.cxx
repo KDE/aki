@@ -22,8 +22,8 @@
 #include "dbus.hpp"
 #include "dialogs/configurationdialog.hpp"
 #include "dialogs/identitydialog.hpp"
-#include "dialogs/networkdialog.hpp"
 #include "dialogs/quickconnectiondialog.hpp"
+#include "dialogs/serverlistdialog.hpp"
 #include "docks/privatemessages/privatemessagedock.hpp"
 #include "interfaces/isettingspage.hpp"
 #include "plugin/plugin.hpp"
@@ -187,8 +187,11 @@ AkiWindow::slotIdentityListTriggered()
 void
 AkiWindow::slotNetworkListTriggered()
 {
-    Aki::NetworkDialog* networkDialog = new Aki::NetworkDialog;
-    networkDialog->show();
+    /*Aki::NetworkDialog* networkDialog = new Aki::NetworkDialog;
+    networkDialog->show();*/
+
+    Aki::ServerListDialog* serverListDialog = new Aki::ServerListDialog;
+    serverListDialog->show();
 }
 
 void
