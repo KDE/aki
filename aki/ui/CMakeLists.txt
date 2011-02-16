@@ -6,6 +6,7 @@ set(aki_ui_SRCS
     ui/channelmodel.cxx
     ui/channelwidget.cxx
     ui/chatview.cxx
+    ui/encodingcombobox.cxx
     ui/identitycombobox.cxx
     ui/identitymodel.cxx
     ui/networklist.cxx
