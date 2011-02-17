@@ -31,18 +31,10 @@ IdentityComboBox::IdentityComboBox(QWidget* parent)
     _model = new Aki::IdentityModel(this);
     setModel(_model);
 
-    QList<Aki::Sql::Identity*> identities = _database->find<Aki::Sql::Identity>().result();
-
-    foreach (Aki::Sql::Identity* identity, identities) {
-        addIdentity(identity);
-    }
-
     connect(this, SIGNAL(activated(int)),
             SLOT(slotActivated(int)));
     connect(this, SIGNAL(currentIndexChanged(int)),
             SLOT(slotCurrentIndexChanged(int)));
-
-    setCurrentIndex(0);
 }
 
 IdentityComboBox::~IdentityComboBox()
@@ -106,6 +98,20 @@ IdentityComboBox::insertIdentity(int row, Aki::Sql::Identity* identity)
     }
 
     _model->insertIdentity(row, identity);
+}
+
+void
+IdentityComboBox::repopulateIdentities()
+{
+    QList<Aki::Sql::Identity*> identities = _database->find<Aki::Sql::Identity>().result();
+
+    foreach (Aki::Sql::Identity* identity, identities) {
+        addIdentity(identity);
+    }
+
+    if (identities.count() > 0) {
+        setCurrentIdentity(identity(0));
+    }
 }
 
 int

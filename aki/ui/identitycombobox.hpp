@@ -44,6 +44,7 @@ public:
     Aki::IdentityComboBox::List findIdentities(const QString& name, Qt::MatchFlags flags);
     void insertIdentity(int row, Aki::Sql::Identity* identity);
     Aki::Sql::Identity* identity(int index) const;
+    void repopulateIdentities();
     int row(Aki::Sql::Identity* identity) const;
     void setCurrentIdentity(Aki::Sql::Identity* identity);
     void setDatabase(Aki::Sql::Database* database);
