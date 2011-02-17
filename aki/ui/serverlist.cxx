@@ -20,6 +20,7 @@
 
 #include "serverlist.hpp"
 #include "sql/database.hpp"
+#include "sql/identity.hpp"
 #include "sql/server.hpp"
 #include "ui/servermodel.hpp"
 using namespace Aki;
@@ -121,6 +122,24 @@ void
 ServerList::removeServer(int row)
 {
     delete takeServer(row);
+}
+
+void
+ServerList::repopulateServers(Aki::Sql::Identity* identity)
+{
+    Q_ASSERT(identity);
+
+    for (int i = 0, c = count(); i < c; ++i) {
+        removeServer(i);
+    }
+
+    const Aki::ServerList::List list = _database->find<Aki::Sql::Server>()
+        .where("serverIdentity = :serverIdentity").bind("serverIdentity", identity->id())
+        .result();
+
+    foreach (Aki::Sql::Server* server, list) {
+        addServer(server);
+    }
 }
 
 int

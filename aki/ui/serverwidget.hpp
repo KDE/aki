@@ -28,6 +28,8 @@ namespace Aki
 {
 namespace Sql
 {
+class Database;
+class Identity;
 class Server;
 } // End of namespace Sql.
 class ServerList;
@@ -45,9 +47,19 @@ public:
     int row(Aki::Sql::Server* server) const;
     void setCurrentServer(Aki::Sql::Server* server);
     void setCurrentRow(int row);
+    void setDatabase(Aki::Sql::Database* database);
     Aki::Sql::Server* server(int index);
     Aki::Sql::Server* takeServer(int index);
+public Q_SLOTS:
+    void repopulateServers(Aki::Sql::Identity* identity);
 private Q_SLOTS:
+    void slotAddClicked();
+    void slotEditClicked();
+    void slotExportClicked();
+    void slotImportClicked();
+    void slotServerCurrentRowChanged(int row);
+    void slotServerListClicked(Aki::Sql::Server* server);
+    void slotRemoveClicked();
 private:
     Aki::ServerList* _serverList;
     KPushButton* _addButton;

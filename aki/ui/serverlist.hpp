@@ -28,6 +28,7 @@ namespace Aki
 namespace Sql
 {
 class Database;
+class Identity;
 class Server;
 } // End of namespace Sql.
 class ServerModel;
@@ -54,6 +55,7 @@ public:
     void setDatabase(Aki::Sql::Database* database);
     Aki::Sql::Server* takeServer(int row);
 public Q_SLOTS:
+    void repopulateServers(Aki::Sql::Identity* identity);
 Q_SIGNALS:
     void currentServerChanged(Aki::Sql::Server* current, Aki::Sql::Server* previous);
     void serverActivated(Aki::Sql::Server* server);
