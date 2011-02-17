@@ -29,6 +29,10 @@ class KIntSpinBox;
 class KLineEdit;
 namespace Aki
 {
+namespace Sql
+{
+class Database;
+} // End of namespace Sql.
 class AddressWidget;
 class ChannelWidget;
 class EncodingComboBox;
@@ -47,6 +51,7 @@ private:
     Aki::EncodingComboBox* _defaultEncoding;
     Aki::ChannelWidget* _channelWidget;
     Aki::AddressWidget* _addressWidget;
+    Aki::Sql::Database* _database;
     QGroupBox* _autoIdentifyGroupBox;
     QGroupBox* _customEncodingGroupBox;
     QGroupBox* _autoReconnectGroupBox;
@@ -54,6 +59,7 @@ private:
     KLineEdit* _servicePassword;
     QCheckBox* _autoJoinChannels;
     QCheckBox* _connectToRandomServers;
+    QCheckBox* _connectOnStartup;
     KIntSpinBox* _retryInterval;
     KIntSpinBox* _retryAttempts;
 }; // End of class ServerListDialog.

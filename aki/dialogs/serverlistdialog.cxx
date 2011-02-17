@@ -19,6 +19,7 @@
  */
 
 #include "serverlistdialog.hpp"
+#include "sql/database.hpp"
 #include "ui/addresswidget.hpp"
 #include "ui/channelwidget.hpp"
 #include "ui/encodingcombobox.hpp"
@@ -32,6 +33,7 @@
 #include <QtGui/QLabel>
 #include <QtGui/QVBoxLayout>
 #include <KDE/KIntSpinBox>
+#include <KDE/KMessageBox>
 #include <KDE/KLineEdit>
 #include <KDE/KLocale>
 #include <KDE/KTabWidget>
@@ -40,6 +42,13 @@ using namespace Aki;
 ServerListDialog::ServerListDialog(QWidget* parent)
     : KDialog(parent)
 {
+    _database = new Aki::Sql::Database("QSQLITE");
+    _database->setDatabaseName(Aki::databaseFile());
+    if (!_database->open()) {
+        KMessageBox::error(this, i18n("Unable to open database file.\nSettings will not be saved."),
+                           i18n("Unable to open database."));
+    }
+
     QWidget* mainWidget = new QWidget;
     setMainWidget(mainWidget);
 
@@ -52,6 +61,7 @@ ServerListDialog::ServerListDialog(QWidget* parent)
 
     _identityComboBox = new Aki::IdentityComboBox;
     mainLayout->setWidget(0, QFormLayout::FieldRole, _identityComboBox);
+    _identityComboBox->setDatabase(_database);
 
     QGroupBox* serversGroupBox = new QGroupBox;
     mainLayout->setWidget(1, QFormLayout::SpanningRole, serversGroupBox);
@@ -62,6 +72,9 @@ ServerListDialog::ServerListDialog(QWidget* parent)
 
     _serverWidget = new Aki::ServerWidget;
     serversGroupBoxLayout->addWidget(_serverWidget, 0, 0, 1, 1);
+    _serverWidget->setDatabase(_database);
+    connect(_identityComboBox, SIGNAL(currentIndexChanged(Aki::Sql::Identity*)),
+            _serverWidget, SLOT(repopulateServers(Aki::Sql::Identity*)));
 
     KTabWidget* serversSettingsTabWidget = new KTabWidget;
     mainLayout->setWidget(2, QFormLayout::SpanningRole, serversSettingsTabWidget);
@@ -113,6 +126,15 @@ ServerListDialog::ServerListDialog(QWidget* parent)
     connectionPageLayout->addWidget(connectionOptionsGroupBox, 1, 0, 1, 1);
     connectionOptionsGroupBox->setTitle(i18n("Connection Options"));
 
+    QGridLayout* connectionOptionsGroupBoxLayout = new QGridLayout;
+    connectionOptionsGroupBox->setLayout(connectionOptionsGroupBoxLayout);
+
+    _connectOnStartup = new QCheckBox;
+    connectionOptionsGroupBoxLayout->addWidget(_connectOnStartup, 0, 0, 1, 1);
+    _connectOnStartup->setText(i18n("Connect on startup"));
+    connectionPageLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding),
+                                  2, 0, 1, 1);
+
     QWidget* serversPage = new QWidget;
     serversSettingsTabWidget->addTab(serversPage, i18n("Servers"));
 
@@ -161,6 +183,8 @@ ServerListDialog::ServerListDialog(QWidget* parent)
     _defaultEncoding = new Aki::EncodingComboBox;
     customEncodingGroupBoxLayout->setWidget(0, QFormLayout::FieldRole, _defaultEncoding);
     encodingLabel->setBuddy(_defaultEncoding);
+    encodingPageLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding),
+                                1, 0, 1, 1);
 
     QWidget* authenticationPage = new QWidget;
     serversSettingsTabWidget->addTab(authenticationPage, i18n("Authentication"));
@@ -195,6 +219,11 @@ ServerListDialog::ServerListDialog(QWidget* parent)
     servicePasswordLabel->setBuddy(_servicePassword);
     _servicePassword->setClearButtonShown(true);
     _servicePassword->setEchoMode(QLineEdit::Password);
+
+    authenticationPageLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding),
+                                      1, 0, 1, 1);
+
+    _identityComboBox->repopulateIdentities();
 }
 
 ServerListDialog::~ServerListDialog()
