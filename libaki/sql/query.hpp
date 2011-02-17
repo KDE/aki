@@ -203,6 +203,8 @@ Query<T>::result()
             results.append(res);
         }
     } else {
+        qDebug() << "RESULT Error";
+        qDebug() << _query.lastQuery();
         qDebug() << _query.lastError().text();
     }
 
@@ -225,7 +227,7 @@ Query<T>::setDatabase(Aki::Sql::Database* database)
 template<typename T> Aki::Sql::Query<T>&
 Query<T>::where(const QString& condition)
 {
-    _sql += condition + '\n';
+    _sql += "WHERE " + condition + '\n';
     return *this;
 }
 
