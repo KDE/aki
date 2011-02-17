@@ -25,7 +25,8 @@ using namespace Irc;
 QString
 Text::makeBold(const QString& text)
 {
-    return QString("\u0002%1\u0002").arg(text);
+    //return QString("\u0002%1\u0002").arg(text);
+    return QString();
 }
 
 QString
@@ -33,16 +34,18 @@ Text::makeColour(const QString& text, Aki::Irc::Text::ColourCode foreground,
                  Aki::Irc::Text::ColourCode background)
 {
     if (background == Aki::Irc::Text::White) {
-        return QString("\u0003%1%2\u0003").arg(QString::number(foreground), text);
+        //return QString("\u0003%1%2\u0003").arg(QString::number(foreground), text);
     }
 
-    return QString("\u0003%1,%2%3\u0003").arg(QString::number(foreground), QString::number(background), text);
+    //return QString("\u0003%1,%2%3\u0003").arg(QString::number(foreground), QString::number(background), text);
+    return QString();
 }
 
 QString
 Text::makeInverse(const QString& text)
 {
-    return QString("\u0016%1\u0016").arg(text);
+    //return QString("\u0016%1\u0016").arg(text);
+    return QString();
 }
 
 QString
@@ -62,5 +65,6 @@ Text::makeStrike(const QString& text)
 QString
 Text::makeUnderline(const QString& text)
 {
-    return QString("\u001F%1\u001F").arg(text);
+    //return QString("\u001F%1\u001F").arg(text);
+    return QString();
 }
