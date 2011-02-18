@@ -94,9 +94,9 @@ AkiWindow::AkiWindow()
     createMenus();
     createDialogs();
 
-    Aki::IndicationSystem::self()->setMainWindow(this);
+    /*Aki::IndicationSystem::self()->setMainWindow(this);
     Aki::IndicationSystem::self()->addChannelMessage("#Test", "Hello");
-    Aki::IndicationSystem::self()->addPrivateMessage(Aki::Irc::NickInfo(""), "hello");
+    Aki::IndicationSystem::self()->addPrivateMessage(Aki::Irc::NickInfo(""), "hello");*/
 }
 
 AkiWindow::~AkiWindow()
