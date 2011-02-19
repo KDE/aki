@@ -108,6 +108,15 @@ void
 AddressWidget::addAddress(Aki::Sql::Address* address)
 {
     _addressList->addAddress(address);
+
+    if (count() == 1) {
+        setCurrentRow(0);
+        slotAddressCurrentRowChanged(0);
+        _removeButton->setEnabled(true);
+    } else if (count() > 1) {
+        _moveDownButton->setDisabled(true);
+        _moveUpButton->setEnabled(true);
+    }
 }
 
 Aki::Sql::Address*
@@ -139,12 +148,28 @@ void
 AddressWidget::insertAddress(int row, Aki::Sql::Address* address)
 {
     _addressList->insertAddress(row, address);
+
+    if (count() == 1) {
+        setCurrentRow(0);
+        slotAddressCurrentRowChanged(0);
+        _removeButton->setEnabled(true);
+    } else if (count() > 1) {
+        _moveDownButton->setDisabled(true);
+        _moveUpButton->setEnabled(true);
+    }
 }
 
 void
 AddressWidget::removeAddress(Aki::Sql::Address* address)
 {
     _addressList->removeAddress(_addressList->row(address));
+
+    if (count() == 0) {
+        _editButton->setDisabled(true);
+        _moveDownButton->setDisabled(true);
+        _moveUpButton->setDisabled(true);
+        _removeButton->setDisabled(true);
+    }
 }
 
 void
@@ -159,6 +184,20 @@ void
 AddressWidget::repopulateAddresses(Aki::Sql::Server* server)
 {
     _addressList->repopulateAddresses(server);
+
+    if (count() == 1) {
+        setCurrentRow(0);
+        slotAddressCurrentRowChanged(0);
+        _removeButton->setEnabled(true);
+    } else if (count() > 1) {
+        _moveDownButton->setDisabled(true);
+        _moveUpButton->setEnabled(true);
+    } else if (count() == 0) {
+        _editButton->setDisabled(true);
+        _moveDownButton->setDisabled(true);
+        _moveUpButton->setDisabled(true);
+        _removeButton->setDisabled(true);
+    }
 }
 
 int
@@ -213,15 +252,6 @@ AddressWidget::slotAddClicked()
         }
 
         addAddress(address);
-
-        if (count() == 1) {
-            setCurrentRow(0);
-            slotAddressCurrentRowChanged(0);
-            _removeButton->setEnabled(true);
-        } else if (count() > 1) {
-            _moveDownButton->setDisabled(true);
-            _moveUpButton->setEnabled(true);
-        }
         break;
     }
     default: {
@@ -406,13 +436,6 @@ AddressWidget::slotRemoveClicked()
             removeAddress(current);
             reorderPosition(position);
         }
-
-        if (count() == 0) {
-            _editButton->setDisabled(true);
-            _moveDownButton->setDisabled(true);
-            _moveUpButton->setDisabled(true);
-            _removeButton->setDisabled(true);
-        }
         break;
     }
     case KMessageBox::No:
@@ -425,5 +448,14 @@ AddressWidget::slotRemoveClicked()
 Aki::Sql::Address*
 AddressWidget::takeAddress(int row)
 {
-    return _addressList->takeAddress(row);
+    Aki::Sql::Address* tmp = _addressList->takeAddress(row);
+
+    if (count() == 0) {
+        _editButton->setDisabled(true);
+        _moveDownButton->setDisabled(true);
+        _moveUpButton->setDisabled(true);
+        _removeButton->setDisabled(true);
+    }
+
+    return tmp;
 }

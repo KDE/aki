@@ -50,8 +50,8 @@ public:
     int row(Aki::Sql::Server* server) const;
     Aki::ServerList::List selectedServers() const;
     Aki::Sql::Server* server(int row) const;
-    void setCurrentRow(int row, QItemSelectionModel::SelectionFlags command = QItemSelectionModel::ClearAndSelect);
-    void setCurrentServer(Aki::Sql::Server* server, QItemSelectionModel::SelectionFlags command = QItemSelectionModel::ClearAndSelect);
+    void setCurrentRow(int row);
+    void setCurrentServer(Aki::Sql::Server* server);
     void setDatabase(Aki::Sql::Database* database);
     Aki::Sql::Server* takeServer(int row);
 public Q_SLOTS:

@@ -178,15 +178,22 @@ ServerList::serverFromIndex(const QModelIndex& index) const
 }
 
 void
-ServerList::setCurrentRow(int row, QItemSelectionModel::SelectionFlags command)
+ServerList::setCurrentRow(int row)
 {
-    selectionModel()->setCurrentIndex(_model->index(row), command);
+    const QModelIndex index = _model->index(row);
+    if (selectionMode() == SingleSelection) {
+        selectionModel()->setCurrentIndex(index, QItemSelectionModel::ClearAndSelect);
+    } else if (selectionMode() == NoSelection) {
+        selectionModel()->setCurrentIndex(index,QItemSelectionModel::NoUpdate);
+    } else {
+        selectionModel()->setCurrentIndex(index, QItemSelectionModel::SelectCurrent);
+    }
 }
 
 void
-ServerList::setCurrentServer(Aki::Sql::Server* server, QItemSelectionModel::SelectionFlags command)
+ServerList::setCurrentServer(Aki::Sql::Server* server)
 {
-    selectionModel()->setCurrentIndex(indexFromServer(server), command);
+    setCurrentRow(row(server));
 }
 
 void

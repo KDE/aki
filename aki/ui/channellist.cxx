@@ -142,8 +142,6 @@ ChannelList::removeChannel(int row)
 void
 ChannelList::repopulateChannels(Aki::Sql::Server* server)
 {
-    Q_ASSERT(server);
-
     for (int i = 0, c = count(); i < c; ++i) {
         removeChannel(i);
     }

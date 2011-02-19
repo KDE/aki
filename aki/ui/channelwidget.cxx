@@ -98,6 +98,15 @@ void
 ChannelWidget::addChannel(Aki::Sql::Channel* channel)
 {
     _channelList->addChannel(channel);
+
+    if (count() == 1) {
+        setCurrentRow(0);
+        slotChannelCurrentRowChanged(0);
+        _removeButton->setEnabled(true);
+    } else if (count() > 1) {
+        _moveDownButton->setDisabled(true);
+        _moveUpButton->setEnabled(true);
+    }
 }
 
 Aki::Sql::Channel*
@@ -122,18 +131,48 @@ void
 ChannelWidget::insertChannel(int row, Aki::Sql::Channel* channel)
 {
     _channelList->insertChannel(row, channel);
+
+    if (count() == 1) {
+        setCurrentRow(0);
+        slotChannelCurrentRowChanged(0);
+        _removeButton->setEnabled(true);
+    } else if (count() > 1) {
+        _moveDownButton->setDisabled(true);
+        _moveUpButton->setEnabled(true);
+    }
 }
 
 void
 ChannelWidget::removeChannel(Aki::Sql::Channel* channel)
 {
     _channelList->removeChannel(_channelList->row(channel));
+
+    if (count() == 0) {
+        _editButton->setDisabled(true);
+        _moveDownButton->setDisabled(true);
+        _moveUpButton->setDisabled(true);
+        _removeButton->setDisabled(true);
+    }
 }
 
 void
 ChannelWidget::repopulateChannels(Aki::Sql::Server* server)
 {
     _channelList->repopulateChannels(server);
+
+    if (count() == 1) {
+        setCurrentRow(0);
+        slotChannelCurrentRowChanged(0);
+        _removeButton->setEnabled(true);
+    } else if (count() > 1) {
+        _moveDownButton->setDisabled(true);
+        _moveUpButton->setEnabled(true);
+    } else if (count() == 0) {
+        _editButton->setDisabled(true);
+        _moveDownButton->setDisabled(true);
+        _moveUpButton->setDisabled(true);
+        _removeButton->setDisabled(true);
+    }
 }
 
 void
@@ -179,15 +218,6 @@ ChannelWidget::slotAddClicked()
         }
 
         addChannel(channel);
-
-        if (count() == 1) {
-            setCurrentRow(0);
-            slotChannelCurrentRowChanged(0);
-            _removeButton->setEnabled(true);
-        } else if (count() > 1) {
-            _moveDownButton->setDisabled(true);
-            _moveUpButton->setEnabled(true);
-        }
     }
     default: {
         break;
@@ -350,13 +380,6 @@ ChannelWidget::slotRemoveClicked()
     switch (result) {
     case KMessageBox::Yes: {
         removeChannel(current);
-
-        if (count() == 0) {
-            _editButton->setDisabled(true);
-            _moveDownButton->setDisabled(true);
-            _moveUpButton->setDisabled(true);
-            _removeButton->setDisabled(true);
-        }
         break;
     }
     default: {
@@ -368,5 +391,14 @@ ChannelWidget::slotRemoveClicked()
 Aki::Sql::Channel*
 ChannelWidget::takeChannel(int row)
 {
-    return _channelList->takeChannel(row);
+    Aki::Sql::Channel* tmp = _channelList->takeChannel(row);
+
+    if (count() == 0) {
+        _editButton->setDisabled(true);
+        _moveDownButton->setDisabled(true);
+        _moveUpButton->setDisabled(true);
+        _removeButton->setDisabled(true);
+    }
+
+    return tmp;
 }

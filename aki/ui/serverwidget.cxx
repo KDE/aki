@@ -97,6 +97,17 @@ void
 ServerWidget::addServer(Aki::Sql::Server* server)
 {
     _serverList->addServer(server);
+
+    if (count() == 1) {
+        setCurrentRow(0);
+        slotServerCurrentRowChanged(0);
+        _removeButton->setEnabled(true);
+        _editButton->setEnabled(true);
+        _exportButton->setEnabled(true);
+    } else {
+        _editButton->setEnabled(true);
+        _exportButton->setEnabled(true);
+    }
 }
 
 int
@@ -115,18 +126,50 @@ void
 ServerWidget::insertServer(int row, Aki::Sql::Server* server)
 {
     _serverList->insertServer(row, server);
+
+    if (count() == 1) {
+        setCurrentRow(0);
+        slotServerCurrentRowChanged(0);
+        _removeButton->setEnabled(true);
+        _editButton->setEnabled(true);
+        _exportButton->setEnabled(true);
+    } else {
+        _editButton->setEnabled(true);
+        _exportButton->setEnabled(true);
+    }
 }
 
 void
 ServerWidget::removeServer(Aki::Sql::Server* server)
 {
     _serverList->removeServer(row(server));
+
+    if (count() == 0) {
+        _editButton->setDisabled(true);
+        _removeButton->setDisabled(true);
+        _exportButton->setDisabled(true);
+    }
 }
 
 void
 ServerWidget::repopulateServers(Aki::Sql::Identity* identity)
 {
     _serverList->repopulateServers(identity);
+
+    if (count() == 1) {
+        setCurrentRow(0);
+        slotServerCurrentRowChanged(0);
+        _removeButton->setEnabled(true);
+        _editButton->setEnabled(true);
+        _exportButton->setEnabled(true);
+    } else if (count() > 1) {
+        _editButton->setEnabled(true);
+        _exportButton->setEnabled(true);
+    } else if (count() == 1) {
+        _editButton->setDisabled(true);
+        _removeButton->setDisabled(true);
+        _exportButton->setDisabled(true);
+    }
 }
 
 int
@@ -178,17 +221,6 @@ ServerWidget::slotAddClicked()
         tmp->setName(server);
         addServer(tmp);
     }
-
-    if (count() == 1) {
-        setCurrentRow(0);
-        slotServerCurrentRowChanged(0);
-        _removeButton->setEnabled(true);
-        _editButton->setEnabled(true);
-        _exportButton->setEnabled(true);
-    } else {
-        _editButton->setEnabled(true);
-        _exportButton->setEnabled(true);
-    }
 }
 
 void
@@ -234,11 +266,6 @@ ServerWidget::slotRemoveClicked()
     switch (result) {
     case KMessageBox::Yes: {
         removeServer(current);
-        if (count() == 0) {
-            _editButton->setDisabled(true);
-            _removeButton->setDisabled(true);
-            _exportButton->setDisabled(true);
-        }
         break;
     }
     default: {
@@ -250,7 +277,7 @@ ServerWidget::slotRemoveClicked()
 void
 ServerWidget::slotServerCurrentRowChanged(int row)
 {
-    Q_UNUSED(row)
+    emit serverChanged(server(row));
 }
 
 void
@@ -269,7 +296,15 @@ ServerWidget::slotServerListClicked(Aki::Sql::Server* server)
 Aki::Sql::Server*
 ServerWidget::takeServer(int index)
 {
-    return _serverList->takeServer(index);
+    Aki::Sql::Server* tmp = _serverList->takeServer(index);
+
+    if (count() == 0) {
+        _editButton->setDisabled(true);
+        _removeButton->setDisabled(true);
+        _exportButton->setDisabled(true);
+    }
+
+    return tmp;
 }
 
 #include "ui/serverwidget.moc"
