@@ -105,6 +105,12 @@ ServerWidget::count() const
     return _serverList->count();
 }
 
+Aki::Sql::Server*
+ServerWidget::currentServer() const
+{
+    return _serverList->currentServer();
+}
+
 void
 ServerWidget::insertServer(int row, Aki::Sql::Server* server)
 {
@@ -250,7 +256,14 @@ ServerWidget::slotServerCurrentRowChanged(int row)
 void
 ServerWidget::slotServerListClicked(Aki::Sql::Server* server)
 {
-    Q_UNUSED(server)
+    if (!server) {
+        return;
+    }
+
+    _editButton->setEnabled(true);
+    _removeButton->setEnabled(true);
+
+    emit serverChanged(server);
 }
 
 Aki::Sql::Server*

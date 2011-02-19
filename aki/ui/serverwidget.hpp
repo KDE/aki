@@ -42,6 +42,7 @@ public:
     ~ServerWidget();
     void addServer(Aki::Sql::Server* server);
     int count() const;
+    Aki::Sql::Server* currentServer() const;
     void insertServer(int row, Aki::Sql::Server* server);
     void removeServer(Aki::Sql::Server* server);
     int row(Aki::Sql::Server* server) const;
@@ -52,6 +53,8 @@ public:
     Aki::Sql::Server* takeServer(int index);
 public Q_SLOTS:
     void repopulateServers(Aki::Sql::Identity* identity);
+Q_SIGNALS:
+    void serverChanged(Aki::Sql::Server* server);
 private Q_SLOTS:
     void slotAddClicked();
     void slotEditClicked();
