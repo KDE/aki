@@ -273,64 +273,65 @@ ServerListDialog::setupActions()
 void
 ServerListDialog::slotAutoIdentifyClicked(bool clicked)
 {
-    Q_UNUSED(clicked)
+    _serverWidget->currentServer()->setAutoIdentify(clicked);
 }
 
 void
 ServerListDialog::slotAutoJoinChannelsClicked(bool clicked)
 {
-    Q_UNUSED(clicked)
+    _serverWidget->currentServer()->setAutoJoinChannels(clicked);
 }
 
 void
 ServerListDialog::slotAutoReconnectClicked(bool clicked)
 {
-    Q_UNUSED(clicked)
+    _serverWidget->currentServer()->setAutoReconnect(clicked);
 }
 
 void
 ServerListDialog::slotConnectOnStartupClicked(bool clicked)
 {
-    Q_UNUSED(clicked)
+    _serverWidget->currentServer()->setConnectOnStartup(clicked);
 }
 
 void
 ServerListDialog::slotConnectToRandomServersClicked(bool clicked)
 {
-    Q_UNUSED(clicked)
+    _serverWidget->currentServer()->setConnectToRandomServer(clicked);
 }
 
 void
 ServerListDialog::slotCustomEncodingClicked(bool clicked)
 {
+    //_serverWidget->currentServer()->set
     Q_UNUSED(clicked)
 }
 
 void
 ServerListDialog::slotDefaultEncodingEncodingChanged(const QString& encoding)
 {
-    Q_UNUSED(encoding)
+    _serverWidget->currentServer()->setDefaultEncoding(encoding);
 }
 
 void
 ServerListDialog::slotRetryAttemptsValueChanged(int value)
 {
-    Q_UNUSED(value)
+    _serverWidget->currentServer()->setRetryAttemptCount(value);
 }
 
 void
 ServerListDialog::slotRetryIntervalValueChanged(int value)
 {
-    Q_UNUSED(value)
+    _serverWidget->currentServer()->setRetryInterval(value);
 }
 
 void ServerListDialog::slotServiceNameTextEdited(const QString& text)
 {
-    Q_UNUSED(text)
+    _serverWidget->currentServer()->setServiceName(text);
 }
 
 void
 ServerListDialog::slotServicePasswordTextEdited(const QString& text)
 {
-    Q_UNUSED(text)
+    _serverWidget->currentServer()->setServicePassword(text);
 }
