@@ -46,6 +46,7 @@
 #include <KDE/KAction>
 #include <KDE/KActionCollection>
 #include <KDE/KActionMenu>
+#include <KDE/KApplication>
 #include <KDE/KCmdLineArgs>
 #include <KDE/KNotifyConfigWidget>
 #include <KDE/KMenuBar>
@@ -93,10 +94,6 @@ AkiWindow::AkiWindow()
 
     createMenus();
     createDialogs();
-
-    /*Aki::IndicationSystem::self()->setMainWindow(this);
-    Aki::IndicationSystem::self()->addChannelMessage("#Test", "Hello");
-    Aki::IndicationSystem::self()->addPrivateMessage(Aki::Irc::NickInfo(""), "hello");*/
 }
 
 AkiWindow::~AkiWindow()
@@ -187,9 +184,6 @@ AkiWindow::slotIdentityListTriggered()
 void
 AkiWindow::slotNetworkListTriggered()
 {
-    /*Aki::NetworkDialog* networkDialog = new Aki::NetworkDialog;
-    networkDialog->show();*/
-
     Aki::ServerListDialog* serverListDialog = new Aki::ServerListDialog;
     serverListDialog->show();
 }
@@ -220,4 +214,5 @@ AkiWindow::slotQuickConnectionTriggered()
 void
 AkiWindow::slotQuitTriggered()
 {
+    kapp->quit();
 }
