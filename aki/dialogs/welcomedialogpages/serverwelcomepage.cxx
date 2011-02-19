@@ -134,6 +134,7 @@ ServerWelcomePage::ServerWelcomePage(Aki::Sql::Database* database, QWidget* pare
     label3->setBuddy(_servicePassword);
     authenticationBoxLayout->setWidget(1, QFormLayout::FieldRole, _servicePassword);
     _servicePassword->setClearButtonShown(true);
+    _servicePassword->setEchoMode(QLineEdit::Password);
     connect(_servicePassword, SIGNAL(textEdited(QString)),
             SLOT(slotServicePasswordTextEdited(QString)));
 
