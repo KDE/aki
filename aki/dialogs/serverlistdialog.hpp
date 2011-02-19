@@ -45,6 +45,20 @@ class ServerListDialog
 public:
     explicit ServerListDialog(QWidget* parent = 0);
     ~ServerListDialog();
+private Q_SLOTS:
+    void slotAutoIdentifyClicked(bool clicked);
+    void slotAutoJoinChannelsClicked(bool clicked);
+    void slotAutoReconnectClicked(bool clicked);
+    void slotConnectOnStartupClicked(bool clicked);
+    void slotConnectToRandomServersClicked(bool clicked);
+    void slotCustomEncodingClicked(bool clicked);
+    void slotDefaultEncodingEncodingChanged(const QString& encoding);
+    void slotRetryAttemptsValueChanged(int value);
+    void slotRetryIntervalValueChanged(int value);
+    void slotServiceNameTextEdited(const QString& text);
+    void slotServicePasswordTextEdited(const QString& text);
+private:
+    void setupActions();
 private:
     Aki::IdentityComboBox* _identityComboBox;
     Aki::ServerWidget* _serverWidget;

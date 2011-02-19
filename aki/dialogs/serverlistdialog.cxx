@@ -19,7 +19,10 @@
  */
 
 #include "serverlistdialog.hpp"
+#include "sql/address.hpp"
 #include "sql/database.hpp"
+#include "sql/identity.hpp"
+#include "sql/server.hpp"
 #include "ui/addresswidget.hpp"
 #include "ui/channelwidget.hpp"
 #include "ui/encodingcombobox.hpp"
@@ -73,8 +76,6 @@ ServerListDialog::ServerListDialog(QWidget* parent)
     _serverWidget = new Aki::ServerWidget;
     serversGroupBoxLayout->addWidget(_serverWidget, 0, 0, 1, 1);
     _serverWidget->setDatabase(_database);
-    connect(_identityComboBox, SIGNAL(currentIndexChanged(Aki::Sql::Identity*)),
-            _serverWidget, SLOT(repopulateServers(Aki::Sql::Identity*)));
 
     KTabWidget* serversSettingsTabWidget = new KTabWidget;
     mainLayout->setWidget(2, QFormLayout::SpanningRole, serversSettingsTabWidget);
@@ -91,6 +92,7 @@ ServerListDialog::ServerListDialog(QWidget* parent)
     _autoReconnectGroupBox->setChecked(false);
     _autoReconnectGroupBox->setTitle(i18n("Auto Reconnect"));
 
+
     QFormLayout* autoReconnectGroupBoxLayout = new QFormLayout;
     _autoReconnectGroupBox->setLayout(autoReconnectGroupBoxLayout);
 
@@ -106,6 +108,7 @@ ServerListDialog::ServerListDialog(QWidget* parent)
     _retryInterval->setSingleStep(5);
     _retryInterval->setValue(_retryInterval->minimum());
     _retryInterval->setAlignment(Qt::AlignRight);
+    _retryInterval->setCorrectionMode(QAbstractSpinBox::CorrectToPreviousValue);
 
     QLabel* retryAttemptsLabel = new QLabel;
     autoReconnectGroupBoxLayout->setWidget(1, QFormLayout::LabelRole, retryAttemptsLabel);
@@ -143,6 +146,7 @@ ServerListDialog::ServerListDialog(QWidget* parent)
 
     _addressWidget = new Aki::AddressWidget;
     serversPageLayout->addWidget(_addressWidget, 0, 0, 1, 1);
+    _addressWidget->setDatabase(_database);
 
     _connectToRandomServers = new QCheckBox;
     serversPageLayout->addWidget(_connectToRandomServers, 1, 0, 1, 1);
@@ -156,6 +160,7 @@ ServerListDialog::ServerListDialog(QWidget* parent)
 
     _channelWidget = new Aki::ChannelWidget;
     channelPageLayout->addWidget(_channelWidget, 0, 0, 1, 1);
+    _channelWidget->setDatabase(_database);
 
     _autoJoinChannels = new QCheckBox;
     channelPageLayout->addWidget(_autoJoinChannels, 1, 0, 1, 1);
@@ -223,9 +228,109 @@ ServerListDialog::ServerListDialog(QWidget* parent)
     authenticationPageLayout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding),
                                       1, 0, 1, 1);
 
+    setupActions();
+
     _identityComboBox->repopulateIdentities();
 }
 
 ServerListDialog::~ServerListDialog()
 {
+}
+
+void
+ServerListDialog::setupActions()
+{
+    connect(_identityComboBox, SIGNAL(currentIndexChanged(Aki::Sql::Identity*)),
+            _serverWidget, SLOT(repopulateServers(Aki::Sql::Identity*)));
+    connect(_serverWidget, SIGNAL(serverChanged(Aki::Sql::Server*)),
+            _addressWidget, SLOT(repopulateAddresses(Aki::Sql::Server*)));
+    connect(_serverWidget, SIGNAL(serverChanged(Aki::Sql::Server*)),
+            _channelWidget, SLOT(repopulateChannels(Aki::Sql::Server*)));
+    connect(_autoReconnectGroupBox, SIGNAL(clicked(bool)),
+            SLOT(slotAutoReconnectClicked(bool)));
+    connect(_retryInterval, SIGNAL(valueChanged(int)),
+            SLOT(slotRetryIntervalValueChanged(int)));
+    connect(_retryAttempts, SIGNAL(valueChanged(int)),
+            SLOT(slotRetryAttemptsValueChanged(int)));
+    connect(_connectOnStartup, SIGNAL(clicked(bool)),
+            SLOT(slotConnectOnStartupClicked(bool)));
+    connect(_connectToRandomServers, SIGNAL(clicked(bool)),
+            SLOT(slotConnectToRandomServersClicked(bool)));
+    connect(_autoJoinChannels, SIGNAL(clicked(bool)),
+            SLOT(slotAutoJoinChannelsClicked(bool)));
+    connect(_customEncodingGroupBox, SIGNAL(clicked(bool)),
+            SLOT(slotCustomEncodingClicked(bool)));
+    connect(_defaultEncoding, SIGNAL(encodingChanged(QString)),
+            SLOT(slotDefaultEncodingEncodingChanged(QString)));
+    connect(_autoIdentifyGroupBox, SIGNAL(clicked(bool)),
+            SLOT(slotAutoIdentifyClicked(bool)));
+    connect(_serviceName, SIGNAL(textEdited(QString)),
+            SLOT(slotServiceNameTextEdited(QString)));
+    connect(_servicePassword, SIGNAL(textEdited(QString)),
+            SLOT(slotServicePasswordTextEdited(QString)));
+}
+
+void
+ServerListDialog::slotAutoIdentifyClicked(bool clicked)
+{
+    Q_UNUSED(clicked)
+}
+
+void
+ServerListDialog::slotAutoJoinChannelsClicked(bool clicked)
+{
+    Q_UNUSED(clicked)
+}
+
+void
+ServerListDialog::slotAutoReconnectClicked(bool clicked)
+{
+    Q_UNUSED(clicked)
+}
+
+void
+ServerListDialog::slotConnectOnStartupClicked(bool clicked)
+{
+    Q_UNUSED(clicked)
+}
+
+void
+ServerListDialog::slotConnectToRandomServersClicked(bool clicked)
+{
+    Q_UNUSED(clicked)
+}
+
+void
+ServerListDialog::slotCustomEncodingClicked(bool clicked)
+{
+    Q_UNUSED(clicked)
+}
+
+void
+ServerListDialog::slotDefaultEncodingEncodingChanged(const QString& encoding)
+{
+    Q_UNUSED(encoding)
+}
+
+void
+ServerListDialog::slotRetryAttemptsValueChanged(int value)
+{
+    Q_UNUSED(value)
+}
+
+void
+ServerListDialog::slotRetryIntervalValueChanged(int value)
+{
+    Q_UNUSED(value)
+}
+
+void ServerListDialog::slotServiceNameTextEdited(const QString& text)
+{
+    Q_UNUSED(text)
+}
+
+void
+ServerListDialog::slotServicePasswordTextEdited(const QString& text)
+{
+    Q_UNUSED(text)
 }
