@@ -22,6 +22,7 @@
 #define AKI_SQL_DATABASE_HPP
 
 #include "aki.hpp"
+#include "debughelper.hpp"
 #include "singleton.hpp"
 #include "sql/metatable.hpp"
 #include "sql/query.hpp"
@@ -250,6 +251,7 @@ typedef QScopedPointer<Aki::Sql::Database, Aki::Sql::DatabaseDeleter> DatabaseSc
 template<typename T> bool
 Database::add(T* data)
 {
+    //DEBUG_FUNC_NAME;
     using namespace std::tr1;
     Q_ASSERT(data);
     AKI_STATIC_ASSERT((is_base_of<Aki::Sql::Table, T>::value));
@@ -258,9 +260,10 @@ Database::add(T* data)
     QStringList params;
     QVariantList valueList;
     for (int i = 0, c = data->metaObject()->classInfoCount(); i < c; ++i) {
+        const QString name = data->metaObject()->classInfo(i).name();
         params << "?";
-        propertyList << QString(data->metaObject()->classInfo(i).name());
-        valueList << data->property(data->metaObject()->classInfo(i).name());
+        propertyList << name;
+        valueList << data->property(name.toAscii().constData());
     }
 
     QString mainField = propertyList.at(0);

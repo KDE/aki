@@ -45,7 +45,7 @@ Table::create()
 bool
 Table::remove()
 {
-    return true;
+    return Aki::Sql::Database::metaTable(this).dropTable();
 }
 
 #include "sql/table.moc"

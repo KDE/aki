@@ -22,12 +22,12 @@
 #define AKI_IRC_BASESOCKET_HPP
 
 #include "aki.hpp"
-#include "ktcpsocket.h"
 #include "irc/message.hpp"
 #include <QtCore/QObject>
 #include <QtCore/QStringList>
 #include <QtNetwork/QSslCertificate>
 #include <QtNetwork/QSslCipher>
+#include <QtNetwork/QSslError>
 
 class QTextCodec;
 
