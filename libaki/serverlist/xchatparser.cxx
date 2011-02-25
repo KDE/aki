@@ -165,12 +165,14 @@ XChatParser::read(const QString& file)
     foreach (Aki::XChatServer* server, _d->serverList) {
         foreach (Aki::Sql::Server* sqlServer, serverList) {
             if (server->name == sqlServer->name()) {
+                int position = 0;
                 foreach (const QString& address, server->addresses) {
                     Aki::Sql::Address* sqlAddress = new Aki::Sql::Address;
                     if (address.contains('/')) {
                         const QStringList split = address.split('/', QString::SkipEmptyParts);
                         sqlAddress->setAddress(split.at(0));
                         sqlAddress->setAddressServer(sqlServer->id());
+                        sqlAddress->setPosition(position);
 
                         QString port = split.at(1);
 
@@ -184,13 +186,11 @@ XChatParser::read(const QString& file)
                         sqlAddress->setAddress(address);
                         sqlAddress->setAddressServer(sqlServer->id());
                         sqlAddress->setPort(6667);
-                    }
-
-                    if (server->flags & Aki::XChatParser::UseSsl) {
-                        sqlAddress->setSsl(true);
+                        sqlAddress->setPosition(position);
                     }
 
                     addressList.append(sqlAddress);
+                    ++position;
                 }
             }
         }
