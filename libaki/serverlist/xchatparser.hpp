@@ -32,7 +32,7 @@ class Database;
 class Identity;
 } // End of namespace Sql.
 class XChatParserPrivate;
-class XChatParser
+class LIBAKI_EXPORT XChatParser
     : public QObject
 {
     Q_OBJECT
