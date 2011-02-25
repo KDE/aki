@@ -21,32 +21,35 @@
 #ifndef AKI_JSONPARSER_P_HPP
 #define AKI_JSONPARSER_P_HPP
 
-#include "server.hpp"
+#include "serverlist/jsonparser.hpp"
+#include "sql/address.hpp"
+#include "sql/channel.hpp"
+#include "sql/database.hpp"
+#include "sql/identity.hpp"
+#include "sql/server.hpp"
 #include <qjson/parser.h>
 #include <qjson/serializer.h>
-#include <QtCore/QObject>
-#include <QtCore/QVariant>
+#include <QtCore/QFile>
 
 namespace Aki
 {
 class JsonParser;
-class SqlIdentity;
-class SqlNetwork;
 class JsonParserPrivate
 {
 public:
     JsonParserPrivate(Aki::JsonParser* qq);
-    QVariantMap writeAddresses(Aki::SqlNetwork* network);
-    QVariantMap writeAuthentication(Aki::SqlNetwork* network);
-    QVariantMap writeChannels(Aki::SqlNetwork* network);
-    QVariantMap writeConnectionOptions(Aki::SqlNetwork* network);
-    QVariantMap writeEncoding(Aki::SqlNetwork* network);
-    QVariantMap writeReconnection(Aki::SqlNetwork* network);
-    void writeServer(QVariantMap* map);
+    Aki::Sql::Address* toAddress(const QVariantMap& addressMap, const Aki::Sql::Server* server);
+    Aki::Sql::Channel* toChannel(const QVariantMap& channelMap, const Aki::Sql::Server* server);
+    Aki::Sql::Server* toServer(const QVariantMap& serverMap);
+    QVariantMap toMap(const Aki::Sql::Server* server);
+    QVariantMap toMap(const Aki::Sql::Channel* channel);
+    QVariantMap toMap(const Aki::Sql::Address* address);
 public:
+    QFile file;
+    Aki::Sql::Database* database;
+    Aki::Sql::Identity* identity;
     QJson::Parser parser;
     QJson::Serializer serializer;
-    Aki::SqlIdentity* identity;
 private:
     Aki::JsonParser* _q;
 }; // End of class JsonParserPrivate.

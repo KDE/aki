@@ -22,13 +22,16 @@
 #define AKI_JSONPARSER_HPP
 
 #include "aki.hpp"
-#include <QtCore/QIODevice>
 #include <QtCore/QObject>
 
 namespace Aki
 {
+namespace Sql
+{
+class Database;
+class Identity;
+} // End of namespace Sql.
 class JsonParserPrivate;
-class SqlIdentity;
 class LIBAKI_EXPORT JsonParser
     : public QObject
 {
@@ -36,8 +39,10 @@ class LIBAKI_EXPORT JsonParser
 public:
     JsonParser(QObject* parent = 0);
     ~JsonParser();
-    bool read(QIODevice* device, Aki::SqlIdentity* identity, bool url=false);
-    bool write(QIODevice* device, Aki::SqlIdentity* identity);
+    bool read(const QString& file);
+    void setDatabase(Aki::Sql::Database* database);
+    void setIdentity(Aki::Sql::Identity* identity);
+    bool write(const QString& file);
 private:
     AKI_DECLARE_PRIVATE(JsonParser)
 }; // End of class JsonParser.

@@ -19,113 +19,106 @@
  */
 
 #include "jsonparser_p.hpp"
-#include "serverlist/jsonparser.hpp"
-#include "utils/sqladdress.hpp"
-#include "utils/sqlchannel.hpp"
-#include "utils/sqlidentity.hpp"
-#include "utils/sqlnetwork.hpp"
-#include "utils/sqlnickname.hpp"
-#include <qjson/parser.h>
 using namespace Aki;
 
-JsonParserPrivate::JsonParserPrivate(JsonParser* qq)
+JsonParserPrivate::JsonParserPrivate(Aki::JsonParser* qq)
     : _q(qq)
 {
 }
 
-QVariantMap
-JsonParserPrivate::writeAddresses(SqlNetwork* network)
+Aki::Sql::Address*
+JsonParserPrivate::toAddress(const QVariantMap& addressMap, const Aki::Sql::Server* server)
 {
-    QVariantMap addressMap;
+    Q_ASSERT(server);
+    Q_ASSERT(server->id() != -1);
 
-    Aki::SqlAddress::List addressList = Aki::SqlAddress::addressListForServer(network);
-    foreach (Aki::SqlAddress* address, addressList) {
-        QVariantMap addy;
-        addy["address"] = address->address();
-        addy["password"] = address->password();
-        addy["port"] = address->port();
-        addy["ssl"] = address->isSslEnabled();
-        addressMap.insertMulti("address", addy);
-    }
-    qDeleteAll(addressList);
+    Aki::Sql::Address* address = new Aki::Sql::Address;
+    address->setAddress(addressMap["address"].toString());
+    address->setAddressServer(server->id());
+    address->setPassword(addressMap["password"].toString());
+    address->setPort(addressMap["port"].toInt());
+    address->setPosition(addressMap["position"].toInt());
+    address->setSsl(addressMap["ssl"].toBool());
 
-    return addressMap;
+    return address;
+}
+
+Aki::Sql::Channel*
+JsonParserPrivate::toChannel(const QVariantMap& channelMap, const Aki::Sql::Server* server)
+{
+    Q_ASSERT(server);
+    Q_ASSERT(server->id() != -1);
+
+    Aki::Sql::Channel* channel = new Aki::Sql::Channel;
+    channel->setChannelServer(server->id());
+    channel->setName(channelMap["name"].toString());
+    channel->setPassword(channelMap["password"].toString());
+
+    return channel;
 }
 
 QVariantMap
-JsonParserPrivate::writeAuthentication(SqlNetwork* network)
+JsonParserPrivate::toMap(const Aki::Sql::Server* server)
 {
-    QVariantMap authenticationMap;
-    authenticationMap["enable"] = network->isAutoIdentifyEnabled();
-    authenticationMap["serviceName"] = network->serviceName();
-    authenticationMap["servicePassword"] = network->servicePassword();
-    return authenticationMap;
+    QVariantMap map;
+
+    map["autoIdentify"] = server->isAutoIdentify();
+    map["autoJoinChannels"] = server->isAutoJoinChannels();
+    map["autoReconnect"] = server->isAutoReconnect();
+    map["connectOnStartup"] = server->isConnectOnStartup();
+    map["connectToRandomServer"] = server->isConnectToRandomServer();
+    map["defaultEncoding"] = server->defaultEncoding();
+    map["encoding"] = server->encoding();
+    map["name"] = server->name();
+    map["retryAttemptCount"] = server->retryAttemptCount();
+    map["retryInterval"] = server->retryInterval();
+    map["serviceName"] = server->serviceName();
+    map["servicePassword"] = server->servicePassword();
+
+    return map;
 }
 
 QVariantMap
-JsonParserPrivate::writeChannels(SqlNetwork* network)
+JsonParserPrivate::toMap(const Aki::Sql::Channel* channel)
 {
-    QVariantMap channelMap;
+    QVariantMap map;
 
-    Aki::SqlChannel::List channelList = Aki::SqlChannel::channelListForServer(network);
-    foreach (Aki::SqlChannel* channel, channelList) {
-        QVariantMap channy;
-        channy["channel"] = channel->channel();
-        channy["password"] = channel->password();
-        channelMap.insertMulti("channel", channy);
-    }
-    qDeleteAll(channelList);
+    map["name"] = channel->name();
+    map["password"] = channel->password();
 
-    return channelMap;
+    return map;
 }
 
 QVariantMap
-JsonParserPrivate::writeConnectionOptions(SqlNetwork* network)
+JsonParserPrivate::toMap(const Aki::Sql::Address* address)
 {
-    QVariantMap connectionOptions;
-    connectionOptions["connectOnStartup"] = network->isConnectOnStartupEnabled();
-    return connectionOptions;
+    QVariantMap map;
+
+    map["address"] = address->address();
+    map["password"] = address->password();
+    map["port"] = address->port();
+    map["position"] = address->position();
+    map["ssl"] = address->isSslEnabled();
+
+    return map;
 }
 
-QVariantMap
-JsonParserPrivate::writeEncoding(SqlNetwork* network)
+Aki::Sql::Server*
+JsonParserPrivate::toServer(const QVariantMap& serverMap)
 {
-    QVariantMap encodingMap;
-    encodingMap["enable"] = !network->isDefaultEncodingEnabled();
-    encodingMap["encoding"] = network->encoding();
-    return encodingMap;
-}
-
-QVariantMap
-JsonParserPrivate::writeReconnection(SqlNetwork* network)
-{
-    QVariantMap reconnection;
-    reconnection["enable"] = network->isAutoReconnectEnabled();
-    reconnection["retryInterval"] = network->retryInterval();
-    reconnection["retryAttempts"] = network->retryAttemptCount();
-    return reconnection;
-}
-
-void
-JsonParserPrivate::writeServer(QVariantMap* map)
-{
-    Aki::SqlNetwork::List networkList = Aki::SqlNetwork::networksForIdentity(identity);
-    if (networkList.isEmpty()) {
-        return;
-    }
-
-    foreach (Aki::SqlNetwork* network, networkList) {
-        QVariantMap networkMap;
-        networkMap["name"] = network->name();
-        networkMap["reconnection"] = writeReconnection(network);
-        networkMap["connectionOptions"] = writeConnectionOptions(network);
-        networkMap["networkAddresses"] = writeAddresses(network);
-        networkMap["connectToRandomServer"] = network->isConnectToRandomServerEnabled();
-        networkMap["networkChannels"] = writeChannels(network);
-        networkMap["autoJoinChannels"] = network->isAutoJoinChannelsEnabled();
-        networkMap["encoding"] = writeEncoding(network);
-        networkMap["authentication"] = writeAuthentication(network);
-        map->insertMulti("network", networkMap);
-    }
-    qDeleteAll(networkList);
+    Aki::Sql::Server* server = new Aki::Sql::Server;
+    server->setAutoIdentify(serverMap["autoIdentify"].toBool());
+    server->setAutoJoinChannels(serverMap["autoJoinChannels"].toBool());
+    server->setAutoReconnect(serverMap["autoReconnect"].toBool());
+    server->setConnectOnStartup(serverMap["connectOnStartup"].toBool());
+    server->setConnectToRandomServer(serverMap["connectToRandomServer"].toBool());
+    server->setDefaultEncoding(serverMap["defaultEncoding"].toString());
+    server->setEncoding(serverMap["encoding"].toString());
+    server->setName(serverMap["name"].toString());
+    server->setRetryAttemptCount(serverMap["retryAttemptCount"].toInt());
+    server->setRetryInterval(serverMap["retryInterval"].toInt());
+    server->setServerIdentity(identity->id());
+    server->setServiceName(serverMap["serviceName"].toString());
+    server->setServicePassword(serverMap["servicePassword"].toString());
+    return server;
 }
