@@ -44,7 +44,7 @@ public:
     void setIdentity(Aki::Sql::Identity* identity);
     bool write(const QString& file);
 private:
-    AKI_DECLARE_PRIVATE(JsonParser)
+    AKI_DECLARE_PRIVATE(Aki::JsonParser)
 }; // End of class JsonParser.
 } // End of namespace Aki.
 

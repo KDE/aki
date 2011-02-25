@@ -27,6 +27,7 @@ using namespace Sql;
 JsonParser::JsonParser(QObject* parent)
     : QObject(parent)
 {
+    _d.reset(new Aki::JsonParserPrivate(this));
 }
 
 JsonParser::~JsonParser()
@@ -232,6 +233,7 @@ JsonParser::write(const QString& file)
         if (!channelMap.isEmpty()) {
             serverMap.insert("channels", channelMap);
         }
+        jsonData.insertMulti("server", serverMap);
     }
 
     qDeleteAll(serverList);
@@ -240,7 +242,7 @@ JsonParser::write(const QString& file)
     _d->serializer.allowSpecialNumbers(true);
 
     const QByteArray data = _d->serializer.serialize(jsonData);
-    if (!data.isEmpty()) {
+    if (data.isEmpty()) {
         DEBUG_TEXT("Unable to serialise objects")
         return false;
     }
