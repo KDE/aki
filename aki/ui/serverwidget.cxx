@@ -19,6 +19,7 @@
  */
 
 #include "serverwidget.hpp"
+#include "serverlist/serverlistserializer.hpp"
 #include "sql/database.hpp"
 #include "sql/identity.hpp"
 #include "sql/server.hpp"
@@ -27,6 +28,7 @@
 #include <QtGui/QSpacerItem>
 #include <QtGui/QVBoxLayout>
 #include <KDE/KInputDialog>
+#include <KDE/KFileDialog>
 #include <KDE/KLocale>
 #include <KDE/KMessageBox>
 #include <KDE/KPushButton>
@@ -155,6 +157,7 @@ void
 ServerWidget::repopulateServers(Aki::Sql::Identity* identity)
 {
     _serverList->repopulateServers(identity);
+    _serverListSerializer->setIdentity(identity);
 
     if (count() == 1) {
         setCurrentRow(0);
@@ -200,6 +203,7 @@ void
 ServerWidget::setDatabase(Aki::Sql::Database* database)
 {
     _serverList->setDatabase(database);
+    _serverListSerializer->setDatabase(database);
 }
 
 void
@@ -249,11 +253,31 @@ ServerWidget::slotEditClicked()
 void
 ServerWidget::slotExportClicked()
 {
+    QString fileName = KFileDialog::getSaveFileName(KUrl(), ".json|Aki ServerList", this);
+    if (fileName.isEmpty()) {
+        return;
+    }
+
+    if (!fileName.endsWith(".json", Qt::CaseInsensitive)) {
+        fileName.append(".json");
+    }
+
+    if (!_serverListSerializer->write(fileName)) {
+        KMessageBox::error(this, i18n("Unable to export server list."), i18n("Unable to export server list."));
+    }
 }
 
 void
 ServerWidget::slotImportClicked()
 {
+    const QString fileName = KFileDialog::getOpenFileName(KUrl(), "*.json|Aki Server List\nservlist_.conf|XChat Server List", this);
+    if (fileName.isEmpty()) {
+        return;
+    }
+
+    if (!_serverListSerializer->read(fileName)) {
+        KMessageBox::error(this, i18n("Unable to import server list."), i18n("Unable to import server list."));
+    }
 }
 
 void

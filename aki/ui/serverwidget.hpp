@@ -33,6 +33,7 @@ class Identity;
 class Server;
 } // End of namespace Sql.
 class ServerList;
+class ServerListSerializer;
 class ServerWidget
     : public QWidget
 {
@@ -65,6 +66,7 @@ private Q_SLOTS:
     void slotRemoveClicked();
 private:
     Aki::ServerList* _serverList;
+    Aki::ServerListSerializer* _serverListSerializer;
     KPushButton* _addButton;
     KPushButton* _removeButton;
     KPushButton* _editButton;
