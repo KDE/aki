@@ -7,7 +7,7 @@ set (aki_dialogs_SRCS
     dialogs/channeldialog.cxx
     dialogs/configurationdialog.cxx
     dialogs/identitydialog.cxx
-    dialogs/networkdialog.cxx
+    #dialogs/networkdialog.cxx
     dialogs/quickconnectiondialog.cxx
     dialogs/serverlistdialog.cxx
     dialogs/welcomedialog.cxx
