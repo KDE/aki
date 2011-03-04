@@ -54,6 +54,7 @@
 #include <KDE/KTabBar>
 #include <KDE/KXMLGUIFactory>
 #include <QtGui/QListWidget>
+#include <QTimer>
 using namespace Aki;
 
 AkiWindow::AkiWindow()
@@ -64,6 +65,8 @@ AkiWindow::AkiWindow()
 
     setCaption(i18n("Aki IRC Client"));
     new Aki::DBus(this);
+
+    Aki::IndicationSystem::self()->setMainWindow(this);
 
     _systemTray = new Aki::SystemTray(this);
     _view = new Aki::View(this);
@@ -140,6 +143,11 @@ AkiWindow::createMenus()
     actionCollection()->addAction("bookmarks", bookmarkMenu);
     new Aki::BookmarkHandler(bookmarkMenu->menu(), actionCollection(), this);
 
+    KAction* menuBarAction = new KAction(this);
+    menuBarAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_M));
+    connect(menuBarAction, SIGNAL(triggered(bool)),
+            SLOT(slotShowMenubar()));
+
     KStandardAction::showMenubar(this, SLOT(slotShowMenubar()), actionCollection());
     KStandardAction::configureNotifications(this, SLOT(slotConfigureNotifications()), actionCollection());
     KStandardAction::preferences(this, SLOT(slotPreferencesTriggered()), actionCollection());
@@ -197,10 +205,8 @@ AkiWindow::slotPreferencesTriggered()
 void
 AkiWindow::slotShowMenubar()
 {
-    if (menuBar()->isHidden()) {
-        menuBar()->show();
-    } else if (menuBar()->isVisible()) {
-        menuBar()->hide();
+    foreach (QAction* menu, menuBar()->actions()) {
+        menu->setVisible(!menu->isVisible());
     }
 }
 
