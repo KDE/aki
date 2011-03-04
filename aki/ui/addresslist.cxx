@@ -140,6 +140,7 @@ AddressList::insertAddress(int row, Aki::Sql::Address* address)
 void
 AddressList::removeAddress(int row)
 {
+    qDebug() << _database->remove(address(row));
     delete takeAddress(row);
 }
 
@@ -148,8 +149,8 @@ AddressList::repopulateAddresses(Aki::Sql::Server* server)
 {
     Q_ASSERT(server);
 
-    for (int i = 0, c = count(); i < c; ++i) {
-        removeAddress(i);
+    foreach (Aki::Sql::Address* address, _model->addresses()) {
+        removeAddress(row(address));
     }
 
     const Aki::AddressList::List list = _database->find<Aki::Sql::Address>()
