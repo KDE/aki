@@ -136,14 +136,17 @@ ChannelList::insertChannel(int row, Aki::Sql::Channel* channel)
 void
 ChannelList::removeChannel(int row)
 {
+    _database->remove(channel(row));
     delete takeChannel(row);
 }
 
 void
 ChannelList::repopulateChannels(Aki::Sql::Server* server)
 {
-    for (int i = 0, c = count(); i < c; ++i) {
-        removeChannel(i);
+    Q_ASSERT(server);
+
+    foreach (Aki::Sql::Channel* channel, _model->channels()) {
+        removeChannel(row(channel));
     }
 
     const Aki::ChannelList::List list = _database->find<Aki::Sql::Channel>()
