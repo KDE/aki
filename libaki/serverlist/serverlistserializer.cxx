@@ -28,6 +28,8 @@ ServerListSerializer::ServerListSerializer(QObject* parent)
     : QObject(parent)
 {
     _d.reset(new Aki::ServerListSerializerPrivate(this));
+    _d->jsonParser = new Aki::JsonParser(this);
+    _d->xchatParser = new Aki::XChatParser(this);
 }
 
 ServerListSerializer::~ServerListSerializer()
