@@ -360,8 +360,16 @@ Database::remove(T* data)
 
     QString str = QString("DELETE FROM %1 WHERE ").arg(className);
     for (int i = 0, c = propertyList.count(); i < c; ++i) {
-        str += propertyList.at(i) + "='" + valueList.at(i).toString() + "' AND ";
+        QString value = valueList.at(i).toString();
+        if (value.isEmpty()) {
+            str += propertyList.at(i) + " IS NULL AND ";
+        } else {
+            str += propertyList.at(i) + "='" + valueList.at(i).toString() + "' AND ";
+        }
     }
+    str.remove(str.length() - 5, 5);
+
+    qDebug() << str;
 
     QSqlQuery query;
     if (query.exec(str)) {
