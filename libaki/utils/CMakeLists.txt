@@ -25,7 +25,6 @@ install(
 
 install(
     FILES
-        utils/Database
     DESTINATION
         ${INCLUDE_INSTALL_DIR}/Aki/Utils
     COMPONENT
