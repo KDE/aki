@@ -89,6 +89,8 @@ ServerWidget::ServerWidget(QWidget* parent)
             SLOT(slotExportClicked()));
 
     buttonLayout->addSpacerItem(new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding));
+
+    _serverListSerializer = new Aki::ServerListSerializer(this);
 }
 
 ServerWidget::~ServerWidget()
