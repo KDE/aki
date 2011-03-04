@@ -121,6 +121,7 @@ ServerList::insertServer(int row, Aki::Sql::Server* server)
 void
 ServerList::removeServer(int row)
 {
+    qDebug() << _database->remove(server(row));
     delete takeServer(row);
 }
 
@@ -129,8 +130,8 @@ ServerList::repopulateServers(Aki::Sql::Identity* identity)
 {
     Q_ASSERT(identity);
 
-    for (int i = 0, c = count(); i < c; ++i) {
-        removeServer(i);
+    foreach (Aki::Sql::Server* server, _model->servers()) {
+        removeServer(row(server));
     }
 
     const Aki::ServerList::List list = _database->find<Aki::Sql::Server>()
