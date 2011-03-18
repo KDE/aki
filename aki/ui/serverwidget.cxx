@@ -279,7 +279,10 @@ ServerWidget::slotImportClicked()
 
     if (!_serverListSerializer->read(fileName)) {
         KMessageBox::error(this, i18n("Unable to import server list."), i18n("Unable to import server list."));
+        return;
     }
+
+    repopulateServers(_serverListSerializer->identity());
 }
 
 void
