@@ -1,8 +1,6 @@
 #include "serverlist/jsonparser.hpp"
 #include "aki.hpp"
 #include "debughelper.hpp"
-#include "utils/database.hpp"
-#include "utils/sqlidentity.hpp"
 #include <QtTest>
 
 class JsonTest : public QObject

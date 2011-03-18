@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010  Keith Rusler <xzekecomax@gmail.com>
+ * Copyright 2009-2011  Keith Rusler <xzekecomax@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -22,6 +22,7 @@
 #define SOCKETTEST_HPP
 
 #include "irc/socket.hpp"
+#include <QtNetwork/QSslCipher>
 
 class SocketTest
     : QObject
@@ -31,14 +32,23 @@ public:
     SocketTest(QObject* parent = 0);
     ~SocketTest();
     void connectToHost();
+private:
+    void dumpCipher(const QSslCipher& cipher);
+    void dumpCertificate(const QSslCertificate& cert);
 private Q_SLOTS:
-    void slotOnGlobalUsersReply(const Aki::Irc::GlobalUsersReply& reply);
-    void slotOnLocalUsersReply(const Aki::Irc::LocalUsersReply& reply);
-    void slotOnLUserReply(const Aki::Irc::LUserReply& reply);
-    void slotOnNamesReply(const Aki::Irc::NamesReply& reply);
+    void slotOnActionReply(const Aki::Irc::ActionReply& reply);
+    void slotOnAwayReply(const Aki::Irc::AwayReply& reply);
+    void slotOnChannelCreationReply(const Aki::Irc::ChannelCreationTimeReply& reply);
+    void slotOnChannelMessageReply(const Aki::Irc::ChannelMessageReply& reply);
+    void slotOnChannelModeReply(const Aki::Irc::ChannelModeReply& reply);
+    void slotOnJoinReply(const Aki::Irc::JoinReply& reply);
+    void slotOnKickReply(const Aki::Irc::KickReply& reply);
     void slotOnMotdReply(const Aki::Irc::MotdReply& reply);
+    void slotOnNickReply(const Aki::Irc::NickReply& reply);
     void slotOnNoticeReply(const Aki::Irc::NoticeReply& reply);
-    void slotOnStartupReply(const Aki::Irc::StartupReply& reply);
+    void slotOnPrivateMessageReply(const Aki::Irc::PrivateMessageReply& reply);
+    void slotOnQuitReply(const Aki::Irc::QuitReply& reply);
+    void slotSslErrors(const QList<QSslError>& errors);
 private:
     Aki::Irc::Socket* _socket;
 };

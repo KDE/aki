@@ -57,6 +57,6 @@ private:
 }; // End of class UserModel.
 } // End of namespace Aki.
 
-Q_DECLARE_METATYPE(Aki::UserModel*);
+Q_DECLARE_METATYPE(Aki::UserModel*)
 
 #endif // AKI_USERMODEL_HPP

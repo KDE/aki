@@ -20,13 +20,13 @@ QueryTest::slotTestGroupBy()
     database->open();
     QScopedPointer<Aki::Sql::Query<Aki::Sql::Address> > addressQuery(new Aki::Sql::Query<Aki::Sql::Address>);
     addressQuery->setDatabase(database.data());
-    QList<QSharedPointer<Aki::Sql::Address> > result =
+    /*QList<QSharedPointer<Aki::Sql::Address> > result =
         addressQuery->where("id = :id")
             .bind(":id", 1)
             .where("WHERE address = :address")
             .bind(":address", "irc.freenode.net")
             .orderBy("address")
-            .result();
+            .result();*/
 }
 
 QTEST_MAIN(QueryTest)

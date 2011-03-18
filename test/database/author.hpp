@@ -58,7 +58,7 @@ private:
     QDate _birthday;
     Author::Sex _sex;
 };
-
+Q_DECLARE_METATYPE(Author*)
 Q_DECLARE_METATYPE(Author::Sex)
 
 #endif // AUTHOR_HPP
