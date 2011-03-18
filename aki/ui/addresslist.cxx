@@ -140,7 +140,6 @@ AddressList::insertAddress(int row, Aki::Sql::Address* address)
 void
 AddressList::removeAddress(int row)
 {
-    qDebug() << _database->remove(address(row));
     delete takeAddress(row);
 }
 

@@ -121,7 +121,6 @@ ServerList::insertServer(int row, Aki::Sql::Server* server)
 void
 ServerList::removeServer(int row)
 {
-    _database->remove(server(row));
     delete takeServer(row);
 }
 

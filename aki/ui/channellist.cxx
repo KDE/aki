@@ -136,7 +136,6 @@ ChannelList::insertChannel(int row, Aki::Sql::Channel* channel)
 void
 ChannelList::removeChannel(int row)
 {
-    _database->remove(channel(row));
     delete takeChannel(row);
 }
 
