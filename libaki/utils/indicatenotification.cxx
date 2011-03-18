@@ -40,13 +40,19 @@ IndicateNotification::IndicateNotification(QObject* parent)
     _d->server.reset(QIndicate::Server::defaultInstance());
     _d->server->setType("message.irc");
 
-    QString appName = KGlobal::mainComponent().componentName();
+    const QString appName = KGlobal::mainComponent().componentName();
+    DEBUG_TEXT2("Application Name: %1", appName);
     KService::Ptr service = KService::serviceByDesktopName(appName);
-    _d->server->setDesktopFile(service->entryPath());
-    _d->server->show();
+    if (service) {
+        _d->server->setDesktopFile(service->entryPath());
+    } else {
+        DEBUG_TEXT("Unable to find desktop file for application")
+    }
 
     connect(_d->server.data(), SIGNAL(serverDisplay()),
             SLOT(showMainWindow()));
+
+    _d->server->show();
 }
 
 IndicateNotification::~IndicateNotification()
@@ -57,47 +63,56 @@ void
 IndicateNotification::addChannelMessage(const QString& channelName, const QString& message)
 {
     DEBUG_FUNC_NAME;
-    _d->indicator = new QIndicate::Indicator(_d->server.data());
-    _d->indicator->setIconProperty(KIcon("aki").pixmap(QSize(16, 16)).toImage());
-    _d->indicator->setNameProperty(QString("%1: \"%2\"").arg(channelName).arg(message));
+//     _d->indicator = new QIndicate::Indicator(_d->server.data());
+//     _d->indicator->setIconProperty(KIcon("aki").pixmap(QSize(16, 16)).toImage());
+//     _d->indicator->setNameProperty(QString("%1: \"%2\"").arg(channelName).arg(message));
+//     _d->indicator->setTimeProperty(QDateTime::currentDateTimeUtc());
+//     _d->indicator->setDrawAttentionProperty(true);
+// 
+//     connect(_d->indicator, SIGNAL(display(QIndicate::Indicator*)),
+//             SLOT(displayIndicator(QIndicate::Indicator*)));
+// 
+//     _d->indicator->show();
+    if (!_d->indicator) {
+        _d->indicator = new QIndicate::Indicator(_d->server.data());
+        _d->indicateList.append(_d->indicator);
+        connect(_d->indicator, SIGNAL(display(QIndicate::Indicator*)),
+                SLOT(displayIndicator(QIndicate::Indicator*)));
+        _d->indicator->show();
+    }
+
+    _d->indicator->setNameProperty(QString("%1: %2").arg(channelName, message));
     _d->indicator->setTimeProperty(QDateTime::currentDateTimeUtc());
     _d->indicator->setDrawAttentionProperty(true);
-
-    connect(_d->indicator, SIGNAL(display(QIndicate::Indicator*)),
-            SLOT(displayIndicator(QIndicate::Indicator*)));
-
-    _d->indicator->show();
 }
 
 void
 IndicateNotification::addCustomMessage(const QString& message, const KIcon& icon, const QString&)
 {
-    DEBUG_FUNC_NAME;
-    _d->indicator = new QIndicate::Indicator(_d->server.data());
-    _d->indicator->setIconProperty(icon.pixmap(QSize(16, 16)).toImage());
-    _d->indicator->setNameProperty(message);
-    _d->indicator->setTimeProperty(QDateTime::currentDateTimeUtc());
-    _d->indicator->setDrawAttentionProperty(true);
+    QIndicate::Indicator* ind = new QIndicate::Indicator(this);
+    ind->setIconProperty(KIcon("aki").pixmap(QSize(16, 16)).toImage());
+    ind->setNameProperty(message);
+    ind->setTimeProperty(QDateTime::currentDateTimeUtc());
 
-    connect(_d->indicator, SIGNAL(display(QIndicate::Indicator*)),
+    connect(ind, SIGNAL(display(QIndicate::Indicator*)),
             SLOT(displayIndicator(QIndicate::Indicator*)));
 
-    _d->indicator->show();
+    ind->show();
 }
 
 void
 IndicateNotification::addPrivateMessage(const Aki::Irc::NickInfo& from, const QString& message)
 {
     DEBUG_FUNC_NAME;
-    _d->indicator = new QIndicate::Indicator(_d->server.data());
-    _d->indicator->setIconProperty(KIcon("aki").pixmap(QSize(16, 16)).toImage());
-    _d->indicator->setNameProperty(QString("%1: \"%2\"").arg(from.nick()).arg(message));
-    _d->indicator->setTimeProperty(QDateTime::currentDateTimeUtc());
+    QIndicate::Indicator* ind = new QIndicate::Indicator(this);
+    ind->setIconProperty(KIcon("aki").pixmap(QSize(16, 16)).toImage());
+    ind->setNameProperty(QString("%1: \"%2\"").arg(from.nick()).arg(message));
+    ind->setTimeProperty(QDateTime::currentDateTimeUtc());
 
-    connect(_d->indicator, SIGNAL(display(QIndicate::Indicator*)),
+    connect(ind, SIGNAL(display(QIndicate::Indicator*)),
             SLOT(displayIndicator(QIndicate::Indicator*)));
 
-    _d->indicator->show();
+    ind->show();
 }
 
 void
@@ -105,6 +120,7 @@ IndicateNotification::setMainWindow(Aki::MainWindow* window)
 {
     Q_ASSERT(window);
     _d->mainWindow = window;
+    _d->server->show();
 }
 
 #include "utils/indicatenotification.moc"

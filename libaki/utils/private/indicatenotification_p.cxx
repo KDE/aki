@@ -33,10 +33,11 @@ IndicateNotificationPrivate::IndicateNotificationPrivate(Aki::IndicateNotificati
 void
 IndicateNotificationPrivate::displayIndicator(QIndicate::Indicator* indicator)
 {
-    DEBUG_FUNC_NAME;
-    showMainWindow();
-
+    indicateList.removeOne(indicator);
     delete indicator;
+
+    mainWindow->show();
+    KWindowSystem::forceActiveWindow(mainWindow->winId());
 }
 
 void
