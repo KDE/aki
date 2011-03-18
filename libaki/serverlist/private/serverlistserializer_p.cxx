@@ -24,6 +24,7 @@ using namespace Aki;
 ServerListSerializerPrivate::ServerListSerializerPrivate(Aki::ServerListSerializer* qq)
     : xchatParser(0),
     jsonParser(0),
+    identity(0),
     _q(qq)
 {
 }

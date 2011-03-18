@@ -39,6 +39,7 @@ class LIBAKI_EXPORT ServerListSerializer
 public:
     explicit ServerListSerializer(QObject* parent = 0);
     ~ServerListSerializer();
+    Aki::Sql::Identity* identity() const;
     bool read(const QString& file);
     void setDatabase(Aki::Sql::Database* database);
     void setIdentity(Aki::Sql::Identity* identity);

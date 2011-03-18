@@ -34,6 +34,7 @@ public:
 public:
     Aki::XChatParser* xchatParser;
     Aki::JsonParser* jsonParser;
+    Aki::Sql::Identity* identity;
 private:
     AKI_DECLARE_PUBLIC(Aki::ServerListSerializer)
 }; // End of class ServerListPrivate.

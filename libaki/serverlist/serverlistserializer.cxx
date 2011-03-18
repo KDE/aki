@@ -36,6 +36,12 @@ ServerListSerializer::~ServerListSerializer()
 {
 }
 
+Aki::Sql::Identity*
+ServerListSerializer::identity() const
+{
+    return _d->identity;
+}
+
 bool
 ServerListSerializer::read(const QString& file)
 {
@@ -57,6 +63,7 @@ ServerListSerializer::setDatabase(Aki::Sql::Database* database)
 void
 ServerListSerializer::setIdentity(Aki::Sql::Identity* identity)
 {
+    _d->identity = identity;
     _d->jsonParser->setIdentity(identity);
     _d->xchatParser->setIdentity(identity);
 }
