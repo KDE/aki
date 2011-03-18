@@ -24,6 +24,8 @@
 #include "ui_identitydialog.h"
 #include <KDE/KDialog>
 
+class KLineEdit;
+class KPushButton;
 namespace Aki
 {
 namespace Sql
@@ -31,39 +33,24 @@ namespace Sql
 class Database;
 class Identity;
 } // End of namespace Sql.
+class IdentityComboBox;
+class NicknameWidget;
 class IdentityDialog
-    : public KDialog,
-      private Ui::IdentityDialog
+    : public KDialog
 {
     Q_OBJECT
 public:
     explicit IdentityDialog(QWidget* parent = 0);
     ~IdentityDialog();
-private Q_SLOTS:
-    void slotAddIdentityClicked();
-    void slotAddNicknameClicked();
-    void slotAwayMessagesClicked(bool checked);
-    void slotAwayMessageTextEdited(const QString& message);
-    void slotAwayNicknameTextEdited(const QString& nickname);
-    void slotEditIdentityClicked();
-    void slotEditNicknameClicked();
-    void slotIdentityActivated(Aki::Sql::Identity* identity);
-    void slotKickMessageTextEdited(const QString& message);
-    void slotMarkLastPositionClicked(bool checked);
-    void slotPartMessageTextEdited(const QString& message);
-    void slotQuitMessageTextEdited(const QString& message);
-    void slotRealNameTextEdited(const QString& name);
-    void slotRemoveIdentityClicked();
-    void slotRemoveNicknameClicked();
-    void slotReturnMessageTextEdited(const QString& message);
-private:
-    void createNewIdentity(const QString& name);
-private:
-    void setupActions();
-    void setupDialog();
-    void setupIcons();
 private:
     Aki::Sql::Database* _database;
+    Aki::IdentityComboBox* _identityComboBox;
+    Aki::NicknameWidget* _nicknameWidget;
+    QToolButton* _addIdentity;
+    QToolButton* _copyIdentity;
+    QToolButton* _editIdentity;
+    QToolButton* _removeIdentity;
+    KLineEdit* _realName;
 }; // End of class IdentityDialog.
 } // End of namespace Aki.
 
