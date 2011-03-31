@@ -32,6 +32,7 @@
 #include "ui/blureffect.hpp"
 #endif // Q_OS_WIN
 
+#include "sql/database.hpp"
 #include "ui/dockbar.hpp"
 #include "ui/dockbutton.hpp"
 #include "ui/dockwidget.hpp"
@@ -106,6 +107,7 @@ AkiWindow::~AkiWindow()
 void
 AkiWindow::addGui(Aki::Plugin* plugin)
 {
+    Q_ASSERT(plugin);
     guiFactory()->addClient(plugin);
 }
 
@@ -185,8 +187,13 @@ AkiWindow::slotConfigureNotifications()
 void
 AkiWindow::slotIdentityListTriggered()
 {
-    Aki::IdentityDialog* identityDialog = new Aki::IdentityDialog;
-    identityDialog->show();
+    Aki::Sql::DatabaseScopedPointer database(new Aki::Sql::Database("QSQLITE"));
+    database->setDatabaseName(Aki::databaseFile());
+
+    if (database->open()) {
+        Aki::IdentityDialog* identityDialog = new Aki::IdentityDialog(database.data(), 0, this);
+        identityDialog->show();
+    }
 }
 
 void
