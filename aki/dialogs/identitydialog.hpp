@@ -40,8 +40,21 @@ class IdentityDialog
 {
     Q_OBJECT
 public:
-    explicit IdentityDialog(QWidget* parent = 0);
+    explicit IdentityDialog(Aki::Sql::Database* database, Aki::Sql::Identity* identity, QWidget* parent = 0);
     ~IdentityDialog();
+private Q_SLOTS:
+    void slotAddIdentityTriggered();
+    void slotAwayMessagesClicked(bool clicked);
+    void slotAwayMessageTextEdited(const QString& message);
+    void slotAwayNicknameTextEdited(const QString& nickname);
+    void slotKickMessageTextEdited(const QString& message);
+    void slotMarkLastPositionClicked(bool clicked);
+    void slotPartMessageTextEdited(const QString& message);
+    void slotQuitMessageTextEdited(const QString& message);
+    void slotRealNameTextEdited(const QString& name);
+    void slotReturnMessageTextEdited(const QString& message);
+private:
+    void populateWidgets(Aki::Sql::Identity* identity);
 private:
     Aki::Sql::Database* _database;
     Aki::IdentityComboBox* _identityComboBox;
@@ -51,6 +64,14 @@ private:
     QToolButton* _editIdentity;
     QToolButton* _removeIdentity;
     KLineEdit* _realName;
+    KLineEdit* _awayNicknameLineEdit;
+    KLineEdit* _awayMessageLineEdit;
+    KLineEdit* _returnMessageLineEdit;
+    KLineEdit* _kickMessageLineEdit;
+    KLineEdit* _partMessageLineEdit;
+    KLineEdit* _quitMessageLineEdit;
+    QCheckBox* _markLastPositionCheckBox;
+    QGroupBox* _awayMessagesGroupBox;
 }; // End of class IdentityDialog.
 } // End of namespace Aki.
 
