@@ -56,6 +56,7 @@
 #include <KDE/KXMLGUIFactory>
 #include <QtGui/QListWidget>
 #include <QTimer>
+#include "dialogs/importdialogpages/importdialog.hpp"
 using namespace Aki;
 
 AkiWindow::AkiWindow()
@@ -98,6 +99,9 @@ AkiWindow::AkiWindow()
 
     createMenus();
     createDialogs();
+
+    Aki::ImportDialog* dialog = new Aki::ImportDialog(this);
+    dialog->show();
 }
 
 AkiWindow::~AkiWindow()
