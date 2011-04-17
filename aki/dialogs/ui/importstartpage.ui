@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ImportStartPage</class>
+ <widget class="QWidget" name="ImportStartPage">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string/>
+  </property>
+  <property name="whatsThis">
+   <string>Import wizard will allow you to migrate your settings from other IRC Clients</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_2">
+   <item row="0" column="0">
+    <layout class="QGridLayout" name="mainLayout">
+     <item row="0" column="0">
+      <widget class="QLabel" name="mainHeader">
+       <property name="text">
+        <string>Import Server Lists from other IRC Clients, Identities, Nicknames and Servers:</string>
+       </property>
+       <property name="wordWrap">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QRadioButton" name="akiRadio">
+       <property name="whatsThis">
+        <string>Allows importing of Aki's own Server List and database</string>
+       </property>
+       <property name="text">
+        <string>Aki</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QRadioButton" name="konversationRadio">
+       <property name="whatsThis">
+        <string>Allows importing of Konversation's Server List</string>
+       </property>
+       <property name="text">
+        <string>Konversation</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QRadioButton" name="mircRadio">
+       <property name="whatsThis">
+        <string>Allows importing of mIRC's Server List</string>
+       </property>
+       <property name="text">
+        <string>mIRC</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0">
+      <widget class="QRadioButton" name="xchatRadio">
+       <property name="whatsThis">
+        <string>Allows importing of XChat's Server List</string>
+       </property>
+       <property name="text">
+        <string>XChat</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="0">
+      <widget class="QRadioButton" name="dontImportAnythingRadio">
+       <property name="whatsThis">
+        <string>Will not import anything and will start out with new settings for the first time</string>
+       </property>
+       <property name="text">
+        <string>Don't import anything</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="0">
+      <spacer name="verticalSpacer">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

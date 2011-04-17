@@ -1,4 +1,5 @@
 include(dialogs/configdialogpages/CMakeLists.txt)
+include(dialogs/importdialogpages/CMakeLists.txt)
 include(dialogs/ui/CMakeLists.txt)
 include(dialogs/welcomedialogpages/CMakeLists.txt)
 
@@ -12,5 +13,6 @@ set (aki_dialogs_SRCS
     dialogs/serverlistdialog.cxx
     dialogs/welcomedialog.cxx
     ${aki_dialogs_configdialogpages_SRCS}
+    ${aki_dialogs_importdialogpages_SRCS}
     ${aki_dialogs_welcomedialoggpages_SRCS}
 )
