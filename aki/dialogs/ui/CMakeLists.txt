@@ -2,6 +2,8 @@ set (aki_dialogui_FILES
     dialogs/ui/chatwindowpage.ui
     dialogs/ui/generalpage.ui
     dialogs/ui/identitydialog.ui
+    dialogs/ui/importakipage.ui
+    dialogs/ui/importidentitypage.ui
     dialogs/ui/importstartpage.ui
     dialogs/ui/importxchatpage.ui
     dialogs/ui/logpage.ui

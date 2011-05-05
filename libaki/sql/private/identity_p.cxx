@@ -19,21 +19,23 @@
  */
 
 #include "identity_p.hpp"
+#include <KUser>
 using namespace Aki;
 using namespace Sql;
 
 IdentityPrivate::IdentityPrivate(Aki::Sql::Identity* qq)
     : id(-1),
-    awayMessage(QString()),
-    awayNickname(QString()),
+    awayMessage("I'm now away."),
     name(QString()),
     kickMessage(QString()),
-    partMessage(QString()),
-    quitMessage(QString()),
-    realName(QString()),
-    returnMessage(QString()),
+    partMessage("Aki IRC Client %v"),
+    quitMessage("Aki IRC Client %v"),
+    returnMessage("I'm now back."),
     enableMessages(false),
-    markLastPosition(false),
+    markLastPosition(true),
     _q(qq)
 {
+    KUser user(KUser::UseRealUserID);
+    awayNickname = user.loginName() + "|away";
+    realName = user.property(KUser::FullName).toString();
 }

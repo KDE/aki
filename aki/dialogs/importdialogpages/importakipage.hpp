@@ -21,13 +21,14 @@
 #ifndef AKI_IMPORTAKIPAGE_HPP
 #define AKI_IMPORTAKIPAGE_HPP
 
-#include <QWidget>
-
+#include "ui_importakipage.h"
+#include <QtGui/QWidget>
 
 namespace Aki
 {
 class ImportAkiPage
-    : public QWidget
+    : public QWidget,
+      private Ui::ImportAkiPage
 {
 public:
     explicit ImportAkiPage(QWidget* parent = 0);

@@ -25,6 +25,10 @@
 
 namespace Aki
 {
+namespace Sql
+{
+class Identity;
+} // End of namespace Sql.
 class ImportDialog
     : public KAssistantDialog
 {
@@ -33,6 +37,7 @@ public:
     explicit ImportDialog(QWidget* parent = 0);
     ~ImportDialog();
 private Q_SLOTS:
+    void slotFinished();
     void slotImportAkiPageToggled();
     void slotImportDontImportAnythingPageToggled();
     void slotImportXChatPageToggled();
@@ -40,6 +45,8 @@ private:
     KPageWidgetItem* _startPage;
     KPageWidgetItem* _akiPage;
     KPageWidgetItem* _xchatPage;
+    KPageWidgetItem* _identityPage;
+    Aki::Sql::Identity* _identity;
 }; // End of class ImportDialog.
 } // End of namespace Aki.
 

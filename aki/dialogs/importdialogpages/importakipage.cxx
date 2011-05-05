@@ -19,11 +19,15 @@
  */
 
 #include "importakipage.hpp"
+#include <KDE/KLineEdit>
 using namespace Aki;
 
 ImportAkiPage::ImportAkiPage(QWidget* parent)
     : QWidget(parent)
 {
+    setupUi(this);
+    customUrl->lineEdit()->setReadOnly(true);
+    customUrl->setVisible(true);
 }
 
 ImportAkiPage::~ImportAkiPage()

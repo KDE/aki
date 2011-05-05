@@ -21,14 +21,20 @@
 #include "importdialog.hpp"
 #include "aki.hpp"
 #include "dialogs/importdialogpages/importakipage.hpp"
+#include "dialogs/importdialogpages/importidentitypage.hpp"
 #include "dialogs/importdialogpages/importstartpage.hpp"
 #include "dialogs/importdialogpages/importxchatpage.hpp"
+#include <KMessageBox>
 using namespace Aki;
 
 ImportDialog::ImportDialog(QWidget* parent)
     : KAssistantDialog(parent)
 {
     setCaption(i18n("Import Assistant"));
+
+    Aki::ImportIdentityPage* identityPage = new Aki::ImportIdentityPage(0);
+    _identityPage = addPage(identityPage, i18n("Setup Identities"));
+    _identityPage->setIcon(KIcon("aki"));
 
     Aki::ImportStartPage* startPage = new Aki::ImportStartPage;
     _startPage = addPage(startPage, i18n("Import Settings and Data"));
@@ -47,9 +53,17 @@ ImportDialog::ImportDialog(QWidget* parent)
     Aki::ImportXChatPage* xchatPage = new Aki::ImportXChatPage;
     _xchatPage = addPage(xchatPage, i18n("Import XChat Settings"));
     _xchatPage->setIcon(KIcon("aki"));
+
+    connect(this, SIGNAL(finished()),
+            SLOT(slotFinished()));
 }
 
 ImportDialog::~ImportDialog()
+{
+}
+
+void
+ImportDialog::slotFinished()
 {
 }
 
