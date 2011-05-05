@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ImportIdentityPage</class>
+ <widget class="QWidget" name="ImportIdentityPage">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>225</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string/>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_2">
+   <item row="0" column="1">
+    <layout class="QFormLayout" name="formLayout">
+     <item row="0" column="0">
+      <widget class="QLabel" name="identityLabel">
+       <property name="text">
+        <string>Identity:</string>
+       </property>
+       <property name="buddy">
+        <cstring>identityComboBox</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="Aki::IdentityComboBox" name="identityComboBox">
+         <property name="whatsThis">
+          <string>Select an identity to modify.</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="addIdentityButton">
+         <property name="whatsThis">
+          <string>Adds a new identity.</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="copyIdentityButton">
+         <property name="whatsThis">
+          <string>Copies the current identity and creates a new identity with the same information.</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="editIdentityButton">
+         <property name="whatsThis">
+          <string>Edits the current identity's name.</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="removeIdentityButton">
+         <property name="whatsThis">
+          <string>Removes the current identity and deletes it.</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="1" column="0" colspan="2">
+      <widget class="KTabWidget" name="ktabwidget">
+       <property name="currentIndex">
+        <number>0</number>
+       </property>
+       <widget class="QWidget" name="generalPage">
+        <attribute name="title">
+         <string>General</string>
+        </attribute>
+        <attribute name="whatsThis">
+         <string extracomment="General information">General information of the identity.</string>
+        </attribute>
+        <layout class="QGridLayout" name="gridLayout_4">
+         <item row="0" column="0">
+          <layout class="QGridLayout" name="gridLayout_3">
+           <item row="0" column="0">
+            <widget class="QLabel" name="realNameLabel">
+             <property name="text">
+              <string>Real name:</string>
+             </property>
+             <property name="buddy">
+              <cstring>realNameLineEdit</cstring>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="KLineEdit" name="realNameLineEdit">
+             <property name="whatsThis">
+              <string>Your real name. This will be available to everyone.</string>
+             </property>
+             <property name="urlDropsEnabled">
+              <bool>false</bool>
+             </property>
+             <property name="showClearButton" stdset="0">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0" colspan="2">
+            <widget class="Aki::NicknameWidget" name="widget" native="true"/>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="awayPage">
+        <attribute name="title">
+         <string>Away</string>
+        </attribute>
+        <attribute name="whatsThis">
+         <string>Away information of the identity.</string>
+        </attribute>
+        <layout class="QGridLayout" name="gridLayout_5">
+         <item row="0" column="0">
+          <layout class="QFormLayout" name="formLayout_2">
+           <property name="fieldGrowthPolicy">
+            <enum>QFormLayout::ExpandingFieldsGrow</enum>
+           </property>
+           <item row="0" column="0" colspan="2">
+            <widget class="QCheckBox" name="markLastPositionCheckBox">
+             <property name="whatsThis">
+              <string>When either the application or the channel is not active, it will display a line from where you left off.</string>
+             </property>
+             <property name="text">
+              <string>Mark last position when away</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="awayNicknameLabel">
+             <property name="text">
+              <string>Away nickname:</string>
+             </property>
+             <property name="buddy">
+              <cstring>awayNicknameLineEdit</cstring>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="KLineEdit" name="awayNicknameLineEdit">
+             <property name="whatsThis">
+              <string>If enabled, your nickname will change to this when you are marked away.</string>
+             </property>
+             <property name="urlDropsEnabled">
+              <bool>false</bool>
+             </property>
+             <property name="showClearButton" stdset="0">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0" colspan="2">
+            <widget class="QGroupBox" name="awayMessagesGroupBox">
+             <property name="whatsThis">
+              <string>If enabled, this will display the away message and the return message. Use this with precaution, because it could make people angry at you.</string>
+             </property>
+             <property name="title">
+              <string>Away Messages</string>
+             </property>
+             <property name="checkable">
+              <bool>true</bool>
+             </property>
+             <property name="checked">
+              <bool>false</bool>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_6">
+              <item row="0" column="0">
+               <layout class="QFormLayout" name="formLayout_3">
+                <item row="0" column="0">
+                 <widget class="QLabel" name="awayMessageLabel">
+                  <property name="text">
+                   <string>Away message:</string>
+                  </property>
+                  <property name="buddy">
+                   <cstring>awayMessageLineEdit</cstring>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QLabel" name="returnMessageLabel">
+                  <property name="text">
+                   <string>Return message:</string>
+                  </property>
+                  <property name="buddy">
+                   <cstring>returnMessageLineEdit</cstring>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="KLineEdit" name="awayMessageLineEdit">
+                  <property name="whatsThis">
+                   <string>If enabled, this will be displayed when you go to the away state.</string>
+                  </property>
+                  <property name="urlDropsEnabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="showClearButton" stdset="0">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="KLineEdit" name="returnMessageLineEdit">
+                  <property name="whatsThis">
+                   <string>If enabled, this will be displayed when you have returned from the away state.</string>
+                  </property>
+                  <property name="urlDropsEnabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="showClearButton" stdset="0">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="miscPage">
+        <attribute name="title">
+         <string>Misc.</string>
+        </attribute>
+        <attribute name="whatsThis">
+         <string>Miscellaneous information of the identity.</string>
+        </attribute>
+        <layout class="QGridLayout" name="gridLayout_7">
+         <item row="0" column="0">
+          <layout class="QFormLayout" name="formLayout_4">
+           <item row="0" column="0">
+            <widget class="QLabel" name="kickMessageLabel">
+             <property name="text">
+              <string>Kick message:</string>
+             </property>
+             <property name="buddy">
+              <cstring>kickMessageLineEdit</cstring>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="partMessageLabel">
+             <property name="text">
+              <string>Part message:</string>
+             </property>
+             <property name="buddy">
+              <cstring>partMessageLineEdit</cstring>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="quitMessageLabel">
+             <property name="text">
+              <string>Quit message:</string>
+             </property>
+             <property name="buddy">
+              <cstring>quitMessageLineEdit</cstring>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="KLineEdit" name="kickMessageLineEdit">
+             <property name="whatsThis">
+              <string>Display this message when you kick someone without a custom message. If this field is empty it will not display a message.</string>
+             </property>
+             <property name="urlDropsEnabled">
+              <bool>false</bool>
+             </property>
+             <property name="showClearButton" stdset="0">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="KLineEdit" name="partMessageLineEdit">
+             <property name="whatsThis">
+              <string>Display this message when you part a channel without a custom message or quit a channel. If this field is empty it will not display a message.</string>
+             </property>
+             <property name="urlDropsEnabled">
+              <bool>false</bool>
+             </property>
+             <property name="showClearButton" stdset="0">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <widget class="KLineEdit" name="quitMessageLineEdit">
+             <property name="whatsThis">
+              <string>Display this message when you quit without a custom message or quit the application. If this field is empty it will not display a message.</string>
+             </property>
+             <property name="urlDropsEnabled">
+              <bool>false</bool>
+             </property>
+             <property name="showClearButton" stdset="0">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>klineedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KTabWidget</class>
+   <extends>QTabWidget</extends>
+   <header>ktabwidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>Aki::NicknameWidget</class>
+   <extends>QWidget</extends>
+   <header>ui/nicknamewidget.hpp</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>Aki::IdentityComboBox</class>
+   <extends>QComboBox</extends>
+   <header>ui/identitycombobox.hpp</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
