@@ -56,7 +56,19 @@ private Q_SLOTS:
     void slotReturnMessageTextEdited(const QString& message);
 private:
     void loadNewIdentity();
+    /**
+     * Updates the widgets with the identity information.
+     *
+     * @p identity Identity to populate widgets with.
+     */
     void setWidgetValues(Aki::Sql::Identity* identity);
+    /**
+     * Updates the identity in the database using transactions.
+     *
+     * @p identity Identity that needs to be updated.
+     * @return true if update was successful; false otherwise.
+     */
+    bool saveIdentity(Aki::Sql::Identity* identity);
 private:
     Aki::Sql::Identity* _identity;
     Aki::Sql::Database* _database;

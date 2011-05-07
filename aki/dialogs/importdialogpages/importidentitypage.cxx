@@ -21,7 +21,9 @@
 #include "importidentitypage.hpp"
 #include "sql/database.hpp"
 #include "sql/identity.hpp"
-#include <KMessageBox>
+#include <QtGui/QRegExpValidator>
+#include <KDE/KInputDialog>
+#include <KDE/KMessageBox>
 using namespace Aki;
 using namespace Aki::Sql;
 
@@ -74,6 +76,26 @@ ImportIdentityPage::loadNewIdentity()
 {
 }
 
+bool
+ImportIdentityPage::saveIdentity(Aki::Sql::Identity* identity)
+{
+    if (_database->transaction()) {
+        if (!_database->update(identity)) {
+            if (!_database->rollback()) {
+                kDebug() << "Unable to rollback Identity data";
+                return false;
+            }
+        } else {
+            if (!_database->commit()) {
+                kDebug() << "Unable to commit Identity data";
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
 void
 ImportIdentityPage::setWidgetValues(Aki::Sql::Identity* identity)
 {
@@ -90,6 +112,52 @@ ImportIdentityPage::setWidgetValues(Aki::Sql::Identity* identity)
 void
 ImportIdentityPage::slotAddIdentityClicked()
 {
+    bool ok = false;
+    QScopedPointer<QRegExpValidator> validator(new QRegExpValidator);
+    validator->setRegExp(QRegExp("[0-9a-zA-Z]+"));
+
+    const QString name = KInputDialog::getText(i18n("Enter a name for the new identity"),
+                                               i18n("Please enter a name for the new identity:"),
+                                               QString(), &ok, 0, validator.data());
+    if (!ok) {
+        return;
+    }
+
+    if (identityComboBox->contains(name)) {
+        KMessageBox::error(this, i18n("Unable to create a new identity. Identity already exists."),
+                           i18n("Identity already exists."));
+        slotAddIdentityClicked();
+        return;
+    }
+
+    Aki::Sql::Identity* previousIdentity = 0;
+
+    if (identityComboBox->count() > 0) {
+        previousIdentity = identityComboBox->currentIdentity();
+    }
+
+    Aki::Sql::Identity* identity = new Aki::Sql::Identity;
+    identity->setName(name);
+
+    if (_database->transaction()) {
+        if (!_database->add(identity)) {
+            if (!_database->rollback()) {
+                kDebug() << "Unable to rollback Identity data";
+                return;
+            }
+        } else {
+            if (!_database->commit()) {
+                kDebug() << "Unable to commit Identity data";
+                return;
+            }
+        }
+    } else {
+        kDebug() << "Unable to start transaction";
+        return;
+    }
+
+    identityComboBox->addIdentity(identity);
+    identityComboBox->setCurrentIdentity(identity);
 }
 
 void
@@ -100,6 +168,10 @@ ImportIdentityPage::slotAwayMessageTextEdited(const QString& message)
     }
 
     _identity->setAwayMessage(message);
+    if (!saveIdentity(_identity)) {
+        KMessageBox::error(this, i18n("Unable to commit changes."),
+                           i18n("Unable to commit changes."));
+    }
 }
 
 void
@@ -110,6 +182,10 @@ ImportIdentityPage::slotAwayMessagesToggled(bool enabled)
     }
 
     _identity->setMessagesEnabled(enabled);
+    if (!saveIdentity(_identity)) {
+        KMessageBox::error(this, i18n("Unable to commit changes."),
+                           i18n("Unable to commit changes."));
+    }
 }
 
 void
@@ -120,16 +196,111 @@ ImportIdentityPage::slotAwayNicknameTextEdited(const QString& nickname)
     }
 
     _identity->setAwayNickname(nickname);
+    if (!saveIdentity(_identity)) {
+        KMessageBox::error(this, i18n("Unable to commit changes."),
+                           i18n("Unable to commit changes."));
+        return;
+    }
 }
 
 void
 ImportIdentityPage::slotCopyIdentityClicked()
 {
+    bool ok = false;
+    QScopedPointer<QRegExpValidator> validator(new QRegExpValidator);
+    validator->setRegExp(QRegExp("[0-9a-zA-Z]+"));
+
+    const QString name = KInputDialog::getText(i18n("Enter a name for the new identity."),
+                                               i18n("Enter a name for the new identity:"), QString(), &ok, 0, validator.data());
+
+    if (!ok) {
+        return;
+    }
+
+    if (identityComboBox->contains(name)) {
+        KMessageBox::error(this, i18n("Unable to create a new identity. Identity already exists."),
+                           i18n("Identity already exists."));
+        slotCopyIdentityClicked();
+    }
+
+    Aki::Sql::Identity* current = identityComboBox->currentIdentity();
+    Aki::Sql::Identity* identity = new Aki::Sql::Identity;
+    identity->setAwayMessage(current->awayMessage());
+    identity->setAwayNickname(current->awayNickname());
+    identity->setKickMessage(current->kickMessage());
+    identity->setMarkLastPositionEnabled(current->isMarkLastPositionEnabled());
+    identity->setMessagesEnabled(current->isMessagesEnabled());
+    identity->setName(name);
+    identity->setPartMessage(current->partMessage());
+    identity->setQuitMessage(current->quitMessage());
+    identity->setRealName(current->realName());
+    identity->setReturnMessage(current->returnMessage());
+
+    if (_database->transaction()) {
+        if (!_database->add(identity)) {
+            if (!_database->rollback()) {
+                kDebug() << "Unable to rollback Identity data";
+                return;
+            }
+        } else {
+            if (!_database->commit()) {
+                kDebug() << "Unable to commit Identity data";
+                return;
+            }
+        }
+    } else {
+        kDebug() << "Unable to start transaction";
+        return;
+    }
+
+    identityComboBox->addIdentity(identity);
+    identityComboBox->setCurrentIdentity(identity);
 }
 
 void
 ImportIdentityPage::slotEditIdentityClicked()
 {
+    bool ok = false;
+    Aki::Sql::Identity* current = identityComboBox->currentIdentity();
+    if (!current) {
+        return;
+    }
+
+    QScopedPointer<QRegExpValidator> validator(new QRegExpValidator);
+    validator->setRegExp(QRegExp("[0-9a-zA-Z]+"));
+
+    const QString name = KInputDialog::getText(i18n("Enter a new identity name"),
+                                               i18n("Enter a new identity name:"), current->name(), &ok, 0, validator.data());
+
+    if (!ok) {
+        return;
+    }
+
+    if (identityComboBox->contains(name)) {
+        KMessageBox::error(this, i18n("Unable to create a new identity. Identity already exists."),
+                           i18n("Identity already exists."));
+        slotEditIdentityClicked();
+        return;
+    }
+
+    current->setName(name);
+
+    if (_database->transaction()) {
+        if (!_database->update(current)) {
+            if (!_database->rollback()) {
+                kDebug() << "Unable to rollback Identity data";
+                return;
+            }
+        } else {
+            if (!_database->commit()) {
+                kDebug() << "Unable to commit Identity data";
+                return;
+            }
+        }
+    } else {
+        kDebug() << "Unable to start transaction";
+        return;
+    }
 }
 
 void
@@ -158,6 +329,10 @@ ImportIdentityPage::slotKickMessageTextEdited(const QString& message)
     }
 
     _identity->setKickMessage(message);
+    if (!saveIdentity(_identity)) {
+        KMessageBox::error(this, i18n("Unable to commit changes."),
+                           i18n("Unable to commit changes."));
+    }
 }
 
 void
@@ -168,6 +343,10 @@ ImportIdentityPage::slotMarkLastPositionToggled(bool enabled)
     }
 
     _identity->setMarkLastPositionEnabled(enabled);
+    if (!saveIdentity(_identity)) {
+        KMessageBox::error(this, i18n("Unable to commit changes."),
+                           i18n("Unable to commit changes."));
+    }
 }
 
 void
@@ -178,6 +357,10 @@ ImportIdentityPage::slotPartMessageTextEdited(const QString& message)
     }
 
     _identity->setPartMessage(message);
+    if (!saveIdentity(_identity)) {
+        KMessageBox::error(this, i18n("Unable to commit changes."),
+                           i18n("Unable to commit changes."));
+    }
 }
 
 void
@@ -188,6 +371,10 @@ ImportIdentityPage::slotQuitMessageTextEdited(const QString& message)
     }
 
     _identity->setQuitMessage(message);
+    if (!saveIdentity(_identity)) {
+        KMessageBox::error(this, i18n("Unable to commit changes."),
+                           i18n("Unable to commit changes."));
+    }
 }
 
 void
@@ -198,11 +385,48 @@ ImportIdentityPage::slotRealNameTextEdited(const QString& name)
     }
 
     _identity->setRealName(name);
+    if (!saveIdentity(_identity)) {
+        KMessageBox::error(this, i18n("Unable to commit changes."),
+                           i18n("Unable to commit changes."));
+    }
 }
 
 void
 ImportIdentityPage::slotRemoveIdentityClicked()
 {
+    Aki::Sql::Identity* current = identityComboBox->currentIdentity();
+    if (!current) {
+        return;
+    }
+
+    const int result = KMessageBox::warningYesNo(this, i18n("Are you sure you want to delete the identity: '%1'?", current->name()),
+                                                 i18n("Are you sure you want to delete the identity?"));
+    switch (result) {
+    case KMessageBox::Yes: {
+        if (_database->transaction()) {
+            if (!_database->remove(current)) {
+                if (!_database->rollback()) {
+                    kDebug() << "Unable to rollback Identity data";
+                    return;
+                }
+            } else {
+                if (!_database->commit()) {
+                    kDebug() << "Unable to commit Identity data";
+                    return;
+                }
+            }
+        } else {
+            kDebug() << "Unable to start transaction";
+            return;
+        }
+        break;
+    }
+    default: {
+        return;
+    }
+    }
+
+    delete identityComboBox->takeIdentity(identityComboBox->row(current));
 }
 
 void
@@ -213,4 +437,8 @@ ImportIdentityPage::slotReturnMessageTextEdited(const QString& message)
     }
 
     _identity->setReturnMessage(message);
+    if (!saveIdentity(_identity)) {
+        KMessageBox::error(this, i18n("Unable to commit changes."),
+                           i18n("Unable to commit changes."));
+    }
 }
