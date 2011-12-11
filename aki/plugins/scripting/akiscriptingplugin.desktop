@@ -15,6 +15,7 @@ Name[sv]=Skripthantering med Kross
 Name[uk]=Скрипти Kross
 Name[x-test]=xxKross Scriptingxx
 Comment=Kross scripting plugin for Aki
+Comment[de]=Kross-Skriptmodul für Aki
 Comment[es]=Complemento de programación de guiones Kross para Aki
 Comment[et]=Aki Krossi skriptiplugin
 Comment[fr]=Module externe de scriptage Kross pour Aki
