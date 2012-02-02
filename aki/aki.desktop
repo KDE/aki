@@ -34,6 +34,7 @@ GenericName[pl]=Klient IRC
 GenericName[pt]=Cliente de IRC
 GenericName[pt_BR]=Cliente IRC
 GenericName[sv]=IRC-klient
+GenericName[ug]=IRC خېرىدارى
 GenericName[uk]=Клієнт IRC
 GenericName[x-test]=xxIRC Clientxx
 Categories=Qt;KDE;Network;
