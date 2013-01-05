@@ -23,6 +23,7 @@ Name[sv]=Aki
 Name[uk]=Aki
 Name[x-test]=xxAkixx
 GenericName=IRC Client
+GenericName[bs]=IRC klijent
 GenericName[cs]=IRC klient
 GenericName[de]=IRC-Programm
 GenericName[es]=Cliente IRC

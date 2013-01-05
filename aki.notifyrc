@@ -41,6 +41,7 @@ Name[x-test]=xxAkixx
 
 [Event/highlight]
 Name=Highlight
+Name[bs]=Istaknuto
 Name[cs]=Zvýraznění
 Name[de]=Hervorhebung
 Name[es]=Realce
@@ -61,6 +62,7 @@ Name[ug]=يورۇت
 Name[uk]=Підсвічування
 Name[x-test]=xxHighlightxx
 Comment=Someone triggered a highlight
+Comment[bs]=Neko je okinuo isticanje
 Comment[cs]=Někdo aktivoval zvýraznění
 Comment[de]=Jemand hat eine Hervorhebung ausgelöst
 Comment[es]=Alguien accionó un realce
@@ -101,6 +103,7 @@ Name[ug]=شەخسىي ئۇچۇر
 Name[uk]=Особисте повідомлення
 Name[x-test]=xxPrivate Messagexx
 Comment=You received a private message
+Comment[bs]=Primili ste ličnu poruku
 Comment[cs]=Obdrželi jste soukromou zprávu
 Comment[de]=Sie haben eine private Nachricht erhalten
 Comment[es]=Usted ha recibido un mensaje privado
