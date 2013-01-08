@@ -5,4 +5,6 @@ set(serverlist_aki_srcs
 set(serverlist_aki_libs
     ${KDE4_KDECORE_LIBS}
     akicore
+    ${QT_QTSQL_LIBRARY}
 )
+

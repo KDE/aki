@@ -5,4 +5,5 @@ set(serverlist_xchat_srcs
 set(serverlist_xchat_libs
     ${KDE4_KDECORE_LIBS}
     akicore
+    ${QT_QTSQL_LIBRARY}
 )

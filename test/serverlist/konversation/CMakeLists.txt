@@ -7,4 +7,5 @@ set(serverlist_konversation_srcs
 set(serverlist_konversation_libs
     ${KDE4_KDECORE_LIBS}
     akicore
+    ${QT_QTSQL_LIBRARY}
 )

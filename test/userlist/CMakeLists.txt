@@ -6,4 +6,4 @@ set(userlisttest_SRCS
     usermodel.cxx
 )
 kde4_add_unit_test(userlisttest ${userlisttest_SRCS})
-target_link_libraries(userlisttest ${KDE4_KDECORE_LIBS} akicore  ${QT_QTGUI_LIBRARY} ${QT_QTTEST_LIBRARY} ${QT_QTDECLARATIVE_LIBRARY})
+target_link_libraries(userlisttest ${KDE4_KDEUI_LIBS} akicore  ${QT_QTGUI_LIBRARY} ${QT_QTTEST_LIBRARY} ${QT_QTDECLARATIVE_LIBRARY})
