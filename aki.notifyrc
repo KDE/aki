@@ -92,6 +92,7 @@ Action=none
 
 [Event/private]
 Name=Private Message
+Name[cs]=Soukromá zpráva
 Name[de]=Private Nachricht
 Name[es]=Mensaje privado
 Name[et]=Privaatsõnum
