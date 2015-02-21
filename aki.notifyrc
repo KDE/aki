@@ -1,6 +1,7 @@
 [Global]
 IconName=aki
 Comment=Aki
+Comment[bs]=Aki
 Comment[cs]=Aki
 Comment[de]=Aki
 Comment[es]=Aki
@@ -22,6 +23,7 @@ Comment[tr]=Aki
 Comment[uk]=Aki
 Comment[x-test]=xxAkixx
 Name=Aki
+Name[bs]=Aki
 Name[cs]=Aki
 Name[de]=Aki
 Name[es]=Aki
@@ -92,6 +94,7 @@ Action=none
 
 [Event/private]
 Name=Private Message
+Name[bs]=Privatna poruka
 Name[cs]=Soukromá zpráva
 Name[de]=Private Nachricht
 Name[es]=Mensaje privado
