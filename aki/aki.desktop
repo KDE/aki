@@ -4,6 +4,7 @@ Type=Application
 Exec=aki
 Icon=aki
 Name=Aki
+Name[ast]=Aki
 Name[bs]=Aki
 Name[cs]=Aki
 Name[de]=Aki
